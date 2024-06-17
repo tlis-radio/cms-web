@@ -32,7 +32,7 @@ const Socials = () => {
    }
 
    return (
-      <div className='bg-black flex p-1 gap-2'>
+      <div className='bg-[#681B22] flex p-1 gap-2'>
          {createSocialLinks()}
       </div>
    )

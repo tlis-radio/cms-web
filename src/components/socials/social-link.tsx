@@ -9,7 +9,7 @@ type SocialLinkProps = {
 
 const SocialLink: FunctionComponent<SocialLinkProps> = ({ icon, redirectUrl }) => {
    return(
-      <a target='_blank' className='flex h-8 w-8 items-center text-white border-2 rounded-3xl p-1' href={redirectUrl}>
+      <a target='_blank' className='flex h-8 w-8 items-center text-white border-2 rounded-3xl p-1 hover:text-[#681B22] hover:bg-white transition-colors' href={redirectUrl}>
          <FontAwesomeIcon icon={icon} />
       </a>
    )
