@@ -6,7 +6,7 @@ const Home = () => {
 
   // Make sure we're in the browser
   if (typeof window !== 'undefined') {
-    router.push('/pages/program')
+    router.push('/pages/main')
   }
 }
 

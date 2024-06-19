@@ -1,4 +1,3 @@
-
 import { faFacebook, faInstagram, faSpotify, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import SocialLink from './social-link';
 
@@ -32,7 +31,7 @@ const Socials = () => {
    }
 
    return (
-      <div className='bg-[#681B22] flex p-1 gap-2'>
+      <div className='bg-[#96120F] flex items-center gap-2'>
          {createSocialLinks()}
       </div>
    )
