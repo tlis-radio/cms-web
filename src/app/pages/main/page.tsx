@@ -2,9 +2,11 @@ import React from "react";
 
 const Shows: React.FC = () => {
    return (
-      <h1>
-         Hello World
-      </h1>
+      <div>
+         <h1>
+            Hello World
+         </h1>
+      </div>
    );
 }
 

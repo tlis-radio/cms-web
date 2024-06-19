@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'TLIS - Študentské internetové rádio'
+  title: 'TLIS - Študentské internetové rádio',
 };
 
 export default function RootLayout({
