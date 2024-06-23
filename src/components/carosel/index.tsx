@@ -14,9 +14,9 @@ const SwiperCarousel: React.FC = () => {
          modules={[Navigation, Pagination, Scrollbar, A11y]}
          spaceBetween={10}
          slidesPerView={3}
+         centeredSlides={true}
          navigation
-         pagination={{ clickable: true }}
-         scrollbar={{ draggable: true }}
+         pagination={{dynamicBullets: true, clickable: true }}
          onSwiper={(swiper) => console.log(swiper)}
          onSlideChange={() => console.log('slide change')}
       >
