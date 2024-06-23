@@ -1,7 +1,7 @@
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 
-const ManagementLayout = ({ children, }: { children: React.ReactNode }) => {
+const PageLayout = ({ children, }: { children: React.ReactNode }) => {
    return (
       <>
          <Header />
@@ -15,4 +15,4 @@ const ManagementLayout = ({ children, }: { children: React.ReactNode }) => {
    );
 };
 
-export default ManagementLayout;
+export default PageLayout;

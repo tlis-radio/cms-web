@@ -1,8 +1,12 @@
+'use client';
 import React from "react";
+import SwiperCarousel from "@/components/carosel";
+
 
 const Shows: React.FC = () => {
    return (
       <div>
+         <SwiperCarousel />
          <h1>
             Hello World
          </h1>
