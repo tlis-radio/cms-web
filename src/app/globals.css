@@ -8,6 +8,12 @@ body {
     min-width: 460px;
 }
 
-.not-active-slide {
-    filter: blur(2px);
+.swiper-slide {
+    filter: blur(4px);
+    transition: filter 0.5s ease;
+}
+  
+.swiper-slide.swiper-slide-active {
+    filter: blur(0);
+    transition: filter 0.5s ease;
 }
