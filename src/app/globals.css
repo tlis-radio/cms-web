@@ -7,3 +7,7 @@
 body {
     min-width: 460px;
 }
+
+.not-active-slide {
+    filter: blur(2px);
+}

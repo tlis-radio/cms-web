@@ -1,25 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Swiper as SwiperClass } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-
 const SwiperCarousel: React.FC = () => {
-   return (
-      <Swiper
-         modules={[Navigation, Pagination, Scrollbar, A11y]}
-         spaceBetween={10}
-         slidesPerView={3}
-         centeredSlides={true}
-         navigation
-         pagination={{dynamicBullets: true, clickable: true }}
-         onSwiper={(swiper) => console.log(swiper)}
-         onSlideChange={() => console.log('slide change')}
-      >
+  const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
+
+  useEffect(() => {
+    const updateSlideClasses = () => {
+      swiperInstance?.slides.forEach((slide, index) => {
+        const slideEl = slide as HTMLElement; // Ensure slide is treated as HTMLElement
+        if (index !== swiperInstance.activeIndex) {
+          slideEl.classList.add('not-active-slide');
+        } else {
+          slideEl.classList.remove('not-active-slide');
+        }
+      });
+    };
+
+    if (swiperInstance) {
+      // Call updateSlideClasses to ensure initial setup
+      updateSlideClasses();
+      // Setup event listener for slide changes
+      swiperInstance.on('slideChange', updateSlideClasses);
+
+      // Cleanup function to remove event listener
+      return () => {
+        swiperInstance.off('slideChange', updateSlideClasses);
+      };
+    }
+  }, [swiperInstance]); // Depend on swiperInstance to re-run when it changes
+
+  return (
+    <Swiper
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={10}
+      slidesPerView={3}
+      centeredSlides={true}
+      navigation
+      pagination={{ dynamicBullets: true, clickable: true }}
+      onSwiper={setSwiperInstance}
+    >
          <SwiperSlide>
             <img src="https://scontent.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=9Gs0cx1mHygQ7kNvgHkWY0O&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYBcEpzfHpZFarZw1Vn-AjrpGGx0BtfPTLmJKS-o9641zQ&oe=667E2D8F&_nc_sid=10d13b" alt="Slide 1" />
          </SwiperSlide>
