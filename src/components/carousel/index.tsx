@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Navigation, Pagination, A11y } from 'swiper/modules';
+import { EffectCoverflow, Navigation, A11y } from 'swiper/modules';
 import { Swiper as SwiperClass } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow'
 
 const SwiperCarousel: React.FC = () => {
    const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
@@ -24,8 +22,7 @@ const SwiperCarousel: React.FC = () => {
 
    return (
       <Swiper
-         modules={[EffectCoverflow, Navigation, Pagination, A11y]}
-         pagination={{ dynamicBullets: true, clickable: true }}
+         modules={[EffectCoverflow, Navigation, A11y]}
          effect='coverflow'
          onSwiper={setSwiperInstance}
          
