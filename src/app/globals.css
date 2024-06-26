@@ -4,15 +4,33 @@
 
 * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
-.swiper-slide {
+/**
+I'm sorry but I'm really not sure why:
+** .swiper-slide-prev
+** .swiper-slide-next
+** .swiper-slide:not(.swiper-slide-visible)
+** .swiper-slide:is(.swiper-slide-visible)
+are written like this, but if i delete something from it, it breaks
+
+* ! Problem 1: The 3rd slide from the beginning and the end don't follow the opacity transition 0.5 from 0 to 1 (invisible to visible).
+* ! They jump right from 0 to 1
+* TODO: Fix Problem 1
+*/
+
+.swiper-slide-prev,.swiper-slide-next {
+    opacity: 1;
     filter: blur(4px);
+    pointer-events: none;
+    transition: filter 0.5s, opacity 0.5s ease;
 }
 
-.swiper-slide.swiper-slide-prev,.swiper-slide.swiper-slide-next {
-    transition: filter 0.5s ease;
+.swiper-slide:not(.swiper-slide-visible) {
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s, filter 0.5s, opacity 0.5s ease;
 }
 
-.swiper-slide.swiper-slide-active {
-    filter: blur(0);
-    transition: filter 0.5s ease;
+.swiper-slide:is(.swiper-slide-visible){
+    opacity: 1;
+    transition: transform 0.5s, filter 0.5s, opacity 0.5s ease;
 }
