@@ -9,29 +9,30 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 const SwiperCarousel: React.FC = () => {
-  const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
+   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
 
-  /*const handleSlideChange = (swiper: SwiperClass) => {
-    console.log('slide changing');
-    // Remove 'active' class from all slides
-    swiper.slides.forEach(slide => {
-      slide.classList.remove('active');
-    });
-    // Add 'active' class to the active slide
-    swiper.slides[swiper.activeIndex].classList.add('active');
-    
-  };*/
+   /*const handleSlideChange = (swiper: SwiperClass) => {
+     console.log('slide changing');
+     // Remove 'active' class from all slides
+     swiper.slides.forEach(slide => {
+       slide.classList.remove('active');
+     });
+     // Add 'active' class to the active slide
+     swiper.slides[swiper.activeIndex].classList.add('active');
+     
+   };*/
 
-  return (
-    <Swiper
-      modules={[Navigation, Pagination, Scrollbar, A11y]}
-      spaceBetween={10}
-      slidesPerView={3}
-      centeredSlides={true}
-      navigation
-      pagination={{ dynamicBullets: true, clickable: true }}
-      onSwiper={setSwiperInstance}
-    >
+   return (
+      <Swiper
+         modules={[Navigation, Pagination, Scrollbar, A11y]}
+         spaceBetween={10}
+         slidesPerView={3}
+         speed={1000} // Speed of the sliding movement in miliseconds
+         centeredSlides={true}
+         navigation
+         pagination={{ dynamicBullets: true, clickable: true }}
+         onSwiper={setSwiperInstance}
+      >
          <SwiperSlide>
             <img src="https://scontent.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=9Gs0cx1mHygQ7kNvgHkWY0O&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYBcEpzfHpZFarZw1Vn-AjrpGGx0BtfPTLmJKS-o9641zQ&oe=667E2D8F&_nc_sid=10d13b" alt="Slide 1" />
          </SwiperSlide>

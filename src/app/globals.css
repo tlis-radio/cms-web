@@ -4,15 +4,14 @@
 
 * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
-body {
-    min-width: 460px;
-}
-
 .swiper-slide {
     filter: blur(4px);
+}
+
+.swiper-slide.swiper-slide-prev,.swiper-slide.swiper-slide-next {
     transition: filter 0.5s ease;
 }
-  
+
 .swiper-slide.swiper-slide-active {
     filter: blur(0);
     transition: filter 0.5s ease;
