@@ -12,9 +12,9 @@ I'm sorry but I'm really not sure why:
 ** .swiper-slide:is(.swiper-slide-visible)
 are written like this, but if i delete something from it, it breaks
 
-* ! Problem 1: The 3rd slide from the beginning and the end don't follow the opacity transition 0.5 from 0 to 1 (invisible to visible).
+* ! Problem 1: The 3rd slide from the beginning and the end don't follow the opacity transition 0.5s from 0 to 1 (invisible to visible).
 * ! They jump right from 0 to 1
-* ! 26.6.2024 11:10 - It's an Opera and Edge Problem
+* ! 27.6.2024 6:41 - It's an Opera, MS Edge and Chrome Problem
 * TODO: Fix Problem 1
 */
 
