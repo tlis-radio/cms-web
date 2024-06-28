@@ -26,7 +26,7 @@ const SwiperCarousel: React.FC = () => {
          effect='coverflow'
          onSwiper={setSwiperInstance}
          
-         //Takes care of the scale chaneging
+         // Takes care of the scale changing
          coverflowEffect={{
             stretch: 0,
             rotate: 0,
