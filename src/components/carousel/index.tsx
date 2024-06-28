@@ -42,35 +42,15 @@ const SwiperCarousel: React.FC = () => {
          navigation
       >
          <SwiperSlide>
-            <img src="https://scontent.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=9Gs0cx1mHygQ7kNvgHkWY0O&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYBcEpzfHpZFarZw1Vn-AjrpGGx0BtfPTLmJKS-o9641zQ&oe=667E2D8F&_nc_sid=10d13b" alt="Slide 1" />
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/448656717_1010263371099577_8325107832581048915_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=UTAdy22JjL4Q7kNvgFmw0W9&edm=AEhyXUkAAAAA&ccb=7-5&ig_cache_key=MzM5NTE0ODE1NzI2NzMxMTMzNg%3D%3D.2-ccb7-5&oh=00_AYBzTwmQUv4AfSTgXBAr1UA9xV-GGU5ObIQsyKIwdvrhjg&oe=668483B9&_nc_sid=8f1549" alt="Slide 1" />
             <h2>Lorem ipsum</h2>
          </SwiperSlide>
          <SwiperSlide>
-            <img src="https://scontent.cdninstagram.com/v/t39.30808-6/438094737_970461668413081_9008734142533829834_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=bY5AKJlTlOkQ7kNvgE_IuEA&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM1NDU2MDcwMjk3ODk1OTgyNg%3D%3D.2-ccb7-5&oh=00_AYDuj8O3RK-Tto34HxjqjDP8zIkqOgpHPEYY7m2EvlomAQ&oe=667E30E0&_nc_sid=10d13b" alt="Slide 2" />
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=0Xv5nBCSliYQ7kNvgFFOnwi&edm=AEhyXUkAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYAflZ2pCSxld8Gq3djumdJhasGl43DFO3IkD5Svadkx3A&oe=6684548F&_nc_sid=8f1549" alt="Slide 2" />
             <h2>Lorem ipsum</h2>
          </SwiperSlide>
          <SwiperSlide>
-            <img src="https://instagram.fbts3-1.fna.fbcdn.net/v/t39.30808-6/437539631_965390092253572_1835127043143057288_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=instagram.fbts3-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=mcWm9G8ZhmQQ7kNvgFKeMUk&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzM0OTUxNzQ0NjA1Njc4MzY2NQ%3D%3D.2-ccb7-5&oh=00_AYD8lOPN5cBKkJ6dno9RGhDyKuvNXdRHl_fauovYrfOMDQ&oe=667E1404&_nc_sid=cf751b" alt="Slide 3" />
-            <h2>Lorem ipsum</h2>
-         </SwiperSlide>
-         <SwiperSlide>
-            <img src="https://scontent.cdninstagram.com/v/t39.30808-6/438086008_970463231746258_1894319194455648312_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=110&_nc_ohc=KzBOPeYWR2sQ7kNvgHRCb9Z&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM1NTU4NzUwMDE2NjMwMzc5MA%3D%3D.2-ccb7-5&oh=00_AYBGO-aKnAoUfJff4Mb4tFKWRIMKzujDjw49esQnKd1n8w&oe=6681F356&_nc_sid=10d13b" alt="Slide 4" />
-            <h2>Lorem ipsum</h2>
-         </SwiperSlide>
-         <SwiperSlide>
-            <img src="https://instagram.fbts3-1.fna.fbcdn.net/v/t39.30808-6/431486173_934386535353928_3756580517607962580_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=instagram.fbts3-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=RQrQokJglF8Q7kNvgGL4wxD&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzMxNzkyOTQwNjM2NDQ4ODYwOA%3D%3D.2-ccb7-5&oh=00_AYA82iQf6E6y2qihuR6Yl-4Ok1N-6rc43ftzdFN3FG_1cg&oe=667E2D2E&_nc_sid=cf751b" alt="Slide 5" />
-            <h2>Lorem ipsum</h2>
-         </SwiperSlide>
-         <SwiperSlide>
-            <img src="https://scontent.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=9Gs0cx1mHygQ7kNvgHkWY0O&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYBcEpzfHpZFarZw1Vn-AjrpGGx0BtfPTLmJKS-o9641zQ&oe=667E2D8F&_nc_sid=10d13b" alt="Slide 1" />
-            <h2>Lorem ipsum</h2>
-         </SwiperSlide>
-         <SwiperSlide>
-            <img src="https://scontent.cdninstagram.com/v/t39.30808-6/438094737_970461668413081_9008734142533829834_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=bY5AKJlTlOkQ7kNvgE_IuEA&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM1NDU2MDcwMjk3ODk1OTgyNg%3D%3D.2-ccb7-5&oh=00_AYDuj8O3RK-Tto34HxjqjDP8zIkqOgpHPEYY7m2EvlomAQ&oe=667E30E0&_nc_sid=10d13b" alt="Slide 2" />
-            <h2>Lorem ipsum</h2>
-         </SwiperSlide>
-         <SwiperSlide>
-            <img src="https://instagram.fbts3-1.fna.fbcdn.net/v/t39.30808-6/437539631_965390092253572_1835127043143057288_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=instagram.fbts3-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=mcWm9G8ZhmQQ7kNvgFKeMUk&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzM0OTUxNzQ0NjA1Njc4MzY2NQ%3D%3D.2-ccb7-5&oh=00_AYD8lOPN5cBKkJ6dno9RGhDyKuvNXdRHl_fauovYrfOMDQ&oe=667E1404&_nc_sid=cf751b" alt="Slide 3" />
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/437539631_965390092253572_1835127043143057288_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=ZKRxg9PtGPMQ7kNvgHsNovb&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzM0OTUxNzQ0NjA1Njc4MzY2NQ%3D%3D.2-ccb7-5&oh=00_AYDEFaGZqztH9axApwAfXCQ_hkmgu6-Lkrdaomdlh7Unag&oe=66847344&_nc_sid=0b30b7" alt="Slide 3" />
             <h2>Lorem ipsum</h2>
          </SwiperSlide>
          <SwiperSlide>
@@ -78,7 +58,27 @@ const SwiperCarousel: React.FC = () => {
             <h2>Lorem ipsum</h2>
          </SwiperSlide>
          <SwiperSlide>
-            <img src="https://instagram.fbts3-1.fna.fbcdn.net/v/t39.30808-6/431486173_934386535353928_3756580517607962580_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=instagram.fbts3-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=RQrQokJglF8Q7kNvgGL4wxD&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzMxNzkyOTQwNjM2NDQ4ODYwOA%3D%3D.2-ccb7-5&oh=00_AYA82iQf6E6y2qihuR6Yl-4Ok1N-6rc43ftzdFN3FG_1cg&oe=667E2D2E&_nc_sid=cf751b" alt="Slide 5" />
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/431486173_934386535353928_3756580517607962580_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=XhzN8mW7MKkQ7kNvgFOtCHn&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzMxNzkyOTQwNjM2NDQ4ODYwOA%3D%3D.2-ccb7-5&oh=00_AYCo8avb9uXIUJLoawYE8TaoK7_R8h_zLDkyJT39xSW5vA&oe=6684542E&_nc_sid=0b30b7" alt="Slide 5" />
+            <h2>Lorem ipsum</h2>
+         </SwiperSlide>
+         <SwiperSlide>
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/448656717_1010263371099577_8325107832581048915_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=UTAdy22JjL4Q7kNvgFmw0W9&edm=AEhyXUkAAAAA&ccb=7-5&ig_cache_key=MzM5NTE0ODE1NzI2NzMxMTMzNg%3D%3D.2-ccb7-5&oh=00_AYBzTwmQUv4AfSTgXBAr1UA9xV-GGU5ObIQsyKIwdvrhjg&oe=668483B9&_nc_sid=8f1549" alt="Slide 1" />
+            <h2>Lorem ipsum</h2>
+         </SwiperSlide>
+         <SwiperSlide>
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=0Xv5nBCSliYQ7kNvgFFOnwi&edm=AEhyXUkAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYAflZ2pCSxld8Gq3djumdJhasGl43DFO3IkD5Svadkx3A&oe=6684548F&_nc_sid=8f1549" alt="Slide 2" />
+            <h2>Lorem ipsum</h2>
+         </SwiperSlide>
+         <SwiperSlide>
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/437539631_965390092253572_1835127043143057288_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=ZKRxg9PtGPMQ7kNvgHsNovb&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzM0OTUxNzQ0NjA1Njc4MzY2NQ%3D%3D.2-ccb7-5&oh=00_AYDEFaGZqztH9axApwAfXCQ_hkmgu6-Lkrdaomdlh7Unag&oe=66847344&_nc_sid=0b30b7" alt="Slide 3" />
+            <h2>Lorem ipsum</h2>
+         </SwiperSlide>
+         <SwiperSlide>
+            <img src="https://scontent.cdninstagram.com/v/t39.30808-6/438086008_970463231746258_1894319194455648312_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=110&_nc_ohc=KzBOPeYWR2sQ7kNvgHRCb9Z&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzM1NTU4NzUwMDE2NjMwMzc5MA%3D%3D.2-ccb7-5&oh=00_AYBGO-aKnAoUfJff4Mb4tFKWRIMKzujDjw49esQnKd1n8w&oe=6681F356&_nc_sid=10d13b" alt="Slide 4" />
+            <h2>Lorem ipsum</h2>
+         </SwiperSlide>
+         <SwiperSlide>
+            <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/431486173_934386535353928_3756580517607962580_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=XhzN8mW7MKkQ7kNvgFOtCHn&edm=AFg4Q8wAAAAA&ccb=7-5&ig_cache_key=MzMxNzkyOTQwNjM2NDQ4ODYwOA%3D%3D.2-ccb7-5&oh=00_AYCo8avb9uXIUJLoawYE8TaoK7_R8h_zLDkyJT39xSW5vA&oe=6684542E&_nc_sid=0b30b7" alt="Slide 5" />
             <h2>Lorem ipsum</h2>
          </SwiperSlide>
       </Swiper>
