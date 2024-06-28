@@ -6,10 +6,10 @@ import SwiperCarousel from "@/components/carousel";
 const Shows: React.FC = () => {
    return (
       <div>
-         <SwiperCarousel />
          <h1>
-            Hello World
+            Program
          </h1>
+         <SwiperCarousel />
       </div>
    );
 }

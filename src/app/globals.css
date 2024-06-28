@@ -42,7 +42,7 @@ are written like this, but if i delete something from it, it breaks
     border-radius: 70%;
     padding: 5px 16px 5px;
     position: relative;
-    right: 1rem;
+    right: 1em;
 }
 
 .swiper-button-prev::after {
@@ -51,5 +51,5 @@ are written like this, but if i delete something from it, it breaks
     border-radius: 70%;
     padding: 5px 16px 5px;
     position: relative;
-    left: 1rem;
+    left: 1em;
 }
