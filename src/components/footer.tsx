@@ -2,7 +2,7 @@ const Footer = () => {
    return (
       <footer className='bg-gray-400 flex flex-row justify-center h-full w-full p-4'>
          <div className='flex items-right'>
-            Footer
+            <p className="font-sans">FOOTER</p>
          </div>
          <div className="flex items-left">
             {/* Later we'll use an API by Maps themselves and generate an API key to make it dark mode to fit with the entire design */}

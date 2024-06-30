@@ -43,7 +43,7 @@ const SwiperCarousel: React.FC = () => {
       >
          <SwiperSlide>
             <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/448656717_1010263371099577_8325107832581048915_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=UTAdy22JjL4Q7kNvgFmw0W9&edm=AEhyXUkAAAAA&ccb=7-5&ig_cache_key=MzM5NTE0ODE1NzI2NzMxMTMzNg%3D%3D.2-ccb7-5&oh=00_AYBzTwmQUv4AfSTgXBAr1UA9xV-GGU5ObIQsyKIwdvrhjg&oe=668483B9&_nc_sid=8f1549" alt="Slide 1" />
-            <h2>Lorem ipsum</h2>
+            <h2 className='font-sans'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src="https://scontent-vie1-1.cdninstagram.com/v/t39.30808-6/444226405_994269226032325_125323137515081025_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyLmYzMDgwOCJ9&_nc_ht=scontent-vie1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=0Xv5nBCSliYQ7kNvgFFOnwi&edm=AEhyXUkAAAAA&ccb=7-5&ig_cache_key=MzM3ODQ3ODM4NTIxNzcwNzc5OA%3D%3D.2-ccb7-5&oh=00_AYAflZ2pCSxld8Gq3djumdJhasGl43DFO3IkD5Svadkx3A&oe=6684548F&_nc_sid=8f1549" alt="Slide 2" />
