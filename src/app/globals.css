@@ -53,3 +53,11 @@ are written like this, but if i delete something from it, it breaks
     position: relative;
     left: 1em;
 }
+
+.swiper-button-next:hover::after, .swiper-button-prev:hover::after{
+    color: #fff;
+    background-color: crimson;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
