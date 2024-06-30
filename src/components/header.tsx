@@ -14,7 +14,7 @@ const Header = () => {
             />
          </div>
          <div className='flex items-center'>
-            Header
+            <p className="font-sans">HEADER</p>
          </div>
          <Socials />
       </header>

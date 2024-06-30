@@ -18,6 +18,13 @@ are written like this, but if i delete something from it, it breaks
 * TODO: Fix Problem 1
 */
 
+@font-face {
+    font-family: 'ArgentumSans-Regular';
+    src: url('/fonts/argentum-sans/ArgentumSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 .swiper-slide-prev,.swiper-slide-next {
     opacity: 1;
     filter: blur(4px);
