@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Socials from "./socials";
+import Player from "./player";
 import logo from "../../public/03_TLIS_logo2020_white_no-bkg.svg";
 
 const Header = () => {
@@ -16,6 +17,7 @@ const Header = () => {
          <div className='flex items-center'>
             <p className="font-sans">HEADER</p>
          </div>
+         <Player />
          <Socials />
       </header>
    )
