@@ -1,5 +1,7 @@
 'use client';
 
+import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect, useRef } from 'react';
 
 const AudioPlayer: React.FC = () => {
@@ -30,22 +32,21 @@ const AudioPlayer: React.FC = () => {
         }
         setIsPlaying(!isPlaying);
     };
-    
+
     return (
         <>
-            <audio src={audioSource} />
-            {isPlaying ? (
-                <button onClick={handlePlayPause}>
-                    <div className="flex gap-2">
-                        <div className="w-4 h-10 bg-black"></div>
-                        <div className="w-4 h-10 bg-black"></div>
-                    </div>
-                </button>
-            ) : (
-                <button onClick={handlePlayPause}>
-                    <div className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[35px] border-l-black"></div>
-                </button>
-            )}
+            <span
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer text-4xl"
+                onClick={() => handlePlayPause()}
+            >
+                {isPlaying ? (
+                    <FontAwesomeIcon icon={faPause} />
+                ) : (
+                    <FontAwesomeIcon icon={faPlay} />
+                )}
+            </span>
         </>
     );
 };
