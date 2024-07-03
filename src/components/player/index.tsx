@@ -1,22 +1,19 @@
 'use client';
 
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faPause, faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useRef, useEffect } from 'react';
 
 /**
- * The player know plays music realtime but ...
- * ! now he caches the stream even after the pause.
- * * Open Network in the DevTool, and after you refresh the page look for tlis.mp3 
- *   TODO: We need to fix this cacheing problem
- * * I would try to clear the tlis.mp3 cache every 5 seconds.
- * * So it can play realtime without such a high cache problem. (Klobucikov napad)
+ ** https://youtu.be/Of_8YG8b760?si=59_oOEfijIUgVrGx
+ * "I did, and still got nothig, but it works :)." - Jizzus 8:23 3.7.2024
  */
 
 const AudioPlayer: React.FC = () => {
     const audioSource = "https://stream.tlis.sk/tlis.mp3";
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!audioRef.current) {
@@ -26,21 +23,29 @@ const AudioPlayer: React.FC = () => {
         return () => {
             if (audioRef.current) {
                 audioRef.current.pause();
-                audioRef.current = null;
+                audioRef.current.src = "";  // Stop downloading the stream
             }
         };
     }, [audioSource]);
 
     const handlePlayPause = () => {
         if (isPlaying) {
-            audioRef.current?.pause();
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.src = "";  // Stop downloading the stream
+            }
             setIsPlaying(false);
         } else {
-            audioRef.current?.play().then(() => {
-                setIsPlaying(true);
-            }).catch((err) => {
-                console.warn(err);
-            });
+            if (audioRef.current) {
+                audioRef.current.src = audioSource;  // Set the source again to resume playback
+                setIsLoading(true);
+                audioRef.current.play().then(() => {
+                    setIsLoading(false);
+                    setIsPlaying(true);
+                }).catch((err) => {
+                    console.warn(err);
+                });
+            }
         }
     };
 
@@ -51,7 +56,8 @@ const AudioPlayer: React.FC = () => {
             className="cursor-pointer text-4xl"
             onClick={handlePlayPause}
         >
-            {!isPlaying && <FontAwesomeIcon icon={faPlay} />}
+            {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
+            {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
             {isPlaying && <FontAwesomeIcon icon={faPause} />}
         </span>
     );
