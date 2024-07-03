@@ -1,66 +1,34 @@
 'use client';
+import React, { useState, useRef } from 'react';
+import { isMobile, isTablet } from "react-device-detect";
+import PlayerControl from "./player-control";
+import PlayerDisplay from "./song-data";
 
-import { faPause, faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState, useRef, useEffect } from 'react';
+const Player: React.FC = () => {
+   const audio = useRef<HTMLAudioElement | null>(null);
+   const [isPlaying, setIsPlaying] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
+   const source = "https://stream.tlis.sk/tlis.mp3"
+   const title = "TLIS";
 
-/**
- ** https://youtu.be/Of_8YG8b760?si=59_oOEfijIUgVrGx
- * "I did, and still got nothig, but it works :)." - Jizzus 8:23 3.7.2024
- */
-
-const AudioPlayer: React.FC = () => {
-    const audioSource = "https://stream.tlis.sk/tlis.mp3";
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        if (!audioRef.current) {
-            audioRef.current = new Audio(audioSource);
-        }
-
-        return () => {
-            if (audioRef.current) {
-                audioRef.current.pause();
-                audioRef.current.src = "";  // Stop downloading the stream
-            }
-        };
-    }, [audioSource]);
-
-    const handlePlayPause = () => {
-        if (isPlaying) {
-            if (audioRef.current) {
-                audioRef.current.pause();
-                audioRef.current.src = "";  // Stop downloading the stream
-            }
-            setIsPlaying(false);
-        } else {
-            if (audioRef.current) {
-                audioRef.current.src = audioSource;  // Set the source again to resume playback
-                setIsLoading(true);
-                audioRef.current.play().then(() => {
-                    setIsLoading(false);
-                    setIsPlaying(true);
-                }).catch((err) => {
-                    console.warn(err);
-                });
-            }
-        }
-    };
-
-    return (
-        <span
-            role="button"
-            tabIndex={0}
-            className="cursor-pointer text-4xl"
-            onClick={handlePlayPause}
-        >
-            {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
-            {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
-            {isPlaying && <FontAwesomeIcon icon={faPause} />}
-        </span>
-    );
+   return (
+      <div
+         className={`flex ${isMobile && !isTablet ? "w-full" : "w-1/2"
+            } items-center rounded-md border border-red-800 bg-red-600/50 py-2 px-4 text-white lg:w-1/3 `}
+      >
+         <div className="mr-2 flex w-[calc(100%-36px-8px)] flex-col">
+            <PlayerDisplay title={title} />
+         </div>
+         <PlayerControl
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+            audioSource={source}
+            audioRef={audio}
+         />
+      </div>
+   );
 };
 
-export default AudioPlayer;
+export default Player;
