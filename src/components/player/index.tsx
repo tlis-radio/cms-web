@@ -1,8 +1,10 @@
 'use client';
+import Image from "next/image";
+import PlayerDisplay from "./song-data";
+import PlayerControl from "./player-control";
 import React, { useState, useRef } from 'react';
 import { isMobile, isTablet } from "react-device-detect";
-import PlayerControl from "./player-control";
-import PlayerDisplay from "./song-data";
+import logo from "../../../public/03_TLIS_logo2020_white_no-bkg.svg";
 
 const Player: React.FC = () => {
    const audio = useRef<HTMLAudioElement | null>(null);
@@ -14,7 +16,7 @@ const Player: React.FC = () => {
    return (
       <div
          className={`flex ${isMobile && !isTablet ? "w-full" : "w-1/2"
-            } items-center bg-[#2e2b2c] py-2 px-4 text-white lg:w-1/3 `}
+            } items-center bg-[#2e2b2c] p-2 text-white lg:w-1/3 gap-2`}
       >
          <PlayerControl
             isLoading={isLoading}
@@ -27,6 +29,12 @@ const Player: React.FC = () => {
          <div className="mr-2 flex w-[calc(100%-44px)] flex-col">
             <PlayerDisplay title={title} />
          </div>
+         <Image
+            src={logo}
+            alt="Logo"
+            height={64}
+            priority={true}
+         />
       </div>
    );
 };
