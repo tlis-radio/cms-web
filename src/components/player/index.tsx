@@ -9,16 +9,13 @@ const Player: React.FC = () => {
    const [isPlaying, setIsPlaying] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const source = "https://stream.tlis.sk/tlis.mp3"
-   const title = "TLIS";
+   const title = "NOOT NOOT";
 
    return (
       <div
          className={`flex ${isMobile && !isTablet ? "w-full" : "w-1/2"
-            } items-center rounded-md border border-red-800 bg-red-600/50 py-2 px-4 text-white lg:w-1/3 `}
+            } items-center bg-[#2e2b2c] py-2 px-4 text-white lg:w-1/3 `}
       >
-         <div className="mr-2 flex w-[calc(100%-36px-8px)] flex-col">
-            <PlayerDisplay title={title} />
-         </div>
          <PlayerControl
             isLoading={isLoading}
             setIsLoading={setIsLoading}
@@ -27,6 +24,9 @@ const Player: React.FC = () => {
             audioSource={source}
             audioRef={audio}
          />
+         <div className="mr-2 flex w-[calc(100%-44px)] flex-col">
+            <PlayerDisplay title={title} />
+         </div>
       </div>
    );
 };

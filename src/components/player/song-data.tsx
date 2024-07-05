@@ -7,11 +7,11 @@ type PlayerDisplayProps = {
 const PlayerDisplay: React.FC<PlayerDisplayProps> = ({ title }) => {
    return (
       <>
-         <span>
-            <p className="w-fit rounded-full bg-red-900 px-2 text-sm">#TLIS</p>
-         </span>
-         <span className="truncate" data-tip={title}>
+         <span className="w-fit px-2" data-tip={title}>
             {title}
+         </span>
+         <span>
+            <p className="w-fit px-2 text-sm">Luca-Dante Spadafora feat. Pingu & Mozart</p>
          </span>
       </>
    );

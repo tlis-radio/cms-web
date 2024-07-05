@@ -2,7 +2,7 @@
 
 import { faPause, faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  ** https://youtu.be/Of_8YG8b760?si=59_oOEfijIUgVrGx
@@ -18,8 +18,6 @@ type PlayerControlProps = {
     audioRef: React.MutableRefObject<HTMLAudioElement | null>;
 };
 
-
-
 const PlayerControl: React.FC<PlayerControlProps> = ({
     isPlaying,
     setIsLoading,
@@ -28,10 +26,12 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
     audioSource,
     audioRef,
 }) => {
+    const [volume, setVolume] = useState<number>(1); // Initial volume set to 1 (max volume)
 
     useEffect(() => {
         if (!audioRef.current) {
             audioRef.current = new Audio(audioSource);
+            audioRef.current.volume = volume;
         }
 
         return () => {
@@ -41,6 +41,12 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
             }
         };
     }, [audioSource]);
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
+        }
+    }, [volume]);
 
     const handlePlayPause = () => {
         if (isPlaying) {
@@ -63,17 +69,31 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
         }
     };
 
+    const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setVolume(Number(event.target.value));
+    };
+
     return (
-        <span
-            role="button"
-            tabIndex={0}
-            className="cursor-pointer text-4xl"
-            onClick={handlePlayPause}
-        >
-            {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
-            {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
-            {isPlaying && <FontAwesomeIcon icon={faPause} />}
-        </span>
+        <div className="flex flex-col items-center gap-1">
+            <span
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer text-4xl"
+                onClick={handlePlayPause}
+            >
+                {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
+                {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
+                {isPlaying && <FontAwesomeIcon icon={faPause} />}
+            </span>
+            <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={handleVolumeChange}
+            />
+        </div>
     );
 };
 

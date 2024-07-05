@@ -6,15 +6,13 @@ import { isMobile, isTablet } from "react-device-detect";
 
 const Header = () => {
    return (
-      <header className='bg-cyan-500 flex flex-row justify-between h-full w-full p-4'>
-         <div className='bg-[#96120F]'>
-            <Image
-               src={logo}
-               alt="Logo"
-               height={64}
-               priority={true}
-            />
-         </div>
+      <header className='bg-[#96120F] flex flex-row justify-between h-full w-full pr-4'>
+         <Image
+            src={logo}
+            alt="Logo"
+            height={73}
+            priority={true}
+         />
          {(!isMobile || isTablet) && <Player />}
          <Socials />
       </header>
