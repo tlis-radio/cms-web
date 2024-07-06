@@ -15,7 +15,7 @@ const Player: React.FC = () => {
 
    return (
       <div
-         className={`flex ${isMobile && !isTablet ? "w-full" : "w-1/2"
+         className={`flex ${isMobile && !isTablet ? "fixed bottom-0 inset-x-0 w-full" : "w-1/2"
             } items-center bg-[#2e2b2c] p-2 text-white lg:w-1/3 gap-2`}
       >
          <PlayerControl
