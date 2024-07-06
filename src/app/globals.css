@@ -25,6 +25,10 @@ are written like this, but if i delete something from it, it breaks
     font-style: normal;
 }
 
+.swiper-wrapper {
+    padding-bottom: 4em;
+}
+
 .swiper-slide-prev,.swiper-slide-next {
     opacity: 1;
     filter: blur(4px);
@@ -49,17 +53,18 @@ are written like this, but if i delete something from it, it breaks
     border-radius: 70%;
     padding: 5px 16px 5px;
     position: relative;
+    top: 3em;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
 }
 
 .swiper-button-next::after {
-    right: 1em;
+    right: 5em;
 }
 
 .swiper-button-prev::after {
-    left: 1em;
+    left: 5em;
 }
 
 .swiper-button-next:hover::after, .swiper-button-prev:hover::after{
