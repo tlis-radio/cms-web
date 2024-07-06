@@ -3,6 +3,8 @@
 import { faPause, faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
+import {isMobile, isTablet } from "react-device-detect";
+import VolumeControl from './volume-control';
 
 /**
  ** https://youtu.be/Of_8YG8b760?si=59_oOEfijIUgVrGx
@@ -87,17 +89,7 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
                 {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
                 {isPlaying && <FontAwesomeIcon icon={faPause} />}
             </span>
-            <div className='px-2.5 py-1 rounded-full bg-[#d43c4a]'>
-                <input
-                    className='w-[100%]'
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={volume}
-                    onChange={handleVolumeChange}
-                />
-            </div>
+            {!isMobile && !isTablet && <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />}
         </div>
     );
 };
