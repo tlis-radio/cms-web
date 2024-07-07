@@ -7,6 +7,7 @@ import dia from '../../../public/citanie_s_diou.jpg';
 import eren from '../../../public/eren_radioshow.jpg';
 import spachtla from '../../../public/okno_do_duse.jpg';
 import kajo from '../../../public/zakutlisie_s_kajom.jpg';
+import valcek from '../../../public/rozpravky_na_dobru_noc.jpg';
 import { isMobile } from 'react-device-detect';
 
 import 'swiper/css';
@@ -69,6 +70,10 @@ const SwiperCarousel: React.FC = () => {
             <h2 className='font-sans'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
+            <img src={valcek.src} alt="Slide 6" />
+            <h2 className='font-sans'>PIATOK 18_00</h2>
+         </SwiperSlide>
+         <SwiperSlide>
             <img src={krivko.src} alt="Slide 1" />
             <h2 className='font-sans'>PIATOK 18_00</h2>
          </SwiperSlide>
@@ -86,6 +91,10 @@ const SwiperCarousel: React.FC = () => {
          </SwiperSlide>
          <SwiperSlide>
             <img src={kajo.src} alt="Slide 5" />
+            <h2 className='font-sans'>PIATOK 18_00</h2>
+         </SwiperSlide>
+         <SwiperSlide>
+            <img src={valcek.src} alt="Slide 6" />
             <h2 className='font-sans'>PIATOK 18_00</h2>
          </SwiperSlide>
       </Swiper>
