@@ -30,7 +30,7 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
     audioSource,
     audioRef,
 }) => {
-    const [volume, setVolume] = useState(0.5); // Initial volume set to 1 (max volume)
+    const [volume, setVolume] = useState(0.5); // Initial volume set to 0.5 (mid volume)
 
     useEffect(() => {
         if (!audioRef.current) {
@@ -82,12 +82,12 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
             <span
                 role="button"
                 tabIndex={0}
-                className="cursor-pointer text-2xl px-3 py-1.5 rounded-full bg-[#d43c4a]"
+                className="flex cursor-pointer text-2xl p-2.5 rounded-full bg-[#d43c4a]"
                 onClick={handlePlayPause}
             >
                 {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
-                {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
-                {isPlaying && <FontAwesomeIcon icon={faPause} />}
+                {!isPlaying && !isLoading && <FontAwesomeIcon className="px-[3px]" icon={faPlay} />}
+                {isPlaying && <FontAwesomeIcon className="px-[4.5px]" icon={faPause} />}
             </span>
             {!isMobile && !isTablet && <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />}
         </div>
