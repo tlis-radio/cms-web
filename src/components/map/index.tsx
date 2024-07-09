@@ -1,6 +1,7 @@
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
 import { LatLngTuple, Icon } from 'leaflet';
+import logo from "../../../public/03_TLIS_logo2020_white_no-bkg.svg";
 
 import dynamic from 'next/dynamic';
 
@@ -34,7 +35,7 @@ const MapComponent = () => {
     };
 
     const tlis_icon = new Icon({
-        iconUrl: 'https://tlis.sk/assets/tlis-white-no-bkg.0998e327.svg',
+        iconUrl: logo.src,
         iconSize: [50, 50],
     });
 
