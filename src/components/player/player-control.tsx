@@ -1,9 +1,6 @@
-'use client';
-
 import { faPause, faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import {isMobile, isTablet } from "react-device-detect";
 import VolumeControl from './volume-control';
 
 /**
@@ -30,7 +27,7 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
     audioSource,
     audioRef,
 }) => {
-    const [volume, setVolume] = useState(0.5); // Initial volume set to 0.5 (mid volume)
+    const [volume, setVolume] = useState(1); // Changed default volume to 100% because of mobile devices
 
     useEffect(() => {
         if (!audioRef.current) {
@@ -89,7 +86,15 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
                 {!isPlaying && !isLoading && <FontAwesomeIcon className="px-[3px]" icon={faPlay} />}
                 {isPlaying && <FontAwesomeIcon className="px-[4.5px]" icon={faPause} />}
             </span>
-            {!isMobile && !isTablet && <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />}
+
+            {
+            // TODO - Style the volume slider
+            // TODO - This is a hotfix, it's still desired to know if we're working with a mobile or tablet device so we can use different initial volume states for PCs and phones/tablets, hence try to find a way to find device type while also keeping SSR - Jager 13:11 9.7.2024
+            }
+
+            <div className='hidden sm:block'>
+                <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
+            </div>
         </div>
     );
 };

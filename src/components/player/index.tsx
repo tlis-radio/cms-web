@@ -1,9 +1,7 @@
-'use client';
 import Image from "next/image";
 import PlayerDisplay from "./song-data";
 import PlayerControl from "./player-control";
 import React, { useState, useRef } from 'react';
-import { isMobile, isTablet } from "react-device-detect";
 import logo from "../../../public/03_TLIS_logo2020_white_no-bkg.svg";
 
 const Player: React.FC = () => {
@@ -15,8 +13,9 @@ const Player: React.FC = () => {
 
    return (
       <div
-         className={`flex ${isMobile && !isTablet ? "fixed bottom-0 inset-x-0 w-full" : "w-1/2"
-            } items-center bg-[#2e2b2c] p-2 text-white lg:w-1/3 gap-2`}
+         className="flex items-center bg-[#2e2b2c] p-2 text-white fixed bottom-0 inset-x-0 w-full 
+             sm:w-1/2 sm:static sm:top-auto sm:left-auto sm:right-auto
+             lg:w-1/3 gap-2"
       >
          <PlayerControl
             isLoading={isLoading}
