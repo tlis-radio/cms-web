@@ -42,7 +42,7 @@ const MapComponent = () => {
         <MapContainer center={[48.15812, 17.064]} zoom={17} style={{ height: "30vh", width: "30%" }}>
         <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
         />
         <Marker position={tlis_marker.geocode} icon={tlis_icon}>
         </Marker>
