@@ -2,7 +2,6 @@ import Player from "./player";
 import Image from "next/image";
 import Socials from "./socials";
 import logo from "../../public/03_TLIS_logo2020_white_no-bkg.svg";
-import { isMobile, isTablet } from "react-device-detect";
 
 const Header = () => {
    return (
@@ -13,7 +12,7 @@ const Header = () => {
             height={80}
             priority={true}
          />
-         {(!isMobile || isTablet) && <Player />}
+         <Player />
          <Socials />
       </header>
    )
