@@ -40,14 +40,16 @@ const MapComponent = () => {
     });
 
     return (
-        <MapContainer center={[48.15812, 17.064]} zoom={17} style={{ height: "30vh", width: "30%" }}>
-        <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-        />
-        <Marker position={tlis_marker.geocode} icon={tlis_icon}>
-        </Marker>
-        </MapContainer>
+        <div className="h-[30vh] w-[90%] sm:w-[50%] lg:w-[33%]">
+            <MapContainer center={[48.15812, 17.064]} zoom={17} style={{ height: "100%", width: "100%" }}>
+                <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                />
+                <Marker position={tlis_marker.geocode} icon={tlis_icon}>
+                </Marker>
+            </MapContainer>
+        </div>
     );
 };
 
