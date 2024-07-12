@@ -13,9 +13,9 @@ const Player: React.FC = () => {
 
    return (
       <div
-         className="flex items-center bg-[#2e2b2c] p-2 text-white fixed bottom-0 inset-x-0 w-full 
+         className="flex items-center bg-[#2e2b2c] p-2 text-white fixed bottom-0 inset-x-0 w-full gap-2 z-10
              sm:w-1/2 sm:static 
-             lg:w-1/3 gap-2"
+             lg:w-1/3"
       >
          <PlayerControl
             isLoading={isLoading}
