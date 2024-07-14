@@ -47,7 +47,11 @@ const SwiperCarousel: React.FC = () => {
          slidesPerView={isMobile ? 2 : 3}
          speed={1000} // Speed of the sliding movement in miliseconds
          centeredSlides={true}
-         navigation
+         navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+            disabledClass: "swiper-button-disabled"
+         }}
       >
          <SwiperSlide>
             <img src={krivko.src} alt="Slide 1" />
@@ -97,6 +101,14 @@ const SwiperCarousel: React.FC = () => {
             <img src={valcek.src} alt="Slide 6" />
             <h2 className='font-sans'>PIATOK 18_00</h2>
          </SwiperSlide>
+         <div className='bg-red-950'>
+            <div>
+               <button className='swiper-button-prev'></button>
+            </div>
+            <div>
+               <button className='swiper-button-next'></button>
+            </div>
+         </div>
       </Swiper>
    );
 };
