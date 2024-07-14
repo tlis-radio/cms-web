@@ -1,4 +1,4 @@
-import Player from "./player";
+import PlayerComponent from "./player";
 import Image from "next/image";
 import Socials from "./socials";
 import logo from "../../public/03_TLIS_logo2020_white_no-bkg.svg";
@@ -12,7 +12,7 @@ const Header = () => {
             height={80}
             priority={true}
          />
-         <Player />
+         <PlayerComponent />
          <Socials />
       </header>
    )
