@@ -10,16 +10,16 @@ const PlayerDisplay: React.FC<PlayerDisplayProps> = ({ title }) => {
       <>
          <span className="px-2" data-tip={title}>
             <Marquee autoFill direction="right">
-               <p className="line-clamp-1">{title} {title} {title}_</p>
+               <p className="line-clamp-1">{title}</p>
             </Marquee>
          </span>
          {
-         // TODO - Make this text scrolling when longer than the container it's located in
-         // Found a Marquee react library, working but need to fix the whitespace error being displayed
+         // TODO - Only use Marquee when the text overflows, some conditional rendering needed
+         // Nech sa páči, darček na dobrú noc :D -Jager 1:22 15.7.2024
          }
          <span className="px-2">
             <Marquee autoFill direction="right">
-               <p className="line-clamp-1">Luca-Dante Spadafora feat. Pingu & Mozart_</p>
+               <p className="line-clamp-1">Luca-Dante Spadafora feat. Pingu & Mozart</p>
             </Marquee>
          </span>
       </>
