@@ -20,9 +20,9 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
    return (
       <>
       <div
-         className="flex items-center bg-[#2e2b2c] p-2 text-white fixed bottom-0 inset-x-0 w-full gap-2 z-10
-             sm:w-1/2 sm:static 
-             lg:w-1/3"
+         className="flex items-center bg-[#2e2b2c] p-2 pr-7 text-white fixed bottom-0 inset-x-0 w-full gap-2 z-10
+             sm:w-1/2 sm:pr-0 sm:static 
+             xl:w-2/5 2xl:w-1/3"
          style={playerStyle}
       >
          <PlayerControl
