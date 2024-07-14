@@ -9,7 +9,7 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
    const playerStyle = {
       transform: isVisible ? 'translateY(0)' : 'translateY(100%)', // Adjust as needed
       transition: 'transform 0.3s ease-in-out',
-  };
+   };
 
    const audio = useRef<HTMLAudioElement | null>(null);
    const [isPlaying, setIsPlaying] = useState(false);
