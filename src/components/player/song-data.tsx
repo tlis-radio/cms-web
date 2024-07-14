@@ -6,7 +6,7 @@ type PlayerDisplayProps = {
 
 const PlayerDisplay: React.FC<PlayerDisplayProps> = ({ title }) => {
    return (
-      <>
+      <div className="overflow-x-hidden">
          <span className="w-fit px-2" data-tip={title}>
             {title}
          </span>
@@ -14,9 +14,9 @@ const PlayerDisplay: React.FC<PlayerDisplayProps> = ({ title }) => {
          // TODO - Make this text scrolling when longer than the container it's located in
          }
          <span>
-            <p className="w-fit px-2 text-sm">Luca-Dante Spadafora feat. Pingu </p>
+            <p className="w-fit px-2 text-sm">Luca-Dante Spadafora feat. Pingu</p>
          </span>
-      </>
+      </div>
    );
 };
 
