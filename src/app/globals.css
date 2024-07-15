@@ -47,31 +47,23 @@ are written like this, but if i delete something from it, it breaks
     transition: transform 0.5s, filter 0.5s, opacity 0.5s ease;
 }
 
+/**
+* Swiper Navigation Buttons
+*/
+
 .swiper-button-next::after, .swiper-button-prev::after {
-    color: crimson;
-    background-color: #fff;
-    border-radius: 70%;
-    padding: 5px 16px 5px;
-    position: relative;
-    top: 3em;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
+    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 top-[210%] sm:top-[200%] md:top-[220%] lg:top-[280%] xl:top-[330%] 2xl:top-[300%]; 
 }
 
 .swiper-button-next::after {
-    right: 5em;
+    @apply right-[400%] lg:right-[600%] xl:right-[700%] 2xl:right-[800%]
 }
 
 .swiper-button-prev::after {
-    left: 5em;
+    @apply left-[400%] lg:left-[600%] xl:left-[700%] 2xl:left-[800%]
 }
 
 .swiper-button-next:hover::after, .swiper-button-prev:hover::after{
-    color: #fff;
-    background-color: crimson;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
+    @apply bg-red-700 text-white transition-colors;
 }
 
