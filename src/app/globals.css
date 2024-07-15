@@ -52,7 +52,7 @@ are written like this, but if i delete something from it, it breaks
 */
 
 .swiper-button-next::after, .swiper-button-prev::after {
-    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 top-[225%] sm:top-[200%] sm:scale-90 md:top-[220%] lg:top-[280%] xl:top-[330%] 2xl:top-[300%] 2xl:scale-100; 
+    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 top-[225%] sm:top-[200%] sm:scale-90 md:top-[220%] lg:top-[280%] xl:top-[330%] 2xl:top-[300%] 2xl:scale-100 xxxl:scale-125 xxxl:top-[420%] tlis_monitor:top-[600%]; 
 }
 
 .swiper-button-next::after {

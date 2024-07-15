@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xxxl: "2196px",
+        tlis_monitor: "3072px",
+      },
       fontFamily: {
         sans: ["ArgentumSans-Regular", "system-ui"],
       },

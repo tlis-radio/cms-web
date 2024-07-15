@@ -46,7 +46,6 @@ const SwiperCarousel: React.FC = () => {
             slideShadows: false
          }}
 
-         //slidesPerView={isMobile ? 2 : 3}
          speed={1000} // Speed of the sliding movement in miliseconds
          centeredSlides={true}
          navigation={{
@@ -118,8 +117,6 @@ const SwiperCarousel: React.FC = () => {
          <div className='bg-red-950'>
             <div>
                <button className='swiper-button-prev'></button>
-            </div>
-            <div>
                <button className='swiper-button-next'></button>
             </div>
          </div>
