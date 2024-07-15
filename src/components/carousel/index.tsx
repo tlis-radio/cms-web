@@ -29,6 +29,10 @@ const SwiperCarousel: React.FC = () => {
    };*/
 
    return (
+      <>
+      <h1 className='font-sans'>
+         Program
+      </h1>
       <Swiper
          modules={[EffectCoverflow, Navigation, A11y]}
          effect='coverflow'
@@ -110,6 +114,7 @@ const SwiperCarousel: React.FC = () => {
             </div>
          </div>
       </Swiper>
+      </>
    );
 };
 
