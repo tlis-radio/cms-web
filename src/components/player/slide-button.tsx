@@ -10,7 +10,7 @@ const SlideButton: React.FC<{isVisible: boolean, onClick: () => void }> = ({isVi
 
 
     return (
-        <div className="fixed bottom-2 right-2 z-20 sm:hidden">
+        <div className="fixed bottom-2 right-2 z-20 lg:hidden">
             <span
                 role="button"
                 tabIndex={0}

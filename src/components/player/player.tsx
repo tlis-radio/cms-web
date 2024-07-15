@@ -21,8 +21,9 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
       <>
       <div
          className="flex items-center bg-[#2e2b2c] p-2 pr-11 text-white fixed bottom-0 inset-x-0 w-full gap-2 z-10
-             sm:w-1/2 sm:pr-0 sm:static 
-             xl:w-2/5 2xl:w-1/3"
+             lg:w-2/3 lg:pr-0 lg:static
+             xl:w-2/3 
+             2xl:w-1/3"
          style={playerStyle}
       >
          <PlayerControl
@@ -36,7 +37,7 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
          <div className="mr-2 flex w-[calc(100%-44px)] flex-col">
             <PlayerDisplay title={title} />
          </div>
-         <div className="hidden sm:block">
+         <div className="hidden lg:block">
             <Image
                src={logo}
                alt="Logo"
