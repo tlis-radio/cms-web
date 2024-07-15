@@ -8,7 +8,6 @@ import eren from '../../../public/eren_radioshow.jpg';
 import spachtla from '../../../public/okno_do_duse.jpg';
 import kajo from '../../../public/zakutlisie_s_kajom.jpg';
 import valcek from '../../../public/rozpravky_na_dobru_noc.jpg';
-import { isMobile } from 'react-device-detect';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -47,8 +46,7 @@ const SwiperCarousel: React.FC = () => {
             slideShadows: false
          }}
 
-         spaceBetween={6}
-         slidesPerView={isMobile ? 2 : 3}
+         //slidesPerView={isMobile ? 2 : 3}
          speed={1000} // Speed of the sliding movement in miliseconds
          centeredSlides={true}
          navigation={{
@@ -56,6 +54,18 @@ const SwiperCarousel: React.FC = () => {
             prevEl: ".swiper-button-prev",
             disabledClass: "swiper-button-disabled"
          }}
+         breakpoints={
+            {
+               1: {
+                  slidesPerView: 2,
+                  spaceBetween: 6
+               },
+               640: {
+                  slidesPerView: 3,
+                  spaceBetween: 20
+               },
+            }
+         }
       >
          <SwiperSlide>
             <img src={krivko.src} alt="Slide 1" />

@@ -52,15 +52,15 @@ are written like this, but if i delete something from it, it breaks
 */
 
 .swiper-button-next::after, .swiper-button-prev::after {
-    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 top-[210%] sm:top-[200%] md:top-[220%] lg:top-[280%] xl:top-[330%] 2xl:top-[300%]; 
+    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 top-[225%] sm:top-[200%] sm:scale-90 md:top-[220%] lg:top-[280%] xl:top-[330%] 2xl:top-[300%] 2xl:scale-100; 
 }
 
 .swiper-button-next::after {
-    @apply right-[400%] lg:right-[600%] xl:right-[700%] 2xl:right-[800%]
+    @apply right-[200%] lg:right-[600%] xl:right-[700%] 2xl:right-[800%]
 }
 
 .swiper-button-prev::after {
-    @apply left-[400%] lg:left-[600%] xl:left-[700%] 2xl:left-[800%]
+    @apply left-[200%] lg:left-[600%] xl:left-[700%] 2xl:left-[800%]
 }
 
 .swiper-button-next:hover::after, .swiper-button-prev:hover::after{
