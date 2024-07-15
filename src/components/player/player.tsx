@@ -23,7 +23,7 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
          className="flex items-center bg-[#2e2b2c] p-2 pr-11 text-white fixed bottom-0 inset-x-0 w-full gap-2 z-10
              lg:w-2/3 lg:pr-0 lg:static
              xl:w-2/3 
-             2xl:w-1/3"
+             2xl:w-1/2"
          style={playerStyle}
       >
          <PlayerControl
@@ -34,16 +34,8 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
             audioSource={source}
             audioRef={audio}
          />
-         <div className="mr-2 flex w-[calc(100%-44px)] flex-col">
+         <div className="mr-2 flex flex-col">
             <PlayerDisplay title={title} />
-         </div>
-         <div className="hidden lg:block">
-            <Image
-               src={logo}
-               alt="Logo"
-               height={128}
-               priority={true}
-            />
          </div>
       </div>
       </>

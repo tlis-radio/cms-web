@@ -92,7 +92,7 @@ const PlayerControl: React.FC<PlayerControlProps> = ({
             // TODO - This is a hotfix, it's still desired to know if we're working with a mobile or tablet device so we can use different initial volume states for PCs and phones/tablets, hence try to find a way to find device type while also keeping SSR - Jager 13:11 9.7.2024
             }
 
-            <div className='hidden lg:block'>
+            <div className='hidden lg:block w-[100px] xxxl:w-[150px]'>
                 <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
             </div>
         </div>
