@@ -11,12 +11,17 @@
 
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import Background from '../../../public/images/bgimage.png'
+import Image from 'next/image'
 
 const PageLayout = ({ children, }: { children: React.ReactNode }) => {
    return (
       <>
          <Header />
-         <div className='bg-[#00ff00] flex flex-row justify-center w-full'>
+         <div className='flex flex-row justify-center w-full'>
+            <div className='absolute -z-10 w-full'>
+               <Image src={Background} alt='bg-image' className='w-full'/>
+            </div>
             <div className='bg-[#ff0000] pt-4 w-full text-center sm:w-3/4 md:w-2/3 2xl:w-1/2'>
                {children}
             </div>

@@ -66,4 +66,3 @@ are written like this, but if i delete something from it, it breaks
 .swiper-button-next:hover::after, .swiper-button-prev:hover::after{
     @apply bg-red-700 text-white transition-colors;
 }
-
