@@ -29,8 +29,8 @@ const SwiperCarousel: React.FC = () => {
 
    return (
       <>
-      <h1 className='font-sans text-white'>
-         Program
+      <h1 className='font-argentumSansMedium text-white text-2xl'>
+         P R O G R A M
       </h1>
       <Swiper
          modules={[EffectCoverflow, Navigation, A11y]}

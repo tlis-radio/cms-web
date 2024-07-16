@@ -13,7 +13,11 @@ const config: Config = {
         tlis_monitor: "3072px",
       },
       fontFamily: {
-        sans: ["ArgentumSans-Regular", "system-ui"],
+        argentumSansRegular: ["ArgentumSans-Regular", "system-ui"],
+        argentumSansBold: ["ArgentumSans-Bold", "system-ui"],
+        argentumSansMedium: ["ArgentumSans-Medium", "system-ui"],
+        argentumSansLight: ["ArgentumSans-Light", "system-ui"],
+        argentumSansThin: ["ArgentumSans-Thin", "system-ui"],
       },
       backgroundImage: {
         "acoustic-foam": "url('/images/bgimage.png')",

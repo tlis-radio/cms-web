@@ -25,6 +25,34 @@ are written like this, but if i delete something from it, it breaks
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'ArgentumSans-Bold';
+    src: url('/fonts/argentum-sans/ArgentumSans-Bold.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ArgentumSans-Medium';
+    src: url('/fonts/argentum-sans/ArgentumSans-Medium.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ArgentumSans-Light';
+    src: url('/fonts/argentum-sans/ArgentumSans-Light.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ArgentumSans-Thin';
+    src: url('/fonts/argentum-sans/ArgentumSans-Thin.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 .swiper-wrapper {
     padding-bottom: 4em;
 }
