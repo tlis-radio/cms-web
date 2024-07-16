@@ -16,6 +16,7 @@ const config: Config = {
         sans: ["ArgentumSans-Regular", "system-ui"],
       },
       backgroundImage: {
+        "acoustic-foam": "url('/images/bgimage.png')",
       },
     },
   },

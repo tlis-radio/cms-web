@@ -29,7 +29,7 @@ const SwiperCarousel: React.FC = () => {
 
    return (
       <>
-      <h1 className='font-sans'>
+      <h1 className='font-sans text-white'>
          Program
       </h1>
       <Swiper
@@ -68,51 +68,51 @@ const SwiperCarousel: React.FC = () => {
       >
          <SwiperSlide>
             <img src={krivko.src} alt="Slide 1" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={dia.src} alt="Slide 2" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={eren.src} alt="Slide 3" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={spachtla.src} alt="Slide 4" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={kajo.src} alt="Slide 5" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={valcek.src} alt="Slide 6" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={krivko.src} alt="Slide 1" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={dia.src} alt="Slide 2" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={eren.src} alt="Slide 3" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={spachtla.src} alt="Slide 4" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={kajo.src} alt="Slide 5" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <SwiperSlide>
             <img src={valcek.src} alt="Slide 6" />
-            <h2 className='font-sans'>PIATOK 18_00</h2>
+            <h2 className='font-sans text-white'>PIATOK 18_00</h2>
          </SwiperSlide>
          <div className='bg-red-950'>
             <div>

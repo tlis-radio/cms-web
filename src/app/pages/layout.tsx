@@ -11,23 +11,22 @@
 
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import Background from '../../../public/images/bgimage.png'
-import Image from 'next/image'
 
 const PageLayout = ({ children, }: { children: React.ReactNode }) => {
    return (
-      <>
+      <div className='bg-acoustic-foam min-h-[100vh] flex flex-col'>
          <Header />
          <div className='flex flex-row justify-center w-full'>
-            <div className='absolute -z-10 w-full'>
-               <Image src={Background} alt='bg-image' className='w-full'/>
-            </div>
-            <div className='bg-[#ff0000] pt-4 w-full text-center sm:w-3/4 md:w-2/3 2xl:w-1/2'>
+            {
+               // bg-[#00ff00] - green
+               // bg-[#ff0000] - red
+            }
+            <div className='pt-4 w-full text-center sm:w-3/4 md:w-2/3 2xl:w-1/2'>
                {children}
             </div>
          </div>
          <Footer />
-      </>
+      </div>
    );
 };
 
