@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Navigation, A11y } from 'swiper/modules';
-import krivko from '../../../public/images/whodba.jpg';
-import dia from '../../../public/images/citanie_s_diou.jpg';
-import eren from '../../../public/images/eren_radioshow.jpg';
-import spachtla from '../../../public/images/okno_do_duse.jpg';
-import kajo from '../../../public/images/zakutlisie_s_kajom.jpg';
-import valcek from '../../../public/images/rozpravky_na_dobru_noc.jpg';
+import krivko from "@/../public/images/whodba.jpg";
+import dia from "@/../public/images/citanie_s_diou.jpg";
+import eren from "@/../public/images/eren_radioshow.jpg";
+import spachtla from "@/../public/images/okno_do_duse.jpg";
+import kajo from "@/../public/images/zakutlisie_s_kajom.jpg";
+import valcek from "@/../public/images/rozpravky_na_dobru_noc.jpg";
 
 import 'swiper/css';
 import 'swiper/css/navigation';

@@ -8,7 +8,7 @@ const PlayerDisplay: React.FC<PlayerDisplayProps> = ({ title }) => {
    return (
       <>
          <span className="px-2" data-tip={title}>
-               <p className="line-clamp-1">{title}</p>
+            <p className="line-clamp-1">{title}</p>
          </span>
          {
          // TODO - Only use Marquee when the text overflows, some conditional rendering needed

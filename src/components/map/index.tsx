@@ -1,7 +1,7 @@
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
 import { LatLngTuple, Icon } from 'leaflet';
-import logo from "../../../public/images/03_TLIS_logo2020_white_no-bkg.svg";
+import logo from "@/../public/images/03_TLIS_logo2020_white_no-bkg.svg";
 import { MapContainer,TileLayer,Marker } from "react-leaflet";
 
 /**
