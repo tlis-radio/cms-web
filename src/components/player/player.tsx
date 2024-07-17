@@ -13,7 +13,6 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
    const [isPlaying, setIsPlaying] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const source = "https://stream.tlis.sk/tlis.mp3"
-   const title = "NOOT NOOT";
 
    return (
       <>
@@ -33,7 +32,7 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
             audioRef={audio}
          />
          <div className="mr-2 flex flex-col">
-            <PlayerDisplay title={title} />
+            <PlayerDisplay />
          </div>
       </div>
       </>
