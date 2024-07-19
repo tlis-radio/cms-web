@@ -7,7 +7,7 @@ const Lazymap = dynamic(() => import("./map"), {
 
 const Footer = () => {
    return (
-      <footer className='bg-gray-400 flex flex-row justify-center h-full w-full p-4 mt-auto'>
+      <footer className='bg-[#111111] flex flex-row justify-center h-full w-full p-4 mt-auto'>
          <Lazymap />
       </footer>
    )
