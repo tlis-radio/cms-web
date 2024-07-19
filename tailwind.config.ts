@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
+        xs: "460px",
         xxxl: "2196px",
         tlis_monitor: "3072px",
       },

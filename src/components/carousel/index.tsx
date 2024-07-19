@@ -121,6 +121,24 @@ const SwiperCarousel: React.FC = () => {
             </div>
          </div>
       </Swiper>
+      <div className='flex place-content-between'>
+         <span className='font-argentumSansRegular text-white relative left-9
+         xs:bottom-10
+         md:bottom-3
+         lg:left-[144px] 
+         xl:left-[170px]
+         2xl:bottom-1 2xl:left-[200px]'>
+            Zmeškal si
+         </span>
+         <span className='font-argentumSansRegular text-white relative right-10
+         xs:bottom-10
+         md:bottom-3
+         lg:right-[148px] 
+         xl:right-[174px]
+         2xl:bottom-1 2xl:right-[204px]'>
+            Zmeškáš
+         </span>
+      </div>
       </>
    );
 };
