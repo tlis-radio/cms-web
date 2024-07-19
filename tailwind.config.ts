@@ -21,7 +21,8 @@ const config: Config = {
         argentumSansThin: ["ArgentumSans-Thin", "system-ui"],
       },
       backgroundImage: {
-        "acoustic-foam": "url('/images/bgimage.png')",
+        "acoustic-foam": "url('/images/bgimage_29x29.png')",
+        "acoustic-foam-round": "url('/images/bgimage_wall_part.png')",
       },
     },
   },

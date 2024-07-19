@@ -5,7 +5,7 @@
  * * 'use client'; 
  * cause the module needs to know the users device
  * - Jizzus 10:48 7.7.2024
- */
+*/
 
 'use client'; 
 
@@ -32,7 +32,6 @@ const PageLayout = ({ children, }: { children: React.ReactNode }) => {
 
 export default PageLayout;
 
-
 /* -------------------------------------------------------------------------- */
 /*                                 2. version                                 */
 /* -------------------------------------------------------------------------- */
@@ -45,7 +44,7 @@ import Footer from '@/components/footer'
 
 const PageLayout = ({ children, }: { children: React.ReactNode }) => {
    return (
-      <div className='bg-acoustic-foam min-h-[100vh] flex flex-col bg-repeat-y bg-center bg-contain'>
+      <div className='bg-acoustic-foam-round min-h-[100vh] flex flex-col bg-repeat-y bg-center bg-contain'>
          <Header />
          <div className='flex flex-row justify-center w-full'>
             {
