@@ -10,15 +10,17 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
 
    if (Array.isArray(source)) {
       // Define the title of the first source in the array
-      title = source[0].title || "";
+      title = String(source[0].title) || "";
    } else {
       // If source is a single object
-      title = source.title || "";
+      title = String(source.title) || "";
    }
 
    /**
     * TODO: this doesn't work for some reason, might be a whitespace issue - Jäger 17.7.2024
-    * !Status update - It works. IDK what he is talking about, i haven't changed the if statement - Jizzus 19.7.2024
+    * *Status update - It works. IDK what he is talking about, i haven't changed the if statement - Jizzus 19.7.2024
+    * !Status update - Saw a bug triggerd by a song, need to find out the metadata of that song - Jizzus 28.7.2024
+    * *Status update - I added String(...) to the title because the bug was maybe type related - Jizzus 28.7.2024
     */
 
    if (title === "Unknown") {

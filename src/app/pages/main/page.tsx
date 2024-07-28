@@ -3,7 +3,7 @@ import React from "react";
 import SwiperCarousel from "@/components/carousel";
 
 
-const Shows: React.FC = () => {
+const Main: React.FC = () => {
    return (
       <div>
          <SwiperCarousel />
@@ -11,4 +11,4 @@ const Shows: React.FC = () => {
    );
 }
 
-export default Shows;
+export default Main;
