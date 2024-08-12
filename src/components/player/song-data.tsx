@@ -25,7 +25,7 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
     */
 
    if (title === "Unknown") {
-      return ["Počúvaťe Rádio TLIS"];
+      return ["Počúvate Rádio TLIS"];
    }
    // Reverse used to switch artist and song title
    return title.split(" - ").reverse();
