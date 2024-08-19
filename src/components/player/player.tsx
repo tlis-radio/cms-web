@@ -17,7 +17,7 @@ const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
    return (
       <>
       <div
-         className="flex items-center bg-[#2e2b2c] p-2 pr-11 text-white fixed bottom-0 inset-x-0 w-full gap-2 z-10
+         className="flex items-center bg-[#2e2b2c] p-2 pr-11 fixed bottom-0 inset-x-0 w-full gap-2 z-10
             lg:w-2/3 lg:pr-0 lg:relative lg:rounded-2xl lg:h-[70px] lg:top-[5px]
             xl:w-2/3 
             2xl:w-1/2"

@@ -14,7 +14,7 @@ const SlideButton: React.FC<{isVisible: boolean, onClick: () => void }> = ({isVi
             <span
                 role="button"
                 tabIndex={0}
-                className="flex cursor-pointer text-2xl p-2.5 rounded-full bg-[#d43c4a] text-white"
+                className="flex cursor-pointer text-2xl p-2.5 rounded-full bg-[#d43c4a]"
                 onClick={onClick}
             >
                 <FontAwesomeIcon icon={faChevronDown} style={buttonStyle} />

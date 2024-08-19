@@ -1,3 +1,4 @@
+'use client';
 import Player from "./player";
 import SlideButton from "./slide-button";
 import React, { useState } from 'react';
