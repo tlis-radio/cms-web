@@ -3,11 +3,11 @@ import NavbarLink from "./navbar-link";
 const navbarLinks = [
    { 
       text: "Home", 
-      url: "/main"
+      url: "/"
    },
    { 
       text: "Program", 
-      url: "/main"
+      url: "/"
    },
    { 
       text: "Archív", 
@@ -15,7 +15,7 @@ const navbarLinks = [
    },
    { 
       text: "O nás",
-      url: "/main"
+      url: "/"
    }
 ];
 

@@ -1,13 +1,9 @@
-'use client';
-import { useRouter } from 'next/navigation'
+import SwiperCarousel from "@/components/carousel";
 
-const Home = () => {
-  const router = useRouter()
-
-  // Make sure we're in the browser
-  if (typeof window !== 'undefined') {
-    router.push('/main')
-  }
+export default function Home() {
+  return (
+    <div>
+        <SwiperCarousel />
+    </div>
+  );
 }
-
-export default Home;
