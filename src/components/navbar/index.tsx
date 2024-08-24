@@ -15,7 +15,7 @@ const navbarLinks = [
    },
    { 
       text: "O nás",
-      url: "/"
+      url: "/o-nas"
    }
 ];
 
