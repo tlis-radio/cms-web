@@ -32,7 +32,7 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
 }
 
 const PlayerDisplay: React.FC = () => {
-   const [titles, setTitles] = useState<string[]>([]);
+   const [titleParts, setTitleParts] = useState<string[]>([]);
 
    useEffect(() => {
       const fetchTitle = async () => {
@@ -40,8 +40,8 @@ const PlayerDisplay: React.FC = () => {
          // TODO put the stream URL into environment variables (process.env and NEXT_PUBLIC_)
 
          const apiEndpoint = "https://stream.tlis.sk/status-json.xsl";
-         const titles = await fetchSourceTitle(apiEndpoint);
-         setTitles(titles);
+         const titleParts = await fetchSourceTitle(apiEndpoint);
+         setTitleParts(titleParts);
       };
 
       // Call fetchTitle immediately when the component mounts
@@ -56,7 +56,7 @@ const PlayerDisplay: React.FC = () => {
 
    return (
       <>
-         {titles.map((title, index) => (
+         {titleParts.map((title, index) => (
             <span key={index} className="px-2 font-argentumSansLight" data-tip={title}>
                {title}
             </span>

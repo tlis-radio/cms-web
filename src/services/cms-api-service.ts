@@ -17,7 +17,7 @@ const getAsync = async <T>(uri: string): Promise<T> => {
 
 const showEndpoints = {
    PaginationAsync: async (limit: number, page: number): Promise<Pagination<Show>> => {
-      const result = await getAsync<PaginationDto<ShowDto>>(`/api/show-management/pagination?limit=${limit}&page=${[page]}`);
+      const result = await getAsync<PaginationDto<ShowDto>>(`https://cms.api.staging.tlis.sk/showmanagement/Show/pagination?limit=${limit}&page=${[page]}`);
 
       return new Pagination<Show>(
          result.limit,
@@ -61,9 +61,9 @@ const broadcastEndpoints = {
    }
 };
 
-class CmsApi {
+class CmsApiService {
    static Show = showEndpoints;
    static Broadcast = broadcastEndpoints;
 }
 
-export default CmsApi;
+export default CmsApiService;
