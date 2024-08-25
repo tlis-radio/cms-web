@@ -27,7 +27,7 @@ const Shows: React.FC = () => {
                   <p className="text-lg font-semibold">Moderátori:</p>
                   <p>Cusco Cota</p>
                </span>
-               <p className="pb-4">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex hic nam eum quas a sit quidem id sed soluta, eius debitis asperiores recusandae explicabo assumenda voluptas deleniti veritatis? Eos, consequatur.</p>
+               <p className="pb-4 font-argentumSansLight">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex hic nam eum quas a sit quidem id sed soluta, eius debitis asperiores recusandae explicabo assumenda voluptas deleniti veritatis? Eos, consequatur.</p>
             </div>
          </div>
       </div>
