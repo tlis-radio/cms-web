@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-acoustic-foam min-h-[100vh] flex flex-col`}>
+      <body className={`${inter.className} bg-acoustic-foam bg-fixed min-h-[100vh] flex flex-col`}>
           <Header />
           <div className='flex flex-row justify-center w-full'>
             {
