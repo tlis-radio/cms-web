@@ -5,7 +5,7 @@ import { Show } from "@/models/show";
 import { BroadcastDto, GetByIdBroadcastDto } from "@/types/broadcast";
 import { ShowDto } from "@/types/show";
 
-const getAsync = async <T>(uri: string): Promise<T> => {
+const getData = async <T>(uri: string): Promise<T> => {
    const response = await fetch(uri);
 
    if (response.status >= 400) {
@@ -16,54 +16,15 @@ const getAsync = async <T>(uri: string): Promise<T> => {
 }
 
 const showEndpoints = {
-   PaginationAsync: async (limit: number, page: number): Promise<Pagination<Show>> => {
-      const result = await getAsync<PaginationDto<ShowDto>>(`https://cms.api.staging.tlis.sk/showmanagement/Show/pagination?limit=${limit}&page=${[page]}`);
-
-      return new Pagination<Show>(
-         result.limit,
-         result.page,
-         result.total,
-         result.totalPages,
-         result.results.map(r => Show.fromDto(r))
-      );
-   },
-   GetByIdAsync: async (id: string | null): Promise<Show | undefined> => {
-      if (!id) {
-         return undefined;
-      }
-
-      const result = await getAsync<ShowDto>(`/api/show-management/${id}`);
-
-      return Show.fromDto(result);
-   }
-};
-
-const broadcastEndpoints = {
-   PaginationAsync: async (limit: number, page: number): Promise<Pagination<Broadcast>> => {
-      const result = await getAsync<PaginationDto<BroadcastDto>>(`/api/broadcast-management/pagination?limit=${limit}&page=${[page]}`);
-
-      return new Pagination<Broadcast>(
-         result.limit,
-         result.page,
-         result.total,
-         result.totalPages,
-         result.results.map(r => Broadcast.fromDto(r))
-      );
-   },
-   GetByIdAsync: async (id: string | null): Promise<BroadcastDetails | undefined> => {
-      if (!id) {
-         return undefined;
-      }
-
-      const result = await getAsync<GetByIdBroadcastDto>(`/api/broadcast-management/${id}`);
-
-      return BroadcastDetails.fromDto(id, result);
+   ListShows: async (limit: number, page: number): Promise<Show[]> => {
+      const data = await getData<PaginationDto<ShowDto>>(`https://cms.api.staging.tlis.sk/showmanagement/Show/pagination?limit=${limit}&page=${[page]}`);
+      // Oconsole.log(data.results);
+      return data.results || [];
    }
 };
 
 class CmsApiService {
    static Show = showEndpoints;
-   static Broadcast = broadcastEndpoints;
 }
 
 export default CmsApiService;
