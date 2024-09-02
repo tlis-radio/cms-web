@@ -1,43 +1,37 @@
-import { ShowDto } from "@/types/show";
+import { PaginationShowDto } from "@/types/show";
 
-export class Show {
+export class PaginationShow {
    public id: string;
    public name: string;
    public description: string;
-   public moderators: Array<{ id: string, nickname: string }>;
+   public moderatorIds: Array<string>;
    public createdDate: string;
-   public profileImage: {
-      id: string;
-      url: string;
-   };
+   public profileImageId: string;
 
    constructor(
       id: string,
       name: string,
       description: string,
-      moderators: Array<{ id: string, nickname: string }>,
+      moderatorIds: Array<string>,
       createdDate: string,
-      profileImage: {
-         id: string;
-         url: string;
-      }
+      profileImageId: string
    ) {
       this.id = id;
       this.name = name;
       this.description = description;
-      this.moderators = moderators;
+      this.moderatorIds = moderatorIds;
       this.createdDate = createdDate;
-      this.profileImage = profileImage;
+      this.profileImageId = profileImageId;
    }
 
-   public static fromDto(dto: ShowDto): Show {
-      return new Show(
+   public static fromDto(dto: PaginationShowDto): PaginationShow {
+      return new PaginationShow(
          dto.id,
          dto.name,
          dto.description,
-         dto.moderators,
+         dto.moderatorIds,
          dto.createdDate,
-         dto.profileImage
+         dto.profileImageId
       );
    }
 }

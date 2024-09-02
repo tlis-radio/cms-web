@@ -1,18 +1,8 @@
-export type ShowDto = {
+export type PaginationShowDto = {
    id: string,
    name: string,
    description: string,
-   moderators: Array<ShowModeratorDto>,
+   moderatorIds: Array<string>,
    createdDate: string,
-   profileImage: ShowDtoImage
+   profileImageId: string
 };
-
-export type ShowModeratorDto = {
-   id: string,
-   nickname: string
-};
-
-export type ShowDtoImage = {
-   id: string;
-   url: string;
-}
