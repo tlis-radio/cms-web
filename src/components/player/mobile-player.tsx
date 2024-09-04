@@ -1,3 +1,7 @@
+/**
+ * This component created more problems then it resolved. - Jizzus 11:13 4.9.2024
+ */
+
 import PlayerDisplay from "./song-data";
 import PlayerControl from "./player-control";
 import React, { useState, useRef } from 'react';
