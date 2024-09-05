@@ -1,6 +1,5 @@
 'use client';
 import Player from "./player";
-import MobilePlayer from "./mobile-player";
 import SlideButton from "./slide-button";
 import React, { useState } from 'react';
 
@@ -11,9 +10,8 @@ const PlayerComponent: React.FC = () => {
 
     return (
       <>
-         <Player />
-         <MobilePlayer isVisible={isVisible} />
-         <SlideButton isVisible={isVisible} onClick={toggleVisibility} />
+         <Player isVisible={isVisible}/>
+         <SlideButton isVisible={isVisible} onClick={toggleVisibility}/>
       </>
     );
 };

@@ -2,7 +2,12 @@ import PlayerDisplay from "./song-data";
 import PlayerControl from "./player-control";
 import React, { useState, useRef } from 'react';
 
-const Player: React.FC<{}> = () => {
+const Player: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
+
+   const playerStyle = {
+      transform: isVisible ? 'translateY(0)' : 'translateY(100%)', // Adjust as needed
+      transition: 'transform 0.3s ease-in-out',
+   };
 
    const audio = useRef<HTMLAudioElement | null>(null);
    const [isPlaying, setIsPlaying] = useState(false);
@@ -12,11 +17,11 @@ const Player: React.FC<{}> = () => {
    return (
       <>
       <div
-         className="flex items-center bg-[#2e2b2c] p-2 pr-11 gap-2 z-10
+         className="flex items-center bg-[#2e2b2c] p-2 pr-11 fixed bottom-0 inset-x-0 w-full gap-2 z-10
             lg:w-2/3 lg:pr-0 lg:relative lg:rounded-2xl lg:h-[70px] lg:top-[5px]
             xl:w-2/3 
-            2xl:w-1/2 hidden lg:flex"
-         // style={playerStyle}
+            2xl:w-1/2"
+         style={playerStyle}
       >
          <PlayerControl
             isLoading={isLoading}
@@ -32,11 +37,6 @@ const Player: React.FC<{}> = () => {
       </div>
       </>
    );
-   
 };
-
-// TODO: Add another file called PlayerContent which will contain the PlayerDisplay and PlayerControl components and based on the PlayerContent we will create 2 components called MobilePlayer and DesktopPlayer (find out which styles are applied for which player)
-// fixed bottom-0 inset-x-0 w-full
-
 
 export default Player;
