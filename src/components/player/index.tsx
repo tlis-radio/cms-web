@@ -10,8 +10,7 @@ const PlayerComponent: React.FC = () => {
 
     return (
       <>
-         <Player isVisible={isVisible}/>
-         <SlideButton isVisible={isVisible} onClick={toggleVisibility}/>
+         <Player />
       </>
     );
 };
