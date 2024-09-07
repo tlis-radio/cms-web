@@ -6,7 +6,7 @@ import Navbar from "./navbar";
 
 const Header = () => {
    return (
-      <header className='bg-[#96120F] text-white pr-4'>
+      <header className='bg-[#96120F] text-white pr-4 fixed w-full'>
          <div className='flex flex-row justify-between h-[80px] w-full'>
             <Image
                src={logo}
