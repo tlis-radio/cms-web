@@ -1,6 +1,8 @@
 import { PaginationDto } from "@/models/pagination";
-import { PaginationShowDto } from "@/types/show";
-import { PaginationShow } from "@/models/show";
+import { PaginationShowDto } from "@/types/show-list";
+import { ShowDto } from "@/types/show-id";
+import { PaginationShow } from "@/models/show-list";
+import { Show } from "@/models/show-id";
 import { ImageDto } from "@/types/image";
 import { UserDto } from "@/types/user";
 
@@ -19,6 +21,12 @@ const showEndpoints = {
       const data = await getData<PaginationDto<PaginationShowDto>>(`https://cms.api.staging.tlis.sk/showmanagement/Show/pagination?limit=${limit}&page=${page}`);
       //console.log(data);
       return data.results || [];
+   },
+
+   getShowDataById: async (id: string): Promise<Show> => {
+      const data = await getData<ShowDto>(`https://cms.api.staging.tlis.sk/showmanagement/Show/${id}`)
+      //console.log(data);
+      return data;
    },
 
    getModeratorName: async (ids: Array<string>): Promise<string> => {

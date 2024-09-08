@@ -1,5 +1,5 @@
 import React from 'react';
-import tlisteam from '@/../public/images/tlis-team.jpg';
+import tlisaci from '@/../public/images/tlisaci.jpg';
 
 const AboutUs: React.FC = () => {
     return (
@@ -24,7 +24,7 @@ const AboutUs: React.FC = () => {
                 Č O   J E   N A Š Í M   P O S L A N Í M ?
             </pre>
             <br />
-            <img src={tlisteam.src} alt="Tlispyčy :)" />
+            <img src={tlisaci.src} alt="Tlispyčy :)" />
             <br />
         </>
     );

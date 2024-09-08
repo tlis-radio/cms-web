@@ -1,4 +1,4 @@
-import { PaginationShowDto } from "@/types/show";
+import { PaginationShowDto } from "@/types/show-list";
 
 export class PaginationShow {
    public id: string;
