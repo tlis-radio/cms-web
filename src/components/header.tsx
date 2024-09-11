@@ -3,11 +3,12 @@ import Image from "next/image";
 import Socials from "./socials";
 import logo from "@/../public/images/03_TLIS_logo2020_white_no-bkg.svg";
 import Navbar from "./navbar";
+import Hamburger from "./navbar/hamburger";
 import Link from "next/link";
 
 const Header = () => {
    return (
-      <header className='bg-[#96120F] text-white pr-4 fixed w-full'>
+      <header className='bg-[#96120F] text-white pr-4 fixed w-full z-20'>
          <div className='flex flex-row justify-between h-[80px] w-full'>
             <Link href={"/"}>
             <Image
@@ -19,6 +20,7 @@ const Header = () => {
             </Link>
             <PlayerComponent />
             <Socials />
+            <Hamburger />
          </div>
          <Navbar />
       </header>
