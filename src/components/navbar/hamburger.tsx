@@ -31,7 +31,7 @@ const Hamburger = () => {
   const createNavbarLinks = () => {
     return navbarLinks.map((link, index) => {
        return (
-        <button className="py-2" onClick={toggleVisibility}>
+        <button className="py-6 w-full hover:text-[#96120F] hover:bg-white transition-colors" onClick={toggleVisibility}>
           <HamburgerNavbarLink key={index} text={link.text} redirectUrl={link.url} />
         </button>
           
@@ -56,10 +56,10 @@ const Hamburger = () => {
       </div>
       
       <div className={classNames(
-        "flex flex-col fixed w-full bg-[#96110f] z-20 top-[80px] items-center transition-opacity duration-300 lg:hidden",
+        "flex flex-col fixed w-full bg-[#8a1210] z-20 top-[80px] items-center transition-opacity duration-300 lg:hidden",
         {
           "opacity-0": !isOpen,
-          "opacity-90": isOpen,
+          "opacity-95": isOpen,
         }
       )}>
         {createNavbarLinks()}
