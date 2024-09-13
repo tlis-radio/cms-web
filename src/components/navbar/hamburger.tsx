@@ -56,7 +56,7 @@ const Hamburger = () => {
       </div>
       
       <div className={classNames(
-        "flex flex-col fixed w-full bg-[#8a1210] z-20 top-[80px] items-center transition-opacity duration-300 lg:hidden",
+        "flex flex-col fixed w-full bg-[#8a1210] z-20 top-[80px] items-center transition-opacity duration-300 rounded-b-3xl lg:hidden",
         {
           "opacity-0": !isOpen,
           "opacity-95": isOpen,
