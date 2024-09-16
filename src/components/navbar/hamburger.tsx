@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import classNames from "classnames";
-import HamburgerNavbarLink from "./hamburger-navbar-link";
 import Link from "next/link";
 
 const navbarLinks = [

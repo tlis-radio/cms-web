@@ -8,8 +8,8 @@ type NavbarLinkProps = {
 
 const HamburgerNavbarLink: FunctionComponent<NavbarLinkProps> = ({ text, redirectUrl }) => {
    return (
-      <Link href={redirectUrl} className="py-6 transition-colors font-argentumSansRegular text-xl w-full">
-         {text}
+      <Link href={redirectUrl} className="py-6 transition-colors text-xl w-full">
+         <p className="font-argentumSansLight">{text}</p>
       </Link>
    )
 }
