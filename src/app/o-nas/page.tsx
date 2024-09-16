@@ -21,7 +21,10 @@ const AboutUs: React.FC = () => {
             </p>
             <br />
             <pre className='font-argentumSansMedium text-white text-2xl'>
-                Č O   J E   N A Š Í M   P O S L A N Í M ?
+                Č O   J E   N A Š Í M
+            </pre>
+            <pre className='font-argentumSansMedium text-white text-2xl'>
+                P O S L A N Í M ?
             </pre>
             <br />
             <img src={tlisaci.src} alt="Tlispyčy :)" />
