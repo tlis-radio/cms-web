@@ -3,6 +3,7 @@
 import { useState } from "react";
 import classNames from "classnames";
 import HamburgerNavbarLink from "./hamburger-navbar-link";
+import Link from "next/link";
 
 const navbarLinks = [
   { 
@@ -32,9 +33,11 @@ const Hamburger = () => {
     return navbarLinks.map((link, index) => {
        return (
         <div className="w-full border-t">
-          <button className="py-6 w-full hover:text-[#96120F] hover:bg-white transition-colors" onClick={toggleVisibility}>
-            <HamburgerNavbarLink key={index} text={link.text} redirectUrl={link.url} />
-          </button>
+          <Link href={link.url}>
+            <button className="py-6 w-full hover:text-[#96120F] hover:bg-white transition-colors" onClick={toggleVisibility}>
+              {link.text}
+            </button>
+          </Link>
         </div>
        )
     })
