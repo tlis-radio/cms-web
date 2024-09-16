@@ -59,8 +59,8 @@ const Hamburger = () => {
       <div className={classNames(
         "flex flex-col fixed w-full bg-[#96120F] z-20 top-[80px] items-center transition-opacity duration-300 rounded-b-3xl lg:hidden",
         {
-          "opacity-0": !isOpen,
-          "opacity-95": isOpen,
+          "opacity-0 invisible": !isOpen,
+          "opacity-95 visible": isOpen,
         }
       )}>
         {createNavbarLinks()}
