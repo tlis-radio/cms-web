@@ -10,7 +10,7 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
 
    if (Array.isArray(source)) {
       // Define the title of the first source in the array
-      title = String(source[0]?.title || "Nič na počúvanie");
+      title = String(source[1]?.title || "Nič na počúvanie");
    } else {
       // If source is a single object
       title = String(source?.title || "Nič na počúvanie");
