@@ -31,7 +31,7 @@ const Hamburger = () => {
   const createNavbarLinks = () => {
     return navbarLinks.map((link, index) => {
        return (
-        <div className="w-full border-t">
+        <div key={link.url} className="w-full border-t">
           <Link href={link.url}>
             <button className="py-6 w-full hover:text-[#96120F] hover:bg-white transition-colors" onClick={toggleVisibility}>
               {link.text}
