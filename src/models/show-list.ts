@@ -4,24 +4,24 @@ export class PaginationShow {
    public id: string;
    public name: string;
    public description: string;
-   public moderatorIds: Array<string>;
+   public moderatorNames: Array<string>;
    public createdDate: string;
-   public profileImageId: string;
+   public profileImageUrl: string;
 
    constructor(
       id: string,
       name: string,
       description: string,
-      moderatorIds: Array<string>,
+      moderatorNames: Array<string>,
       createdDate: string,
-      profileImageId: string
+      profileImageUrl: string
    ) {
       this.id = id;
       this.name = name;
       this.description = description;
-      this.moderatorIds = moderatorIds;
+      this.moderatorNames = moderatorNames;
       this.createdDate = createdDate;
-      this.profileImageId = profileImageId;
+      this.profileImageUrl = profileImageUrl;
    }
 
    public static fromDto(dto: PaginationShowDto): PaginationShow {
@@ -29,9 +29,9 @@ export class PaginationShow {
          dto.id,
          dto.name,
          dto.description,
-         dto.moderatorIds,
+         dto.moderatorNames,
          dto.createdDate,
-         dto.profileImageId
+         dto.profileImageUrl
       );
    }
 }

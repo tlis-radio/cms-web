@@ -1,7 +1,6 @@
-const PaginationImage = async ({ src, alt }: { src: Promise<string>, alt: string }) => {
-   const resolvedSrc = await src; // Await the promise to get the actual URL
+const PaginationImage = async ({ src, alt }: { src: string, alt: string }) => {
    return (
-   <img src={resolvedSrc} alt={alt} className="w-48" />
+   <img src={src} alt={alt} className="w-48" />
    )
 };
 

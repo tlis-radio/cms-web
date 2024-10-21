@@ -8,7 +8,7 @@ const Shows: React.FC = async () => {
    const createShowLinks = () => {
       return shows.map((show, index) => {
          return (
-            <ShowLink key={index} id={show.id} name={show.name} description={show.description} imageId={show.profileImageId} moderatorIds={show.moderatorIds} />
+            <ShowLink key={index} id={show.id} name={show.name} description={show.description} imageUrl={show.profileImageUrl} moderatorNames={show.moderatorNames} />
          )
       })
    }

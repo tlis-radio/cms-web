@@ -2,7 +2,7 @@ export type PaginationShowDto = {
    id: string,
    name: string,
    description: string,
-   moderatorIds: Array<string>,
+   moderatorNames: Array<string>,
    createdDate: string,
-   profileImageId: string
+   profileImageUrl: string
 };
