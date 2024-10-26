@@ -67,7 +67,7 @@ const Hamburger = () => {
         }
       )}>
         {createNavbarLinks()}
-        <div className="w-full border-t">
+        <div className="w-full border-t min-[450px]:hidden">
           <div className="py-6 w-full flex justify-center">
             <Socials mobile={true} />
           </div>
