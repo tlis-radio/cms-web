@@ -33,23 +33,26 @@ const Player: React.FC<{}> = () => {
 
    const toggleVisibility = () => setIsVisible(!isVisible);
 
+   const playerWrapper = useRef<HTMLDivElement | null>(null);
+
    const audio = useRef<HTMLAudioElement | null>(null);
    const [isPlaying, setIsPlaying] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const source = "https://stream.tlis.sk/tlis.mp3"
 
-   useEffect(()=> {
-      document.addEventListener("resize", shiftBody);
-      document.removeEventListener("resize", shiftBody);
+   useEffect(() => {
+      window.addEventListener("resize", shiftBody);
       shiftBody();
+      return () => window.removeEventListener("resize", shiftBody);
    }, [isVisible]);
-   
-   function shiftBody () {
-      if(window.innerWidth >= 1024) {
+
+   function shiftBody() {
+      console.log('test');
+      if (window.innerWidth >= 1024) {
          document.querySelector('body')?.style.setProperty('padding-bottom', '0');
          return;
       };
-      document.querySelector('body')?.style.setProperty('padding-bottom', isVisible ? '4rem' : '0');
+      document.querySelector('body')?.style.setProperty('padding-bottom', isVisible ? playerWrapper.current?.clientHeight + 'px' : '0');
    }
 
    const playerClasses = classNames(
@@ -66,7 +69,7 @@ const Player: React.FC<{}> = () => {
 
    return (
       <>
-         <div
+         <div ref={playerWrapper}
             className={playerClasses}
          >
             <PlayerControl
