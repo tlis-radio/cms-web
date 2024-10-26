@@ -47,7 +47,6 @@ const Player: React.FC<{}> = () => {
    }, [isVisible]);
 
    function shiftBody() {
-      console.log('test');
       if (window.innerWidth >= 1024) {
          document.querySelector('body')?.style.setProperty('padding-bottom', '0');
          return;
