@@ -109,14 +109,14 @@ const SwiperCarousel: React.FC = () => {
         }
 
         <div className="relative">
-          <div className="relative h-[100px] flex justify-between">
+          <div className="relative h-[100px] flex justify-between px-[2rem]">
             <div className="relative h-[100px] flex items-center flex-col gap-3">
-              <span className="font-argentumSansRegular text-white relative">Zmeškal si</span>
               <button className="swiper-button-prev"></button>
+              <span className="font-argentumSansRegular text-white relative">Zmeškal si</span>
             </div>
             <div className="relative h-[100px] flex items-center flex-col gap-3">
-              <span className="font-argentumSansRegular text-white relative">Zmeškáš</span>
               <button className="swiper-button-next"></button>
+              <span className="font-argentumSansRegular text-white relative">Zmeškáš</span>
             </div>
           </div>
         </div>
