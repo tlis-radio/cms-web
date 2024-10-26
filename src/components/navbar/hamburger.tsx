@@ -3,6 +3,7 @@
 import { useState } from "react";
 import classNames from "classnames";
 import Link from "next/link";
+import Socials from "../socials";
 
 const navbarLinks = [
   { 
@@ -66,6 +67,11 @@ const Hamburger = () => {
         }
       )}>
         {createNavbarLinks()}
+        <div className="w-full border-t">
+          <div className="py-6 w-full flex justify-center">
+            <Socials mobile={true} />
+          </div>
+        </div>
       </div>
       
 

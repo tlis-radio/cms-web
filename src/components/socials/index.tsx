@@ -20,7 +20,7 @@ export const socialLinks = [
    }
 ];
 
-const Socials = () => {
+const Socials = ({mobile}: {mobile: boolean}) => {
 
    const createSocialLinks = () => {
       return socialLinks.map((link, index) => {
@@ -31,7 +31,7 @@ const Socials = () => {
    }
 
    return (
-      <div className='bg-[#96120F] flex items-center gap-2 max-[450px]:hidden'>
+      <div className={`bg-[#96120F] flex items-center gap-2 ${mobile? 'min-[450px]:hidden' : 'max-[450px]:hidden'}`}>
          {createSocialLinks()}
       </div>
    )

@@ -19,7 +19,7 @@ const Header = () => {
             />
             </Link>
             <PlayerComponent />
-            <Socials />
+            <Socials mobile={false} />
             <Hamburger />
          </div>
          <Navbar />
