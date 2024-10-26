@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-* { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
 /**
 I'm sorry but I'm really not sure why:
@@ -57,11 +59,28 @@ are written like this, but if i delete something from it, it breaks
     padding-bottom: 4em;
 }
 
-.swiper-slide-prev,.swiper-slide-next {
+.swiper-slide-prev,
+.swiper-slide-next {
     opacity: 1;
     filter: blur(4px);
     pointer-events: none;
     transition: filter 0.5s, opacity 0.5s ease;
+}
+
+.swiper-button-prev {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin-top: 0 !important;
+}
+
+.swiper-button-next {
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    margin-top: 0 !important;
 }
 
 .swiper-slide:not(.swiper-slide-visible) {
@@ -70,7 +89,7 @@ are written like this, but if i delete something from it, it breaks
     transition: transform 0.5s, filter 0.5s, opacity 0.5s ease;
 }
 
-.swiper-slide:is(.swiper-slide-visible){
+.swiper-slide:is(.swiper-slide-visible) {
     opacity: 1;
     transition: transform 0.5s, filter 0.5s, opacity 0.5s ease;
 }
@@ -80,19 +99,13 @@ are written like this, but if i delete something from it, it breaks
 /* -------------------------------------------------------------------------- */
 
 
-.swiper-button-next::after, .swiper-button-prev::after {
-    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 top-[225%] sm:top-[200%] sm:scale-90 md:top-[220%] lg:top-[280%] xl:top-[330%] 2xl:top-[300%] 2xl:scale-100 xxxl:scale-125 xxxl:top-[420%] tlis_monitor:top-[600%]; 
-}
-
-.swiper-button-next::after {
-    @apply right-[200%] lg:right-[600%] xl:right-[700%] 2xl:right-[800%]
-}
-
+.swiper-button-next::after,
 .swiper-button-prev::after {
-    @apply left-[200%] lg:left-[600%] xl:left-[700%] 2xl:left-[800%]
+    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 sm:scale-90 2xl:scale-100 xxxl:scale-125 tlis_monitor:top-[600%];
 }
 
-.swiper-button-next:hover::after, .swiper-button-prev:hover::after{
+.swiper-button-next:hover::after,
+.swiper-button-prev:hover::after {
     @apply bg-red-700 text-white transition-colors;
 }
 
@@ -109,9 +122,9 @@ input[type="range"] {
     cursor: pointer;
     height: 12px
 }
- 
+
 input[type="range"]:focus {
-   outline: none;
+    outline: none;
 }
 
 
@@ -127,12 +140,12 @@ input[type="range"]::-webkit-slider-thumb {
     @apply bg-[#2e2b2c] w-3 h-3 rounded-full outline-red-900 scale-105 transition-transform relative bottom-1
 }
 
-input[type="range"]:hover::-webkit-slider-thumb {   
+input[type="range"]:hover::-webkit-slider-thumb {
     @apply scale-125 transition-transform
 }
 
 input[type="range"]:hover::-webkit-slider-runnable-track {
-    @apply bg-gray-300 
+    @apply bg-gray-300
 }
 
 
@@ -143,9 +156,9 @@ input[type="range"]::-moz-range-track {
 }
 
 input[type="range"]::-moz-range-thumb {
-    border: none; 
+    border: none;
     border-radius: 0;
-    @apply bg-[#2e2b2c] w-3 h-3 rounded-full outline-red-900 scale-105 transition-transform 
+    @apply bg-[#2e2b2c] w-3 h-3 rounded-full outline-red-900 scale-105 transition-transform
 }
 
 input[type="range"]:hover::-moz-range-thumb {
@@ -153,5 +166,5 @@ input[type="range"]:hover::-moz-range-thumb {
 }
 
 input[type="range"]:hover::-moz-range-track {
-    @apply bg-gray-300 
+    @apply bg-gray-300
 }

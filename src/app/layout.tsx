@@ -15,7 +15,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
     <html lang="en">
       <body className={`${inter.className} bg-acoustic-foam bg-fixed min-h-[100vh] flex flex-col`}>
           <Header />
-          <div className='flex flex-row justify-center w-full pt-[100px]'>
+          <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[125px]'>
             {
               // bg-[#00ff00] - green
               // bg-[#ff0000] - red
