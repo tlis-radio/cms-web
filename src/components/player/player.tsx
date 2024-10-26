@@ -1,6 +1,6 @@
 import PlayerDisplay from "./song-data";
 import PlayerControl from "./player-control";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
@@ -29,7 +29,6 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
 };
 
 const Player: React.FC<{}> = () => {
-
    const [isVisible, setIsVisible] = useState(true);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
@@ -38,6 +37,20 @@ const Player: React.FC<{}> = () => {
    const [isPlaying, setIsPlaying] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const source = "https://stream.tlis.sk/tlis.mp3"
+
+   useEffect(()=> {
+      document.addEventListener("resize", shiftBody);
+      document.removeEventListener("resize", shiftBody);
+      shiftBody();
+   }, [isVisible]);
+   
+   function shiftBody () {
+      if(window.innerWidth >= 1024) {
+         document.querySelector('body')?.style.setProperty('padding-bottom', '0');
+         return;
+      };
+      document.querySelector('body')?.style.setProperty('padding-bottom', isVisible ? '4rem' : '0');
+   }
 
    const playerClasses = classNames(
       'flex items-center bg-[#2e2b2c] p-2 pr-11 fixed bottom-0 inset-x-0 w-full gap-2 z-10',
