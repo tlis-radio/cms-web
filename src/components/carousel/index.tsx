@@ -42,7 +42,7 @@ const programLinks = [
   },
 ];
 
-const SwiperCarousel: React.FC = () => {
+function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
 
   /*const handleSlideChange = (swiper: SwiperClass) => {
@@ -57,12 +57,22 @@ const SwiperCarousel: React.FC = () => {
       swiper.slides[swiper.activeIndex].classList.add('active');
    };*/
 
+  function getDate(dateString: string) {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return date.toLocaleDateString("sk-SK", options).replace(/\//g, ".").toUpperCase();
+  }
+
   const createProgramLinks = () => {
-    return programLinks.map((program, index) => {
+    return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <img src={program.imageUrl} alt={program.showName} />
-          <h2 className="font-sans text-white pt-3">PIATOK 18_00</h2>
+          <img src={`https://directus.tlis.sk/assets/${program.Cover}`} alt={program.Title} />
+          <h2 className="font-sans text-white pt-3">{getDate(program.Date)}</h2>
         </SwiperSlide>
       );
     });
