@@ -14,34 +14,6 @@ import valcek from "@/../public/images/rozpravky_na_dobru_noc.jpg";
 import "swiper/css";
 import "swiper/css/navigation";
 
-const programLinks = [
-  // some values, just for the time of development
-  {
-    showName: "Whoodba",
-    imageUrl: krivko.src,
-  },
-  {
-    showName: "Čítanie s diou",
-    imageUrl: dia.src,
-  },
-  {
-    showName: "Eren Radioshow",
-    imageUrl: eren.src,
-  },
-  {
-    showName: "Okno do duše",
-    imageUrl: spachtla.src,
-  },
-  {
-    showName: "Zákutlisie s Kajom",
-    imageUrl: kajo.src,
-  },
-  {
-    showName: "Rozprávky na dobrú noc",
-    imageUrl: valcek.src,
-  },
-];
-
 function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
 
