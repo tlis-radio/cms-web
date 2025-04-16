@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Inter } from "next/font/google";
+import { PlayerProvider } from "@/context/PlayerContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +15,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en">
       <body className={`${inter.className} bg-acoustic-foam bg-fixed min-h-[100vh] flex flex-col transition-[padding] duration-300 ease-in-out`}>
+        <PlayerProvider>
           <Header />
           <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[125px]'>
             {
@@ -25,7 +27,8 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
             </div>
           </div>
           <Footer />
+        </PlayerProvider>
       </body>
-    </html>
+    </html >
   );
 }

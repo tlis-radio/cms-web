@@ -1,6 +1,7 @@
 import React from "react";
 import { Root } from "@/types/streamstatus";
 import { useEffect, useState } from "react";
+import ProgressControl from "./progress-control";
 
 async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    const response = await fetch(apiEndpoint);
@@ -35,11 +36,12 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    return title.split(" - ").reverse();
 }
 
-const PlayerDisplay: React.FC = () => {
+function PlayerDisplay({ mode, archiveName, currentTime, duration, setCurrentTime }: { mode: "stream" | "archive", archiveName: string | null, currentTime: number, duration: number, setCurrentTime: (currentTime: number) => void }) {
    const [titleParts, setTitleParts] = useState<string[]>([]);
 
    useEffect(() => {
       const fetchTitle = async () => {
+         if (mode === "archive") return;
 
          // TODO put the stream URL into environment variables (process.env and NEXT_PUBLIC_)
 
@@ -60,11 +62,22 @@ const PlayerDisplay: React.FC = () => {
 
    return (
       <>
-         {titleParts.map((title, index) => (
-            <span key={index} className="px-2 font-argentumSansLight" data-tip={title}>
-               {title}
-            </span>
-         ))}
+         {mode === "archive" ? (
+            <div className="w-full">
+               <span className="px-2 font-argentumSansLight" data-tip={archiveName}>
+                  {archiveName}
+               </span>
+               <ProgressControl currentTime={currentTime} duration={duration} handleProgressChange={(e) => {
+                  setCurrentTime(Number(e.target.value));
+                }} />
+            </div>
+         ) : (
+            titleParts.map((title, index) => (
+               <span key={index} className="px-2 font-argentumSansLight" data-tip={title}>
+                  {title}
+               </span>
+            ))
+         )}
       </>
    );
 };

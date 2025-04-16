@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
+import { usePlayer } from "@/context/PlayerContext";
 
 
 const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ isVisible, onClick }) => {
@@ -29,6 +30,7 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
 };
 
 const Player: React.FC<{}> = () => {
+   const { mode, archiveName, src, currentTime, duration, setCurrentTime} = usePlayer();
    const [isVisible, setIsVisible] = useState(true);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
@@ -38,7 +40,6 @@ const Player: React.FC<{}> = () => {
    const audio = useRef<HTMLAudioElement | null>(null);
    const [isPlaying, setIsPlaying] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
-   const source = "https://stream.tlis.sk/tlis.mp3"
 
    useEffect(() => {
       window.addEventListener("resize", shiftBody);
@@ -76,11 +77,11 @@ const Player: React.FC<{}> = () => {
                setIsLoading={setIsLoading}
                isPlaying={isPlaying}
                setIsPlaying={setIsPlaying}
-               audioSource={source}
+               audioSource={src}
                audioRef={audio}
             />
-            <div className="mr-2 flex flex-col">
-               <PlayerDisplay />
+            <div className="mr-2 flex flex-col w-full">
+               <PlayerDisplay mode={mode} archiveName={archiveName} currentTime={currentTime} duration={duration} setCurrentTime={setCurrentTime}/>
             </div>
          </div>
          <SlideButton isVisible={isVisible} onClick={toggleVisibility} />
