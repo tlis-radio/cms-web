@@ -56,7 +56,6 @@ const showEndpoints = {
       var episodeData = await directus.request(readItems("Episodes", {
          filter: { id: { _in: episodes } },
       }));
-      const moderators = await directus.request(readItems("Moderators"));
       return episodeData || [];
    },
 
