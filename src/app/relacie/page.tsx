@@ -3,7 +3,7 @@ import CmsApiService from "@/services/cms-api-service";
 import ShowLink from "@/components/pagination/show-link";
 
 const Shows: React.FC = async () => {
-   const shows = await CmsApiService.Show.listShows(10, 1);
+   const shows = await CmsApiService.Show.listShows();
 
    const createShowLinks = () => {
       return shows.map((show: any, index: number) => {
