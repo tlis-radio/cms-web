@@ -18,9 +18,9 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, ima
          <div className="flex flex-col gap-2 text-left">
             <h2 className="text-2xl font-semibold">{name}</h2>
             <span className="flex items-center gap-2">
-               <p className="text-lg font-semibold">Moderátori:</p>
+               <p className="text-lg font-semibold">Moderátori: </p>
                {/* TODO: */}
-               { moderatorNames.map((name, index) => (<p key={index}>{name}</p>)) }
+               <p>{moderatorNames.join(", ")}</p>
             </span>
             <p className="text-justify pb-4 font-argentumSansLight">{description}</p>
          </div>

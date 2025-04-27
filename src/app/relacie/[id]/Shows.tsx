@@ -4,7 +4,7 @@ import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
-export default function Shows({ show, episodes }: { show: any, episodes: any }) {
+export default function Shows({ show, moderators, episodes }: { show: any, moderators: Array<string>, episodes: any }) {
     const { setMode, setArchiveName, setSrc, setCurrentTime, setDuration } = usePlayer();
 
     function selectEpisode(episodeSrc: string, episodeName: string, episodeCover: string, episodeDescription: string) {
@@ -25,7 +25,7 @@ export default function Shows({ show, episodes }: { show: any, episodes: any }) 
                             <img className="md:h-52" src={"https://directus.tlis.sk/assets/" + show.Cover} />
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <p className="text-2xl font-semibold">{show.Title}</p>
-                                <p>{show.Moderators.join(", ")}</p>
+                                <p>{moderators.join(", ")}</p>
                                 <p>Archív: {episodes.length}</p>
                             </div>
                         </div>
@@ -52,7 +52,7 @@ export default function Shows({ show, episodes }: { show: any, episodes: any }) 
                                             selectEpisode("https://directus.tlis.sk/assets/" + episode.Audio, episode.Title, episode.Cover, episode.Description);
                                         }}
                                     >
-                                     <FontAwesomeIcon className="px-[3px]" icon={faPlay} />
+                                    <FontAwesomeIcon className="px-[3px]" icon={faPlay} />
                                     </span>
                                 </div>
                                 <div className="flex h-full gap-4 md:flex-col">

@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type PlayerMode = "stream" | "archive";
 
@@ -31,6 +31,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
 
+  useEffect(() => {
+    if(mode == "archive"){
+      // ziskat dlzku src
+    }
+  }, [mode, src])
 
   return (
     <PlayerContext.Provider

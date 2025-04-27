@@ -5,9 +5,10 @@ import Shows from "./Shows";
 
 const Show: React.FC = async ({ params }: any) => {
    const show = await CmsApiService.Show.getShowDataById(params.id)
+   const moderators = await CmsApiService.Show.getShowModeratorsByIds(show.Moderators);
    const episodes = await CmsApiService.Show.getShowEpisodesById(params.id);
 
-   return <Shows show={show} episodes={episodes}/>
+   return <Shows show={show} moderators={moderators} episodes={episodes}/>
 }
 
 export default Show;

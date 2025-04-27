@@ -1,7 +1,7 @@
 import { ModeratorDto } from "@/types/moderator";
 
 export class Moderator {
-   public id: string;
+   public id: number;
    public user_created: string;
    public date_created: string;
    public user_updated: string | null;
@@ -9,7 +9,7 @@ export class Moderator {
    public Name: string;
 
    constructor(
-      id: string,
+      id: number,
       user_created: string,
       date_created: string,
       user_updated: string | null,

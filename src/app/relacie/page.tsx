@@ -6,9 +6,18 @@ const Shows: React.FC = async () => {
    const shows = await CmsApiService.Show.listShows();
 
    const createShowLinks = () => {
-      return shows.map((show: any, index: number) => {
+      return shows.map( async (show: any, index: number) => {
+         const moderatorNames = await CmsApiService.Show.getShowModeratorsByIds(show.Moderators);
+
          return (
-            <ShowLink key={index} id={show.id} name={show.Title} description={show.Description} imageUrl={"https://directus.tlis.sk/assets/" + show.Cover} moderatorNames={show.Moderators} />
+            <ShowLink 
+               key={index} 
+               id={show.id} 
+               name={show.Title} 
+               description={show.Description} 
+               imageUrl={"https://directus.tlis.sk/assets/" + show.Cover} 
+               moderatorNames={moderatorNames}
+            />
          )
       })
    }

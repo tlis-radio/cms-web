@@ -1,5 +1,5 @@
 export type ModeratorDto = {
-   id: string,
+   id: number,
    user_created: string,
    date_created: string,
    user_updated: string | null,

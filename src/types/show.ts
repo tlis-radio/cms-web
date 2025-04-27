@@ -1,5 +1,5 @@
 export type ShowDto = {
-   id: string,
+   id: number,
    user_created: string,
    date_created: string,
    user_updated: string,
@@ -8,5 +8,5 @@ export type ShowDto = {
    Cover: string,
    Description: string,
    Episode: Array<string>,
-   Moderators: Array<string>
+   Moderators: Array<number>
 };

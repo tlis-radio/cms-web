@@ -1,7 +1,7 @@
 import { ShowDto } from "@/types/show";
 
 export class Show {
-   public id: string;
+   public id: number;
    public user_created: string;
    public date_created: string;
    public user_updated: string;
@@ -10,10 +10,10 @@ export class Show {
    public Cover: string;
    public Description: string;
    public Episode: Array<string>;
-   public Moderators: Array<string>;
+   public Moderators: Array<number>;
 
    constructor(
-      id: string,
+      id: number,
       user_created: string,
       date_created: string,
       user_updated: string,
@@ -22,7 +22,7 @@ export class Show {
       Cover: string,
       Description: string,
       Episode: Array<string>,
-      Moderators: Array<string>
+      Moderators: Array<number>
    ) {
       this.id = id;
       this.user_created = user_created;
