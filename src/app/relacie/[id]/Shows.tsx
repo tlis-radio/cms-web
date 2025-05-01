@@ -5,15 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 export default function Shows({ show, moderators, episodes }: { show: any, moderators: Array<string>, episodes: any }) {
-    const { setMode, setArchiveName, setSrc, setCurrentTime, setDuration } = usePlayer();
+    const {setMode, setArchiveName, setSrc } = usePlayer();
 
     function selectEpisode(episodeSrc: string, episodeName: string, episodeCover: string, episodeDescription: string) {
         setMode("archive");
-        console.log(episodeSrc)
         setArchiveName(episodeName);
         setSrc(episodeSrc);
-        setCurrentTime(0);
-        setDuration(150); // toto by si mal player zistit 
     }
 
     return (

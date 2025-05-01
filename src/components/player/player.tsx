@@ -30,16 +30,12 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
 };
 
 const Player: React.FC<{}> = () => {
-   const { mode, archiveName, src, currentTime, duration, setCurrentTime} = usePlayer();
+   const { mode, archiveName, currentTime, duration, updateCurrentTime} = usePlayer();
    const [isVisible, setIsVisible] = useState(true);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
 
    const playerWrapper = useRef<HTMLDivElement | null>(null);
-
-   const audio = useRef<HTMLAudioElement | null>(null);
-   const [isPlaying, setIsPlaying] = useState(false);
-   const [isLoading, setIsLoading] = useState(false);
 
    useEffect(() => {
       window.addEventListener("resize", shiftBody);
@@ -72,16 +68,9 @@ const Player: React.FC<{}> = () => {
          <div ref={playerWrapper}
             className={playerClasses}
          >
-            <PlayerControl
-               isLoading={isLoading}
-               setIsLoading={setIsLoading}
-               isPlaying={isPlaying}
-               setIsPlaying={setIsPlaying}
-               audioSource={src}
-               audioRef={audio}
-            />
+            <PlayerControl/>
             <div className="mr-2 flex flex-col w-full">
-               <PlayerDisplay mode={mode} archiveName={archiveName} currentTime={currentTime} duration={duration} setCurrentTime={setCurrentTime}/>
+               <PlayerDisplay mode={mode} archiveName={archiveName} currentTime={currentTime} duration={duration} updateCurrentTime={updateCurrentTime}/>
             </div>
          </div>
          <SlideButton isVisible={isVisible} onClick={toggleVisibility} />

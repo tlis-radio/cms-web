@@ -36,7 +36,7 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    return title.split(" - ").reverse();
 }
 
-function PlayerDisplay({ mode, archiveName, currentTime, duration, setCurrentTime }: { mode: "stream" | "archive", archiveName: string | null, currentTime: number, duration: number, setCurrentTime: (currentTime: number) => void }) {
+function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrentTime }: { mode: "stream" | "archive", archiveName: string | null, currentTime: number, duration: number, updateCurrentTime: (currentTime: number) => void }) {
    const [titleParts, setTitleParts] = useState<string[]>([]);
 
    useEffect(() => {
@@ -68,7 +68,7 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, setCurrentTim
                   {archiveName}
                </span>
                <ProgressControl currentTime={currentTime} duration={duration} handleProgressChange={(e) => {
-                  setCurrentTime(Number(e.target.value));
+                  updateCurrentTime(Number(e.target.value));
                 }} />
             </div>
          ) : (
