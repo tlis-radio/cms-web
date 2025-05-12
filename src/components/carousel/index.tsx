@@ -90,18 +90,25 @@ function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
           createProgramLinks()
         }
 
-        <div className="relative">
-          <div className="relative h-[100px] flex justify-between px-[2rem]">
-            <div className="relative h-[100px] flex items-center flex-col gap-3">
-              <button className="swiper-button-prev"></button>
-              <span className="font-argentumSansRegular text-white relative">Zmeškal si</span>
-            </div>
-            <div className="relative h-[100px] flex items-center flex-col gap-3">
-              <button className="swiper-button-next"></button>
-              <span className="font-argentumSansRegular text-white relative">Zmeškáš</span>
+        {carouselPosts.length > 0 ? (
+          <div className="relative">
+            <div className="relative h-[100px] flex justify-between px-[2rem]">
+              <div className="relative h-[100px] flex items-center flex-col gap-3">
+                <button className="swiper-button-prev"></button>
+                <span className="font-argentumSansRegular text-white relative">Zmeškal si</span>
+              </div>
+              <div className="relative h-[100px] flex items-center flex-col gap-3">
+                <button className="swiper-button-next"></button>
+                <span className="font-argentumSansRegular text-white relative">Zmeškáš</span>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="relative pb-8">
+            {/* placeholder ked nemame relaciu */}
+            <img src="/images/tlisaci.jpg" alt="Žiadne nastávajúce relácie"></img>
+          </div>
+        )}
       </Swiper>
     </>
   );
