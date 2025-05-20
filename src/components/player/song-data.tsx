@@ -61,24 +61,34 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
    }, []); // Empty dependency array means this effect runs once on mount
 
    return (
-      <>
+      <div className="w-full overflow-hidden">
          {mode === "archive" ? (
             <div className="w-full">
-               <span className="px-2 font-argentumSansLight" data-tip={archiveName}>
+               <span className="px-2 font-argentumSansLight text-sm sm:text-base truncate" data-tip={archiveName}>
                   {archiveName}
                </span>
-               <ProgressControl currentTime={currentTime} duration={duration} handleProgressChange={(e) => {
-                  updateCurrentTime(Number(e.target.value));
-                }} />
+               <ProgressControl 
+                  currentTime={currentTime} 
+                  duration={duration} 
+                  handleProgressChange={(e) => {
+                     updateCurrentTime(Number(e.target.value));
+                  }} 
+               />
             </div>
          ) : (
-            titleParts.map((title, index) => (
-               <span key={index} className="px-2 font-argentumSansLight" data-tip={title}>
-                  {title}
-               </span>
-            ))
+            <div className="flex flex-col">
+               {titleParts.map((title, index) => (
+                  <span 
+                     key={index} 
+                     className="px-2 font-argentumSansLight text-sm sm:text-base truncate" 
+                     data-tip={title}
+                  >
+                     {title}
+                  </span>
+               ))}
+            </div>
          )}
-      </>
+      </div>
    );
 };
 

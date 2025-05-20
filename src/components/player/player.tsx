@@ -6,21 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { usePlayer } from "@/context/PlayerContext";
 
-
 const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ isVisible, onClick }) => {
-
    const buttonStyle = {
       transform: isVisible ? 'rotate(0deg)' : 'rotate(180deg)',
       transition: 'transform 0.3s ease-in-out',
    };
 
-
    return (
-      <div className="fixed bottom-2 right-2 z-20 lg:hidden">
+      <div className={`fixed ${isVisible ? 'bottom-20' : 'bottom-5'} right-4 z-20 lg:hidden transition-all duration-300 ease-in-out`}>
          <span
             role="button"
             tabIndex={0}
-            className="flex cursor-pointer text-2xl p-2.5 rounded-full bg-[#d43c4a]"
+            className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a] shadow-lg"
             onClick={onClick}
          >
             <FontAwesomeIcon icon={faChevronDown} style={buttonStyle} />
@@ -52,25 +49,29 @@ const Player: React.FC<{}> = () => {
    }
 
    const playerClasses = classNames(
-      'flex items-center bg-[#2e2b2c] p-2 pr-11 fixed bottom-0 inset-x-0 w-full gap-2 z-10',
+      'flex items-center bg-[#2e2b2c] p-3 fixed bottom-0 inset-x-0 w-full gap-3 z-10',
       {
          'translate-y-0': isVisible,
          'translate-y-full lg:translate-y-0': !isVisible,
       },
       'transition-transform duration-300 ease-in-out',
-      'lg:w-2/3 lg:pr-0 lg:relative lg:rounded-2xl lg:h-[70px] lg:top-[5px]',
+      'lg:w-3/4 lg:pr-0 lg:relative lg:rounded-xl lg:h-16 lg:top-[5px] lg:mx-auto',
       'xl:w-2/3',
       '2xl:w-1/2'
    );
 
    return (
       <>
-         <div ref={playerWrapper}
-            className={playerClasses}
-         >
+         <div ref={playerWrapper} className={playerClasses}>
             <PlayerControl/>
-            <div className="mr-2 flex flex-col w-full">
-               <PlayerDisplay mode={mode} archiveName={archiveName} currentTime={currentTime} duration={duration} updateCurrentTime={updateCurrentTime}/>
+            <div className="flex flex-col flex-1 min-w-0">
+               <PlayerDisplay 
+                  mode={mode} 
+                  archiveName={archiveName} 
+                  currentTime={currentTime} 
+                  duration={duration} 
+                  updateCurrentTime={updateCurrentTime}
+               />
             </div>
          </div>
          <SlideButton isVisible={isVisible} onClick={toggleVisibility} />

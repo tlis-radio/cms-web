@@ -14,7 +14,7 @@ import { usePlayer } from '@/context/PlayerContext';
 type PlayerControlProps = {};
 
 const PlayerControl: React.FC<PlayerControlProps> = () => {
-    const {audioRef, isLoading, currentTime, isPlaying, setIsPlaying } = usePlayer();
+    const { audioRef, isLoading, isPlaying, setIsPlaying } = usePlayer();
     const [volume, setVolume] = useState(1); // Changed default volume to 100% because of mobile devices
 
     useEffect(() => {
@@ -28,24 +28,16 @@ const PlayerControl: React.FC<PlayerControlProps> = () => {
     };
 
     return (
-        <div className="flex items-center gap-1">
-            <span
-                role="button"
-                tabIndex={0}
-                className="flex cursor-pointer text-2xl p-2.5 rounded-full bg-[#d43c4a]"
-                onClick={()=>{
-                    setIsPlaying(!isPlaying);
-                }}
+        <div className="flex items-center gap-2 sm:gap-3">
+            <button
+                className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                onClick={() => setIsPlaying(!isPlaying)}
+                aria-label={isPlaying ? "Pause" : "Play"}
             >
                 {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
-                {!isPlaying && !isLoading && <FontAwesomeIcon className="px-[3px]" icon={faPlay} />}
-                {isPlaying && <FontAwesomeIcon className="px-[4.5px]" icon={faPause} />}
-            </span>
-
-            {
-                // TODO - Style the volume slider
-                // TODO - This is a hotfix, it's still desired to know if we're working with a mobile or tablet device so we can use different initial volume states for PCs and phones/tablets, hence try to find a way to find device type while also keeping SSR - Jager 13:11 9.7.2024
-            }
+                {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
+                {isPlaying && <FontAwesomeIcon icon={faPause} />}
+            </button>
 
             <div className='hidden lg:block w-[100px] xxxl:w-[150px]'>
                 <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
