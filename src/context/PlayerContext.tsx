@@ -51,6 +51,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setDuration(audio.duration);
       };
       setIsPlaying(true);
+    } else {
+      setSrc("https://stream.tlis.sk/tlis.mp3");
     }
 
     if (audioRef.current) {

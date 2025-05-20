@@ -13,7 +13,7 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
    };
 
    return (
-      <div className={`fixed ${isVisible ? 'bottom-20' : 'bottom-5'} right-4 z-20 lg:hidden transition-all duration-300 ease-in-out`}>
+      <div className={`fixed ${isVisible ? 'bottom-[6rem]' : 'bottom-5'} right-4 z-20 lg:hidden transition-all duration-300 ease-in-out`}>
          <span
             role="button"
             tabIndex={0}
@@ -27,7 +27,7 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
 };
 
 const Player: React.FC<{}> = () => {
-   const { mode, archiveName, currentTime, duration, updateCurrentTime} = usePlayer();
+   const { mode, archiveName, currentTime, duration, updateCurrentTime, setMode } = usePlayer();
    const [isVisible, setIsVisible] = useState(true);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
@@ -62,14 +62,33 @@ const Player: React.FC<{}> = () => {
 
    return (
       <>
+         {mode !== "stream" && (
+            <div
+               className={classNames(
+                 "fixed left-4 z-20 transition-all duration-300 ease-in-out",
+                 isVisible ? "max-lg:bottom-[6rem]" : "bottom-5"
+               )}
+            >
+               <button 
+                  onClick={() => {
+                     setMode("stream");
+                  }}
+                  className="flex items-center justify-center w-auto h-10 text-xl rounded-full bg-[#d43c4a] shadow-lg text-white px-4"
+                  aria-label="Live"
+                  type="button"
+               >
+                  ● LIVE
+               </button>
+            </div>
+         )}
          <div ref={playerWrapper} className={playerClasses}>
-            <PlayerControl/>
+            <PlayerControl />
             <div className="flex flex-col flex-1 min-w-0">
-               <PlayerDisplay 
-                  mode={mode} 
-                  archiveName={archiveName} 
-                  currentTime={currentTime} 
-                  duration={duration} 
+               <PlayerDisplay
+                  mode={mode}
+                  archiveName={archiveName}
+                  currentTime={currentTime}
+                  duration={duration}
                   updateCurrentTime={updateCurrentTime}
                />
             </div>
