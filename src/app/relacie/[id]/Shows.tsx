@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 export default function Shows({ show, moderators, episodes }: { show: any, moderators: Array<string>, episodes: any }) {
-    const {setMode, setArchiveName, setSrc } = usePlayer();
+    const { setMode, setArchiveName, setSrc } = usePlayer();
 
     function selectEpisode(episodeSrc: string, episodeName: string, episodeCover: string, episodeDescription: string) {
         setMode("archive");
@@ -33,31 +33,41 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                 </div>
 
                 <div className="mb-8">
-                    {episodes.map((episode: any, index: number) => {
-                        return (
-                            <div key={index} className="flex flex-col gap-4 border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
-                                <div className="flex flex-col gap-6 md:flex-row ">
-                                    <img className="md:h-52" src={"https://directus.tlis.sk/assets/" + episode.Cover} />
-                                    <div className="flex py-2.5 h-max w-full flex-col gap-4">
-                                        <p className="text-2xl text-left font-semibold">{episode.Title}</p>
+                    {episodes.map((episode: any, index: number) => (
+                        <div key={index} className="border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
+                            <div className="flex flex-col md:flex-row gap-4">
+                                <img
+                                    className="w-full h-auto max-h-52 object-cover md:w-48 md:flex-shrink-0"
+                                    src={"https://directus.tlis.sk/assets/" + episode.Cover}
+                                    alt={episode.Title}
+                                />
+
+                                <div className="flex-1 flex flex-col">
+                                    <div className="flex justify-between items-start gap-4">
+                                        <h3 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h3>
+                                        <button
+                                            onClick={() => {
+                                                selectEpisode(
+                                                    "https://directus.tlis.sk/assets/" + episode.Audio,
+                                                    episode.Title,
+                                                    episode.Cover,
+                                                    episode.Description
+                                                );
+                                            }}
+                                            className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"
+                                            aria-label="Play episode"
+                                        >
+                                            <FontAwesomeIcon icon={faPlay} className="ml-1" />
+                                        </button>
                                     </div>
-                                    <span
-                                        role="button"
-                                        tabIndex={0}
-                                        className="w-fit h-fit flex cursor-pointer text-2xl p-2.5 rounded-full bg-[#d43c4a]"
-                                        onClick={() => {
-                                            selectEpisode("https://directus.tlis.sk/assets/" + episode.Audio, episode.Title, episode.Cover, episode.Description);
-                                        }}
-                                    >
-                                    <FontAwesomeIcon className="px-[3px]" icon={faPlay} />
-                                    </span>
-                                </div>
-                                <div className="flex h-full gap-4 md:flex-col">
-                                    <p>{episode.Description}</p>
+
+                                    <div className="mt-4">
+                                        <p className="text-justify">{episode.Description}</p>
+                                    </div>
                                 </div>
                             </div>
-                        )
-                    })}
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
