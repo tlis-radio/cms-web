@@ -16,8 +16,13 @@ const showEndpoints = {
    },
 
    getShowDataById: async (id: number): Promise<Show> => {
-      const data = await directus.request<ShowDto>(readItem("Shows", id));
-      return data;
+      try{
+         const data = await directus.request<ShowDto>(readItem("Shows", id));
+         return data;
+      } catch (error) {
+         console.error("Error fetching show data: (Probably not found)");
+         throw error;
+      }
    },
 
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
