@@ -20,14 +20,11 @@ const AboutUs: React.FC = () => {
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos est excepturi perspiciatis optio neque provident repellat reiciendis nesciunt accusamus odio, molestiae iste aperiam necessitatibus officia quasi, voluptates doloremque eligendi error!
             </p>
             <br />
-            <pre className='font-argentumSansMedium text-white text-2xl'>
-                Č O   J E   N A Š Í M
-            </pre>
-            <pre className='font-argentumSansMedium text-white text-2xl'>
-                P O S L A N Í M ?
-            </pre>
+            <p className='font-argentumSansMedium text-white text-2xl tracking-[10px] uppercase'>
+                Čo je naším<br/> poslaním?
+            </p>
             <br />
-            <img src={tlisaci.src} alt="Tlispyčy :)" />
+            <img src={tlisaci.src} alt="Tlispyčy :)" className='rounded-xl' />
             <br />
         </>
     );
