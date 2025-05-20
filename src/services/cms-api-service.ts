@@ -22,6 +22,7 @@ const showEndpoints = {
 
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
       const showData = await directus.request<ShowDto>(readItem("Shows", id));
+      if(showData.Episode.length === 0) return [];
       var episodeData = await directus.request<Array<EpisodeDto>>(readItems("Episodes", {
          filter: { id: { _in: showData.Episode } },
          sort: ['id'],
@@ -31,6 +32,7 @@ const showEndpoints = {
    },
 
    getShowModeratorsByIds: async (ids: Array<number>): Promise<Array<string>> => {
+      if (ids.length === 0) return [];
       var moderatorData = await directus.request<Array<ModeratorDto>>(readItems("Moderators", {
          filter: { id: { _in: ids } },
       }));
