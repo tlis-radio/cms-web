@@ -105,9 +105,15 @@ function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
           </div>
 
         </Swiper>) : (
-        <div className="relative pb-8">
-          {/* placeholder ked nemame relaciu */}
-          <img src="/images/tlisaci.jpg" alt="Žiadne nastávajúce relácie"></img>
+        <div className="relative py-8">
+          <h3 className="font-argentumSansMedium text-xl mb-3 text-white">Momentálne nie je žiadny program</h3>
+          <p className="text-gray-200 mb-4">Pozrite si náš archív minulých relácií</p>
+          <a
+            href="/relacie"
+            className="inline-block bg-[#d43c4a] hover:bg-[#b83744] text-white px-6 py-2 rounded-full transition-colors"
+          >
+            Otvoriť archív
+          </a>
         </div>
       )}
     </>
