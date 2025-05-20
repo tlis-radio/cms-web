@@ -1,30 +1,13 @@
-import SwiperCarousel from "@/components/carousel";
-
-import { createDirectus, readItems, rest } from '@directus/sdk';
-const directus = createDirectus('http://directus.tlis.sk').with(rest());
+import Program from "@/components/carousel/Program";
 
 export default async function Home() {
-
-  const today = new Date();
-  const threeDaysAgo = new Date(today);
-  threeDaysAgo.setDate(today.getDate() - 3);
-  const threeDaysAhead = new Date(today);
-  threeDaysAhead.setDate(today.getDate() + 3);
-
-  const carouselPosts = await directus.request(readItems('Episodes',
-    {
-      filter: {
-        Date: {
-          _between: [threeDaysAgo.toDateString(), threeDaysAhead.toDateString()],
-        },
-      },
-      sort: ['Date'],
-    }
-  ));
-
   return (
     <div>
-      <SwiperCarousel carouselPosts={carouselPosts}/>
+      <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> študentské rádio</h1>
+      <Program />
     </div>
+    // archív
+    // novinky
+    // členovia
   );
 }

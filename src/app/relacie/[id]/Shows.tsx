@@ -45,20 +45,21 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                                 <div className="flex-1 flex flex-col">
                                     <div className="flex justify-between items-start gap-4">
                                         <h3 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h3>
-                                        <button
-                                            onClick={() => {
-                                                selectEpisode(
-                                                    "https://directus.tlis.sk/assets/" + episode.Audio,
-                                                    episode.Title,
-                                                    episode.Cover,
-                                                    episode.Description
-                                                );
-                                            }}
-                                            className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"
-                                            aria-label="Play episode"
-                                        >
-                                            <FontAwesomeIcon icon={faPlay} className="ml-1" />
-                                        </button>
+                                        {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
+                                            <button
+                                                onClick={() => {
+                                                    selectEpisode(
+                                                        "https://directus.tlis.sk/assets/" + episode.Audio,
+                                                        episode.Title,
+                                                        episode.Cover,
+                                                        episode.Description
+                                                    );
+                                                }}
+                                                className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"
+                                                aria-label="Play episode"
+                                            >
+                                                <FontAwesomeIcon icon={faPlay} className="ml-1" />
+                                            </button>)}
                                     </div>
 
                                     <div className="mt-4">

@@ -52,45 +52,45 @@ function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
 
   return (
     <>
-      <h1 className="font-argentumSansMedium text-white text-2xl tracking-[13px] pb-[25px]">PROGRAM</h1>
-      <Swiper
-        modules={[EffectCoverflow, Navigation, A11y]}
-        effect="coverflow"
-        onSwiper={setSwiperInstance}
-        // Takes care of the scale changing
-        coverflowEffect={{
-          stretch: 0,
-          rotate: 0,
-          depth: 50,
-          modifier: 8,
-          slideShadows: false,
-        }}
-        speed={1000} // Speed of the sliding movement in miliseconds
-        centeredSlides={true}
-        navigation={{
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-          disabledClass: "swiper-button-disabled",
-        }}
-        breakpoints={{
-          1: {
-            slidesPerView: 2,
-            spaceBetween: 6,
-          },
-          640: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-          },
-        }}
-      >
-        {
-          /**
-           ** creating Program slides (Later they will coded to be links to the specific show)
-           */
-          createProgramLinks()
-        }
+      {carouselPosts.length > 0 ? (
+        <Swiper
+          modules={[EffectCoverflow, Navigation, A11y]}
+          effect="coverflow"
+          onSwiper={setSwiperInstance}
+          // Takes care of the scale changing
+          coverflowEffect={{
+            stretch: 0,
+            rotate: 0,
+            depth: 50,
+            modifier: 8,
+            slideShadows: false,
+          }}
+          speed={1000} // Speed of the sliding movement in miliseconds
+          centeredSlides={true}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+            disabledClass: "swiper-button-disabled",
+          }}
+          breakpoints={{
+            1: {
+              slidesPerView: 2,
+              spaceBetween: 6,
+            },
+            640: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+          }}
+        >
+          {
+            /**
+             ** creating Program slides (Later they will coded to be links to the specific show)
+             */
+            createProgramLinks()
+          }
 
-        {carouselPosts.length > 0 ? (
+
           <div className="relative">
             <div className="relative h-[100px] flex justify-between px-[2rem]">
               <div className="relative h-[100px] flex items-center flex-col gap-3">
@@ -103,13 +103,13 @@ function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
               </div>
             </div>
           </div>
-        ) : (
-          <div className="relative pb-8">
-            {/* placeholder ked nemame relaciu */}
-            <img src="/images/tlisaci.jpg" alt="Žiadne nastávajúce relácie"></img>
-          </div>
-        )}
-      </Swiper>
+
+        </Swiper>) : (
+        <div className="relative pb-8">
+          {/* placeholder ked nemame relaciu */}
+          <img src="/images/tlisaci.jpg" alt="Žiadne nastávajúce relácie"></img>
+        </div>
+      )}
     </>
   );
 };

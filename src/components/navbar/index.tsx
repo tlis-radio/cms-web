@@ -7,7 +7,7 @@ const navbarLinks = [
    },
    { 
       text: "Program", 
-      url: "/"
+      url: "/program"
    },
    { 
       text: "Archív", 
