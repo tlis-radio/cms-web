@@ -91,21 +91,29 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setCurrentTime(newTime);
     }
   }
-
   useEffect(() => {
-    if (isPlaying) {
-      if (audioRef.current) {
+    if (audioRef.current && mode === "stream") {
+      if (isPlaying) {
+        audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
+        audioRef.current.load();
         audioRef.current.play().catch((err) => {
           console.warn(err);
         });
+      } else {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+        audioRef.current.load();
       }
-    }
-    else {
-      if (audioRef.current) {
+    } else if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch((err) => {
+          console.warn(err);
+        });
+      } else {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, mode]);
 
   return (
     <PlayerContext.Provider
