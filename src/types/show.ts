@@ -9,4 +9,5 @@ export type ShowDto = {
    Description: string,
    Episode: Array<string>,
    Moderators: Array<number>
+   Filter: string;
 };
