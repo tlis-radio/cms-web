@@ -11,7 +11,9 @@ const directus = createDirectus('http://directus.tlis.sk').with(rest({ onRequest
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
-      const shows = await directus.request<Array<ShowDto>>(readItems("Shows"));
+      const shows = await directus.request<Array<ShowDto>>(readItems("Shows", {
+         sort: ['-Episode.date_created']
+      }));
       return shows || [];
    },
 
