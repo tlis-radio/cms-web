@@ -7,7 +7,7 @@ import { Episode } from '@/models/episode';
 
 import { createDirectus, readItem, readItems, rest } from '@directus/sdk';
 
-const directus = createDirectus('http://directus.tlis.sk').with(rest());
+const directus = createDirectus('http://directus.tlis.sk').with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
