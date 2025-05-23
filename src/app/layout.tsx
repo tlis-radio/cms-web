@@ -22,7 +22,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
               // bg-[#00ff00] - green
               // bg-[#ff0000] - red
             }
-            <div className='pt-4 w-full text-center md:w-3/4 xl:w-2/3 2xl:w-1/2'>
+            <div className='pt-4 w-full text-center max-w-7xl'>
               {children}
             </div>
           </div>

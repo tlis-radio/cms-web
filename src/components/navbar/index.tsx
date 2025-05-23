@@ -34,7 +34,7 @@ const Navbar = () => {
    }
 
    return (
-      <nav className='bg-[#96120F] flex font-semibold'>
+      <nav className='bg-[#96120F] flex font-semibold max-w-7xl mx-auto'>
          {createNavbarLinks()}
       </nav>
    )
