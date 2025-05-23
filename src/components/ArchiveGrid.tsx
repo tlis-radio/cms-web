@@ -11,9 +11,9 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
   const limitedShows = shows.slice(0, limit);
 
   return (
-    <div className="mb-12">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 px-4 md:px-8">
-        <h2 className="text-5xl italic text-white font-semibold pt-16 pb-4">Archív</h2>
+    <div className="mb-12 py-16">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 px-4 md:px-8 pb-2">
+        <h2 className="text-5xl italic text-white font-semibold pb-0">Archív</h2>
         <Link 
           href="/relacie" 
           className="text-white hover:underline mt-2 md:mt-0"
