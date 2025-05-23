@@ -94,10 +94,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     if (audioRef.current && mode === "stream") {
       if (isPlaying) {
+        setIsLoading(true);
         audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
         audioRef.current.load();
         audioRef.current.play().catch((err) => {
           console.warn(err);
+        }).then(()=>{
+          setIsLoading(false);
         });
       } else {
         audioRef.current.pause();

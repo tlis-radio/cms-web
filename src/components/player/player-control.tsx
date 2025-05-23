@@ -36,7 +36,7 @@ const PlayerControl: React.FC<PlayerControlProps> = () => {
             >
                 {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}
                 {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
-                {isPlaying && <FontAwesomeIcon icon={faPause} />}
+                {!isLoading && isPlaying && <FontAwesomeIcon icon={faPause} />}
             </button>
 
             <div className='hidden lg:block w-[100px] xxxl:w-[150px]'>
