@@ -4,25 +4,7 @@ import { useState } from "react";
 import classNames from "classnames";
 import Link from "next/link";
 import Socials from "../socials";
-
-const navbarLinks = [
-  { 
-     text: "Home", 
-     url: "/"
-  },
-  { 
-     text: "Program", 
-     url: "/"
-  },
-  { 
-     text: "Archív", 
-     url: "/relacie"
-  },
-  { 
-     text: "O nás",
-     url: "/o-nas"
-  }
-];
+import { navbarLinks } from "./index";
 
 const Hamburger = () => {
   const [isOpen, setIsOpen] = useState(false);

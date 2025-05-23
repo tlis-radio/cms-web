@@ -1,19 +1,23 @@
 import NavbarLink from "./navbar-link";
 
-const navbarLinks = [
-   { 
-      text: "Home", 
+export const navbarLinks = [
+   {
+      text: "Home",
       url: "/"
    },
-   { 
-      text: "Program", 
+   {
+      text: "Program",
       url: "/program"
    },
-   { 
-      text: "Archív", 
+   {
+      text: "Archív",
       url: "/relacie"
    },
-   { 
+   {
+      text: "Členovia",
+      url: "/clenovia"
+   },
+   {
       text: "O nás",
       url: "/o-nas"
    }
