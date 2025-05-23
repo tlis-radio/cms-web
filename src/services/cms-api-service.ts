@@ -50,11 +50,18 @@ const showEndpoints = {
 
       return moderatorNames || "";
    }
+};
 
+var memberEndpoints = {
+   listMembers: async (): Promise<Array<Object>> => {
+      const members = await directus.request<Array<Object>>(readItems("Members"));
+      return members || [];
+   }
 };
 
 class CmsApiService {
    static Show = showEndpoints;
+   static Member = memberEndpoints;
 }
 
 export default CmsApiService;
