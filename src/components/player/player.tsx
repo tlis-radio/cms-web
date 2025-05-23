@@ -66,7 +66,7 @@ const Player: React.FC<{}> = () => {
             <div
                className={classNames(
                  "fixed left-4 z-20 transition-all duration-300 ease-in-out",
-                 isVisible ? "max-lg:bottom-[6rem]" : "bottom-5"
+                 isVisible ? "max-lg:bottom-[6rem] bottom-4" : "bottom-5"
                )}
             >
                <button 
