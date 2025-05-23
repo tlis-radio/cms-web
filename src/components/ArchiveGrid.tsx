@@ -36,7 +36,7 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="mt-2 text-white text-left font-medium line-clamp-1">
+            <h3 className="mt-2 text-white text-left text-2xl line-clamp-1">
               {show.Title}
             </h3>
           </Link>

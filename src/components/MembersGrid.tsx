@@ -19,7 +19,7 @@ var roles = {
 }
 
 interface MembersProps {
-    header: boolean;
+    header?: boolean;
 }
 
 const Members: React.FC<MembersProps> = async ({ header = true }) => {
