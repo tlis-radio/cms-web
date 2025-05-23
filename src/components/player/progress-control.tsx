@@ -7,8 +7,12 @@ interface ProgressControlProps {
 }
 
 function getTimeFromMs(ms: number): string {
-    const minutes = Math.floor(ms / 60);
+    const hours = Math.floor(ms / 3600);
+    const minutes = Math.floor((ms % 3600) / 60);
     const seconds = Math.floor(ms % 60);
+    if (hours > 0) {
+        return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
