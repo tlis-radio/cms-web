@@ -10,4 +10,5 @@ export type ShowDto = {
    Episode: Array<string>,
    Moderators: Array<number>
    Filter: string;
+   ModeratorNames?: string[];
 };

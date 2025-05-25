@@ -20,7 +20,7 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, ima
             <span className="flex flex-wrap items-center gap-2">
                <p className="text-lg font-semibold">Účinkujúci: </p>
                {/* TODO: */}
-               <p>{moderatorNames.join(", ")}</p>
+               <p>{moderatorNames?.join(", ")}</p>
             </span>
             <p className="text-justify pb-4 font-argentumSansLight">{description}</p>
          </div>
