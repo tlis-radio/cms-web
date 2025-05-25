@@ -12,7 +12,7 @@ type ShowLinkProps = {
 
 const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, imageUrl, moderatorNames }) => {
    return (
-      <Link href={`/relacie/${id}`} className="bg-[#1c1c1c] text-white mx-4 flex cursor-pointer flex-col gap-4 border-b-2 p-4 hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
+      <Link href={`/relacie/${id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
          <PaginationImage src={imageUrl} alt={name} />
 
          <div className="flex flex-col gap-2 text-left">
