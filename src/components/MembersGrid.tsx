@@ -1,12 +1,14 @@
 import React from "react";
 import CmsApiService from "@/services/cms-api-service";
 import Image from "next/image";
+import MemberGridItem from "./MemberItem";
 
-interface Member {
+export interface Member {
     id: string;
     Name: string;
     Picture: string;
     Role: string;
+    BestOfTheMonth: boolean;
 }
 
 var roles = {
@@ -50,16 +52,7 @@ const Members: React.FC<MembersProps> = async ({ header = true }) => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {roleMembers.map((member) => (
-                                <div key={member.id} className="group text-center">
-                                    <div className="aspect-square relative rounded-full overflow-hidden shadow-lg mb-2 mx-auto w-3/4">
-                                        <img
-                                            src={"https://directus.tlis.sk/assets/" + member.Picture}
-                                            alt={member.Name}
-                                            className="object-cover group-hover:scale-105 transition-transform h-full w-full"
-                                        />
-                                    </div>
-                                    <h3 className="text-white font-medium">{member.Name}</h3>
-                                </div>
+                                <MemberGridItem member={member} key={member.id} />
                             ))}
                         </div>
                     </div>
