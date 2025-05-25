@@ -37,7 +37,7 @@ const Members: React.FC<MembersProps> = async ({ header = true }) => {
 
     return (
         <div className="space-y-12 mb-12 px-4 md:px-8">
-            {header && <h2 className="text-5xl italic text-white font-semibold pb-0 text-left">Členovia</h2>}
+            {header && <h2 className="text-4xl text-white font-semibold pb-0 text-left">Členovia</h2>}
 
             {Object.entries(roles).map(([roleKey, roleTitle]) => {
                 const roleMembers = membersByRole[roleKey] || [];
