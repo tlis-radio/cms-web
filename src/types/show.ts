@@ -8,7 +8,7 @@ export type ShowDto = {
    Cover: string,
    Description: string,
    Episode: Array<string>,
-   Moderators: Array<number>
+   Cast: Array<number>
    Filter: string;
    ModeratorNames?: string[];
 };

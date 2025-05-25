@@ -10,7 +10,7 @@ export class Show {
    public Cover: string;
    public Description: string;
    public Episode: Array<string>;
-   public Moderators: Array<number>;
+   public Cast: Array<number>;
    public Filter: string;
    public ModeratorNames?: string[];
 
@@ -24,7 +24,7 @@ export class Show {
       Cover: string,
       Description: string,
       Episode: Array<string>,
-      Moderators: Array<number>,
+      Cast: Array<number>,
       Filter: string,
       ModeratorNames?: string[]
    ) {
@@ -37,7 +37,7 @@ export class Show {
       this.Cover = Cover;
       this.Description = Description;
       this.Episode = Episode;
-      this.Moderators = Moderators;
+      this.Cast = Cast;
       this.Filter = Filter;
       this.ModeratorNames = ModeratorNames;
    }
@@ -53,7 +53,7 @@ export class Show {
          dto.Cover,
          dto.Description,
          dto.Episode,
-         dto.Moderators,
+         dto.Cast,
          dto.Filter,
          dto.ModeratorNames
       );

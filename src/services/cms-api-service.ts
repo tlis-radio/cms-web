@@ -12,13 +12,13 @@ const directus = createDirectus('http://directus.tlis.sk').with(rest({ onRequest
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
       const shows = await directus.request<Array<ShowDto>>(readItems("Shows", {
-         sort: ['-Episode.date_created']
+         sort: ['-Episode.date_created'],
       }));
       return shows || [];
    },
 
    getShowDataById: async (id: number): Promise<Show> => {
-      try{
+      try {
          const data = await directus.request<ShowDto>(readItem("Shows", id));
          return data;
       } catch (error) {
@@ -29,7 +29,7 @@ const showEndpoints = {
 
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
       const showData = await directus.request<ShowDto>(readItem("Shows", id));
-      if(showData.Episode.length === 0) return [];
+      if (showData.Episode.length === 0) return [];
       var episodeData = await directus.request<Array<EpisodeDto>>(readItems("Episodes", {
          filter: { id: { _in: showData.Episode } },
          sort: ['id'],
@@ -40,7 +40,7 @@ const showEndpoints = {
 
    getShowModeratorsByIds: async (ids: Array<number>): Promise<Array<string>> => {
       if (ids.length === 0) return [];
-      var moderatorData = await directus.request<Array<ModeratorDto>>(readItems("Moderators", {
+      var moderatorData = await directus.request<Array<ModeratorDto>>(readItems("Cast", {
          filter: { id: { _in: ids } },
       }));
 
