@@ -32,7 +32,7 @@ const showEndpoints = {
       if (showData.Episode.length === 0) return [];
       var episodeData = await directus.request<Array<EpisodeDto>>(readItems("Episodes", {
          filter: { id: { _in: showData.Episode } },
-         sort: ['id'],
+         sort: ['-Date'],
       }));
 
       return episodeData || [];
