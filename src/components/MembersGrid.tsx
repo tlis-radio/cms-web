@@ -14,7 +14,7 @@ export interface Member {
 var roles = {
     moderator: "Moderátori",
     technic: "Technici",
-    pr: "PRisti",
+    pr: "PR-isti",
     web: "Webový tím",
     dj: "DJi",
     playwright: "Dramaturgovia",

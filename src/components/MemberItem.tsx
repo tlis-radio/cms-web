@@ -10,12 +10,9 @@ export default function MemberGridItem({ member } :{ member: Member }) {
                 const crown = document.getElementById(`crown-${member.id}`);
                 if (crown) crown.style.animation = "crownParty 0.8s forwards";
             }}
-            onClick={()=>{
+            onMouseLeave={() => {
                 const crown = document.getElementById(`crown-${member.id}`);
                 if (crown) crown.style.animation = "none";
-                setTimeout(() => {
-                    if (crown) crown.style.animation = "crownParty 0.8s forwards";
-                }, 100);
             }}
         >
         <div className="aspect-square relative rounded-full overflow-hidden shadow-lg mb-2 mx-auto w-3/4 transition-transform duration-700 group-hover:rotate-[720deg] group-hover:scale-110">
