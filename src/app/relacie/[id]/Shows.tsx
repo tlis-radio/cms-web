@@ -5,12 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 export default function Shows({ show, moderators, episodes }: { show: any, moderators: Array<string>, episodes: any }) {
-    const { setMode, setArchiveName, setSrc } = usePlayer();
+    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId } = usePlayer();
 
-    function selectEpisode(episodeSrc: string, episodeName: string, episodeCover: string, episodeDescription: string) {
+    function selectEpisode(episodeSrc: string, episodeName: string, episodeId: number) {
         setMode("archive");
         setArchiveName(episodeName);
         setSrc(episodeSrc);
+        setArchiveEpisodeId(episodeId);
     }
 
     return (
@@ -51,8 +52,7 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                                                     selectEpisode(
                                                         "https://directus.tlis.sk/assets/" + episode.Audio,
                                                         episode.Title,
-                                                        episode.Cover,
-                                                        episode.Description
+                                                        episode.id
                                                     );
                                                 }}
                                                 className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"

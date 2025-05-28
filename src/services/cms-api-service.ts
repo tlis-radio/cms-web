@@ -5,9 +5,15 @@ import { Moderator } from "@/models/moderator";
 import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
-import { createDirectus, readItem, readItems, rest } from '@directus/sdk';
+import { createDirectus, readItem, readItems, rest, staticToken } from '@directus/sdk';
 
-const directus = createDirectus('http://directus.tlis.sk').with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
+if( !process.env.DIRECTUS_TOKEN ) {
+   throw new Error("DIRECTUS_TOKEN environment variable is not set.");
+}
+
+export const directus = createDirectus('https://directus.tlis.sk')
+   .with(staticToken(process.env.DIRECTUS_TOKEN!))
+   .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {

@@ -21,6 +21,8 @@ interface PlayerContextType {
   updateCurrentTime: (currentTime: number) => void;
   duration: number;
   setDuration: (duration: number) => void;
+
+  setArchiveEpisodeId: (id: number) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | null>(null);
@@ -41,7 +43,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isLoading, setIsLoading] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
+  const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
+  const [countedView, setCountedView] = useState<boolean>(false);
+
   useEffect(() => {
+    setCountedView(false);
     if (mode == "archive") {
       setCurrentTime(0);
       const audio = new Audio();
@@ -62,7 +68,9 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else {
       audioRef.current = new Audio(src);
     }
+  }, [mode, src]);
 
+  useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play().catch((err) => {
         console.warn(err);
@@ -76,12 +84,22 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         audioRef.current.removeEventListener("timeupdate", handleAudioTimeUpdate);
       }
     };
-
-  }, [mode, src]);
+  }, [mode, src, countedView])
 
   function handleAudioTimeUpdate() {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
+      if (countedView === false && mode === "archive" && episodeId !== null && audioRef.current.duration > 0 && audioRef.current.currentTime >= 300) {
+        setCountedView(true);
+        fetch(`/api/view/${episodeId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).catch((err) => {
+          console.error("Failed to count view:", err);
+        });
+      }
     }
   }
 
@@ -99,7 +117,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         audioRef.current.load();
         audioRef.current.play().catch((err) => {
           console.warn(err);
-        }).then(()=>{
+        }).then(() => {
           setIsLoading(false);
         });
       } else {
@@ -136,7 +154,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setArchiveName,
         setSrc,
         duration,
-        setDuration
+        setDuration,
+        setArchiveEpisodeId,
       }}
     >
       {children}
