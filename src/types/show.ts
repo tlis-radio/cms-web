@@ -11,4 +11,5 @@ export type ShowDto = {
    Cast: Array<number>
    Filter: string;
    ModeratorNames?: string[];
+   Views: number;
 };

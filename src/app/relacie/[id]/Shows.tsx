@@ -22,7 +22,7 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                         <div className="flex flex-col gap-6 md:flex-row">
                             <img className="md:h-52" src={"https://directus.tlis.sk/assets/" + show.Cover} />
                             <div className="m-auto flex h-max w-full flex-col gap-4">
-                                <p className="text-2xl font-semibold">{show.Title}</p>
+                                <h1 className="text-2xl font-semibold">{show.Title}</h1>
                                 <p>{moderators.join(", ")}</p>
                                 <p>Archív: {episodes.length}</p>
                             </div>
@@ -45,7 +45,10 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
 
                                 <div className="flex-1 flex flex-col">
                                     <div className="flex justify-between items-start gap-4">
-                                        <h3 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h3>
+                                        <div className="flex flex-col items-start">
+                                            <h2 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h2>
+                                            <p>{episode.Views} {episode.Views == 1 ? "vypočutie" : "vypočutí"}</p>
+                                        </div>
                                         {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
                                             <button
                                                 onClick={() => {

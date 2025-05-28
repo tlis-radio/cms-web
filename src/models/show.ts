@@ -13,6 +13,7 @@ export class Show {
    public Cast: Array<number>;
    public Filter: string;
    public ModeratorNames?: string[];
+   public Views: number;
 
    constructor(
       id: number,
@@ -26,6 +27,7 @@ export class Show {
       Episode: Array<string>,
       Cast: Array<number>,
       Filter: string,
+      Views: number,
       ModeratorNames?: string[]
    ) {
       this.id = id;
@@ -40,6 +42,7 @@ export class Show {
       this.Cast = Cast;
       this.Filter = Filter;
       this.ModeratorNames = ModeratorNames;
+      this.Views = Views;
    }
 
    public static fromDto(dto: ShowDto): Show {
@@ -55,7 +58,8 @@ export class Show {
          dto.Episode,
          dto.Cast,
          dto.Filter,
-         dto.ModeratorNames
+         dto.Views,
+         dto.ModeratorNames,
       );
    }
 }
