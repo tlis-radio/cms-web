@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from "react";
-import { useVynilPlayer } from "./VynilProvider";
+import { useVinylPlayer } from "./VinylProvider";
 
 export default function Turntable() {
 
-    const { isPlaying, currentPosition, songDuration, seekVynil } = useVynilPlayer();
+    const { isPlaying, currentPosition, songDuration, seekVinyl } = useVinylPlayer();
 
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const [lastDragAngle, setLastDragAngle] = useState<number>(0);
@@ -89,7 +89,7 @@ export default function Turntable() {
         const anglePercentage = angleChange / (2 * Math.PI);
 
         var newPosition = Math.max(0, Math.min(songDuration, currentPosition + anglePercentage * songDuration));
-        seekVynil(newPosition);
+        seekVinyl(newPosition);
         setLastDragAngle(currentAngle)
     }
 

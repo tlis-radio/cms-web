@@ -1,4 +1,4 @@
-import VynilPlayer from "@/components/vynil/VynilPlayer";
+import VynilPlayer from "@/components/vinyl/VinylPlayer";
 
 export default function vynilpage () {
     return <VynilPlayer />;

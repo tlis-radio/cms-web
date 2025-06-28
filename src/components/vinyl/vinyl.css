@@ -1,4 +1,4 @@
-.vynil-player #waveform-container {
+.vinyl-player #waveform-container {
     width: 90%;
     max-width: 800px;
     height: 100px;
@@ -7,14 +7,14 @@
     cursor: pointer;
 }
 
-.vynil-player #waveform {
+.vinyl-player #waveform {
     display: flex;
     height: 100%;
     align-items: center;
     justify-content: space-between;
 }
 
-.vynil-player .wave-bar {
+.vinyl-player .wave-bar {
     flex: 1;
     background-color: #555;
     margin: 0 1px;
@@ -23,18 +23,18 @@
     height: 40%;
 }
 
-.vynil-player .wave-bar.active {
+.vinyl-player .wave-bar.active {
     background: linear-gradient(to bottom, #FFE600 0%, #FFB800 100%);
 }
 
-.vynil-player #turntable {
+.vinyl-player #turntable {
     width: 300px;
     height: 300px;
     margin: auto;
     position: relative;
 }
 
-.vynil-player #vinyl {
+.vinyl-player #vinyl {
     width: 300px;
     height: 300px;
     border-radius: 50%;
@@ -49,7 +49,7 @@
     transition: transform 0.1s linear;
 }
 
-.vynil-player #vinyl::before {
+.vinyl-player #vinyl::before {
     content: '';
     position: absolute;
     width: 50px;
@@ -61,7 +61,7 @@
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.vynil-player #vinyl::after {
+.vinyl-player #vinyl::after {
     content: '';
     position: absolute;
     width: 10px;
@@ -72,7 +72,7 @@
     left: 145px;
 }
 
-.vynil-player #label {
+.vinyl-player #label {
     position: absolute;
     width: 100px;
     height: 100px;
@@ -89,14 +89,14 @@
     pointer-events: none;
 }
 
-.vynil-player .groove {
+.vinyl-player .groove {
     position: absolute;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.1);
     pointer-events: none;
 }
 
-.vynil-player #grooves {
+.vinyl-player #grooves {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -105,8 +105,8 @@
 
 
 @media (max-width: 400px) {
-    .vynil-player #turntable,
-    .vynil-player #vinyl {
+    .vinyl-player #turntable,
+    .vinyl-player #vinyl {
         width: 90vw;
         max-width: 90vw;
         height: 90vw;
@@ -117,14 +117,14 @@
         overflow: hidden;
     }
 
-    .vynil-player #vinyl::before {
+    .vinyl-player #vinyl::before {
         width: 14vw;
         height: 14vw;
         top: 38vw;
         left: 38vw;
     }
 
-    .vynil-player #vinyl::after {
+    .vinyl-player #vinyl::after {
         width: 3vw;
         height: 3vw;
         top: 50%;
@@ -132,7 +132,7 @@
         translate: -50% -50%;
     }
 
-    .vynil-player #label {
+    .vinyl-player #label {
         width: 30vw;
         height: 30vw;
         top: 30vw;

@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from "react";
-import { useVynilPlayer } from "./VynilProvider";
+import { useVinylPlayer } from "./VinylProvider";
 import React from "react";
 
 export default function Waveform() {
 
-    const { isPlaying, analyser, sourceNode, audioContext, audioBuffer, songDuration, currentPosition, seekVynil } = useVynilPlayer();
+    const { isPlaying, analyser, sourceNode, audioContext, audioBuffer, songDuration, currentPosition, seekVinyl } = useVinylPlayer();
     
     const [barRate, setBarRate] = useState(200);
     const [waveformData, setWaveformData] = useState<number[]>([]);
@@ -73,7 +73,7 @@ export default function Waveform() {
             return;
         }
         const percent = Math.min(1, Math.max(0, clickX / rect.width));
-        seekVynil(percent * songDuration);
+        seekVinyl(percent * songDuration);
     }
 
     function updateWaveformProgress() {

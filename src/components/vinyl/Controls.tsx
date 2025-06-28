@@ -1,10 +1,10 @@
 'use client';
 import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useVynilPlayer } from "./VynilProvider";
+import { useVinylPlayer } from "./VinylProvider";
 
 export default function Controls() {
-    const { isPlaying, playAudio, stopAudio } = useVynilPlayer();
+    const { isPlaying, playAudio, stopAudio } = useVinylPlayer();
 
     return (
         <div id="controls" className="mt-5 flex justify-center items-center gap-5">

@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-export interface VynilPlayerState {
+export interface VinylPlayerState {
     sourceNode: AudioBufferSourceNode | null;
     audioContext: AudioContext | null;
     audioBuffer: AudioBuffer | null;
@@ -15,10 +15,10 @@ export interface VynilPlayerState {
 
     playAudio: (position?: number) => void;
     stopAudio: () => void;
-    seekVynil: (position: number) => void;
+    seekVinyl: (position: number) => void;
 }
 
-export interface VynilPlayerContextProps extends VynilPlayerState {
+export interface VinylPlayerContextProps extends VinylPlayerState {
     sourceNode: AudioBufferSourceNode | null;
     audioContext: AudioContext | null;
     audioBuffer: AudioBuffer | null;
@@ -32,13 +32,13 @@ export interface VynilPlayerContextProps extends VynilPlayerState {
 
     playAudio: (position?: number) => void;
     stopAudio: () => void;
-    seekVynil: (position: number) => void;
+    seekVinyl: (position: number) => void;
 }
 
 
-const VynilPlayerContext = createContext<VynilPlayerContextProps | undefined>(undefined);
+const VinylPlayerContext = createContext<VinylPlayerContextProps | undefined>(undefined);
 
-export const VynilProvider = ({ children }: { children: ReactNode }) => {
+export const VinylProvider = ({ children }: { children: ReactNode }) => {
 
     const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
     const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
@@ -140,7 +140,7 @@ export const VynilProvider = ({ children }: { children: ReactNode }) => {
     }
 
     var lastSeek = performance.now();
-    function seekVynil(position: number) {
+    function seekVinyl(position: number) {
         if (rafIdRef.current) {
             cancelAnimationFrame(rafIdRef.current);
             rafIdRef.current = null;
@@ -192,8 +192,8 @@ export const VynilProvider = ({ children }: { children: ReactNode }) => {
     }, [])
 
     return (
-        <div className='vynil-player' >
-            <VynilPlayerContext.Provider
+        <div className='vinyl-player' >
+            <VinylPlayerContext.Provider
                 value={{
                     analyser,
                     sourceNode,
@@ -205,19 +205,19 @@ export const VynilProvider = ({ children }: { children: ReactNode }) => {
                     playAudio,
                     stopAudio,
                     currentPosition,
-                    seekVynil,
+                    seekVinyl,
                 }}
             >
                 {children}
-            </VynilPlayerContext.Provider>
+            </VinylPlayerContext.Provider>
         </div>
     );
 };
 
-export const useVynilPlayer = () => {
-    const context = useContext(VynilPlayerContext);
+export const useVinylPlayer = () => {
+    const context = useContext(VinylPlayerContext);
     if (!context) {
-        throw new Error('useVynilPlayer must be used within a VynilProvider');
+        throw new Error('useVinylPlayer must be used within a VinylProvider');
     }
     return context;
 };

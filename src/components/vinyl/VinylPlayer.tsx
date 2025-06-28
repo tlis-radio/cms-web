@@ -1,14 +1,14 @@
 import Controls from "./Controls";
 import Turntable from "./Turntable";
-import { VynilProvider } from "./VynilProvider";
+import { VinylProvider } from "./VinylProvider";
 import Waveform from "./Waveform";
 
-import "./vynil.css";
+import "./vinyl.css";
 
-export default function VynilPlayer() {
-    return <VynilProvider>
+export default function VinylPlayer() {
+    return <VinylProvider>
         <Turntable />
         <Waveform />
         <Controls />
-    </VynilProvider>;
+    </VinylProvider>;
 }
