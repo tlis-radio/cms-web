@@ -14,7 +14,7 @@ import valcek from "@/../public/images/rozpravky_na_dobru_noc.jpg";
 import "swiper/css";
 import "swiper/css/navigation";
 
-function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
+function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, loadingError?: boolean }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
 
   /*const handleSlideChange = (swiper: SwiperClass) => {
@@ -49,6 +49,13 @@ function SwiperCarousel({ carouselPosts }: { carouselPosts: any }) {
       );
     });
   };
+
+  if (loadingError) {
+    return <div className="relative py-8">
+      <h3 className="font-argentumSansMedium text-xl mb-3 text-white">Chyba pri načítaní programu</h3>
+      <p className="text-gray-200 mb-4">Skúste to prosím neskôr.</p>
+    </div>
+  }
 
   return (
     <>

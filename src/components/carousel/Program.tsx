@@ -5,6 +5,8 @@ const directus = createDirectus('http://directus.tlis.sk').with(rest());
 
 export default async function Program() {
 
+    var loadingError = false;
+
     const today = new Date();
     const threeDaysAgo = new Date(today);
     threeDaysAgo.setDate(today.getDate() - 3);
@@ -20,7 +22,11 @@ export default async function Program() {
             },
             sort: ['Date'],
         }
-    ));
+    )).catch((error)=>{
+        console.error("Error fetching episodes:", error);
+        loadingError = true;
+        return [];
+    });
 
-    return (<SwiperCarousel carouselPosts={carouselPosts} />);
+    return (<SwiperCarousel carouselPosts={carouselPosts} loadingError={loadingError} />);
 }

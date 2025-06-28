@@ -5,7 +5,7 @@ import { useState } from "react";
 
 type FilterProps = "active" | "archived" | "digital";
 
-export default function ShowsPage({ shows }: { shows: Show[] }) {
+export default function ShowsPage({ shows, loadingError }: { shows: Show[], loadingError?: boolean }) {
   const [filter, setFilter] = useState<FilterProps>("active");
 
   const createShowLinks = () => {
@@ -36,8 +36,9 @@ export default function ShowsPage({ shows }: { shows: Show[] }) {
         <h1 className="text-4xl text-white font-semibold">
           <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> relácie
         </h1>
+
         <div className="ml-auto relative">
-          <select 
+          <select
             value={filter}
             onChange={(e) => setFilter(e.target.value as FilterProps)}
             className="appearance-none bg-transparent text-white pr-6 pl-2 py-1 focus:outline-none cursor-pointer"
@@ -53,6 +54,14 @@ export default function ShowsPage({ shows }: { shows: Show[] }) {
           </div>
         </div>
       </div>
+
+      {loadingError && <div className="relative py-8">
+        <h3 className="font-argentumSansMedium text-xl mb-3 text-white">
+          Chyba pri načítaní archívu
+        </h3>
+        <p className="text-gray-200 mb-4">Skúste to prosím neskôr.</p>
+      </div>}
+
       <div className="px-8">
         {createShowLinks()}
       </div>

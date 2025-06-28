@@ -4,7 +4,12 @@ import ShowsPage from "./ShowsPage";
 import { Show } from "@/models/show";
 
 const Shows: React.FC = async () => {
-   var shows = await CmsApiService.Show.listShows();
+   var loadingError = false;
+   var shows = await CmsApiService.Show.listShows().catch((error) => {
+      console.error("Error fetching shows:", error);
+      loadingError = true;
+      return [];
+   });
    shows = await Promise.all(
       shows.map(async (show: Show) => {
          const moderatorNames = await CmsApiService.Show.getShowModeratorsByIds(show.Cast);
@@ -12,7 +17,7 @@ const Shows: React.FC = async () => {
       })
    );
 
-   return (<ShowsPage shows={shows} />);
+   return (<ShowsPage shows={shows} loadingError={loadingError} />);
 };
 
 export default Shows;

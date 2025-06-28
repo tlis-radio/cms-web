@@ -25,7 +25,12 @@ interface MembersProps {
 }
 
 const Members: React.FC<MembersProps> = async ({ header = true }) => {
-    const members = await CmsApiService.Member.listMembers();
+    var loadingError = false;
+    const members = await CmsApiService.Member.listMembers().catch((error) => {
+        console.error("Error fetching members:", error);
+        loadingError = true;
+        return [];
+    });
 
     // Group members by role
     const membersByRole: { [key: string]: Member[] } = {};
@@ -40,6 +45,13 @@ const Members: React.FC<MembersProps> = async ({ header = true }) => {
     return (
         <div className="space-y-12 mb-12 px-4 md:px-8">
             {header && <h2 className="text-4xl text-white font-semibold pb-0 text-left">Členovia</h2>}
+
+            {loadingError && (
+                <div className="relative py-8" style={{ marginTop: '0 !important' }}>
+                    <h3 className="font-argentumSansMedium text-xl mb-3 text-white">Chyba pri načítaní členov</h3>
+                    <p className="text-gray-200 mb-4">Skúste to prosím neskôr.</p>
+                </div>
+            )}
 
             {Object.entries(roles).map(([roleKey, roleTitle]) => {
                 const roleMembers = membersByRole[roleKey] || [];
