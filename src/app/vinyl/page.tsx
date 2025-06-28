@@ -1,5 +1,5 @@
-import VynilPlayer from "@/components/vinyl/VinylPlayer";
+import VinylPlayer from "@/components/vinyl/VinylPlayer";
 
-export default function vynilpage () {
-    return <VynilPlayer />;
+export default function vinylpage () {
+    return <VinylPlayer />;
 }
