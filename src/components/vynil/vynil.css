@@ -1,0 +1,142 @@
+.vynil-player #waveform-container {
+    width: 90%;
+    max-width: 800px;
+    height: 100px;
+    margin: 50px auto;
+    position: relative;
+    cursor: pointer;
+}
+
+.vynil-player #waveform {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vynil-player .wave-bar {
+    flex: 1;
+    background-color: #555;
+    margin: 0 1px;
+    min-width: 2px;
+    transition: background-color 0.2s ease;
+    height: 40%;
+}
+
+.vynil-player .wave-bar.active {
+    background: linear-gradient(to bottom, #FFE600 0%, #FFB800 100%);
+}
+
+.vynil-player #turntable {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    position: relative;
+}
+
+.vynil-player #vinyl {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #111 30%, #333 70%, #111 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    transition: transform 0.1s linear;
+}
+
+.vynil-player #vinyl::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: silver;
+    top: 125px;
+    left: 125px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.vynil-player #vinyl::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #111;
+    top: 145px;
+    left: 145px;
+}
+
+.vynil-player #label {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFE600 0%, #FFB800 100%);
+    background: url('https://i1.sndcdn.com/artworks-000126259431-uemg3s-t500x500.jpg') center/cover no-repeat;
+    top: 100px;
+    left: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.vynil-player .groove {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.vynil-player #grooves {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+
+@media (max-width: 400px) {
+    .vynil-player #turntable,
+    .vynil-player #vinyl {
+        width: 90vw;
+        max-width: 90vw;
+        height: 90vw;
+        max-height: 90vw;
+        min-width: 0;
+        min-height: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .vynil-player #vinyl::before {
+        width: 14vw;
+        height: 14vw;
+        top: 38vw;
+        left: 38vw;
+    }
+
+    .vynil-player #vinyl::after {
+        width: 3vw;
+        height: 3vw;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+    }
+
+    .vynil-player #label {
+        width: 30vw;
+        height: 30vw;
+        top: 30vw;
+        left: 30vw;
+        font-size: 1.1em;
+    }
+}
