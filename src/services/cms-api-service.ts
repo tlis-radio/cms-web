@@ -7,11 +7,15 @@ import { Episode } from '@/models/episode';
 
 import { createDirectus, readItem, readItems, rest, staticToken } from '@directus/sdk';
 
-if( !process.env.DIRECTUS_TOKEN ) {
+if (!process.env.DIRECTUS_TOKEN) {
    throw new Error("DIRECTUS_TOKEN environment variable is not set.");
 }
 
-export const directus = createDirectus('https://directus.tlis.sk')
+if (!process.env.DIRECTUS_URL) {
+   throw new Error("DIRECTUS_URL environment variable is not set.");
+}
+
+export const directus = createDirectus(process.env.DIRECTUS_URL!)
    .with(staticToken(process.env.DIRECTUS_TOKEN!))
    .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
 

@@ -1,0 +1,30 @@
+name: Build Prod Website
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build and Push Docker Image
+      run: |
+        IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/tlis-web:latest
+        docker build . \
+        --file dockerfile \
+        --tag $IMAGE_NAME \
+        docker push $IMAGE_NAME
+        
+    - name: Deploy to production
+      run: |
+        curl -X GET "${{ secrets.DEPLOY_URL }}?uuid=${{ secrets.PROD_DEPLOY_ID }}&force=false" \
+          -H "Authorization: Bearer ${{ secrets.DEPLOY_SECRET }}"
