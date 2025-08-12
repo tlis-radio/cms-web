@@ -3,6 +3,13 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+
+ARG DIRECTUS_TOKEN
+ARG DIRECTUS_URL
+
+ENV DIRECTUS_TOKEN=$DIRECTUS_TOKEN
+ENV DIRECTUS_URL=$DIRECTUS_URL
+
 RUN npm run build
 EXPOSE 3000
 CMD ["npm", "run", "start"]
