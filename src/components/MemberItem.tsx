@@ -17,7 +17,7 @@ export default function MemberGridItem({ member } :{ member: Member }) {
         >
         <div className="aspect-square relative rounded-full overflow-hidden shadow-lg mb-2 mx-auto w-3/4 transition-transform duration-700 group-hover:rotate-[720deg] group-hover:scale-110">
             <img
-                src={"https://directus.tlis.sk/assets/" + member.Picture}
+                src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + member.Picture}
                 alt={member.Name}
                 className="object-cover group-hover:scale-105 transition-transform h-full w-full"
             />

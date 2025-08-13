@@ -17,7 +17,7 @@ export default function ShowsPage({ shows, loadingError }: { shows: Show[], load
           id={show.id}
           name={show.Title}
           description={show.Description}
-          imageUrl={"https://directus.tlis.sk/assets/" + show.Cover}
+          imageUrl={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover}
           moderatorNames={show.ModeratorNames}
         />
       )

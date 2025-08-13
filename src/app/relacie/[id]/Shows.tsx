@@ -20,7 +20,7 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                 <div className="flex flex-col gap-4 border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
                     <div className="border-b pb-4">
                         <div className="flex flex-col gap-6 md:flex-row">
-                            <img className="md:h-52" src={"https://directus.tlis.sk/assets/" + show.Cover} />
+                            <img className="md:h-52" src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover} />
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="text-2xl font-semibold">{show.Title}</h1>
                                 <p>{moderators.join(", ")}</p>
@@ -39,7 +39,7 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                             <div className="flex flex-col md:flex-row gap-4">
                                 <img
                                     className="w-full h-auto max-h-52 object-cover md:w-48 md:flex-shrink-0"
-                                    src={"https://directus.tlis.sk/assets/" + episode.Cover}
+                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + episode.Cover}
                                     alt={episode.Title}
                                 />
 
@@ -53,7 +53,7 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                                             <button
                                                 onClick={() => {
                                                     selectEpisode(
-                                                        "https://directus.tlis.sk/assets/" + episode.Audio,
+                                                        `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + episode.Audio,
                                                         episode.Title,
                                                         episode.id
                                                     );

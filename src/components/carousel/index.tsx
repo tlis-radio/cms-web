@@ -43,7 +43,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
     return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <img src={`https://directus.tlis.sk/assets/${program.Cover}`} alt={program.Title} />
+          <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
           <h2 className="font-sans text-white pt-3">{getDate(program.Date)}</h2>
         </SwiperSlide>
       );

@@ -43,7 +43,7 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
           >
             <div className="aspect-square relative rounded-lg overflow-hidden shadow-lg">
               <img
-                src={"https://directus.tlis.sk/assets/" + show.Cover}
+                src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover}
                 alt={show.Title}
                 className="w-full h-full object-cover"
               />
