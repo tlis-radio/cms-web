@@ -7,3 +7,4 @@ export default function Clenovia() {
 
     </>
 }
+export const dynamic = "force-dynamic";

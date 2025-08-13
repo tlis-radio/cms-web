@@ -21,3 +21,4 @@ const Shows: React.FC = async () => {
 };
 
 export default Shows;
+export const dynamic = "force-dynamic";
