@@ -31,7 +31,7 @@ const Socials = ({mobile}: {mobile: boolean}) => {
    }
 
    return (
-      <div className={`bg-[#96120F] flex items-center gap-2 ${mobile? 'min-[450px]:hidden' : 'max-[450px]:hidden'}`}>
+      <div className={`bg-[#96120F] ml-4 flex items-center gap-2 ${mobile? 'min-[450px]:hidden' : 'max-[450px]:hidden'}`}>
          {createSocialLinks()}
       </div>
    )

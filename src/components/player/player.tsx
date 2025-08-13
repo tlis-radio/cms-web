@@ -55,7 +55,7 @@ const Player: React.FC<{}> = () => {
          'translate-y-full lg:translate-y-0': !isVisible,
       },
       'transition-transform duration-300 ease-in-out',
-      'lg:w-3/4 lg:pr-0 lg:relative lg:rounded-xl lg:h-16 lg:top-[5px] lg:mx-auto',
+      'lg:w-[55%] lg:pr-0 lg:relative lg:rounded-xl lg:h-16 lg:top-[5px] lg:mx-auto',
       'xl:w-2/3',
       '2xl:w-1/2'
    );
@@ -65,8 +65,8 @@ const Player: React.FC<{}> = () => {
          {mode !== "stream" && (
             <div
                className={classNames(
-                 "fixed left-4 z-20 transition-all duration-300 ease-in-out",
-                 isVisible ? "max-lg:bottom-[6rem] bottom-4" : "bottom-5"
+                 "fixed left-4 lg:relative lg:ml-auto mr-7 z-20 transition-all duration-300 ease-in-out flex items-center justify-center",
+                 isVisible ? "max-lg:bottom-[6rem] bottom-4 lg:bottom-0" : "bottom-5 lg:bottom-0"
                )}
             >
                <button 
@@ -74,7 +74,7 @@ const Player: React.FC<{}> = () => {
                      setMode("stream");
                      setIsPlaying(true);
                   }}
-                  className="flex items-center justify-center w-auto h-10 text-xl rounded-full bg-[#d43c4a] shadow-lg text-white px-4"
+                  className="flex items-center justify-center whitespace-nowrap w-auto h-10 text-xl rounded-full bg-[#d43c4a] shadow-lg text-white px-4"
                   aria-label="Live"
                   type="button"
                >
