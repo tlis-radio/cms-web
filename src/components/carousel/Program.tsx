@@ -1,7 +1,7 @@
 import SwiperCarousel from "@/components/carousel";
 
 import { readItems } from '@directus/sdk';
-import { directus } from "@/services/cms-api-service";
+import { getDirectusInstance } from "@/services/cms-api-service";
 
 export default async function Program() {
     var loadingError = false;
@@ -12,7 +12,7 @@ export default async function Program() {
     const threeDaysAhead = new Date(today);
     threeDaysAhead.setDate(today.getDate() + 3);
 
-    const carouselPosts = await directus.request(readItems('Episodes',
+    const carouselPosts = await getDirectusInstance().request(readItems('Episodes',
         {
             filter: {
                 Date: {

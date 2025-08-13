@@ -1,4 +1,4 @@
-import { directus } from "@/services/cms-api-service";
+import { getDirectusInstance } from "@/services/cms-api-service";
 import { readItem, updateItem } from "@directus/sdk";
 import { NextResponse } from "next/server";
 
@@ -40,8 +40,8 @@ export async function POST(
         viewTrackingMap.get(trackingKey)!.add(ip);
 
         console.log(`Counting view for ID: ${id}, IP: ${ip}, Date: ${today}`);
-        const episode = await directus.request(readItem("Episodes", id));
-        await directus.request(updateItem("Episodes", id, { 
+        const episode = await getDirectusInstance().request(readItem("Episodes", id));
+        await getDirectusInstance().request(updateItem("Episodes", id, { 
             Views: (episode.Views || 0) + 1 
         }));
         

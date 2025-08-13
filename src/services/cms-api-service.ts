@@ -5,23 +5,30 @@ import { Moderator } from "@/models/moderator";
 import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
-import { createDirectus, readItem, readItems, rest, staticToken } from '@directus/sdk';
+import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
 
-if (!process.env.DIRECTUS_TOKEN) {
-   throw new Error("DIRECTUS_TOKEN environment variable is not set.");
+let directusInstance: RestClient<any>;
+
+export function getDirectusInstance(): RestClient<any> {
+   if (!directusInstance) {
+      if (!process.env.DIRECTUS_TOKEN) {
+         throw new Error("DIRECTUS_TOKEN environment variable is not set.");
+      }
+
+      if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+         throw new Error("NEXT_PUBLIC_DIRECTUS_URL environment variable is not set.");
+      }
+      directusInstance = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
+         .with(staticToken(process.env.DIRECTUS_TOKEN!))
+         .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
+   }
+   return directusInstance;
 }
 
-if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-   throw new Error("NEXT_PUBLIC_DIRECTUS_URL environment variable is not set.");
-}
-
-export const directus = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
-   .with(staticToken(process.env.DIRECTUS_TOKEN!))
-   .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
-      const shows = await directus.request<Array<ShowDto>>(readItems("Shows", {
+      const shows = await directusInstance.request<Array<ShowDto>>(readItems("Shows", {
          sort: ['-Episode.date_created'],
       }));
       return shows || [];
@@ -29,7 +36,7 @@ const showEndpoints = {
 
    getShowDataById: async (id: number): Promise<Show> => {
       try {
-         const data = await directus.request<ShowDto>(readItem("Shows", id));
+         const data = await directusInstance.request<ShowDto>(readItem("Shows", id));
          return data;
       } catch (error) {
          console.error("Error fetching show data: (Probably not found)");
@@ -38,9 +45,9 @@ const showEndpoints = {
    },
 
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
-      const showData = await directus.request<ShowDto>(readItem("Shows", id));
+      const showData = await directusInstance.request<ShowDto>(readItem("Shows", id));
       if (showData.Episode.length === 0) return [];
-      var episodeData = await directus.request<Array<EpisodeDto>>(readItems("Episodes", {
+      var episodeData = await directusInstance.request<Array<EpisodeDto>>(readItems("Episodes", {
          filter: { id: { _in: showData.Episode } },
          sort: ['-Date'],
       }));
@@ -50,7 +57,7 @@ const showEndpoints = {
 
    getShowModeratorsByIds: async (ids: Array<number>): Promise<Array<string>> => {
       if (ids.length === 0) return [];
-      var moderatorData = await directus.request<Array<ModeratorDto>>(readItems("Cast", {
+      var moderatorData = await directusInstance.request<Array<ModeratorDto>>(readItems("Cast", {
          filter: { id: { _in: ids } },
       }));
 
@@ -64,7 +71,7 @@ const showEndpoints = {
 
 var memberEndpoints = {
    listMembers: async (): Promise<Array<Object>> => {
-      const members = await directus.request<Array<Object>>(readItems("Members"));
+      const members = await directusInstance.request<Array<Object>>(readItems("Members"));
       return members || [];
    }
 };
