@@ -28,7 +28,7 @@ export function getDirectusInstance(): RestClient<any> {
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
-      const shows = await directusInstance.request<Array<ShowDto>>(readItems("Shows", {
+      const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
          sort: ['-Episode.date_created'],
       }));
       return shows || [];
@@ -36,7 +36,7 @@ const showEndpoints = {
 
    getShowDataById: async (id: number): Promise<Show> => {
       try {
-         const data = await directusInstance.request<ShowDto>(readItem("Shows", id));
+         const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
          return data;
       } catch (error) {
          console.error("Error fetching show data: (Probably not found)");
@@ -45,9 +45,9 @@ const showEndpoints = {
    },
 
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
-      const showData = await directusInstance.request<ShowDto>(readItem("Shows", id));
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
       if (showData.Episode.length === 0) return [];
-      var episodeData = await directusInstance.request<Array<EpisodeDto>>(readItems("Episodes", {
+      var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
          filter: { id: { _in: showData.Episode } },
          sort: ['-Date'],
       }));
@@ -57,7 +57,7 @@ const showEndpoints = {
 
    getShowModeratorsByIds: async (ids: Array<number>): Promise<Array<string>> => {
       if (ids.length === 0) return [];
-      var moderatorData = await directusInstance.request<Array<ModeratorDto>>(readItems("Cast", {
+      var moderatorData = await getDirectusInstance().request<Array<ModeratorDto>>(readItems("Cast", {
          filter: { id: { _in: ids } },
       }));
 
@@ -71,7 +71,7 @@ const showEndpoints = {
 
 var memberEndpoints = {
    listMembers: async (): Promise<Array<Object>> => {
-      const members = await directusInstance.request<Array<Object>>(readItems("Members"));
+      const members = await getDirectusInstance().request<Array<Object>>(readItems("Members"));
       return members || [];
    }
 };
