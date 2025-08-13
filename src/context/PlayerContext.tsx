@@ -109,29 +109,52 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setCurrentTime(newTime);
     }
   }
+
   useEffect(() => {
+    let streamHandleCanPlay: (() => void) | null = null;
+    let archiveHandleCanPlay: (() => void) | null = null;
     if (audioRef.current && mode === "stream") {
       if (isPlaying) {
         setIsLoading(true);
         audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
         audioRef.current.load();
+
+        streamHandleCanPlay = () => {
+          setIsLoading(false);
+          audioRef.current?.removeEventListener("canplay", streamHandleCanPlay!);
+        };
+        audioRef.current.addEventListener("canplay", streamHandleCanPlay);
         audioRef.current.play().catch((err) => {
           console.warn(err);
-        }).then(() => {
-          setIsLoading(false);
         });
       } else {
         audioRef.current.pause();
         audioRef.current.src = "";
         audioRef.current.load();
+        setIsLoading(false);
+        if (streamHandleCanPlay) {
+          audioRef.current.removeEventListener("canplay", streamHandleCanPlay);
+        }
       }
     } else if (audioRef.current) {
       if (isPlaying) {
+        setIsLoading(true);
+
+        archiveHandleCanPlay = () => {
+          setIsLoading(false);
+          audioRef.current?.removeEventListener("canplay", archiveHandleCanPlay!);
+        };
+        audioRef.current.addEventListener("canplay", archiveHandleCanPlay);
+
         audioRef.current.play().catch((err) => {
           console.warn(err);
         });
       } else {
         audioRef.current.pause();
+        if (archiveHandleCanPlay) {
+          audioRef.current.removeEventListener("canplay", archiveHandleCanPlay);
+        }
+        setIsLoading(false);
       }
     }
   }, [isPlaying, mode]);
