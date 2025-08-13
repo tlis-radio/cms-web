@@ -15,3 +15,5 @@ export default async function Home() {
     // členovia
   );
 }
+
+const dynamic = "force-dynamic";
