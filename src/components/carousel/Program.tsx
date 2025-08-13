@@ -1,10 +1,9 @@
 import SwiperCarousel from "@/components/carousel";
 
-import { createDirectus, readItems, rest } from '@directus/sdk';
-const directus = createDirectus('http://directus.tlis.sk').with(rest());
+import { readItems } from '@directus/sdk';
+import { directus } from "@/services/cms-api-service";
 
 export default async function Program() {
-
     var loadingError = false;
 
     const today = new Date();
@@ -22,7 +21,7 @@ export default async function Program() {
             },
             sort: ['Date'],
         }
-    )).catch((error)=>{
+    )).catch((error) => {
         console.error("Error fetching episodes:", error);
         loadingError = true;
         return [];
