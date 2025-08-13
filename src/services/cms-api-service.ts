@@ -11,11 +11,11 @@ if (!process.env.DIRECTUS_TOKEN) {
    throw new Error("DIRECTUS_TOKEN environment variable is not set.");
 }
 
-if (!process.env.DIRECTUS_URL) {
-   throw new Error("DIRECTUS_URL environment variable is not set.");
+if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+   throw new Error("NEXT_PUBLIC_DIRECTUS_URL environment variable is not set.");
 }
 
-export const directus = createDirectus(process.env.DIRECTUS_URL!)
+export const directus = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
    .with(staticToken(process.env.DIRECTUS_TOKEN!))
    .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
 
