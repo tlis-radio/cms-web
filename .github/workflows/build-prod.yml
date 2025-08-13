@@ -27,8 +27,7 @@ jobs:
         docker build . \
         --file Dockerfile \
         --tag $IMAGE_NAME \
-        --build-arg NEXT_PUBLIC_DIRECTUS_URL=${{ secrets.PROD_DIRECTUS_URL }} \
-        --build-arg DIRECTUS_TOKEN=${{ secrets.PROD_DIRECTUS_TOKEN }} \
+        --build-arg NEXT_PUBLIC_DIRECTUS_URL=${{ secrets.PROD_DIRECTUS_URL }}
         docker push $IMAGE_NAME
         
     - name: Deploy to production
