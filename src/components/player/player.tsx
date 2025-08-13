@@ -27,7 +27,7 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
 };
 
 const Player: React.FC<{}> = () => {
-   const { mode, archiveName, currentTime, duration, updateCurrentTime, setMode } = usePlayer();
+   const { mode, archiveName, currentTime, duration, updateCurrentTime, setMode, setIsPlaying } = usePlayer();
    const [isVisible, setIsVisible] = useState(true);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
@@ -72,6 +72,7 @@ const Player: React.FC<{}> = () => {
                <button 
                   onClick={() => {
                      setMode("stream");
+                     setIsPlaying(true);
                   }}
                   className="flex items-center justify-center w-auto h-10 text-xl rounded-full bg-[#d43c4a] shadow-lg text-white px-4"
                   aria-label="Live"

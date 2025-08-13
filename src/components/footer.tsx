@@ -6,6 +6,8 @@
  * });
 */
 
+import Link from "next/link";
+
 const Footer = () => {
    return (
       <footer className='bg-[#111111] text-white w-full py-8 px-4 mt-auto'>
@@ -65,9 +67,9 @@ const Footer = () => {
             <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
                <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Študentské rádio TLIS. Všetky práva vyhradené.</p>
                <div className="flex gap-4">
-                  <a href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Program</a>
-                  <a href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Archív</a>
-                  <a href="/o-nas" className="text-gray-400 hover:text-white text-sm transition-colors">O nás</a>
+                  <Link href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Program</Link>
+                  <Link href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Archív</Link>
+                  <Link href="/o-nas" className="text-gray-400 hover:text-white text-sm transition-colors">O nás</Link>
                </div>
             </div>
          </div>

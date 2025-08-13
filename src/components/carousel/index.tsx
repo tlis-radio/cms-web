@@ -13,6 +13,7 @@ import valcek from "@/../public/images/rozpravky_na_dobru_noc.jpg";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import Link from "next/link";
 
 function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, loadingError?: boolean }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
@@ -115,12 +116,12 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
         <div className="relative py-8">
           <h3 className="font-argentumSansMedium text-xl mb-3 text-white">Momentálne nie je žiadny program</h3>
           <p className="text-gray-200 mb-4">Pozrite si náš archív minulých relácií</p>
-          <a
+          <Link
             href="/relacie"
             className="inline-block bg-[#d43c4a] hover:bg-[#b83744] text-white px-6 py-2 rounded-full transition-colors"
           >
             Otvoriť archív
-          </a>
+          </Link>
         </div>
       )}
     </>
