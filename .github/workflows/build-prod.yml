@@ -38,9 +38,11 @@ jobs:
     - name: Get last successful commit SHA
       id: last_commit
       run: |
-        LAST_SHA=$(gh api \
-          repos/${{ github.repository }}/actions/workflows/${{ github.workflow }}.yml/runs \
-          --jq '.workflow_runs | map(select(.conclusion=="success")) | .[1].head_sha')
+        LAST_RUN_JSON=$(gh api repos/${{ github.repository }}/actions/workflows/${{ github.workflow }}.yml/runs \
+          -f status=success -f per_page=2)
+
+        LAST_SHA=$(echo "$LAST_RUN_JSON" | jq -r '.workflow_runs[1].head_sha // ""')
+
         echo "LAST_SHA=$LAST_SHA" >> $GITHUB_ENV
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
