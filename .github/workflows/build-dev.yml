@@ -33,3 +33,39 @@ jobs:
       run: |
         curl -X GET "${{ secrets.DEPLOY_URL }}?uuid=${{ secrets.DEV_DEPLOY_ID }}&force=false" \
           -H "Authorization: Bearer ${{ secrets.DEPLOY_SECRET }}"
+
+    - name: Get last successful commit SHA
+      id: last_commit
+      run: |
+        LAST_SHA=$(gh api \
+          repos/${{ github.repository }}/actions/workflows/${{ github.workflow }}.yml/runs \
+          --jq '.workflow_runs | map(select(.conclusion=="success")) | .[1].head_sha')
+        echo "LAST_SHA=$LAST_SHA" >> $GITHUB_ENV
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get commit list since last build
+      run: |
+        git fetch --unshallow
+        if [ -n "$LAST_SHA" ]; then
+          CHANGES=$(git log --pretty=format:"- %s (%an)" $LAST_SHA..HEAD)
+        else
+          CHANGES=$(git log -5 --pretty=format:"- %s (%an)")
+        fi
+        echo "CHANGES<<EOF" >> $GITHUB_ENV
+        echo "$CHANGES" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
+    - name: Create new Discord forum thread
+      run: |
+        WEBHOOK_URL="${{ secrets.DISCORD_FORUM_WEBHOOK_URL }}" 
+        THREAD_TITLE="Dev Build - $(date -u +"%Y-%m-%d %H:%M UTC")"
+        MESSAGE="🚀 Nový dev build webstránky!\n**Build Date:** $(date -u +"%Y-%m-%d %H:%M UTC")\n**Latest commits:**\n${CHANGES}\n\n📝 Píšte feedback do tohto threadu."
+
+        # Escape quotes for JSON
+        SAFE_MESSAGE=$(echo "$MESSAGE" | sed 's/"/\\"/g')
+
+        curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"thread_name\":\"$THREAD_TITLE\",\"content\":\"$SAFE_MESSAGE\"}" \
+          "$WEBHOOK_URL"
