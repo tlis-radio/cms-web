@@ -38,9 +38,9 @@ jobs:
     - name: Get last successful commit SHA
       id: last_commit
       run: |
-        WORKFLOW_FILE="prodc-dev.yml"
+        WORKFLOW_FILE="build-prod.yml"
         LAST_RUN_JSON=$(gh api "repos/${{ github.repository }}/actions/workflows/${WORKFLOW_FILE}/runs?status=success&per_page=15")
-        LAST_SHA=$(echo "$LAST_RUN_JSON" | jq -r '.workflow_runs[1].head_sha // ""')
+        LAST_SHA=$(echo "$LAST_RUN_JSON" | jq -r '.workflow_runs[0].head_sha // ""')
 
         echo "LAST_SHA=$LAST_SHA" >> $GITHUB_ENV
       env:
@@ -50,9 +50,9 @@ jobs:
       run: |
         git fetch --unshallow
         if [ -n "$LAST_SHA" ]; then
-          CHANGES=$(git log --pretty=format:"- %s (%an)" $LAST_SHA..HEAD)
+          CHANGES=$(git log --pretty=format:"- %h - %s (%an)" ${LAST_SHA}..HEAD)
         else
-          CHANGES=$(git log -5 --pretty=format:"- %s (%an)")
+          CHANGES=$(git log -5 --pretty=format:"-%h - %s (%an)")
         fi
         echo "CHANGES<<EOF" >> $GITHUB_ENV
         echo "$CHANGES" >> $GITHUB_ENV
