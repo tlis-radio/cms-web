@@ -2,6 +2,7 @@ import React from "react";
 import { Root } from "@/types/streamstatus";
 import { useEffect, useState } from "react";
 import ProgressControl from "./progress-control";
+import Marquee from "./marquee";
 
 async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    const response = await fetch(apiEndpoint);
@@ -64,28 +65,23 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
       <div className="w-full overflow-hidden">
          {mode === "archive" ? (
             <div className="w-full">
-               <span className="px-2 font-argentumSansLight text-sm sm:text-base truncate" data-tip={archiveName}>
-                  {archiveName}
-               </span>
-               <ProgressControl 
-                  currentTime={currentTime} 
-                  duration={duration} 
+               <Marquee className="px-2 font-argentumSansLight text-sm sm:text-base" data-tip={archiveName} text={archiveName || ''} />
+               <ProgressControl
+                  currentTime={currentTime}
+                  duration={duration}
                   handleProgressChange={(e) => {
                      updateCurrentTime(Number(e.target.value));
-                  }} 
+                  }}
                />
             </div>
          ) : (
             <div className="flex flex-col">
-               {titleParts.map((title, index) => (
-                  <span 
-                     key={index} 
-                     className="px-2 font-argentumSansLight text-sm sm:text-base truncate" 
-                     data-tip={title}
-                  >
-                     {title}
-                  </span>
-               ))}
+               <Marquee
+                  text={titleParts.join(" ")}
+                  speed={15}
+                  className="px-2 font-argentumSansLight text-sm sm:text-base truncate"
+                  data-tip={titleParts.join(" ")}
+               />
             </div>
          )}
       </div>
