@@ -16,7 +16,7 @@ function getTimeFromMs(ms: number): string {
 const ProgressControl: React.FC<ProgressControlProps> = ({ currentTime, duration, handleProgressChange }) => {
     return (
         <div className='flex items-center gap-4 px-4'>
-            <p className='text-white w-24'>{getTimeFromMs(currentTime)}</p>
+            <p className='text-white sm:w-[6rem] w-[7.5rem]'>{getTimeFromMs(currentTime)}</p>
             <div className='px-2.5 py-1 rounded-full bg-[#d43c4a] w-full'>
                 <input
                     className='w-[100%] cursor-pointer'
