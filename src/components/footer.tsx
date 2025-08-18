@@ -67,7 +67,7 @@ const Footer = () => {
             <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
                <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Študentské rádio TLIS. Všetky práva vyhradené.</p>
                <div className="flex gap-4">
-                  <Link href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Program</Link>
+                  <Link href="/program" className="text-gray-400 hover:text-white text-sm transition-colors">Program</Link>
                   <Link href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Archív</Link>
                   <Link href="/o-nas" className="text-gray-400 hover:text-white text-sm transition-colors">O nás</Link>
                </div>
