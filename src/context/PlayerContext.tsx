@@ -15,6 +15,8 @@ interface PlayerContextType {
   src: string;
   setMode: (mode: PlayerMode) => void;
   setArchiveName: (name: string | null) => void;
+  setArchiveMetadata: (metadata: { author: string; album: string; image: string }) => void;
+
   setSrc: (src: string) => void;
   currentTime: number;
   setCurrentTime: (currentTime: number) => void;
@@ -37,6 +39,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isPlaying, setIsPlaying] = useState(false);
   const [mode, setMode] = useState<PlayerMode>("stream");
   const [archiveName, setArchiveName] = useState<string | null>(null);
+  const [archiveMetadata, setArchiveMetadata] = useState<{
+    author: string;
+    album: string;
+    image: string;
+  } | null>(null);
   const [src, setSrc] = useState<string>("https://stream.tlis.sk/tlis.mp3");
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -86,6 +93,50 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
   }, [mode, src, countedView])
 
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      if (mode == 'stream') {
+        navigator.mediaSession.metadata = new window.MediaMetadata({
+          title: 'Počúvaš Rádio TLIS',
+          artist: 'Rádio TLIS',
+          album: 'Rádio TLIS',
+        });
+      } else if (mode === 'archive' && archiveMetadata) {
+        navigator.mediaSession.metadata = new window.MediaMetadata({
+          title: mode === 'archive' ? archiveName! : 'Rádio TLIS',
+          artist: archiveMetadata?.author! || "Rádio TLIS",
+          album: archiveMetadata?.album! || "Rádio TLIS",
+          artwork: [
+            { src: archiveMetadata?.image!, sizes: '512x512', type: 'image/png' }
+          ]
+        });
+      }
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        setIsPlaying(true);
+      });
+      navigator.mediaSession.setActionHandler('pause', () => {
+        setIsPlaying(false);
+      });
+    }
+
+    // Listen for stream-title-updated and update Media Session title for stream
+    if (isPlaying && mode === "stream" && 'mediaSession' in navigator && audioRef.current) {
+      const handleStreamTitleUpdated = (e: Event) => {
+        const customEvent = e as CustomEvent<string>;
+        if (navigator.mediaSession.metadata) {
+          navigator.mediaSession.metadata.title = customEvent.detail;
+        }
+      };
+
+      document.addEventListener("stream-title-updated", handleStreamTitleUpdated as EventListener);
+
+      return () => {
+        document.removeEventListener("stream-title-updated", handleStreamTitleUpdated as EventListener);
+      };
+    }
+  }, [mode, src, archiveMetadata, archiveName]);
+
   function handleAudioTimeUpdate() {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
@@ -114,6 +165,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     let streamHandleCanPlay: (() => void) | null = null;
     let archiveHandleCanPlay: (() => void) | null = null;
     if (audioRef.current && mode === "stream") {
+      setArchiveMetadata(null);
       if (isPlaying) {
         setIsLoading(true);
         audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
@@ -169,6 +221,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setIsPlaying,
         mode,
         archiveName,
+        setArchiveMetadata,
         src,
         currentTime,
         setCurrentTime,

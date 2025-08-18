@@ -47,10 +47,10 @@ const Marquee = ({ text, speed = 15, className }: { text: string; speed?: number
             duration: speed,
           }}
         >
-          <span className={classNames("px-4 block", className)}>{text}</span>
+          <span className={classNames("block", className)}>{text}</span>
         </motion.div>
       ) : (
-        <span ref={staticTextRef} className={classNames("px-4 block", className)}>
+        <span ref={staticTextRef} className={classNames("block", className)}>
           {text}
         </span>
       )}

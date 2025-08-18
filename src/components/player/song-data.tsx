@@ -47,8 +47,9 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
          // TODO put the stream URL into environment variables (process.env and NEXT_PUBLIC_)
 
          const apiEndpoint = "https://stream.tlis.sk/status-json.xsl";
-         const titleParts = await fetchSourceTitle(apiEndpoint);
-         setTitleParts(titleParts);
+         const parts = await fetchSourceTitle(apiEndpoint);
+         document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: parts.join(" ") }));
+         setTitleParts(parts);
       };
 
       // Call fetchTitle immediately when the component mounts

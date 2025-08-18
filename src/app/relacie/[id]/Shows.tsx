@@ -4,14 +4,19 @@ import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
-export default function Shows({ show, moderators, episodes }: { show: any, moderators: Array<string>, episodes: any }) {
-    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId } = usePlayer();
+export default function Shows({ show, moderators, episodes, ShowName }: { show: any, moderators: Array<string>, episodes: any, ShowName: string }) {
+    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
 
-    function selectEpisode(episodeSrc: string, episodeName: string, episodeId: number) {
+    function selectEpisode(episode: any) {
         setMode("archive");
-        setArchiveName(episodeName);
-        setSrc(episodeSrc);
-        setArchiveEpisodeId(episodeId);
+        setArchiveName(episode.Title);
+        setArchiveMetadata({
+            author: ShowName,
+            album: ShowName,
+            image: episode.Cover
+        });
+        setSrc(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio}`);
+        setArchiveEpisodeId(episode.id);
     }
 
     return (
@@ -52,11 +57,7 @@ export default function Shows({ show, moderators, episodes }: { show: any, moder
                                         {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
                                             <button
                                                 onClick={() => {
-                                                    selectEpisode(
-                                                        `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + episode.Audio,
-                                                        episode.Title,
-                                                        episode.id
-                                                    );
+                                                    selectEpisode(episode);
                                                 }}
                                                 className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"
                                                 aria-label="Play episode"

@@ -9,7 +9,7 @@ const Show: React.FC = async ({ params }: any) => {
       const show = await CmsApiService.Show.getShowDataById(params.id)
       const moderators = await CmsApiService.Show.getShowModeratorsByIds(show.Cast);
       const episodes = await CmsApiService.Show.getShowEpisodesById(params.id);
-      return <Shows show={show} moderators={moderators} episodes={episodes} />
+      return <Shows show={show} moderators={moderators} episodes={episodes} ShowName={show.Title} />
    } catch (error) {
       return <NotFound message={<h2 className="text-2xl text-white mb-2">Reláciu sa nepodarilo načítať.</h2>}></NotFound>
    }
