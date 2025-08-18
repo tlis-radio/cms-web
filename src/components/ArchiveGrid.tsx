@@ -17,11 +17,11 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
 
   return (
     <div className="mb-12 py-16">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 px-4 md:px-8 pb-2">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 px-4 md:px-8 pb-2">
         <h2 className="text-4xl text-white font-semibold pb-0">Archív</h2>
         <Link
           href="/relacie"
-          className="text-white hover:underline mt-2 md:mt-0"
+          className="text-white hover:underline mt-2 md:mt-0 hidden sm:block"
         >
           Zobraziť všetky
         </Link>
@@ -39,21 +39,29 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
           <Link
             key={index}
             href={`/relacie/${show.id}`}
-            className="group transition-transform hover:scale-105"
+            className="group transition-transform hover:scale-105 flex flex-col"
           >
-            <div className="aspect-square relative rounded-lg overflow-hidden shadow-lg">
+            <div className="aspect-square relative rounded-lg overflow-hidden shadow-lg order-1 sm:order-0 mb-8 sm:mb-2">
               <img
                 src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover}
                 alt={show.Title}
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="mt-2 text-white text-left text-2xl line-clamp-1">
+            <h3 className="text-white text-left text-2xl line-clamp-1 order-0 sm:order-1 sm:mt-2 sm:mb-0 mb-2">
               {show.Title}
             </h3>
           </Link>
         ))}
       </div>
+
+      <Link
+          href="/relacie"
+          className="bg-[#d43c4a] rounded-full px-4 py-2 text-white block sm:hidden w-fit m-auto mt-10"
+        >
+          Zobraziť všetky
+        </Link>
+
     </div>
   );
 };
