@@ -1,12 +1,31 @@
 "use client";
 import ShowLink from "@/components/pagination/show-link";
 import { Show } from "@/models/show";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type FilterProps = "active" | "archived" | "digital";
 
 export default function ShowsPage({ shows, loadingError }: { shows: Show[], loadingError?: boolean }) {
-  const [filter, setFilter] = useState<FilterProps>("active");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [filter, setFilter] = useState<FilterProps>(searchParams.get("filter") as FilterProps || "active");
+
+  useEffect(()=>{
+    const newFilter = searchParams.get("filter") as FilterProps;
+    if (newFilter) {
+      setFilter(newFilter);
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (filter) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("filter", filter);
+      router.replace(`?${params.toString()}`); // or router.push
+    }
+  }, [filter, searchParams, router]);
 
   const createShowLinks = () => {
     const filteredShows = shows.filter((show: Show) => show.Filter === filter);
