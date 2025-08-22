@@ -98,19 +98,19 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
             createProgramLinks()
           }
 
-
-          <div className="relative">
+          {carouselPosts.length > 1 ?
+          <div className="relative w-full sm:absolute sm:top-1/2 sm:-translate-y-1/2 z-10 pointer-events-none">
             <div className="relative h-[100px] flex justify-between px-[2rem]">
-              <div className="relative h-[100px] flex items-center flex-col gap-3">
+              <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
                 <button className="swiper-button-prev"></button>
-                <span className="font-argentumSansRegular text-white relative">Zmeškal si</span>
+                <span className="font-argentumSansRegular text-white relative uppercase mt-2">Zmeškal si</span>
               </div>
-              <div className="relative h-[100px] flex items-center flex-col gap-3">
+              <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
                 <button className="swiper-button-next"></button>
-                <span className="font-argentumSansRegular text-white relative">Zmeškáš</span>
+                <span className="font-argentumSansRegular text-white relative uppercase mt-2">Zmeškáš</span>
               </div>
             </div>
-          </div>
+          </div> : null}
 
         </Swiper>) : (
         <div className="relative py-8">

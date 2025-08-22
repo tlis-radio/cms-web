@@ -191,7 +191,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else if (audioRef.current) {
       if (isPlaying) {
         setIsLoading(true);
-
+  
+        audioRef.current.load();
         archiveHandleCanPlay = () => {
           setIsLoading(false);
           audioRef.current?.removeEventListener("canplay", archiveHandleCanPlay!);

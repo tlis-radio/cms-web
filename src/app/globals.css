@@ -101,7 +101,7 @@ are written like this, but if i delete something from it, it breaks
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
-    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 sm:scale-90 2xl:scale-100 xxxl:scale-125 tlis_monitor:top-[600%];
+    @apply rounded-full px-5 py-2 text-red-700 bg-white transition-colors relative scale-75 sm:scale-90 2xl:scale-100 xxxl:scale-125
 }
 
 .swiper-button-next:hover::after,
