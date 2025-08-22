@@ -192,10 +192,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (isPlaying) {
         setIsLoading(true);
   
-        // audioRef.current.load();
+        audioRef.current.load();
         archiveHandleCanPlay = () => {
           setIsLoading(false);
-          audioRef.current?.removeEventListener("canplay", archiveHandleCanPlay!);
+          if(audioRef.current){
+            audioRef.current.currentTime = currentTime;
+            audioRef.current.removeEventListener("canplay", archiveHandleCanPlay!);
+          }
         };
         audioRef.current.addEventListener("canplay", archiveHandleCanPlay);
 
