@@ -48,7 +48,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                 <div className="flex justify-between items-start gap-4">
                     <div className="flex flex-col items-start">
                         <h2 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h2>
-                        <p>{episode.Views} {episode.Views == 1 ? "vypočutie" : "vypočutí"}</p>
+                        <p>{new Date(episode.Date).toLocaleDateString("sk-SK")} • {episode.Views} {episode.Views == 1 ? "vypočutie" : "vypočutí"}</p>
                     </div>
                     {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
                         <button
