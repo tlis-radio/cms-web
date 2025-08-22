@@ -13,7 +13,7 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
    };
 
    return (
-      <div className={`fixed ${isVisible ? 'bottom-[6rem]' : 'bottom-5'} right-4 z-20 lg:hidden transition-all duration-300 ease-in-out`}>
+      <div className={`fixed ${isVisible ? 'bottom-[4.5rem]' : 'bottom-5'} right-4 z-20 lg:hidden transition-all duration-300 ease-in-out`}>
          <span
             role="button"
             tabIndex={0}
@@ -49,7 +49,7 @@ const Player: React.FC<{}> = () => {
    }
 
    const playerClasses = classNames(
-      'flex items-center bg-[#2e2b2c] p-3 fixed bottom-0 inset-x-0 w-full gap-3 z-10',
+      'flex items-center bg-[#2e2b2c] p-3 fixed bottom-0 inset-x-0 w-full gap-3 z-10 h-20',
       {
          'translate-y-0': isVisible,
          'translate-y-full lg:translate-y-0': !isVisible,
@@ -66,7 +66,7 @@ const Player: React.FC<{}> = () => {
             <div
                className={classNames(
                  "fixed left-4 lg:relative lg:ml-auto mr-7 z-20 transition-all duration-300 ease-in-out flex items-center justify-center",
-                 isVisible ? "max-lg:bottom-[6rem] bottom-4 lg:bottom-0" : "bottom-5 lg:bottom-0"
+                 isVisible ? "max-lg:bottom-[4.5rem] bottom-4 lg:bottom-0" : "bottom-5 lg:bottom-0"
                )}
             >
                <button 
