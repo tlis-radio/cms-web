@@ -43,7 +43,7 @@ const Members: React.FC<MembersProps> = async ({ header = true }) => {
     });
 
     return (
-        <div className="space-y-12 mb-12 px-4 md:px-8">
+        <div className="space-y-12 mb-12 px-4 md:px-8 overflow-hidden">
             {header && <h2 className="text-4xl text-white font-semibold pb-0 text-left">Členovia</h2>}
 
             {loadingError && (
@@ -62,7 +62,7 @@ const Members: React.FC<MembersProps> = async ({ header = true }) => {
                     <div key={roleKey} className="space-y-6">
                         <h2 className="text-2xl text-left text-white font-semibold">{roleTitle}</h2>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                             {roleMembers.map((member) => (
                                 <MemberGridItem member={member} key={member.id} />
                             ))}
