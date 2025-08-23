@@ -1,4 +1,5 @@
-import { FunctionComponent } from "react";
+'use client'
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import PaginationImage from "@/components/pagination/pagination-image";
 
@@ -11,8 +12,24 @@ type ShowLinkProps = {
 }
 
 const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, imageUrl, moderatorNames }) => {
+   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
+   const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
+   const descriptionRef = useRef<HTMLDivElement>(null);
+
+   useEffect(() => {
+      function checkOverflow() {
+         if (descriptionRef.current) {
+            setIsDescriptionOverflowing(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
+         }
+      }
+
+      checkOverflow();
+      window.addEventListener("resize", checkOverflow);
+      return () => window.removeEventListener("resize", checkOverflow);
+   }, []);
+
    return (
-      <Link href={`/relacie/${id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
+      <Link href={`/relacie/${id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
          <PaginationImage src={imageUrl} alt={name} />
 
          <div className="flex flex-col gap-2 text-left">
@@ -22,7 +39,10 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, ima
                {/* TODO: */}
                <p>{moderatorNames?.join(", ")}</p>
             </span>
-            <p className="text-justify pb-4 font-argentumSansLight">{description}</p>
+            <div className="relative">
+               <p ref={descriptionRef} className="text-justify font-argentumSansLight max-h-[120px] overflow-hidden text-overflow-ellipsis">{description}</p>
+               {isDescriptionOverflowing && <div className="w-full absolute bottom-0 h-10 bg-gradient-to-b from-transparent to-[#1C1C1C] group-hover:to-[#111111] transition-colors duration-200" />}
+            </div>
          </div>
       </Link>
    )
