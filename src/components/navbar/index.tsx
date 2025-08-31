@@ -41,7 +41,11 @@ export const navbarLinks = [
    {
       text: "Konkurz",
       target: "_blank",
-      url: "https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform"
+      url: "/konkurz"
+   },
+   {
+      text: "2%",
+      url: "/dve-percenta"
    }
 ];
 
@@ -49,7 +53,7 @@ const Navbar = () => {
 
    const createNavbarLinks = () => {
       return navbarLinks.map((link, index) => {
-         if(link.subLinks){
+         if (link.subLinks) {
             return (
                <NavbarDropdownLink key={index} text={link.text} href={link.url}>
                   {link.subLinks.map((subLink, subIndex) => (

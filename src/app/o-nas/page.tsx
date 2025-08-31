@@ -22,7 +22,7 @@ const AboutUs: React.FC = () => {
                 </div>
                 <img
                     src={tlisaci.src}
-                    alt="Tlispyčy :)"
+                    alt="Zostava členov rádia TLIS"
                     className='rounded-xl w-full h-auto object-cover shadow-lg order-1 md:order-2'
                 />
             </div>
