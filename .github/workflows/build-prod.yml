@@ -58,10 +58,10 @@ jobs:
         echo "$CHANGES" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
-    - name: Post dev build to Discord thread
+    - name: Post prod build to Discord thread
       run: |
         WEBHOOK_URL="${{ secrets.DISCORD_FORUM_WEBHOOK_URL }}"
-        THREAD_TITLE="Dev Build - $(date -u +"%Y-%m-%d %H:%M UTC")"
+        THREAD_TITLE="Prod Build - $(date -u +"%Y-%m-%d %H:%M UTC")"
 
         SAFE_CHANGES=$(echo "$CHANGES" | sed ':a;N;$!ba;s/\n/\\n/g; s/"/\\"/g')
 
