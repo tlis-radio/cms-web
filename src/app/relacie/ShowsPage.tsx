@@ -1,5 +1,6 @@
 "use client";
 import ShowLink from "@/components/pagination/show-link";
+import Select from "@/components/primitives/Select";
 import { Show } from "@/models/show";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -43,12 +44,6 @@ export default function ShowsPage({ shows, loadingError }: { shows: Show[], load
     })
   }
 
-  const filterLabels = {
-    active: "Aktívne relácie",
-    archived: "Archívne relácie",
-    digital: "Digitálne relácie"
-  };
-
   return (
     <>
       <div className="flex flex-wrap items-center justify-between mb-8 px-8">
@@ -56,21 +51,17 @@ export default function ShowsPage({ shows, loadingError }: { shows: Show[], load
           <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> relácie
         </h1>
 
-        <div className="ml-auto relative">
-          <select
+        <div className="ml-auto relative min-w-[180px]">
+          <Select
+            options={[
+              { value: "active", label: "Aktívne relácie" },
+              { value: "archived", label: "Archívne relácie" },
+              { value: "digital", label: "Digitálne relácie" },
+            ]}
             value={filter}
-            onChange={(e) => setFilter(e.target.value as FilterProps)}
-            className="appearance-none bg-transparent text-white pr-6 pl-2 py-1 focus:outline-none cursor-pointer"
-          >
-            <option value="active" className="text-black">Aktívne relácie</option>
-            <option value="archived" className="text-black">Archívne relácie</option>
-            <option value="digital" className="text-black">Digitálne relácie</option>
-          </select>
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 pointer-events-none">
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
+            onChange={(val) => setFilter(val as FilterProps)}
+            className="bg-transparent text-white min-w-[180px]"
+          />
         </div>
       </div>
 
