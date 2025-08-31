@@ -30,13 +30,16 @@ const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
          sort: ['-Episode.date_created'],
+         fields: ['*', 'Cast.*'],
       }));
       return shows || [];
    },
 
    getShowDataById: async (id: number): Promise<Show> => {
       try {
-         const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
+         const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
+            fields: ['*', 'Cast.*'],
+         }));
          return data;
       } catch (error) {
          console.error("Error fetching show data: (Probably not found)");

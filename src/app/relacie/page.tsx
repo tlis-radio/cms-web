@@ -12,7 +12,7 @@ const Shows: React.FC = async () => {
    });
    shows = await Promise.all(
       shows.map(async (show: Show) => {
-         const moderatorNames = await CmsApiService.Show.getShowModeratorsByIds(show.Cast);
+         const moderatorNames = await CmsApiService.Show.getShowModeratorsByIds(show.Cast.map((castMember) => (castMember as any).Cast_id));
          return { ...show, ModeratorNames: moderatorNames };
       })
    );
