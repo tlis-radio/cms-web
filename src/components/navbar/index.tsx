@@ -1,5 +1,7 @@
 import { text } from "stream/consumers";
 import NavbarLink from "./navbar-link";
+import NavbarDropdownLink from "./navbar-dropdown-link";
+import Link from "next/link";
 
 export const navbarLinks = [
    {
@@ -12,7 +14,21 @@ export const navbarLinks = [
    },
    {
       text: "Archív",
-      url: "/relacie"
+      url: "/relacie",
+      subLinks: [
+         {
+            text: "Aktívne relácie",
+            url: "/relacie?filter=active"
+         },
+         {
+            text: "Archívne relácie",
+            url: "/relacie?filter=archived"
+         },
+         {
+            text: "Digitálne relácie",
+            url: "/relacie?filter=digital"
+         }
+      ]
    },
    {
       text: "Členovia",
@@ -33,6 +49,15 @@ const Navbar = () => {
 
    const createNavbarLinks = () => {
       return navbarLinks.map((link, index) => {
+         if(link.subLinks){
+            return (
+               <NavbarDropdownLink key={index} text={link.text} href={link.url}>
+                  {link.subLinks.map((subLink, subIndex) => (
+                     <NavbarLink key={subIndex} text={subLink.text} redirectUrl={subLink.url} />
+                  ))}
+               </NavbarDropdownLink>
+            )
+         }
          return (
             <NavbarLink key={index} text={link.text} redirectUrl={link.url} target={link.target} />
          )
