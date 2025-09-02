@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
+import Markdown from 'react-markdown'
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
@@ -65,16 +66,11 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                 <div className={classNames("relative", isDescriptionExpanded ? "pb-10" : "")}>
                     <div
                         ref={descriptionRef}
-                        className={`mt-4 ${isDescriptionExpanded ? "max-h-none" : "max-h-32"} overflow-hidden`}
+                        className={`mt-4 ${isDescriptionExpanded ? "max-h-none" : "max-h-32"} overflow-hidden text-justify tlis-markdown`}
                     >
-                        <p className="text-justify">
-                            {episode.Description.split("\n").map((line: string, idx: number) => (
-                                <span key={idx}>
-                                    {line}
-                                    <br />
-                                </span>
-                            ))}
-                        </p>
+                        <Markdown>
+                            {episode.Description}
+                        </Markdown>
                     </div>
 
                     {isDescriptionOverflowing && (
@@ -113,7 +109,9 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                         </div>
                     </div>
                     <div className="flex h-full gap-4 md:flex-col">
-                        <p>{show.Description}</p>
+                        <Markdown>
+                            {show.Description}
+                        </Markdown>
                     </div>
                 </div>
 

@@ -2,6 +2,7 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import PaginationImage from "@/components/pagination/pagination-image";
+import Markdown from "react-markdown";
 
 type ShowLinkProps = {
    id: string,
@@ -40,7 +41,11 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, ima
                <p>{moderatorNames?.join(", ")}</p>
             </span>
             <div className="relative">
-               <p ref={descriptionRef} className="text-justify font-argentumSansLight max-h-[120px] overflow-hidden text-overflow-ellipsis">{description}</p>
+               <div ref={descriptionRef} className="text-justify font-argentumSansLight max-h-[120px] overflow-hidden text-overflow-ellipsis">
+                  <Markdown>
+                     {description}
+                  </Markdown>
+               </div>
                {isDescriptionOverflowing && <div className="w-full absolute bottom-0 h-10 bg-gradient-to-b from-transparent to-[#1C1C1C] group-hover:to-[#111111] transition-colors duration-200" />}
             </div>
          </div>
