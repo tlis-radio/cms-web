@@ -29,7 +29,7 @@ export function getDirectusInstance(): RestClient<any> {
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
-         sort: ['-Episode.date_created'],
+         sort: ['-Episode.Date'],
          fields: ['*', 'Cast.*'],
       }));
       return shows || [];
