@@ -45,7 +45,6 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                     src={episode.Cover}
                     width={500}
                     height={500}
-                    quality={75}
                     alt={episode.Title}
                     className="w-full h-auto sm:flex-shrink-0 object-contain"
                 />
@@ -111,7 +110,6 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                                     src={show.Cover}
                                     width={500}
                                     height={500}
-                                    quality={75}
                                     alt={show.Title}
                                     className="md:h-52"
                                 />

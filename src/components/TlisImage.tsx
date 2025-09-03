@@ -7,10 +7,10 @@ interface TlisImageProps extends ImageProps {
     alt: string;
     width?: number;
     height?: number;
-    quality?: number;
+    sizeMultiplier?: number; /* some images are not crisp */
 }
 
-const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, quality = 100, alt, ...props }) => {
+const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, alt, sizeMultiplier = 1, ...props }) => {
     const imgRef = useRef<HTMLDivElement>(null);
     const [renderSize, setRenderSize] = useState<{ width: number; height: number }>({
         width: Number(width),
@@ -33,7 +33,7 @@ const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, q
         return () => clearInterval(interval);
     }, [updateSize]);
 
-    const modifiedSrc = `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${src}?width=${renderSize.width}&quality=${quality || 75}`;
+    const modifiedSrc = `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${src}?width=${Math.floor(renderSize.width*sizeMultiplier)}&quality=${100}`;
 
     return (
         <div ref={imgRef} style={{ width: "100%", height: "100%" }}>

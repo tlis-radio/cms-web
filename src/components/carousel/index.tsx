@@ -45,7 +45,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
     return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <TlisImage src={program.Cover} alt={program.Title} />
+          <TlisImage src={program.Cover} alt={program.Title} sizeMultiplier={2} />
           <h2 className="font-sans text-white pt-3">{getDate(program.Date)}</h2>
         </SwiperSlide>
       );
@@ -100,18 +100,18 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
           }
 
           {carouselPosts.length > 1 ?
-          <div className="relative w-full sm:absolute sm:top-1/2 sm:-translate-y-1/2 z-10 pointer-events-none">
-            <div className="relative h-[100px] flex justify-between px-[2rem]">
-              <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
-                <button className="swiper-button-prev"></button>
-                <span className="font-argentumSansRegular text-white relative uppercase mt-2">Zmeškal si</span>
+            <div className="relative w-full sm:absolute sm:top-1/2 sm:-translate-y-1/2 z-10 pointer-events-none">
+              <div className="relative h-[100px] flex justify-between px-[2rem]">
+                <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
+                  <button className="swiper-button-prev"></button>
+                  <span className="font-argentumSansRegular text-white relative uppercase mt-2">Zmeškal si</span>
+                </div>
+                <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
+                  <button className="swiper-button-next"></button>
+                  <span className="font-argentumSansRegular text-white relative uppercase mt-2">Zmeškáš</span>
+                </div>
               </div>
-              <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
-                <button className="swiper-button-next"></button>
-                <span className="font-argentumSansRegular text-white relative uppercase mt-2">Zmeškáš</span>
-              </div>
-            </div>
-          </div> : null}
+            </div> : null}
 
         </Swiper>) : (
         <div className="relative py-8">

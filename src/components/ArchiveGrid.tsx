@@ -48,7 +48,6 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
                 src={show.Cover}
                 width={500}
                 height={500}
-                quality={75}
                 alt={show.Title}
                 className="w-full h-full object-cover"
               />
