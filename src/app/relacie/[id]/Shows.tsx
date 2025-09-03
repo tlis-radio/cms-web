@@ -6,6 +6,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Markdown from 'react-markdown'
+import TlisImage from "@/components/TlisImage";
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
@@ -39,10 +40,13 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
 
     return <div className="border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
         <div className="flex flex-col md:flex-row gap-4">
-            <img
-                className="w-full h-auto max-h-[200px] md:w-48 md:flex-shrink-0 object-contain"
-                src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + episode.Cover}
+            <TlisImage
+                src={episode.Cover}
+                width={500}
+                height={500}
+                quality={75}
                 alt={episode.Title}
+                className="w-full h-auto max-h-[200px] md:w-48 md:flex-shrink-0 object-contain"
             />
 
             <div className="flex-1 flex flex-col">
@@ -100,7 +104,14 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                 <div className="flex flex-col gap-4 border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
                     <div className="border-b pb-4">
                         <div className="flex flex-col gap-6 md:flex-row">
-                            <img className="md:h-52" src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover} />
+                            <TlisImage
+                                src={show.Cover}
+                                width={500}
+                                height={500}
+                                quality={75}
+                                alt={show.Title}
+                                className="md:h-52"
+                            />
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="text-2xl font-semibold">{show.Title}</h1>
                                 <p>{moderators.join(", ")}</p>

@@ -1,6 +1,10 @@
+import TlisImage from "@/components/TlisImage";
+
 const PaginationImage = ({ src, alt }: { src: string, alt: string }) => {
    return (
-   <img src={src} alt={alt} className="w-48" />
+      <div className="w-48" >
+         <TlisImage src={src} alt={alt}/>
+      </div>
    )
 };
 

@@ -3,6 +3,7 @@ import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import PaginationImage from "@/components/pagination/pagination-image";
 import Markdown from "react-markdown";
+import TlisImage from "@/components/TlisImage";
 
 type ShowLinkProps = {
    id: string,
@@ -31,7 +32,9 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, ima
 
    return (
       <Link href={`/relacie/${id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
-         <PaginationImage src={imageUrl} alt={name} />
+         <div className="sm:w-48 w-full flex-shrink-0">
+            <TlisImage src={imageUrl} alt={name}/>
+         </div>
 
          <div className="flex flex-col gap-2 text-left">
             <h2 className="text-2xl font-semibold">{name}</h2>
