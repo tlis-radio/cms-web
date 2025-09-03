@@ -10,7 +10,7 @@ interface TlisImageProps extends ImageProps {
     quality?: number;
 }
 
-const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, quality = 75, alt, ...props }) => {
+const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, quality = 100, alt, ...props }) => {
     const imgRef = useRef<HTMLDivElement>(null);
     const [renderSize, setRenderSize] = useState<{ width: number; height: number }>({
         width: Number(width),
