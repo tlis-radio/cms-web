@@ -1,6 +1,8 @@
 import React from "react";
 import CmsApiService from "@/services/cms-api-service";
 import Link from "next/link";
+import Image from "next/image";
+import TlisImage from "./TlisImage";
 
 interface ShowGridProps {
   limit?: number;
@@ -42,8 +44,11 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
             className="group transition-transform hover:scale-105 flex flex-col"
           >
             <div className="aspect-square relative rounded-lg overflow-hidden shadow-lg order-1 sm:order-0 mb-8 sm:mb-2">
-              <img
-                src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover}
+              <TlisImage
+                src={show.Cover}
+                width={500}
+                height={500}
+                quality={75}
                 alt={show.Title}
                 className="w-full h-full object-cover"
               />

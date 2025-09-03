@@ -14,6 +14,7 @@ import valcek from "@/../public/images/rozpravky_na_dobru_noc.jpg";
 import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
+import TlisImage from "../TlisImage";
 
 function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, loadingError?: boolean }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
@@ -44,7 +45,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
     return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
+          <TlisImage src={program.Cover} alt={program.Title} />
           <h2 className="font-sans text-white pt-3">{getDate(program.Date)}</h2>
         </SwiperSlide>
       );
