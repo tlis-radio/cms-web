@@ -10,6 +10,7 @@ export type NavbarDropdownLinkProps = {
     target?: string,
 }
 
+/* desktop component only, mobile version handled in hamburger.tsx */
 const NavbarDropdownLink: FunctionComponent<NavbarDropdownLinkProps> = ({ text, href = '#', children, className, target }) => {
     const [open, setOpen] = useState(false);
 
@@ -34,7 +35,7 @@ const NavbarDropdownLink: FunctionComponent<NavbarDropdownLinkProps> = ({ text, 
             </Link>
             {isOpen && (
                 <div
-                    className="absolute left-1/2 -translate-x-1/2 min-w-[10rem] bg-[#f8f8f8] shadow-lg z-50 flex flex-col gap-1 animate-fadeIn text-[#222]"
+                    className="py-1 absolute left-1/2 -translate-x-1/2 min-w-[10rem] bg-[#f8f8f8] shadow-lg z-50 flex flex-col gap-1 animate-fadeIn text-[#222]"
                     onMouseEnter={() => setDropdownHover(true)}
                     onMouseLeave={() => setDropdownHover(false)}
                 >
