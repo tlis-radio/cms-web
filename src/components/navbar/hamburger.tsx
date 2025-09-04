@@ -4,9 +4,9 @@ import { useState } from "react";
 import classNames from "classnames";
 import Link from "next/link";
 import Socials from "../socials";
-import { navbarLinks } from "./index";
+import { NavbarLinkType } from "./index";
 
-const Hamburger = () => {
+const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleVisibility = () => setIsOpen(!isOpen);
@@ -83,8 +83,8 @@ const Hamburger = () => {
         className={classNames(
           "flex flex-col fixed w-full bg-[#96120F] z-20 top-[80px] transition-opacity duration-300 rounded-b-3xl lg:hidden",
           {
-        "opacity-0 invisible": !isOpen,
-        "opacity-95 visible": isOpen,
+            "opacity-0 invisible": !isOpen,
+            "opacity-95 visible": isOpen,
           }
         )}
         style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
@@ -92,7 +92,7 @@ const Hamburger = () => {
         {createNavbarLinks()}
         <div className="w-full border-t min-[450px]:hidden">
           <div className="py-6 w-full flex justify-center">
-        <Socials mobile={true} />
+            <Socials mobile={true} />
           </div>
         </div>
       </div>

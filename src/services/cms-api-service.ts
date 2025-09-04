@@ -6,6 +6,7 @@ import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
 import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
+import getConfig from "next/config";
 
 let directusInstance: RestClient<any>;
 
@@ -79,9 +80,17 @@ var memberEndpoints = {
    }
 };
 
+var configEndpoints = {
+   getConfig: async (): Promise<{audition: boolean}> => {
+      const config = await getDirectusInstance().request<{audition: boolean}>(readItems("config"));
+      return config;
+   }
+}
+
 class CmsApiService {
    static Show = showEndpoints;
    static Member = memberEndpoints;
+   static Config = configEndpoints;
 }
 
 export default CmsApiService;

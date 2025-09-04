@@ -1,55 +1,66 @@
-import { text } from "stream/consumers";
 import NavbarLink from "./navbar-link";
 import NavbarDropdownLink from "./navbar-dropdown-link";
-import Link from "next/link";
+import CmsApiService from "@/services/cms-api-service";
 
-export const navbarLinks = [
-   {
-      text: "Home",
-      url: "/"
-   },
-   {
-      text: "Program",
-      url: "/program"
-   },
-   {
-      text: "Archív",
-      url: "/relacie",
-      subLinks: [
-         {
-            text: "Aktívne relácie",
-            url: "/relacie?filter=active"
-         },
-         {
-            text: "Archívne relácie",
-            url: "/relacie?filter=archived"
-         },
-         {
-            text: "Digitálne relácie",
-            url: "/relacie?filter=digital"
-         }
-      ]
-   },
-   {
-      text: "Členovia",
-      url: "/clenovia"
-   },
-   {
-      text: "O nás",
-      url: "/o-nas"
-   },
-   {
-      text: "Konkurz",
-      target: "_blank",
-      url: "/konkurz"
-   },
-   {
-      text: "2%",
-      url: "/dve-percenta"
-   }
-];
+export type NavbarLinkType = {
+   text: string,
+   url: string,
+   target?: string,
+   subLinks?: { text: string, url: string }[]
+}
 
-const Navbar = () => {
+export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
+
+   const config = await CmsApiService.Config.getConfig();
+
+   return [
+      {
+         text: "Home",
+         url: "/"
+      },
+      {
+         text: "Program",
+         url: "/program"
+      },
+      {
+         text: "Archív",
+         url: "/relacie",
+         subLinks: [
+            {
+               text: "Aktívne relácie",
+               url: "/relacie?filter=active"
+            },
+            {
+               text: "Archívne relácie",
+               url: "/relacie?filter=archived"
+            },
+            {
+               text: "Digitálne relácie",
+               url: "/relacie?filter=digital"
+            }
+         ]
+      },
+      {
+         text: "Členovia",
+         url: "/clenovia"
+      },
+      {
+         text: "O nás",
+         url: "/o-nas"
+      },
+      ...(config.audition ? [{
+         text: "Konkurz",
+         target: "_blank",
+         url: "/konkurz"
+      }] : []),
+      {
+         text: "2%",
+         url: "/dve-percenta"
+      }
+   ];
+}
+
+const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
 
    const createNavbarLinks = () => {
       return navbarLinks.map((link, index) => {
