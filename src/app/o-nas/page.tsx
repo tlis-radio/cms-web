@@ -1,5 +1,6 @@
 import React from 'react';
 import tlisaci from '@/../public/images/tlisaci.jpg';
+import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
 
 const AboutUs: React.FC = () => {
     return (
@@ -20,7 +21,7 @@ const AboutUs: React.FC = () => {
                         Naše vysielanie <strong className='text-[#d43c4a]'>beží od pondelka do štvrtku</strong>, no rádio TLIS nekončí vypnutím mikrofónov. Stretávame sa na poradách, organizujeme workshopy, brigády a – áno – aj študentské flámy. Každý z nás tu funguje vlastným tempom, no spája nás spoločná vášeň: robiť rádio inak.
                     </p>
                 </div>
-                <img
+                <GalleryThumbnail
                     src={tlisaci.src}
                     alt="Zostava členov rádia TLIS"
                     className='rounded-xl w-full h-auto object-cover shadow-lg order-1 md:order-2'
