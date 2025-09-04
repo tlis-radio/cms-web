@@ -42,6 +42,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
         <div className="flex flex-col md:flex-row gap-4">
             <div className="md:w-48 w-full flex-shrink-0">
                 <TlisImage
+                    preview
                     src={episode.Cover}
                     width={500}
                     height={500}
@@ -107,6 +108,7 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                         <div className="flex flex-col gap-6 md:flex-row">
                             <div className="md:w-52 w-full aspect-square flex-shrink-0">
                                 <TlisImage
+                                    preview
                                     src={show.Cover}
                                     width={500}
                                     height={500}

@@ -5,6 +5,8 @@ import Footer from '@/components/footer'
 import { Inter } from "next/font/google";
 import { PlayerProvider } from "@/context/PlayerContext";
 import Script from "next/script";
+import GalleryOverlay from "@/components/carousel/gallery/GalleryOverlay";
+import { GalleryProvider } from "@/components/carousel/gallery/GalleryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +22,12 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <PlayerProvider>
           <Header />
           <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[125px] mb-16'>
-            {
-              // bg-[#00ff00] - green
-              // bg-[#ff0000] - red
-            }
-            <div className='pt-4 w-full text-center max-w-7xl'>
-              {children}
-            </div>
+            <GalleryProvider>
+              <div className='pt-4 w-full text-center max-w-7xl'>
+                {children}
+              </div>
+              <GalleryOverlay />
+            </GalleryProvider>
           </div>
           <Footer />
         </PlayerProvider>

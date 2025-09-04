@@ -45,7 +45,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
     return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <TlisImage src={program.Cover} alt={program.Title} sizeMultiplier={2} />
+          <TlisImage src={program.Cover} alt={program.Title} sizeMultiplier={2} preview />
           <h2 className="font-sans text-white pt-3">{getDate(program.Date)}</h2>
         </SwiperSlide>
       );
