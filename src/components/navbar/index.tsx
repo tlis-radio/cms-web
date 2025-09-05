@@ -53,6 +53,8 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
          text: "Konkurz",
          target: "_blank",
          url: "/konkurz", // redirects to external google form
+         // ak problem bude pretrvavat, zmenit na docs link nech nie je internal fetch, mozeme odstranit prefetch
+         // https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform
          prefetch: false
       }] : []),
       {

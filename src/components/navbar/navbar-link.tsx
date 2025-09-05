@@ -15,7 +15,11 @@ const NavbarLink: FunctionComponent<NavbarLinkProps> = ({ text, redirectUrl, tar
       <Link prefetch={prefetch} href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors ${className ?? ''}`} target={target}>
          {text}
       </Link> :
-      <a href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors ${className ?? ''}`} target={target}>
+      <a href={redirectUrl}
+         rel="noopener noreferrer"
+         target={target}
+         className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors ${className ?? ''}`}
+      >
          {text}
       </a>
 }
