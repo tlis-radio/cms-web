@@ -6,8 +6,7 @@ export type NavbarLinkType = {
    text: string,
    url: string,
    target?: string,
-   subLinks?: { text: string, url: string, prefetch?: boolean, target?: string }[],
-   prefetch?: boolean
+   subLinks?: { text: string, url: string, target?: string }[],
 }
 
 export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
@@ -52,10 +51,7 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
       ...(config.audition ? [{
          text: "Konkurz",
          target: "_blank",
-         url: "/konkurz", // redirects to external google form
-         // ak problem bude pretrvavat, zmenit na docs link nech nie je internal fetch, mozeme odstranit prefetch
-         // https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform
-         prefetch: false
+         url: "https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform",
       }] : []),
       {
          text: "2%",
@@ -72,13 +68,13 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
             return (
                <NavbarDropdownLink key={index} text={link.text} href={link.url}>
                   {link.subLinks.map((subLink, subIndex) => (
-                     <NavbarLink target={subLink.target} prefetch={subLink.prefetch} key={subIndex} text={subLink.text} redirectUrl={subLink.url} />
+                     <NavbarLink target={subLink.target} key={subIndex} text={subLink.text} redirectUrl={subLink.url} />
                   ))}
                </NavbarDropdownLink>
             )
          }
          return (
-            <NavbarLink key={index} prefetch={link.prefetch} text={link.text} redirectUrl={link.url} target={link.target} />
+            <NavbarLink key={index} text={link.text} redirectUrl={link.url} target={link.target} />
          )
       })
    }
