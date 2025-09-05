@@ -31,14 +31,14 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
               }}
               type="button"
             >
-              <Link href={link.url} onClick={handleMainLinkClick} className="px-8 py-4">
+              <Link href={link.url} prefetch={link.prefetch} onClick={handleMainLinkClick} className="px-8 py-4">
                 {link.text}
               </Link>
               <span className="absolute right-4 ml-2 py-4">{showSubLinks ? "▲" : "▼"}</span>
             </button>
             {showSubLinks && link.subLinks.map((subLink, subIndex) => (
               <div key={subIndex} className="w-full border-t bg-[#a83b38]">
-                <Link href={subLink.url}>
+                <Link href={subLink.url} prefetch={subLink.prefetch} target={subLink.target}>
                   <button
                     className="px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center"
                     onClick={toggleVisibility}

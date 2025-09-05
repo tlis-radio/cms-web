@@ -6,7 +6,8 @@ export type NavbarLinkType = {
    text: string,
    url: string,
    target?: string,
-   subLinks?: { text: string, url: string }[]
+   subLinks?: { text: string, url: string, prefetch?: boolean, target?: string }[],
+   prefetch?: boolean
 }
 
 export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
@@ -50,7 +51,8 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
       ...(config.audition ? [{
          text: "Konkurz",
          target: "_blank",
-         url: "/konkurz"
+         url: "/konkurz",
+         prefetch: false
       }] : []),
       {
          text: "2%",
@@ -67,13 +69,13 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
             return (
                <NavbarDropdownLink key={index} text={link.text} href={link.url}>
                   {link.subLinks.map((subLink, subIndex) => (
-                     <NavbarLink key={subIndex} text={subLink.text} redirectUrl={subLink.url} />
+                     <NavbarLink target={subLink.target} prefetch={subLink.prefetch} key={subIndex} text={subLink.text} redirectUrl={subLink.url} />
                   ))}
                </NavbarDropdownLink>
             )
          }
          return (
-            <NavbarLink key={index} text={link.text} redirectUrl={link.url} target={link.target} />
+            <NavbarLink key={index} prefetch={link.prefetch} text={link.text} redirectUrl={link.url} target={link.target} />
          )
       })
    }
