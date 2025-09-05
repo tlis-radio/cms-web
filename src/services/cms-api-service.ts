@@ -7,6 +7,7 @@ import { Episode } from '@/models/episode';
 
 import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
 import getConfig from "next/config";
+import Config from "@/types/config";
 
 let directusInstance: RestClient<any>;
 
@@ -26,6 +27,16 @@ export function getDirectusInstance(): RestClient<any> {
    return directusInstance;
 }
 
+export function getPublicDirectusInstance(): RestClient<any> {
+   if (!directusInstance) {
+      if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+         throw new Error("NEXT_PUBLIC_DIRECTUS_URL environment variable is not set.");
+      }
+      directusInstance = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
+         .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
+   }
+   return directusInstance;
+}
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
@@ -81,8 +92,8 @@ var memberEndpoints = {
 };
 
 var configEndpoints = {
-   getConfig: async (): Promise<{audition: boolean}> => {
-      const config = await getDirectusInstance().request<{audition: boolean}>(readItems("config"));
+   getConfig: async (): Promise<Config> => {
+      const config = await getPublicDirectusInstance().request<Config>(readItems("config"));
       return config;
    }
 }
