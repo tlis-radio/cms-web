@@ -13,6 +13,7 @@ export type NavbarLinkType = {
 export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
    const config = await CmsApiService.Config.getConfig();
 
+   /* only use prefetch:true (default), for internal links */
    return [
       {
          text: "Home",
@@ -51,7 +52,7 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
       ...(config.audition ? [{
          text: "Konkurz",
          target: "_blank",
-         url: "/konkurz",
+         url: "/konkurz", // redirects to external google form
          prefetch: false
       }] : []),
       {
@@ -88,4 +89,3 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
 };
 
 export default Navbar;
-export const dynamic = 'force-dynamic';

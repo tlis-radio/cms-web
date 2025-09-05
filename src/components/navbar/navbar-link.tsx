@@ -10,11 +10,14 @@ type NavbarLinkProps = {
 }
 
 const NavbarLink: FunctionComponent<NavbarLinkProps> = ({ text, redirectUrl, target, className, prefetch }) => {
-   return (
-      <Link prefetch={prefetch} href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors ${className??''}`} target={target}>
+   /* Only use <Link> for internal navigation */
+   return prefetch ?
+      <Link prefetch={prefetch} href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors ${className ?? ''}`} target={target}>
          {text}
-      </Link>
-   )
+      </Link> :
+      <a href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors ${className ?? ''}`} target={target}>
+         {text}
+      </a>
 }
 
 export default NavbarLink;
