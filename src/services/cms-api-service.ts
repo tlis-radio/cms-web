@@ -6,10 +6,10 @@ import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
 import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
-import getConfig from "next/config";
 import Config from "@/types/config";
 
 let directusInstance: RestClient<any>;
+let publicDirectusInstance: RestClient<any>;
 
 export function getDirectusInstance(): RestClient<any> {
    if (!directusInstance) {
@@ -28,14 +28,14 @@ export function getDirectusInstance(): RestClient<any> {
 }
 
 export function getPublicDirectusInstance(): RestClient<any> {
-   if (!directusInstance) {
+   if (!publicDirectusInstance) {
       if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
          throw new Error("NEXT_PUBLIC_DIRECTUS_URL environment variable is not set.");
       }
-      directusInstance = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
+      publicDirectusInstance = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
          .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
    }
-   return directusInstance;
+   return publicDirectusInstance;
 }
 
 const showEndpoints = {
