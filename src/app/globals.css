@@ -197,3 +197,11 @@ input[type="range"]:hover::-moz-range-track {
         filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.7));
     }
 }
+
+.tlis-markdown p {
+    margin-bottom: .75rem;
+}
+
+.tlis-markdown a {
+    @apply text-[#D43C4A] underline;
+}

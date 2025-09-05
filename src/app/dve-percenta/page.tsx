@@ -1,7 +1,7 @@
 export default function DvePercenta() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg flex flex-col items-center">
-            <h1 className='font-argentumSansMedium text-3xl md:text-4xl tracking-[10px] uppercase mb-8 text-center'>O nás</h1>
+            <h1 className='font-argentumSansMedium text-3xl md:text-4xl tracking-[10px] uppercase mb-8 text-center'>Dve percentá</h1>
             <p className="font-argentumSansRegular text-lg leading-relaxed mb-6">Podporte naše študentské rádio TLIS poukázaním 2% z Vašich daní. Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.</p>
 
             <h2 className="text-xl font-semibold mb-2 text-[#d43c4a]">ÚDAJE POTREBNÉ NA POUKÁZANIE 2%</h2>

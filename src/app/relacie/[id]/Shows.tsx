@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
+import Markdown from 'react-markdown'
+import TlisImage from "@/components/TlisImage";
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
@@ -38,11 +40,16 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
 
     return <div className="border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
         <div className="flex flex-col md:flex-row gap-4">
-            <img
-                className="w-full h-auto max-h-[200px] md:w-48 md:flex-shrink-0 object-contain"
-                src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + episode.Cover}
-                alt={episode.Title}
-            />
+            <div className="md:w-48 w-full flex-shrink-0">
+                <TlisImage
+                    preview
+                    src={episode.Cover}
+                    width={500}
+                    height={500}
+                    alt={episode.Title}
+                    className="w-full h-auto sm:flex-shrink-0 object-contain"
+                />
+            </div>
 
             <div className="flex-1 flex flex-col">
                 <div className="flex justify-between items-start gap-4">
@@ -65,16 +72,11 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                 <div className={classNames("relative", isDescriptionExpanded ? "pb-10" : "")}>
                     <div
                         ref={descriptionRef}
-                        className={`mt-4 ${isDescriptionExpanded ? "max-h-none" : "max-h-32"} overflow-hidden`}
+                        className={`mt-4 ${isDescriptionExpanded ? "max-h-none" : "max-h-32"} overflow-hidden text-justify tlis-markdown`}
                     >
-                        <p className="text-justify">
-                            {episode.Description.split("\n").map((line: string, idx: number) => (
-                                <span key={idx}>
-                                    {line}
-                                    <br />
-                                </span>
-                            ))}
-                        </p>
+                        <Markdown>
+                            {episode.Description}
+                        </Markdown>
                     </div>
 
                     {isDescriptionOverflowing && (
@@ -104,7 +106,16 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                 <div className="flex flex-col gap-4 border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
                     <div className="border-b pb-4">
                         <div className="flex flex-col gap-6 md:flex-row">
-                            <img className="md:h-52" src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/` + show.Cover} />
+                            <div className="md:w-52 w-full aspect-square flex-shrink-0">
+                                <TlisImage
+                                    preview
+                                    src={show.Cover}
+                                    width={500}
+                                    height={500}
+                                    alt={show.Title}
+                                    className="md:h-52"
+                                />
+                            </div>
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="text-2xl font-semibold">{show.Title}</h1>
                                 <p>{moderators.join(", ")}</p>
@@ -113,7 +124,9 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                         </div>
                     </div>
                     <div className="flex h-full gap-4 md:flex-col">
-                        <p>{show.Description}</p>
+                        <Markdown>
+                            {show.Description}
+                        </Markdown>
                     </div>
                 </div>
 

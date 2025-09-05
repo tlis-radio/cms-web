@@ -6,8 +6,10 @@ import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
 import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
+import Config from "@/types/config";
 
 let directusInstance: RestClient<any>;
+let publicDirectusInstance: RestClient<any>;
 
 export function getDirectusInstance(): RestClient<any> {
    if (!directusInstance) {
@@ -25,18 +27,31 @@ export function getDirectusInstance(): RestClient<any> {
    return directusInstance;
 }
 
+export function getPublicDirectusInstance(): RestClient<any> {
+   if (!publicDirectusInstance) {
+      if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+         throw new Error("NEXT_PUBLIC_DIRECTUS_URL environment variable is not set.");
+      }
+      publicDirectusInstance = createDirectus(process.env.NEXT_PUBLIC_DIRECTUS_URL!)
+         .with(rest({ onRequest: (options) => ({ ...options, cache: "no-store" }), }));
+   }
+   return publicDirectusInstance;
+}
 
 const showEndpoints = {
    listShows: async (): Promise<Array<Show>> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
-         sort: ['-Episode.date_created'],
+         sort: ['-Episode.Date'],
+         fields: ['*', 'Cast.*'],
       }));
       return shows || [];
    },
 
    getShowDataById: async (id: number): Promise<Show> => {
       try {
-         const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
+         const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
+            fields: ['*', 'Cast.*'],
+         }));
          return data;
       } catch (error) {
          console.error("Error fetching show data: (Probably not found)");
@@ -76,9 +91,17 @@ var memberEndpoints = {
    }
 };
 
+var configEndpoints = {
+   getConfig: async (): Promise<Config> => {
+      const config = await getPublicDirectusInstance().request<Config>(readItems("config"));
+      return config;
+   }
+}
+
 class CmsApiService {
    static Show = showEndpoints;
    static Member = memberEndpoints;
+   static Config = configEndpoints;
 }
 
 export default CmsApiService;
