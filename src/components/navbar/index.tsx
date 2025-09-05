@@ -10,7 +10,6 @@ export type NavbarLinkType = {
 }
 
 export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
-
    const config = await CmsApiService.Config.getConfig();
 
    return [
@@ -87,3 +86,4 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
 };
 
 export default Navbar;
+export const dynamic = 'force-dynamic';
