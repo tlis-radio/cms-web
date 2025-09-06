@@ -46,6 +46,7 @@ const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, a
                     src={modifiedSrc}
                     width={renderSize.width}
                     height={renderSize.height}
+                    loading="lazy"
                     alt={alt}
                     {...props}
                 />

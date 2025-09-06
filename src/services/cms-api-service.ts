@@ -5,7 +5,7 @@ import { Moderator } from "@/models/moderator";
 import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
-import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
+import { aggregate, createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
 import Config from "@/types/config";
 
 let directusInstance: RestClient<any>;
@@ -68,6 +68,30 @@ const showEndpoints = {
       }));
 
       return episodeData || [];
+   },
+
+   getShowEpisodesCountById: async (id: string): Promise<number> => {
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
+      if (showData.Episode.length === 0) return 0;
+      const showEpisodesCount = await getDirectusInstance().request(aggregate("Episodes", {
+         query: { filter: { id: { _in: showData.Episode } }, },
+         aggregate: { count: '*' },
+      }));
+      return parseInt(showEpisodesCount[0].count!) || 0;
+   },
+
+   PAGE_SIZE: 10, // TODO: adjustable page size in future?
+   getShowEpisodesByIdPaginated: async (id: string, page: number): Promise<{ episodes: Array<Episode>, totalCount: number }> => {
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
+      if (showData.Episode.length === 0) return { episodes: [], totalCount: 0 };
+      const total_count = await showEndpoints.getShowEpisodesCountById(id);
+      var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
+         filter: { id: { _in: showData.Episode } },
+         sort: ['-Date'],
+         limit: showEndpoints.PAGE_SIZE,
+         page
+      }));
+      return { episodes: episodeData || [], totalCount: total_count };
    },
 
    getShowModeratorsByIds: async (ids: Array<number>): Promise<Array<string>> => {

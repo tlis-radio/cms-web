@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Markdown from 'react-markdown'
 import TlisImage from "@/components/TlisImage";
+import { loadMoreEpisodes } from "@/app/actions";
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
@@ -99,7 +100,44 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
 
 }
 
-export default function Shows({ show, moderators, episodes, ShowName }: { show: any, moderators: Array<string>, episodes: any, ShowName: string }) {
+export default function Shows({ show, moderators, episodes, ShowName, totalCount }: { show: any, moderators: Array<string>, episodes: any, ShowName: string, totalCount: number }) {
+    const [episodesList, setEpisodesList] = useState(episodes);
+    const [hasMoreEpisodes, setHasMoreEpisodes] = useState(totalCount > episodes.length);
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const loaderRef = useRef<HTMLDivElement | null>(null);
+
+    async function loadEpisodes() {
+        if (isLoading) return;
+        setIsLoading(true);
+        const nextPage = page + 1;
+        setPage(nextPage);
+        const { episodes: newEpisodes, totalCount: newTotalCount } = await loadMoreEpisodes(show.id, nextPage);
+    setEpisodesList((prev: any[]) => [...prev, ...newEpisodes.episodes]);
+        setHasMoreEpisodes(newTotalCount > episodesList.length + newEpisodes.episodes.length);
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
+        if (!hasMoreEpisodes) return;
+        const loader = loaderRef.current;
+        if (!loader) return;
+        let ticking = false;
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && !isLoading && hasMoreEpisodes && !ticking) {
+                    ticking = true;
+                    loadEpisodes().finally(() => { ticking = false; });
+                }
+            },
+            { threshold: 1.0 }
+        );
+        observer.observe(loader);
+        return () => {
+            observer.disconnect();
+        };
+    }, [loaderRef, isLoading, hasMoreEpisodes]);
+
     return (
         <div className="mb-[80px] flex w-full justify-center md:mb-0">
             <div className="w-full z-10 px-2">
@@ -119,7 +157,7 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="text-2xl font-semibold">{show.Title}</h1>
                                 <p>{moderators.join(", ")}</p>
-                                <p>Archív: {episodes.length}</p>
+                                <p>Archív: {totalCount}</p>
                             </div>
                         </div>
                     </div>
@@ -131,12 +169,19 @@ export default function Shows({ show, moderators, episodes, ShowName }: { show: 
                 </div>
 
                 <div className="mb-8">
-                    {episodes.map((episode: any, index: number) => (
+                    {episodesList.map((episode: any, index: number) => (
                         <Episode episode={episode} key={index} ShowName={ShowName} />
                     ))}
+                    {hasMoreEpisodes && (
+                        <div className="text-center text-white mt-4" ref={loaderRef}>
+                            <svg className="mx-auto h-8 w-8 animate-spin text-[#D43C4A]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                            </svg>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
     )
-
 }
