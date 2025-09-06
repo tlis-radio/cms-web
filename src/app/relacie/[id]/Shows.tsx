@@ -2,12 +2,13 @@
 
 import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faShareAlt as faShare, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Markdown from 'react-markdown'
 import TlisImage from "@/components/TlisImage";
 import { loadMoreEpisodes } from "@/app/actions";
+import Link from "next/link";
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
@@ -15,6 +16,8 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
     const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
     const descriptionRef = useRef<HTMLDivElement>(null);
+
+
     useEffect(() => {
         function checkOverflow() {
             if (descriptionRef.current) {
@@ -39,6 +42,19 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
         setArchiveEpisodeId(episode.id);
     }
 
+    function shareEpisode(episode: any) {
+        if (navigator.share) {
+            navigator.share({
+                title: episode.Title,
+                text: episode.Description?.slice(0, 100),
+                url: window.location.href + `?sharedEpisode=${episode.id}`,
+            }).catch(() => { });
+        } else {
+            const url = window.location.href + `?sharedEpisode=${episode.id}`;
+            navigator.clipboard.writeText(url);
+        }
+    }
+
     return <div className="border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
         <div className="flex flex-col md:flex-row gap-4">
             <div className="md:w-48 w-full flex-shrink-0">
@@ -58,16 +74,24 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                         <h2 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h2>
                         <p>{new Date(episode.Date).toLocaleDateString("sk-SK")} • {episode.Views} {episode.Views == 1 ? "vypočutie" : "vypočutí"}</p>
                     </div>
-                    {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
+                    <div className="flex items-center gap-3 mt-2 md:mt-0">
                         <button
-                            onClick={() => {
-                                selectEpisode(episode);
-                            }}
-                            className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"
-                            aria-label="Play episode"
-                        >
-                            <FontAwesomeIcon icon={faPlay} className="ml-1" />
-                        </button>)}
+                            onClick={() => { shareEpisode(episode) }}
+                            aria-label="Share episode"
+                            className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
+                            <FontAwesomeIcon icon={faShare} />
+                        </button>
+                        {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
+                            <button
+                                onClick={() => {
+                                    selectEpisode(episode);
+                                }}
+                                className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] transition-colors"
+                                aria-label="Play episode"
+                            >
+                                <FontAwesomeIcon icon={faPlay} className="ml-1" />
+                            </button>)}
+                    </div>
                 </div>
 
                 <div className={classNames("relative", isDescriptionExpanded ? "pb-10" : "")}>
@@ -113,7 +137,7 @@ export default function Shows({ show, moderators, episodes, ShowName, totalCount
         const nextPage = page + 1;
         setPage(nextPage);
         const { episodes: newEpisodes, totalCount: newTotalCount } = await loadMoreEpisodes(show.id, nextPage);
-    setEpisodesList((prev: any[]) => [...prev, ...newEpisodes.episodes]);
+        setEpisodesList((prev: any[]) => [...prev, ...newEpisodes.episodes]);
         setHasMoreEpisodes(newTotalCount > episodesList.length + newEpisodes.episodes.length);
         setIsLoading(false);
     }
@@ -139,7 +163,10 @@ export default function Shows({ show, moderators, episodes, ShowName, totalCount
     }, [loaderRef, isLoading, hasMoreEpisodes]);
 
     return (
-        <div className="mb-[80px] flex w-full justify-center md:mb-0">
+        <div className="mb-[80px] flex flex-col w-full justify-center md:mb-0">
+            <Link href="/relacie" className="w-full text-white text-left px-2 mb-4 flex gap-2 justify-center items-center">
+                <FontAwesomeIcon icon={faChevronLeft} className="w-4" /><p> Zobraziť všetky relácie</p>
+            </Link>
             <div className="w-full z-10 px-2">
                 <div className="flex flex-col gap-4 border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
                     <div className="border-b pb-4">

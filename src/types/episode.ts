@@ -8,5 +8,6 @@ export type EpisodeDto = {
    Cover: string,
    Audio: string,
    Show_Id: string,
-   Date: string
+   Date: string,
+   Views: number
 };

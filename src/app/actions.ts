@@ -12,3 +12,8 @@ export async function loadMoreEpisodes(showId: string, page: number) {
         totalCount: episodes.totalCount
     };
 }
+
+export async function GetEpisodeById(episodeId: number) {
+    const episode = await CmsApiService.Show.getEpisodeById(episodeId);
+    return episode;
+}

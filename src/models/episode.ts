@@ -11,6 +11,7 @@ export class Episode {
    public Audio: string;
    public Show_Id: string;
    public Date: string;
+   public Views: number;
 
    constructor(
       id: string,
@@ -22,7 +23,8 @@ export class Episode {
       Cover: string,
       Audio: string,
       Show_Id: string,
-      Date: string
+      Date: string,
+      Views: number
    ) {
       this.id = id;
       this.user_created = user_created;
@@ -34,6 +36,7 @@ export class Episode {
       this.Audio = Audio;
       this.Show_Id = Show_Id;
       this.Date = Date;
+      this.Views = Views;
    }
 
    public static fromDto(dto: EpisodeDto): Episode {
@@ -47,7 +50,8 @@ export class Episode {
          dto.Cover,
          dto.Audio,
          dto.Show_Id,
-         dto.Date
+         dto.Date,
+         dto.Views
       );
    }
 }

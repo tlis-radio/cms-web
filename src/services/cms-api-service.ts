@@ -70,6 +70,11 @@ const showEndpoints = {
       return episodeData || [];
    },
 
+   getEpisodeById: async (id: number): Promise<Episode | null> => {
+      const episode = await getDirectusInstance().request<EpisodeDto>(readItem("Episodes", id));
+      return episode || null;
+   },
+
    getShowEpisodesCountById: async (id: string): Promise<number> => {
       const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
       if (showData.Episode.length === 0) return 0;
