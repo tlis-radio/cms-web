@@ -1,20 +1,16 @@
 'use client'
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from 'next/link';
-import PaginationImage from "@/components/pagination/pagination-image";
 import Markdown from "react-markdown";
 import TlisImage from "@/components/TlisImage";
+import { Show } from "@/models/show";
+import { ShowCast } from "@/types/show";
 
 type ShowLinkProps = {
-   id: string,
-   name: string,
-   description: string,
-   imageUrl: string,
-   moderatorNames: Array<string>,
+   show: Show;
 }
 
-const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, imageUrl, moderatorNames }) => {
-   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
+const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
    const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
    const descriptionRef = useRef<HTMLDivElement>(null);
 
@@ -31,22 +27,23 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ id, name, description, ima
    }, []);
 
    return (
-      <Link href={`/relacie/${id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
+      <Link href={`/relacie/${show.id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
          <div className="sm:w-48 w-full flex-shrink-0">
-            <TlisImage src={imageUrl} alt={name}/>
+            <TlisImage src={show.Cover} alt={show.Title} />
          </div>
 
          <div className="flex flex-col gap-2 text-left">
-            <h2 className="text-2xl font-semibold">{name}</h2>
+            <h2 className="text-2xl font-semibold">{show.Title}</h2>
             <span className="flex flex-wrap items-center gap-2">
                <p className="text-lg font-semibold">Účinkujúci: </p>
-               {/* TODO: */}
-               <p>{moderatorNames?.join(", ")}</p>
+               {show.Cast.map((castMember: ShowCast, index) => {
+                  return <span key={index} className="text-lg">{castMember.Cast_id.Name}</span>
+               })}
             </span>
             <div className="relative">
                <div ref={descriptionRef} className="text-justify font-argentumSansLight max-h-[120px] overflow-hidden text-overflow-ellipsis">
                   <Markdown>
-                     {description}
+                     {show.Description}
                   </Markdown>
                </div>
                {isDescriptionOverflowing && <div className="w-full absolute bottom-0 h-10 bg-gradient-to-b from-transparent to-[#1C1C1C] group-hover:to-[#111111] transition-colors duration-200" />}

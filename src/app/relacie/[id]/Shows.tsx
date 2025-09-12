@@ -9,6 +9,7 @@ import Markdown from 'react-markdown'
 import TlisImage from "@/components/TlisImage";
 import { loadMoreEpisodes } from "@/app/actions";
 import Link from "next/link";
+import { ShowCast } from "@/types/show";
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
@@ -16,7 +17,6 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
     const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
     const descriptionRef = useRef<HTMLDivElement>(null);
-
 
     useEffect(() => {
         function checkOverflow() {
@@ -69,7 +69,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
             </div>
 
             <div className="flex-1 flex flex-col">
-                <div className="flex justify-between items-start gap-4">
+                <div className="flex justify-between items-start gap-4 md:flex-row flex-col mt-0 md:mt-2">
                     <div className="flex flex-col items-start">
                         <h2 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h2>
                         <p>{new Date(episode.Date).toLocaleDateString("sk-SK")} • {episode.Views} {episode.Views == 1 ? "vypočutie" : "vypočutí"}</p>
@@ -124,12 +124,12 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
 
 }
 
-export default function Shows({ show, moderators, episodes, ShowName, totalCount }: { show: any, moderators: Array<string>, episodes: any, ShowName: string, totalCount: number }) {
+export default function Shows({ show, episodes, ShowName, totalCount }: { show: any, episodes: any, ShowName: string, totalCount: number }) {
     const [episodesList, setEpisodesList] = useState(episodes);
     const [hasMoreEpisodes, setHasMoreEpisodes] = useState(totalCount > episodes.length);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
-    const loaderRef = useRef<HTMLDivElement | null>(null);
+    const loaderRef = useRef<HTMLDivElement>(null);
 
     async function loadEpisodes() {
         if (isLoading) return;
@@ -183,7 +183,11 @@ export default function Shows({ show, moderators, episodes, ShowName, totalCount
                             </div>
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="text-2xl font-semibold">{show.Title}</h1>
-                                <p>{moderators.join(", ")}</p>
+                                <p className="flex flex-wrap gap-4 justify-center w-full">
+                                    {show.Cast.map((castMember: ShowCast, index: number) => (
+                                        <span key={index}>{castMember.Cast_id.Name}</span>
+                                    ))}
+                                </p>
                                 <p>Archív: {totalCount}</p>
                             </div>
                         </div>

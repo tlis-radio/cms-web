@@ -21,6 +21,7 @@ export async function POST(
         const ip = request.headers.get('x-forwarded-for') || 
                    request.headers.get('x-real-ip') || 
                    'unknown';
+        console.log(`Received view count request for ID: ${id} from IP: ${ip}`);
         
         const today = new Date().toISOString().split('T')[0];
         const trackingKey = `${id}_${today}`;

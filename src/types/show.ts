@@ -1,3 +1,14 @@
+export type ShowCast = {
+   id: number;
+   Cast_id: CastDto;
+   Show_id: ShowDto;
+}
+
+export type CastDto = {
+   id: number;
+   Name: string;
+}
+
 export type ShowDto = {
    id: number,
    user_created: string,
@@ -8,7 +19,7 @@ export type ShowDto = {
    Cover: string,
    Description: string,
    Episode: Array<string>,
-   Cast: Array<number>
+   Cast: ShowCast[],
    Filter: string;
    ModeratorNames?: string[];
    Views: number;

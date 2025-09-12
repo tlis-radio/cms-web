@@ -1,23 +1,19 @@
 import React, { useState } from "react";
 import CmsApiService from "@/services/cms-api-service";
 import ShowsPage from "./ShowsPage";
-import { Show } from "@/models/show";
 
-const Shows: React.FC = async () => {
+const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) => {
+   let filterValue = searchParams?.filter;
+   const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
+
    var loadingError = false;
-   var shows = await CmsApiService.Show.listShows().catch((error) => {
+   var showsResult = await CmsApiService.Show.listShowsPaginated(1, filter).catch((error) => {
       console.error("Error fetching shows:", error);
       loadingError = true;
-      return [];
+      return null;
    });
-   shows = await Promise.all(
-      shows.map(async (show: Show) => {
-         const moderatorNames = await CmsApiService.Show.getShowModeratorsByIds(show.Cast.map((castMember) => (castMember as any).Cast_id));
-         return { ...show, ModeratorNames: moderatorNames };
-      })
-   );
 
-   return (<ShowsPage shows={shows} loadingError={loadingError} />);
+   return (<ShowsPage shows={showsResult?.shows || []} totalCount={showsResult?.totalCount || 0} loadingError={loadingError} />);
 };
 
 export default Shows;
