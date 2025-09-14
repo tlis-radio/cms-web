@@ -9,6 +9,13 @@ export async function POST(
     { params }: { params: { id: string } }
 ) {
     const { id } = params;
+    const enabled = process.env.TRACKER_ENABLED === 'true';
+    if (!enabled) {
+        return NextResponse.json(
+            { error: 'Tracking is disabled' },
+            { status: 403 }
+        );
+    }
     if (!id) {
         return NextResponse.json(
             { error: 'ID is required' },

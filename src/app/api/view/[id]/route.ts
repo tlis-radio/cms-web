@@ -9,6 +9,13 @@ export async function POST(
     { params }: { params: { id: string } }
 ) {
     const { id } = params;
+    const enabled = process.env.TRACKER_ENABLED === 'true';
+    if (!enabled) {
+        return NextResponse.json(
+            { error: 'Tracking is disabled' },
+            { status: 403 }
+        );
+    }
     if (!id) {
         return NextResponse.json(
             { error: 'ID is required' },
@@ -18,13 +25,13 @@ export async function POST(
 
     try {
         // TODO: otestovat toto v produkcii, ci funguje
-        const ip = request.headers.get('x-forwarded-for') || 
-                   request.headers.get('x-real-ip') || 
-                   'unknown';
-        
+        const ip = request.headers.get('x-forwarded-for') ||
+            request.headers.get('x-real-ip') ||
+            'unknown';
+
         const today = new Date().toISOString().split('T')[0];
         const trackingKey = `${id}_${today}`;
-        
+
         if (viewTrackingMap.has(trackingKey)) {
             const ipSet = viewTrackingMap.get(trackingKey)!;
             if (ipSet.has(ip)) {
@@ -41,13 +48,13 @@ export async function POST(
 
         console.log(`Counting view for ID: ${id}, IP: ${ip}, Date: ${today}`);
         const episode = await getDirectusInstance().request(readItem("Episodes", id));
-        await getDirectusInstance().request(updateItem("Episodes", id, { 
-            Views: (episode.Views || 0) + 1 
+        await getDirectusInstance().request(updateItem("Episodes", id, {
+            Views: (episode.Views || 0) + 1
         }));
-        await getDirectusInstance().request(createItem("track_views", { 
+        await getDirectusInstance().request(createItem("track_views", {
             episode: id
         }));
-        
+
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("Error counting view:", error);
