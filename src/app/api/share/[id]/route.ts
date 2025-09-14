@@ -25,13 +25,13 @@ export async function POST(
 
     try {
         // TODO: otestovat toto v produkcii, ci funguje
-        const ip = request.headers.get('x-forwarded-for') || 
-                   request.headers.get('x-real-ip') || 
-                   'unknown';
-        
+        const ip = request.headers.get('x-forwarded-for') ||
+            request.headers.get('x-real-ip') ||
+            'unknown';
+
         const today = new Date().toISOString().split('T')[0];
         const trackingKey = `${id}_${today}`;
-        
+
         if (shareTrackingMap.has(trackingKey)) {
             const ipSet = shareTrackingMap.get(trackingKey)!;
             if (ipSet.has(ip)) {
@@ -47,10 +47,12 @@ export async function POST(
         shareTrackingMap.get(trackingKey)!.add(ip);
 
         console.log(`Counting view for ID: ${id}, IP: ${ip}, Date: ${today}`);
-        await getDirectusInstance().request(createItem("track_shares", { 
-            episode: id
+        const episode = await getDirectusInstance().request(readItem("Episodes", id, { fields: ['Title'] }));
+        await getDirectusInstance().request(createItem("track_shares", {
+            episode: id,
+            name: episode.Title
         }));
-        
+
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("Error counting view:", error);
