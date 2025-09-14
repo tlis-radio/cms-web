@@ -22,6 +22,14 @@ export default function ShareShow() {
         GetEpisodeById(parseInt(episodeId)).then((episode) => {
             setSharedEpisode(episode);
         });
+        fetch(`/api/share/${episodeId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).catch((err) => {
+            console.error("Failed to count view:", err);
+        });
     }, []);
 
     function playEpisode(episode: any) {
