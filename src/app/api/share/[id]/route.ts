@@ -2,7 +2,7 @@ import { getDirectusInstance } from "@/services/cms-api-service";
 import { createItem, readItem, updateItem } from "@directus/sdk";
 import { NextResponse } from "next/server";
 
-const viewTrackingMap = new Map<string, Set<string>>();
+const shareTrackingMap = new Map<string, Set<string>>();
 
 export async function POST(
     request: Request,
@@ -32,27 +32,25 @@ export async function POST(
         const today = new Date().toISOString().split('T')[0];
         const trackingKey = `${id}_${today}`;
 
-        if (viewTrackingMap.has(trackingKey)) {
-            const ipSet = viewTrackingMap.get(trackingKey)!;
+        if (shareTrackingMap.has(trackingKey)) {
+            const ipSet = shareTrackingMap.get(trackingKey)!;
             if (ipSet.has(ip)) {
-                console.log(`View already counted for IP: ${ip} on ${today}`);
+                console.log(`Share already counted for IP: ${ip} on ${today}`);
                 return NextResponse.json(
-                    { success: false, message: 'View already counted for this IP today' },
+                    { success: false, message: 'Share already counted for this IP today' },
                     { status: 200 }
                 );
             }
         } else {
-            viewTrackingMap.set(trackingKey, new Set<string>());
+            shareTrackingMap.set(trackingKey, new Set<string>());
         }
-        viewTrackingMap.get(trackingKey)!.add(ip);
+        shareTrackingMap.get(trackingKey)!.add(ip);
 
         console.log(`Counting view for ID: ${id}, IP: ${ip}, Date: ${today}`);
-        const episode = await getDirectusInstance().request(readItem("Episodes", id));
-        await getDirectusInstance().request(updateItem("Episodes", id, {
-            Views: (episode.Views || 0) + 1
-        }));
-        await getDirectusInstance().request(createItem("track_views", {
-            episode: id
+        const episode = await getDirectusInstance().request(readItem("Episodes", id, { fields: ['Title'] }));
+        await getDirectusInstance().request(createItem("track_shares", {
+            episode: id,
+            name: episode.Title
         }));
 
         return NextResponse.json({ success: true });

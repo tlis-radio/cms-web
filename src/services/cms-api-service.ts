@@ -5,7 +5,7 @@ import { Moderator } from "@/models/moderator";
 import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
-import { createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
+import { aggregate, createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
 import Config from "@/types/config";
 
 let directusInstance: RestClient<any>;
@@ -39,18 +39,39 @@ export function getPublicDirectusInstance(): RestClient<any> {
 }
 
 const showEndpoints = {
+   PAGE_SIZE: 10, // TODO: adjustable page size in future?
    listShows: async (): Promise<Array<Show>> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
          sort: ['-Episode.Date'],
-         fields: ['*', 'Cast.*'],
+         fields: ['*', 'Cast.Cast_id.*'],
       }));
       return shows || [];
+   },
+
+   listShowsCount: async (filter: string): Promise<number> => {
+      const showsCount = await getDirectusInstance().request(aggregate("Shows", {
+         aggregate: { count: '*' },
+         query: { filter: { Filter: { _eq: filter } } },
+      }));
+      return parseInt(showsCount[0].count!) || 0;
+   },
+
+   listShowsPaginated: async (page: number, filter: string): Promise<{ shows: Array<Show>, totalCount: number }> => {
+      const total_count = await showEndpoints.listShowsCount(filter);
+      var shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
+         sort: ['-Episode.Date'],
+         fields: ['*', 'Cast.Cast_id.Name'],
+         filter: { Filter: { _eq: filter } },
+         limit: showEndpoints.PAGE_SIZE,
+         page
+      }));
+      return { shows: shows || [], totalCount: total_count };
    },
 
    getShowDataById: async (id: number): Promise<Show> => {
       try {
          const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
-            fields: ['*', 'Cast.*'],
+            fields: ['*', 'Cast.Cast_id.Name'],
          }));
          return data;
       } catch (error) {
@@ -70,17 +91,32 @@ const showEndpoints = {
       return episodeData || [];
    },
 
-   getShowModeratorsByIds: async (ids: Array<number>): Promise<Array<string>> => {
-      if (ids.length === 0) return [];
-      var moderatorData = await getDirectusInstance().request<Array<ModeratorDto>>(readItems("Cast", {
-         filter: { id: { _in: ids } },
+   getEpisodeById: async (id: number): Promise<Episode | null> => {
+      const episode = await getDirectusInstance().request<EpisodeDto>(readItem("Episodes", id));
+      return episode || null;
+   },
+
+   getShowEpisodesCountById: async (id: string): Promise<number> => {
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
+      if (showData.Episode.length === 0) return 0;
+      const showEpisodesCount = await getDirectusInstance().request(aggregate("Episodes", {
+         query: { filter: { id: { _in: showData.Episode } }, },
+         aggregate: { count: '*' },
       }));
+      return parseInt(showEpisodesCount[0].count!) || 0;
+   },
 
-      const moderatorNames = moderatorData.map((moderator: Moderator) => {
-         return moderator.Name;
-      });
-
-      return moderatorNames || "";
+   getShowEpisodesByIdPaginated: async (id: string, page: number): Promise<{ show: Show, episodes: Array<Episode>, totalCount: number }> => {
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['Cast.Cast_id.Name', 'Episode', 'Cover', 'Title'] }));
+      if (showData.Episode.length === 0) return { show: showData, episodes: [], totalCount: 0 };
+      const total_count = await showEndpoints.getShowEpisodesCountById(id);
+      var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
+         filter: { id: { _in: showData.Episode } },
+         sort: ['-Date'],
+         limit: showEndpoints.PAGE_SIZE,
+         page
+      }));
+      return { show: showData, episodes: episodeData || [], totalCount: total_count };
    }
 };
 

@@ -92,7 +92,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
         {createNavbarLinks()}
         <div className="w-full border-t min-[450px]:hidden">
           <div className="py-6 w-full flex justify-center">
-            <Socials mobile={true} />
+            <Socials mobile={'mobile'} />
           </div>
         </div>
       </div>

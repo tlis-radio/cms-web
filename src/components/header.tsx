@@ -20,7 +20,7 @@ const Header = async () => {
                />
             </Link>
             <PlayerComponent />
-            <Socials mobile={false} />
+            <Socials mobile={"desktop"} />
             <Hamburger navbarLinks={navbarLinks} />
          </div>
          <Navbar navbarLinks={navbarLinks} />
