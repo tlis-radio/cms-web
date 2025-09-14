@@ -183,9 +183,9 @@ export default function Shows({ show, episodes, ShowName, totalCount }: { show: 
                             </div>
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="text-2xl font-semibold">{show.Title}</h1>
-                                <p className="flex flex-wrap gap-4 justify-center w-full">
+                                <p className="flex flex-wrap gap-1 justify-center w-full">
                                     {show.Cast.map((castMember: ShowCast, index: number) => (
-                                        <span key={index}>{castMember.Cast_id.Name}</span>
+                                        <span key={index}>{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ',' : ''}</span>
                                     ))}
                                 </p>
                                 <p>Archív: {totalCount}</p>

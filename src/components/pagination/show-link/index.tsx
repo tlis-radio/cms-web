@@ -34,10 +34,10 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
 
          <div className="flex flex-col gap-2 text-left">
             <h2 className="text-2xl font-semibold">{show.Title}</h2>
-            <span className="flex flex-wrap items-center gap-2">
+            <span className="flex flex-wrap items-center gap-1">
                <p className="text-lg font-semibold">Účinkujúci: </p>
                {show.Cast.map((castMember: ShowCast, index) => {
-                  return <span key={index} className="text-lg">{castMember.Cast_id.Name}</span>
+                  return <span key={index} className="text-lg">{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ',' : ''}</span>
                })}
             </span>
             <div className="relative">
