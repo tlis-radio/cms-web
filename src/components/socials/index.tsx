@@ -20,7 +20,7 @@ export const socialLinks = [
    }
 ];
 
-const Socials = ({mobile}: {mobile: boolean}) => {
+const Socials = ({mobile}: {mobile: 'mobile' | 'desktop' | 'both'}) => {
 
    const createSocialLinks = () => {
       return socialLinks.map((link, index) => {
@@ -31,7 +31,13 @@ const Socials = ({mobile}: {mobile: boolean}) => {
    }
 
    return (
-      <div className={`bg-[#96120F] ml-4 flex items-center gap-2 ${mobile? 'min-[450px]:hidden' : 'max-[450px]:hidden'}`}>
+      <div className={`ml-4 flex items-center gap-2 ${
+         mobile === 'both'
+         ? ''
+         : mobile === 'mobile'
+         ? 'min-[450px]:hidden'
+         : 'max-[450px]:hidden'
+      }`}>
          {createSocialLinks()}
       </div>
    )
