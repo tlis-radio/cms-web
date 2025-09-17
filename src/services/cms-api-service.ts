@@ -107,7 +107,7 @@ const showEndpoints = {
    },
 
    getShowEpisodesByIdPaginated: async (id: string, page: number): Promise<{ show: Show, episodes: Array<Episode>, totalCount: number }> => {
-      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['Cast.Cast_id.Name', 'Episode', 'Cover', 'Title'] }));
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['*', 'Cast.Cast_id.Name' ] }));
       if (showData.Episode.length === 0) return { show: showData, episodes: [], totalCount: 0 };
       const total_count = await showEndpoints.getShowEpisodesCountById(id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
