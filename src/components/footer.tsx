@@ -9,32 +9,45 @@
 
 import Link from "next/link";
 import Socials from "./socials";
+import { faMixcloud, faSoundcloud } from "@fortawesome/free-brands-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
+// Custom playlist icon definition
+export const CustomPlaylistIcon: IconDefinition = {
+   icon: [
+      24, // width
+      24, // height
+      [], // ligatures
+      "e001", // unicode
+
+      // SVG path data for the playlist icon
+      "M2.25 6C2.25 5.58579 2.58579 5.25 3 5.25H21C21.4142 5.25 21.75 5.58579 21.75 6C21.75 6.41421 21.4142 6.75 21 6.75H3C2.58579 6.75 2.25 6.41421 2.25 6ZM2.25 10C2.25 9.58579 2.58579 9.25 3 9.25H21C21.4142 9.25 21.75 9.58579 21.75 10C21.75 10.4142 21.4142 10.75 21 10.75H3C2.58579 10.75 2.25 10.4142 2.25 10ZM2.25 14C2.25 13.5858 2.58579 13.25 3 13.25H11C11.4142 13.25 11.75 13.5858 11.75 14C11.75 14.4142 11.4142 14.75 11 14.75H3C2.58579 14.75 2.25 14.4142 2.25 14ZM2.25 18C2.25 17.5858 2.58579 17.25 3 17.25H11C11.4142 17.25 11.75 17.5858 11.75 18C11.75 18.4142 11.4142 18.75 11 18.75H3C2.58579 18.75 2.25 18.4142 2.25 18Z M18.875 14.1184C20.5288 15.0733 21.3558 15.5507 21.4772 16.2395C21.5076 16.4118 21.5076 16.5882 21.4772 16.7605C21.3558 17.4493 20.5288 17.9267 18.875 18.8816C17.2212 19.8364 16.3942 20.3138 15.737 20.0746C15.5725 20.0148 15.4199 19.9266 15.2858 19.8141C14.75 19.3645 14.75 18.4097 14.75 16.5C14.75 14.5903 14.75 13.6355 15.2858 13.1859C15.4199 13.0734 15.5725 12.9852 15.737 12.9254C16.3942 12.6862 17.2212 13.1636 18.875 14.1184Z"
+   ],
+   prefix: "fas",
+   iconName: "function"
+};
 
 const Footer = () => {
    return (
       <footer className='bg-[#111111] text-white w-full py-8 px-4 mt-auto'>
          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
                {/* Logo and basic info */}
-               <div className="flex flex-col items-center md:items-start">
-                  <h3 className="font-argentumSansMedium text-xl mb-2">Študentské rádio TLIS</h3>
-                  <p className="text-gray-400 text-sm">Vysielame alternatívu od roku 1981</p>
+               <div className="flex flex-col items-center justify-center gap-2 lg:flex-row lg:gap-6">
+                  <span className="text-gray-400 text-sm">© {new Date().getFullYear()}</span>
+                  <span className="font-argentumSansMedium text-2xl">Rádio TLIS</span>
+                  <span className="text-gray-400 text-sm">Všetky práva vyhradené.</span>
                </div>
 
                {/* Social media links */}
                <div className="flex flex-col items-center md:items-end">
-                  <h4 className="font-argentumSansMedium mb-3">Sledujte nás</h4>
-                  <Socials mobile={'both'} />
-               </div>
-            </div>
-
-            {/* Copyright and links */}
-            <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-               <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Študentské rádio TLIS. Všetky práva vyhradené.</p>
-               <div className="flex gap-4">
-                  <Link href="/program" className="text-gray-400 hover:text-white text-sm transition-colors">Program</Link>
-                  <Link href="/relacie" className="text-gray-400 hover:text-white text-sm transition-colors">Archív</Link>
-                  <Link href="/o-nas" className="text-gray-400 hover:text-white text-sm transition-colors">O nás</Link>
+                  <Socials mobile={'both'}
+                     additionalLinks={[
+                        { icon: faSoundcloud, url: "https://soundcloud.com/radiotlis" },
+                        { icon: faMixcloud, url: "https://mx" },
+                        { icon: CustomPlaylistIcon, url: "https://www.radia.sk/radia/tlis/playlist" }
+                     ]}
+                  />
                </div>
             </div>
          </div>
