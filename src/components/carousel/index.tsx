@@ -38,7 +38,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
       hour: "2-digit",
       minute: "2-digit",
     };
-    return date.toLocaleDateString("sk-SK", options).replace(/\//g, ".").toUpperCase();
+    return date.toLocaleDateString("sk-SK", options).replace(/\//g, ".").replace(":", "_").replace(" ", " | ").toUpperCase();
   }
 
   const createProgramLinks = () => {

@@ -56,6 +56,18 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
                text: "Členovia",
                url: "/clenovia"
             },
+            // {
+            //    text: "História",
+            //    url: "/o-nas/historia"
+            // },
+            // {
+            //    text: "Partneri",
+            //    url: "/o-nas/partneri"
+            // },
+            // {
+            //    text: "Kontakt",
+            //    url: "/kontakt"
+            // }
          ]
       }
    ];
