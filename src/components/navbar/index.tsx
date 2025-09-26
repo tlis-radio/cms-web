@@ -9,18 +9,18 @@ export type NavbarLinkType = {
    subLinks?: { text: string, url: string, target?: string }[],
 }
 
-export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
-   const config = await CmsApiService.Config.getConfig();
+export type MarqueeLinkType = {
+   text: string,
+   url: string,
+   target?: string,
+}
 
+export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
    /* only use prefetch:true (default), for internal links */
    return [
       {
          text: "Home",
          url: "/"
-      },
-      {
-         text: "Program",
-         url: "/program"
       },
       {
          text: "Archív",
@@ -35,26 +35,42 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
                url: "/relacie?filter=archived"
             },
             {
-               text: "Digitálne relácie",
+               text: "Starý archív",
                url: "/relacie?filter=digital"
             }
          ]
       },
+      // {
+      //    text: "Reporty",
+      //    url: "/reporty"
+      // },
       {
-         text: "Členovia",
-         url: "/clenovia"
-      },
-      {
-         text: "O nás",
-         url: "/o-nas"
-      },
+         text: "O rádiu",
+         url: "/o-nas",
+         subLinks: [
+            {
+               text: "Kto sme",
+               url: "/o-nas"
+            },
+            {
+               text: "Členovia",
+               url: "/clenovia"
+            },
+         ]
+      }
+   ];
+}
+
+export async function getMarqueeLinks(): Promise<MarqueeLinkType[]> {
+   const config = await CmsApiService.Config.getConfig();
+   return [
       ...(config.audition ? [{
-         text: "Konkurz",
+         text: "Prihlás sa na konkurz",
          target: "_blank",
          url: "https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform",
       }] : []),
       {
-         text: "2%",
+         text: "Daj nám 2% a my budeme hrať na 100%",
          url: "/dve-percenta"
       }
    ];
