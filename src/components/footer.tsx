@@ -30,25 +30,15 @@ export const CustomPlaylistIcon: IconDefinition = {
 const Footer = () => {
    return (
       <footer className='bg-[#111111] text-white w-full py-8 px-4 mt-auto'>
-         <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-               {/* Logo and basic info */}
-               <div className="flex flex-col items-center justify-center gap-2 lg:flex-row lg:gap-6">
-                  <span className="text-gray-400 text-sm">© {new Date().getFullYear()}</span>
-                  <span className="font-argentumSansMedium text-2xl">Rádio TLIS</span>
-                  <span className="text-gray-400 text-sm">Všetky práva vyhradené.</span>
-               </div>
-
-               {/* Social media links */}
-               <div className="flex flex-col items-center md:items-end">
-                  <Socials mobile={'both'}
-                     additionalLinks={[
-                        { icon: faSoundcloud, url: "https://soundcloud.com/radiotlis" },
-                        { icon: faMixcloud, url: "https://mx" },
-                        { icon: CustomPlaylistIcon, url: "https://www.radia.sk/radia/tlis/playlist" }
-                     ]}
-                  />
-               </div>
+         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Rádio TLIS. Všetky práva vyhradené.</p>
+            <div className="flex flex-col items-center md:items-end">
+               <Socials mobile={'both'}
+                  additionalLinks={[
+                     { icon: faSoundcloud, url: "https://soundcloud.com/radiotlis" },
+                     { icon: faMixcloud, url: "https://mx" },
+                     { icon: CustomPlaylistIcon, url: "https://www.radia.sk/radia/tlis/playlist" }
+                  ]} />
             </div>
          </div>
       </footer>

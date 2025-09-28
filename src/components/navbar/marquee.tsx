@@ -3,10 +3,10 @@ import Link from "next/link";
 import { MarqueeLinkType } from ".";
 import { useEffect, useState } from "react";
 function Separator() {
-    return <span className="text-gray-500 mx-2">~</span>;
+    return <span className="text-gray-500 mx-1"><img src="/images/03_TLIS_logo2020_white_no-bkg.svg" alt="Separator" className="w-8 h-8" /></span>;
 }
 
-export default function Marquee({data}: {data?: MarqueeLinkType[]}) {
+export default function Marquee({ data }: { data?: MarqueeLinkType[] }) {
     // Calculate animation duration based on screen width
     const baseDuration = 20; // seconds
     const [duration, setDuration] = useState(baseDuration);
@@ -41,11 +41,11 @@ export default function Marquee({data}: {data?: MarqueeLinkType[]}) {
                     .marquee-track:hover { animation-play-state: paused; }
                 `}
             </style>
-            <div className="py-2">
+            <div className="py-1">
                 <div className="marquee-track">
                     {repeatedData.map((item, index) => (
                         <span key={index} className="inline-flex items-center">
-                            <Link href={item.url} target={item.target} className="text-white text-sm mx-4 hover:underline uppercase">
+                            <Link href={item.url} target={item.target} className="text-white text-xl mx-4 hover:underline uppercase font-bold">
                                 {item.text}
                             </Link>
                             {index < repeatedData.length - 1 && <Separator />}
