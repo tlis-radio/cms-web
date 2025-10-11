@@ -129,7 +129,9 @@ var memberEndpoints = {
 
 var configEndpoints = {
    getConfig: async (): Promise<Config> => {
-      const config = await getPublicDirectusInstance().request<Config>(readItems("config"));
+      const config = await getPublicDirectusInstance().request<Config>(readItems("config", {
+         fields: ['audition', 'links.*']
+      }));
       return config;
    }
 }

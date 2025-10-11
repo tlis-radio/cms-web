@@ -81,10 +81,11 @@ export async function getMarqueeLinks(): Promise<MarqueeLinkType[]> {
          target: "_blank",
          url: "https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform",
       }] : []),
-      {
-         text: "Daj nám 2% a my budeme hrať na 100%",
-         url: "/dve-percenta"
-      }
+      ...config.links.map(link => ({
+         text: link.text,
+         url: link.link,
+         target: link.external ? "_blank" : undefined,
+      })),
    ];
 }
 
