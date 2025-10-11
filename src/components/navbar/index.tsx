@@ -19,11 +19,11 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
    /* only use prefetch:true (default), for internal links */
    return [
       {
-         text: "Home",
+         text: "Domov",
          url: "/"
       },
       {
-         text: "Archív",
+         text: "Podcasty",
          url: "/relacie",
          subLinks: [
             {
