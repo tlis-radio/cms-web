@@ -56,17 +56,17 @@ jobs:
         echo "CHANGES<<EOF" >> $GITHUB_ENV
         echo "$CHANGES" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
-
+    
     - name: Post dev build to Discord thread
       run: |
         WEBHOOK_URL="${{ secrets.DISCORD_FORUM_WEBHOOK_URL }}"
-        THREAD_TITLE="Dev Build - $(date -u +"%Y-%m-%d %H:%M UTC")"
+        THREAD_ID="${{ secrets.THREAD_ID }}"
 
         SAFE_CHANGES=$(echo "$CHANGES" | sed ':a;N;$!ba;s/\n/\\n/g; s/"/\\"/g')
 
-        MESSAGE="🚀 Nový dev build webstránky!\\n**Build Date:** $(date -u +"%Y-%m-%d %H:%M UTC")\\n**Latest commits:**\\n$SAFE_CHANGES\\n\\n📝 Píšte feedback do tohto threadu."
+        MESSAGE="🚀 Nový dev build webstránky!\\n**Build Date:** $(date -u +"%Y-%m-%d %H:%M UTC")\\n**Latest commits:**\\n$SAFE_CHANGES"
 
         curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{\"thread_name\":\"$THREAD_TITLE\",\"content\":\"$MESSAGE\"}" \
-          "$WEBHOOK_URL"
+          -d "{\"content\":\"$MESSAGE\"}" \
+          "${WEBHOOK_URL}?thread_id=${THREAD_ID}"
