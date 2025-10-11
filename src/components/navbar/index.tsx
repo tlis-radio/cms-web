@@ -75,18 +75,11 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
 
 export async function getMarqueeLinks(): Promise<MarqueeLinkType[]> {
    const config = await CmsApiService.Config.getConfig();
-   return [
-      ...(config.audition ? [{
-         text: "Prihlás sa na konkurz",
-         target: "_blank",
-         url: "https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform",
-      }] : []),
-      ...config.links.map(link => ({
+   return config.links.map(link => ({
          text: link.text,
          url: link.link,
          target: link.external ? "_blank" : undefined,
-      })),
-   ];
+      }));
 }
 
 const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
