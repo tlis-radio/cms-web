@@ -66,7 +66,7 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
       <div className="w-full overflow-hidden">
          {mode === "archive" ? (
             <div className="w-full">
-               <Marquee className="px-2 font-argentumSansLight text-sm sm:text-base" data-tip={archiveName} text={archiveName || ''} />
+               <Marquee className="font-argentumSansLight text-sm sm:text-base" data-tip={archiveName} text={archiveName || ''} />
                <ProgressControl
                   currentTime={currentTime}
                   duration={duration}
@@ -80,7 +80,7 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
                <Marquee
                   text={titleParts.join(" ")}
                   speed={15}
-                  className="px-2 font-argentumSansLight text-sm sm:text-base truncate"
+                  className="font-argentumSansLight text-sm sm:text-base truncate"
                   data-tip={titleParts.join(" ")}
                />
             </div>
