@@ -4,20 +4,26 @@ import React, { useState } from "react";
 import { Swiper as SwiperClass } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation, A11y } from "swiper/modules";
-import krivko from "@/../public/images/whodba.jpg";
-import dia from "@/../public/images/citanie_s_diou.jpg";
-import eren from "@/../public/images/eren_radioshow.jpg";
-import spachtla from "@/../public/images/okno_do_duse.jpg";
-import kajo from "@/../public/images/zakutlisie_s_kajom.jpg";
-import valcek from "@/../public/images/rozpravky_na_dobru_noc.jpg";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
-import TlisImage from "../TlisImage";
 
 function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, loadingError?: boolean }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
+
+  const getNextEventIndex = () => {
+    const now = new Date();
+    
+    for (let i = 0; i < carouselPosts.length; i++) {
+      const eventDate = new Date(carouselPosts[i].Date);
+      if (eventDate > now) {
+        return i;
+      }
+    }
+    
+    return 0; // Return first event if no future events found
+  };
 
   /*const handleSlideChange = (swiper: SwiperClass) => {
       console.log('slide changing');
@@ -45,8 +51,8 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
     return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <TlisImage src={program.Cover} alt={program.Title} sizeMultiplier={2} preview />
-          <h2 className="font-sans text-white pt-3">{getDate(program.Date)}</h2>
+          <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
+          <h2 className="font-sans text-white pt-3 font-bold">{getDate(program.Date)}</h2>
         </SwiperSlide>
       );
     });
@@ -66,6 +72,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
           modules={[EffectCoverflow, Navigation, A11y]}
           effect="coverflow"
           onSwiper={setSwiperInstance}
+          initialSlide={getNextEventIndex()}
           // Takes care of the scale changing
           coverflowEffect={{
             stretch: 0,
@@ -74,7 +81,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
             modifier: 8,
             slideShadows: false,
           }}
-          speed={1000} // Speed of the sliding movement in miliseconds
+          speed={500} // Speed of the sliding movement in miliseconds
           centeredSlides={true}
           navigation={{
             nextEl: ".swiper-button-next",
