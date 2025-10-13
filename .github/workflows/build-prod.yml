@@ -69,5 +69,5 @@ jobs:
 
         curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{\"thread_name\":\"$THREAD_TITLE\",\"content\":\"$MESSAGE\"}" \
-          "$WEBHOOK_URL"
+          -d "{\"content\":\"$MESSAGE\"}" \
+          "${WEBHOOK_URL}?thread_id=${THREAD_ID}"

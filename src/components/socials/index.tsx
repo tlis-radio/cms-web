@@ -20,10 +20,10 @@ export const socialLinks = [
    }
 ];
 
-const Socials = ({mobile}: {mobile: 'mobile' | 'desktop' | 'both'}) => {
+const Socials = ({mobile, additionalLinks}: {mobile: 'mobile' | 'desktop' | 'both', additionalLinks?: { icon: any; url: string; }[]}) => {
 
    const createSocialLinks = () => {
-      return socialLinks.map((link, index) => {
+      return [...socialLinks, ...(additionalLinks || [])].map((link, index) => {
          return (
             <SocialLink key={index} icon={link.icon} redirectUrl={link.url} />
          )
@@ -31,7 +31,7 @@ const Socials = ({mobile}: {mobile: 'mobile' | 'desktop' | 'both'}) => {
    }
 
    return (
-      <div className={`ml-4 flex items-center gap-2 ${
+      <div className={`ml-4 flex items-center gap-2 flex-wrap ${
          mobile === 'both'
          ? ''
          : mobile === 'mobile'

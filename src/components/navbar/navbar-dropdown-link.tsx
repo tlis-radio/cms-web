@@ -19,7 +19,7 @@ const NavbarDropdownLink: FunctionComponent<NavbarDropdownLinkProps> = ({ text, 
 
     return (
         <div
-            className={`relative hidden lg:block ${className ?? ''}`}
+            className={`relative hidden lg:block uppercase ${className ?? ''}`}
             onMouseEnter={() => setOpen(true)}
             onMouseLeave={() => setOpen(false)}
         >
