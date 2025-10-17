@@ -136,7 +136,7 @@ var configEndpoints = {
 
 var streamEndpoints = {
    getCurrentStreamTitle: async (): Promise<string> => {
-      const stream = await getDirectusInstance().request<{ current_episode: EpisodeDto }>(readItem("stream", 1, {
+      const stream = await getPublicDirectusInstance().request<{ current_episode: EpisodeDto }>(readItem("stream", 1, {
          fields: ['current_episode.*']
       }));
       var {current_episode} = stream;
