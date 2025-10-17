@@ -22,6 +22,12 @@ export default function ShowsPage({ shows, loadingError, totalCount }: { shows: 
     router.push(`/relacie?filter=${filter}`);
   }
 
+  useEffect(()=>{
+    const filter = searchParams.get('filter');
+    if (!window.umami) { return; }
+    window.umami.track("Filter Shows", { filter: filter })
+  }, [searchParams.get('filter')])
+
   async function loadShows() {
     if (isLoading) return;
     setIsLoading(true);
