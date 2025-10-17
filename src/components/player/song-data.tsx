@@ -3,6 +3,7 @@ import { Root } from "@/types/streamstatus";
 import { useEffect, useState } from "react";
 import ProgressControl from "./progress-control";
 import Marquee from "./marquee";
+import CmsApiService from "@/services/cms-api-service";
 
 async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    const response = await fetch(apiEndpoint);
@@ -44,9 +45,12 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
       const fetchTitle = async () => {
          if (mode === "archive") return;
 
-         // TODO put the stream URL into environment variables (process.env and NEXT_PUBLIC_)
-
-         const apiEndpoint = "https://stream.tlis.sk/status-json.xsl";
+         const currentStreamTitleResponse = await fetch('/api/stream');
+         const currentStreamTitle = await currentStreamTitleResponse.text();
+         if (currentStreamTitle) return setTitleParts([currentStreamTitle]);
+         
+         const apiEndpoint = process.env.NEXT_PUBLIC_ICECAST_ENDPOINT;
+         if (!apiEndpoint) return setTitleParts(["Nezńame rádio"]);
          const parts = await fetchSourceTitle(apiEndpoint);
          document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: parts.join(" ") }));
          setTitleParts(parts);
