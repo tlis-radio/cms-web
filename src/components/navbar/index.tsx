@@ -56,10 +56,10 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
                text: "Členovia",
                url: "/o-radiu/clenovia"
             },
-            {
-               text: "História",
-               url: "/o-radiu/historia"
-            },
+            //{
+            //   text: "História",
+            //   url: "/o-radiu/historia"
+            //},
             // {
             //    text: "Partneri",
             //    url: "/o-radiu/partneri"

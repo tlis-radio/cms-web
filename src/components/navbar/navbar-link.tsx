@@ -9,7 +9,7 @@ type NavbarLinkProps = {
 }
 
 const NavbarLink: FunctionComponent<NavbarLinkProps> = ({ text, redirectUrl, target, className }) => {
-   return <Link href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors uppercase ${className ?? ''}`} target={target}>
+   return <Link href={redirectUrl} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors whitespace-nowrap uppercase ${className ?? ''}`} target={target}>
       {text}
    </Link>
 }

@@ -11,7 +11,7 @@ import { GalleryProvider } from "@/components/carousel/gallery/GalleryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'TLIS - Študentské internetové rádio',
+  title: 'Radio TLIS | tlis.sk',
 };
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {

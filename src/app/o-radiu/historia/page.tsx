@@ -5,7 +5,7 @@ import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
 const AboutUs: React.FC = () => {
     return (
         <>
-            <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> kto sme</h1>
+            <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> história</h1>
             <div className="max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg">
 
                 <div className="flex flex-col gap-8 items-center">
