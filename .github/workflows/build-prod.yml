@@ -63,7 +63,7 @@ jobs:
     - name: Post prod build to Discord thread
       run: |
         WEBHOOK_URL="${{ secrets.DISCORD_FORUM_WEBHOOK_URL }}"
-        THREAD_TITLE="Prod Build - $(date -u +"%Y-%m-%d %H:%M UTC")"
+        THREAD_ID="${{ secrets.THREAD_ID }}"
 
         SAFE_CHANGES=$(echo "$CHANGES" | sed ':a;N;$!ba;s/\n/\\n/g; s/"/\\"/g')
 
