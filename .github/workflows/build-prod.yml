@@ -28,7 +28,8 @@ jobs:
         --file Dockerfile \
         --tag $IMAGE_NAME \
         --build-arg NEXT_PUBLIC_DIRECTUS_URL=${{ secrets.DIRECTUS_URL }} \
-        --build-arg NEXT_PUBLIC_ICECAST_ENDPOINT=${{ secrets.ICECAST_ENDPOINT }}
+        --build-arg NEXT_PUBLIC_ANALYTICS_ID=${{ secrets.ANALYTICS_ID }} \
+        --build-arg NEXT_PUBLIC_ANALYTICS_URL=${{ secrets.ANALYTICS_URL }}
         docker push $IMAGE_NAME
         
     - name: Deploy to production

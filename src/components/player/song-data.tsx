@@ -1,42 +1,7 @@
 import React from "react";
-import { Root } from "@/types/streamstatus";
 import { useEffect, useState } from "react";
 import ProgressControl from "./progress-control";
 import Marquee from "./marquee";
-import CmsApiService from "@/services/cms-api-service";
-
-async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
-   const response = await fetch(apiEndpoint);
-   const data: Root = await response.json();
-   const source = data.icestats.source;
-   let title = "";
-
-   if (Array.isArray(source)) {
-      // Define the title of the first source in the array
-      if (source[1].listenurl === "http://stream.tlis.sk:8000/studio.mp3") {
-         title = String(source[1]?.title || "Nič na počúvanie");
-      } else {
-         title = String(source[0]?.title || "Nič na počúvanie");
-      }
-   } else {
-      // If source is a single object
-      title = String(source?.title || "Nič na počúvanie");
-   }
-
-   /**
-    * TODO: this doesn't work for some reason, might be a whitespace issue - Jäger 17.7.2024
-    * *Status update - It works. IDK what he is talking about, i haven't changed the if statement - Jizzus 19.7.2024
-    * !Status update - Saw a bug triggerd by a song, need to find out the metadata of that song - Jizzus 28.7.2024
-    * *Status update - I added String(...) to the title because the bug was maybe type related - Jizzus 28.7.2024
-    * *Status update - I modified the inside of the String(...), in case the source would be, for some fkin reason, null - Jizzus 9.8.2024
-    */
-
-   if (title === "Unknown") {
-      return ["Počúvate Rádio TLIS"];
-   }
-   // Reverse used to switch artist and song title
-   return title.split(" - ").reverse();
-}
 
 function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrentTime }: { mode: "stream" | "archive", archiveName: string | null, currentTime: number, duration: number, updateCurrentTime: (currentTime: number) => void }) {
    const [titleParts, setTitleParts] = useState<string[]>([]);
@@ -48,14 +13,8 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
          const currentStreamTitleResponse = await fetch('/api/stream');
          const currentStreamTitle = await currentStreamTitleResponse.text();
          if (currentStreamTitle) return setTitleParts([currentStreamTitle]);
-         
-         // mightdo: move all of the logic to server?
-
-         const apiEndpoint = process.env.NEXT_PUBLIC_ICECAST_ENDPOINT;
-         if (!apiEndpoint) return setTitleParts(["Neznáme rádio"]);
-         const parts = await fetchSourceTitle(apiEndpoint);
-         document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: parts.join(" ") }));
-         setTitleParts(parts);
+         else setTitleParts(["Neznáme rádio"]);
+         document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: titleParts.join(" ") }));
       };
 
       // Call fetchTitle immediately when the component mounts
