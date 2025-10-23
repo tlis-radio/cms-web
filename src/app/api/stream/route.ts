@@ -8,8 +8,6 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    const source = data.icestats.source;
    let title = "";
 
-   console.log(JSON.stringify(data));
-
    if (Array.isArray(source)) {
       // Define the title of the first source in the array
       if (source[1].listenurl === "http://stream.tlis.sk:8000/studio.mp3") {
