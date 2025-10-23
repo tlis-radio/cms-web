@@ -8,6 +8,8 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
    const source = data.icestats.source;
    let title = "";
 
+   console.log(JSON.stringify(data));
+
    if (Array.isArray(source)) {
       // Define the title of the first source in the array
       if (source[1].listenurl === "http://stream.tlis.sk:8000/studio.mp3") {
@@ -19,6 +21,8 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
       // If source is a single object
       title = String(source?.title || "Nič na počúvanie");
    }
+
+   console.log(title);
 
    /**
     * TODO: this doesn't work for some reason, might be a whitespace issue - Jäger 17.7.2024
