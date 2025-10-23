@@ -48,9 +48,12 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
          const currentStreamTitleResponse = await fetch('/api/stream');
          const currentStreamTitle = await currentStreamTitleResponse.text();
          if (currentStreamTitle) return setTitleParts([currentStreamTitle]);
+         console.log("DEBUG: no current stream")
          
          const apiEndpoint = process.env.NEXT_PUBLIC_ICECAST_ENDPOINT;
-         if (!apiEndpoint) return setTitleParts(["Nezńame rádio"]);
+         console.log("DEBUG: Using ICECAST_ENDPOINT:", apiEndpoint);
+         if (!apiEndpoint) return setTitleParts(["Neznáme rádio"]);
+         console.log("DEBUG: Fetching source title from API endpoint");
          const parts = await fetchSourceTitle(apiEndpoint);
          document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: parts.join(" ") }));
          setTitleParts(parts);

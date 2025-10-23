@@ -139,6 +139,7 @@ var streamEndpoints = {
       const stream = await getPublicDirectusInstance().request<{ current_episode: EpisodeDto }>(readItem("stream", 1, {
          fields: ['current_episode.*']
       }));
+      console.log("DEBUG: Fetched stream data:", stream.current_episode);
       var {current_episode} = stream;
       if(!current_episode) return "";
       return current_episode.Title || "";
