@@ -192,7 +192,7 @@ export default function Shows({ show, episodes, ShowName, totalCount }: { show: 
                             </div>
                         </div>
                     </div>
-                    <div className="flex h-full gap-4 md:flex-col">
+                    <div className="flex flex-col h-full gap-4">
                         <Markdown>
                             {show.Description}
                         </Markdown>

@@ -9,21 +9,21 @@ export type NavbarLinkType = {
    subLinks?: { text: string, url: string, target?: string }[],
 }
 
-export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
-   const config = await CmsApiService.Config.getConfig();
+export type MarqueeLinkType = {
+   text: string,
+   url: string,
+   target?: string,
+}
 
+export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
    /* only use prefetch:true (default), for internal links */
    return [
       {
-         text: "Home",
+         text: "Domov",
          url: "/"
       },
       {
-         text: "Program",
-         url: "/program"
-      },
-      {
-         text: "Archív",
+         text: "Podcasty",
          url: "/relacie",
          subLinks: [
             {
@@ -35,29 +35,51 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
                url: "/relacie?filter=archived"
             },
             {
-               text: "Digitálne relácie",
+               text: "Starý archív",
                url: "/relacie?filter=digital"
             }
          ]
       },
+      // {
+      //    text: "Reporty",
+      //    url: "/reporty"
+      // },
       {
-         text: "Členovia",
-         url: "/clenovia"
-      },
-      {
-         text: "O nás",
-         url: "/o-nas"
-      },
-      ...(config.audition ? [{
-         text: "Konkurz",
-         target: "_blank",
-         url: "https://docs.google.com/forms/d/e/1FAIpQLSfENP1vGmJ9JaLeAII2sbF2WFvL9wcode0ZtRAAPRWOSwIr9Q/viewform",
-      }] : []),
-      {
-         text: "2%",
-         url: "/dve-percenta"
+         text: "O rádiu",
+         url: "/o-nas",
+         subLinks: [
+            {
+               text: "Kto sme",
+               url: "/o-nas"
+            },
+            {
+               text: "Členovia",
+               url: "/clenovia"
+            },
+            // {
+            //    text: "História",
+            //    url: "/o-nas/historia"
+            // },
+            // {
+            //    text: "Partneri",
+            //    url: "/o-nas/partneri"
+            // },
+            // {
+            //    text: "Kontakt",
+            //    url: "/kontakt"
+            // }
+         ]
       }
    ];
+}
+
+export async function getMarqueeLinks(): Promise<MarqueeLinkType[]> {
+   const config = await CmsApiService.Config.getConfig();
+   return config.links.map(link => ({
+         text: link.text,
+         url: link.link,
+         target: link.external ? "_blank" : undefined,
+      }));
 }
 
 const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {

@@ -39,7 +39,7 @@ const PlayerControl: React.FC<PlayerControlProps> = () => {
                 {!isLoading && isPlaying && <FontAwesomeIcon icon={faPause} />}
             </button>
 
-            <div className='hidden lg:block w-[100px] xxxl:w-[150px]'>
+            <div className='hidden lg:block'>
                 <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
             </div>
         </div>

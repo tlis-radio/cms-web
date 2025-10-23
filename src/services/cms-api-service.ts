@@ -1,7 +1,5 @@
 import { ShowDto } from "@/types/show";
 import { Show } from "@/models/show";
-import { ModeratorDto } from "@/types/moderator";
-import { Moderator } from "@/models/moderator";
 import { EpisodeDto } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
@@ -129,8 +127,21 @@ var memberEndpoints = {
 
 var configEndpoints = {
    getConfig: async (): Promise<Config> => {
-      const config = await getPublicDirectusInstance().request<Config>(readItems("config"));
+      const config = await getPublicDirectusInstance().request<Config>(readItems("config", {
+         fields: ['links.*']
+      }));
       return config;
+   }
+}
+
+var streamEndpoints = {
+   getCurrentStreamTitle: async (): Promise<string> => {
+      const stream = await getPublicDirectusInstance().request<{ current_episode: EpisodeDto }>(readItem("stream", 1, {
+         fields: ['current_episode.*']
+      }));
+      var {current_episode} = stream;
+      if(!current_episode) return "";
+      return current_episode.Title || "";
    }
 }
 
@@ -138,6 +149,7 @@ class CmsApiService {
    static Show = showEndpoints;
    static Member = memberEndpoints;
    static Config = configEndpoints;
+   static Stream = streamEndpoints;
 }
 
 export default CmsApiService;

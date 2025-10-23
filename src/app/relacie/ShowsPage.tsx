@@ -22,6 +22,12 @@ export default function ShowsPage({ shows, loadingError, totalCount }: { shows: 
     router.push(`/relacie?filter=${filter}`);
   }
 
+  useEffect(()=>{
+    const filter = searchParams.get('filter');
+    if (!window.umami) { return; }
+    window.umami.track("Filter Shows", { filter: filter })
+  }, [searchParams.get('filter')])
+
   async function loadShows() {
     if (isLoading) return;
     setIsLoading(true);
@@ -80,9 +86,9 @@ export default function ShowsPage({ shows, loadingError, totalCount }: { shows: 
         <div className="ml-auto relative min-w-[180px]">
           <Select
             options={[
-              { value: "active", label: "Aktívne relácie" },
-              { value: "archived", label: "Archívne relácie" },
-              { value: "digital", label: "Digitálne relácie" },
+              { value: "active", label: "AKTÍVNE RELÁCIE" },
+              { value: "archived", label: "ARCHÍVNE RELÁCIE" },
+              { value: "digital", label: "STARÝ ARCHÍV" },
             ]}
             value={searchParams.get("filter") || "active"}
             onChange={(val) => setFilter(val as FilterProps)}
