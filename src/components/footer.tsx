@@ -31,7 +31,7 @@ const Footer = () => {
    return (
       <footer className='bg-[#111111] text-white w-full py-8 px-4 mt-auto'>
          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Radio TLIS. Všetky práva vyhradené.</p>
+            <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Radio TLIS | ***strictly alternative*** | Všetky práva vyhradené</p>
             <div className="flex flex-col items-center md:items-end">
                <Socials mobile={'both'}
                   additionalLinks={[

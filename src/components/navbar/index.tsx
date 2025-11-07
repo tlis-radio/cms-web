@@ -46,27 +46,27 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
       // },
       {
          text: "O rádiu",
-         url: "/o-nas",
+         url: "/o-radiu",
          subLinks: [
             {
                text: "Kto sme",
-               url: "/o-nas"
+               url: "/o-radiu"
             },
             {
                text: "Členovia",
-               url: "/clenovia"
+               url: "/o-radiu/clenovia"
             },
-            // {
-            //    text: "História",
-            //    url: "/o-nas/historia"
-            // },
+            //{
+            //   text: "História",
+            //   url: "/o-radiu/historia"
+            //},
             // {
             //    text: "Partneri",
-            //    url: "/o-nas/partneri"
+            //    url: "/o-radiu/partneri"
             // },
             // {
             //    text: "Kontakt",
-            //    url: "/kontakt"
+            //    url: "/o-radiu/kontakt"
             // }
          ]
       }

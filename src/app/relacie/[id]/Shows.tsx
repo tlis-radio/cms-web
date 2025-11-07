@@ -113,7 +113,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                                 onClick={() => setDescriptionExpanded(!isDescriptionExpanded)}
                                 className={"mt-2 hover:underline absolute bottom-0 -translate-x-1/2 text-[#D43C4A]"}
                             >
-                                {isDescriptionExpanded ? "Skryť" : "Zobraziť viac"}
+                                {isDescriptionExpanded ? "SKRYŤ" : "ZOBRAZIŤ VIAC"}
                             </button>
                         </div>
                     )}
@@ -165,7 +165,7 @@ export default function Shows({ show, episodes, ShowName, totalCount }: { show: 
     return (
         <div className="mb-[80px] flex flex-col w-full justify-center md:mb-0">
             <Link href="/relacie" className="w-full text-white text-left px-2 mb-4 flex gap-2 justify-center items-center">
-                <FontAwesomeIcon icon={faChevronLeft} className="w-4" /><p> Zobraziť všetky relácie</p>
+                <FontAwesomeIcon icon={faChevronLeft} className="w-4" /><p>ZOBRAZIŤ VŠETKY RELÁCIE</p>
             </Link>
             <div className="w-full z-10 px-2">
                 <div className="flex flex-col gap-4 border bg-[#1c1c1c] p-4 text-white drop-shadow-lg">
@@ -182,13 +182,13 @@ export default function Shows({ show, episodes, ShowName, totalCount }: { show: 
                                 />
                             </div>
                             <div className="m-auto flex h-max w-full flex-col gap-4">
-                                <h1 className="text-2xl font-semibold">{show.Title}</h1>
-                                <p className="flex flex-wrap gap-1 justify-center w-full">
+                                <h1 className="text-4xl font-semibold">{show.Title}</h1>
+                                <p className="flex flex-wrap gap-1 justify-center w-full"> Redaktori:
                                     {show.Cast.map((castMember: ShowCast, index: number) => (
                                         <span key={index}>{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ',' : ''}</span>
                                     ))}
                                 </p>
-                                <p>Archív: {totalCount}</p>
+                                <p>Počet epizód: {totalCount}</p>
                             </div>
                         </div>
                     </div>
