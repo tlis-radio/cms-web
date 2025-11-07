@@ -11,7 +11,7 @@ export default function DvePercenta() {
                 className='rounded-xl w-full h-auto object-cover shadow-lg'
             />   
             <p className="text-sm leading-relaxed mb-6 mt-6">Internátne rozhlasové štúdio TLIS (IRŠ TLIS) je jediným študentským rozhlasovým štúdiom v Bratislave. Dávame študentom aj neštudentom priestor a možnosť realizovať sa pri tvorbe audiovizuálnej produkcie - tvorbe rozhlasových relácií, hudobných playlistov či organizácii hudobných eventov. Ponúkame možnosť vyskúšať si prácu v masmediálnej sfére - či už spoza mikrofónu, technického pultu alebo organizačno - propagačného backgroundu. Našim cieľom je poskytnúť študentom a dobrovoľníkom neoceniteľnú prax a vychovávať tak nové generácie moderátorov, hudobných redaktorov, dramaturgov, šéfredaktorov, technikov a marketérov zameraných nielen na hudobný priemysel.</p>
-            <p className="text-lg leading-relaxed mb-6">Podporte naše študentské rádio TLIS poukázaním 2% z Vašich daní. Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.</p>
+            <p className="text-lg leading-relaxed mb-6">Ak nemáte kam, dajte to nám.<br></br> Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.</p>
             <p className="text-lg leading-relaxed mb-6">Ďakujeme! ❤</p>
             <div className="border-t border-gray-100 mt-2 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <h2 className="text-xl font-semibold mb-2 text-[#d43c4a]">Daňové priznanie vám podáva zamestnávateľ:</h2></div>
