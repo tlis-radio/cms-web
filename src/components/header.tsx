@@ -7,6 +7,8 @@ import Hamburger from "./navbar/hamburger";
 import Link from "next/link";
 import Marquee from "./navbar/marquee";
 
+export const dynamic = 'force-dynamic';
+
 const Header = async () => {
    var navbarLinks = await getNavbarLinks();
    var marqueeLinks = await getMarqueeLinks();
