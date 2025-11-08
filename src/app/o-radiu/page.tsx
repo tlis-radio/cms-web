@@ -32,3 +32,4 @@ const AboutUs: React.FC = () => {
 };
 
 export default AboutUs;
+export const dynamic = 'force-dynamic';
