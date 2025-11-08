@@ -20,7 +20,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, handleVolumeChang
             </button>
 
             {/* Slider — hidden by default, shown on hover/focus-within. Positioned to the right of the icon. */}
-            <div className="absolute left-full pl-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-150">
+            <div className="absolute z-50 left-full pl-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-150">
                 <div className="px-3 py-2 rounded-full bg-[#d43c4a]">
                     <input
                         aria-label="Volume slider"
