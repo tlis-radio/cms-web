@@ -20,12 +20,12 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
   return (
     <div className="mb-12 py-16">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 px-4 md:px-8 pb-2">
-        <h2 className="text-4xl text-white font-semibold pb-0">Archív</h2>
+        <h2 className="text-4xl text-white font-semibold pb-0"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> archív</h2>
         <Link
           href="/relacie"
-          className="text-white hover:underline mt-2 md:mt-0 hidden sm:block"
+          className="text-white font-bold hover:underline mt-2 md:mt-0 hidden sm:block"
         >
-          Zobraziť všetky
+          ZOBRAZIŤ VŠETKY
         </Link>
       </div>
 
@@ -52,7 +52,7 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="text-white text-left text-2xl line-clamp-1 order-0 sm:order-1 sm:mt-2 sm:mb-0 mb-2">
+            <h3 className="font-argentumSansMedium text-white text-left text-2xl line-clamp-1 order-0 sm:order-1 sm:mt-2 sm:mb-0 mb-2">
               {show.Title}
             </h3>
           </Link>
@@ -61,9 +61,9 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
 
       <Link
           href="/relacie"
-          className="bg-[#d43c4a] rounded-full px-4 py-2 text-white block sm:hidden w-fit m-auto mt-10"
+          className="font-argentumSansMedium bg-[#d43c4a] rounded-full px-4 py-2 text-white block sm:hidden w-fit m-auto mt-10"
         >
-          Zobraziť všetky
+          ZOBRAZIŤ VŠETKY
         </Link>
 
     </div>

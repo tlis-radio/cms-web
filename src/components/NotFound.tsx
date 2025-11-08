@@ -5,7 +5,7 @@ export default function NotFound({ message }: { message?: React.ReactNode }) {
         <div className="flex flex-col items-center justify-center h-96">
             <h1 className="text-6xl font-bold text-[#96120F] mb-4">404</h1>
             {message}
-            <p className="text-white text-center">Ak veríš, že je to chyba, napíš nám na naše socíalne siete!</p>
+            <p className="text-white text-center uppercase">Ajaj, toto tu nemáme :(</p>
             <div className="flex gap-4 mt-4">
                 <a
                     href="https://instagram.com/radiotlis"
