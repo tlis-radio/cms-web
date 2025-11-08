@@ -54,3 +54,5 @@ export default function DvePercenta() {
         </>
     );
 }
+
+export const dynamic = 'force-dynamic';

@@ -3,7 +3,7 @@ import { Root } from "@/types/streamstatus";
 
 
 async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
-   const response = await fetch(apiEndpoint);
+   const response = await fetch(apiEndpoint, { cache: "no-store" });
    const data: Root = await response.json();
    const source = data.icestats.source;
    let title = "";
