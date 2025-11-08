@@ -1,6 +1,6 @@
 import { ShowDto } from "@/types/show";
 import { Show } from "@/models/show";
-import { EpisodeDto } from '@/types/episode';
+import { EpisodeDto, Tag } from '@/types/episode';
 import { Episode } from '@/models/episode';
 
 import { aggregate, createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
@@ -78,10 +78,35 @@ const showEndpoints = {
       }
    },
 
+   getShowTagsById: async (id: string): Promise<Array<Tag>> => {
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
+         fields: ['Episode.Tags.Tags_id.*'],
+      }));
+      var allTags: Array<Tag> = [];
+      for (let episode of showData.Episode) {
+         for (let tagRelation of episode.Tags) {
+            const tag = tagRelation.Tags_id;
+            if (!allTags.find(t => t.id === tag.id)) {
+               allTags.push(tag);
+            }
+         }
+      }
+      return allTags;
+   },
+
+   getEpisodesByTagId: async (tagId: number): Promise<Array<Episode>> => {
+      const episodes = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
+         fields: ["*", "Tags.Tags_id.*"],
+         filter: { "Tags.Tags_id.id": { _eq: tagId } }
+      }));
+      return episodes || [];
+   },
+
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
       const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
       if (showData.Episode.length === 0) return [];
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
+         fields: ["*", "Tags.Tags_id.*"],
          filter: { id: { _in: showData.Episode } },
          sort: ['-Date'],
       }));
@@ -90,7 +115,9 @@ const showEndpoints = {
    },
 
    getEpisodeById: async (id: number): Promise<Episode | null> => {
-      const episode = await getDirectusInstance().request<EpisodeDto>(readItem("Episodes", id));
+      const episode = await getDirectusInstance().request<EpisodeDto>(readItem("Episodes", id, {
+         fields: ["*", "Tags.Tags_id.*"]
+      }));
       return episode || null;
    },
 
@@ -109,6 +136,7 @@ const showEndpoints = {
       if (showData.Episode.length === 0) return { show: showData, episodes: [], totalCount: 0 };
       const total_count = await showEndpoints.getShowEpisodesCountById(id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
+         fields: ["*", "Tags.Tags_id.*"],
          filter: { id: { _in: showData.Episode } },
          sort: ['-Date'],
          limit: showEndpoints.PAGE_SIZE,

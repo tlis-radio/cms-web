@@ -20,8 +20,6 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
       title = String(source?.title || "Nič na počúvanie");
    }
 
-   console.log(title);
-
    /**
     * TODO: this doesn't work for some reason, might be a whitespace issue - Jäger 17.7.2024
     * *Status update - It works. IDK what he is talking about, i haven't changed the if statement - Jizzus 19.7.2024

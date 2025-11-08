@@ -1,3 +1,6 @@
+import { Episode } from "@/models/episode";
+import { Tag } from "./episode";
+
 export type ShowCast = {
    id: number;
    Cast_id: CastDto;
@@ -18,7 +21,7 @@ export type ShowDto = {
    Title: string,
    Cover: string,
    Description: string,
-   Episode: Array<string>,
+   Episode: Array<Episode>,
    Cast: ShowCast[],
    Filter: string;
    ModeratorNames?: string[];

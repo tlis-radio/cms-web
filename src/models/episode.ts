@@ -1,4 +1,4 @@
-import { EpisodeDto } from "@/types/episode";
+import { EpisodeDto, Tags } from "@/types/episode";
 
 export class Episode {
    public id: string;
@@ -12,6 +12,7 @@ export class Episode {
    public Show_Id: string;
    public Date: string;
    public Views: number;
+   public Tags: Array<Tags>;
 
    constructor(
       id: string,
@@ -24,7 +25,8 @@ export class Episode {
       Audio: string,
       Show_Id: string,
       Date: string,
-      Views: number
+      Views: number,
+      Tags: Array<Tags>
    ) {
       this.id = id;
       this.user_created = user_created;
@@ -37,6 +39,7 @@ export class Episode {
       this.Show_Id = Show_Id;
       this.Date = Date;
       this.Views = Views;
+      this.Tags = Tags;
    }
 
    public static fromDto(dto: EpisodeDto): Episode {
@@ -51,7 +54,8 @@ export class Episode {
          dto.Audio,
          dto.Show_Id,
          dto.Date,
-         dto.Views
+         dto.Views,
+         dto.Tags
       );
    }
 }

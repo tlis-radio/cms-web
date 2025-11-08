@@ -1,4 +1,5 @@
 import { ShowCast, ShowDto } from "@/types/show";
+import { Episode } from "./episode";
 
 export class Show {
    public id: number;
@@ -9,7 +10,7 @@ export class Show {
    public Title: string;
    public Cover: string;
    public Description: string;
-   public Episode: Array<string>;
+   public Episode: Array<Episode>;
    public Cast: ShowCast[];
    public Filter: string;
    public ModeratorNames?: string[];
@@ -24,7 +25,7 @@ export class Show {
       Title: string,
       Cover: string,
       Description: string,
-      Episode: Array<string>,
+      Episode: Array<Episode>,
       Cast: ShowCast[],
       Filter: string,
       Views: number,

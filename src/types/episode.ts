@@ -1,3 +1,15 @@
+export type Tags = {
+   id: number,
+   Episodes_id: EpisodeDto,
+   Tags_id: Tag
+}
+
+export type Tag = {
+   id: number,
+   Title: string,
+   Color: string
+}
+
 export type EpisodeDto = {
    id: string,
    user_created: string,
@@ -9,5 +21,6 @@ export type EpisodeDto = {
    Audio: string,
    Show_Id: string,
    Date: string,
-   Views: number
+   Views: number,
+   Tags: Tags[]
 };
