@@ -1,6 +1,22 @@
 import React from 'react';
 import tlisaci from '@/../public/images/tlisaci.jpg';
 import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
+import type { Metadata } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+
+export const metadata: Metadata = {
+    title: "Kontakt | Rádio TLIS",
+    description: "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
+    alternates: { canonical: SITE_URL + "/o-radiu/kontakt" },
+    openGraph: {
+        title: "Kontakt | Rádio TLIS",
+        description: "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
+        url: SITE_URL + "/o-radiu/kontakt",
+        siteName: "Rádio TLIS",
+        locale: "sk_SK",
+    },
+};
 
 const AboutUs: React.FC = () => {
     return (

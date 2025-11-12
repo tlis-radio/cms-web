@@ -1,6 +1,22 @@
 import React from 'react';
 import tlisaci from '@/../public/images/tlisaci.jpg';
 import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
+import type { Metadata } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+
+export const metadata: Metadata = {
+    title: "História | Rádio TLIS",
+    description: "História rádia TLIS — ako vzniklo naše študentské rádio a kľúčové momenty v jeho vývoji.",
+    alternates: { canonical: SITE_URL + "/o-radiu/historia" },
+    openGraph: {
+        title: "História | Rádio TLIS",
+        description: "História rádia TLIS — ako vzniklo naše študentské rádio a kľúčové momenty v jeho vývoji.",
+        url: SITE_URL + "/o-radiu/historia",
+        siteName: "Rádio TLIS",
+        locale: "sk_SK",
+    },
+};
 
 const AboutUs: React.FC = () => {
     return (

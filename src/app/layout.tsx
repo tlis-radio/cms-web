@@ -10,8 +10,19 @@ import { GalleryProvider } from "@/components/carousel/gallery/GalleryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+
 export const metadata: Metadata = {
-  title: 'Radio TLIS | tlis.sk',
+  title: 'Rádio TLIS',
+  description: 'Študentské rádio TLIS — alternatívna hudba, relácie a kultúra. Poslúchajte online a zistite viac o našom programe.',
+  alternates: { canonical: SITE_URL + "/" },
+  openGraph: {
+    title: 'Rádio TLIS',
+    description: 'Študentské rádio TLIS — alternatívna hudba, relácie a kultúra.',
+    url: SITE_URL + "/",
+    siteName: 'Rádio TLIS',
+    locale: 'sk_SK',
+  },
 };
 
 declare global {

@@ -1,5 +1,22 @@
 import tlisaci from '@/../public/images/darujte_nam_2_percenta.png';
 import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
+import type { Metadata } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+
+export const metadata: Metadata = {
+    title: "Dve percentá | Rádio TLIS",
+    description: "Ako poukázať 2% daní pre Rádio TLIS — postup, potrebné údaje a kontakty.",
+    alternates: { canonical: SITE_URL + "/dve-percenta" },
+    openGraph: {
+        title: "Dve percentá | Rádio TLIS",
+        description: "Ako poukázať 2% daní pre Rádio TLIS — postup, potrebné údaje a kontakty.",
+        url: SITE_URL + "/dve-percenta",
+        siteName: "Rádio TLIS",
+        locale: "sk_SK",
+    },
+};
+
 export default function DvePercenta() {
     return (
         <>       

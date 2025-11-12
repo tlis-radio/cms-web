@@ -1,6 +1,22 @@
 import React, { useState } from "react";
 import CmsApiService from "@/services/cms-api-service";
 import ShowsPage from "./ShowsPage";
+import type { Metadata } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+
+export const metadata: Metadata = {
+   title: "Relácie | Rádio TLIS",
+   description: "Prehľad relácií rádia TLIS — vyhľadajte relácie, moderátorov a posledné epizódy.",
+   alternates: { canonical: SITE_URL + "/relacie" },
+   openGraph: {
+      title: "Relácie | Rádio TLIS",
+      description: "Prehľad relácií rádia TLIS — vyhľadajte relácie, moderátorov a epizódy.",
+      url: SITE_URL + "/relacie",
+      siteName: "Rádio TLIS",
+      locale: "sk_SK",
+   },
+};
 
 const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) => {
    let filterValue = searchParams?.filter;
