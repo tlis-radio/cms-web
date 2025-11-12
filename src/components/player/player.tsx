@@ -27,7 +27,7 @@ const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ is
 };
 
 const Player: React.FC<{}> = () => {
-   const { mode, archiveName, currentTime, duration, updateCurrentTime, setMode, setIsPlaying } = usePlayer();
+   const { mode, archiveName, archiveShowSlug, currentTime, duration, updateCurrentTime, setMode, setIsPlaying } = usePlayer();
    const [isVisible, setIsVisible] = useState(true);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
@@ -88,6 +88,7 @@ const Player: React.FC<{}> = () => {
                <PlayerDisplay
                   mode={mode}
                   archiveName={archiveName}
+                  archiveShowSlug={archiveShowSlug}
                   currentTime={currentTime}
                   duration={duration}
                   updateCurrentTime={updateCurrentTime}

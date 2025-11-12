@@ -2,8 +2,9 @@ import React from "react";
 import { useEffect, useState } from "react";
 import ProgressControl from "./progress-control";
 import Marquee from "./marquee";
+import Link from "next/link";
 
-function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrentTime }: { mode: "stream" | "archive", archiveName: string | null, currentTime: number, duration: number, updateCurrentTime: (currentTime: number) => void }) {
+function PlayerDisplay({ mode, archiveName, archiveShowSlug, currentTime, duration, updateCurrentTime }: { mode: "stream" | "archive", archiveName: string | null, archiveShowSlug: string | null, currentTime: number, duration: number, updateCurrentTime: (currentTime: number) => void }) {
    const [titleParts, setTitleParts] = useState<string[]>([]);
 
    useEffect(() => {
@@ -31,7 +32,9 @@ function PlayerDisplay({ mode, archiveName, currentTime, duration, updateCurrent
       <div className="w-full overflow-hidden">
          {mode === "archive" ? (
             <div className="w-full">
-               <Marquee className="font-argentumSansLight text-sm sm:text-base" data-tip={archiveName} text={archiveName || ''} />
+               <Link href={`/relacie/${archiveShowSlug}`}>
+                  <Marquee className="font-argentumSansLight text-sm sm:text-base" data-tip={archiveName} text={archiveName || ''} />
+               </Link>
                <ProgressControl
                   currentTime={currentTime}
                   duration={duration}

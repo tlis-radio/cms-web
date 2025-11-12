@@ -12,9 +12,11 @@ interface PlayerContextType {
 
   mode: PlayerMode;
   archiveName: string | null;
+  archiveShowSlug: string | null;
   src: string;
   setMode: (mode: PlayerMode) => void;
   setArchiveName: (name: string | null) => void;
+  setArchiveShowSlug: (show: string | null) => void;
   setArchiveMetadata: (metadata: { author: string; album: string; image: string }) => void;
 
   setSrc: (src: string) => void;
@@ -39,6 +41,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isPlaying, setIsPlaying] = useState(false);
   const [mode, setMode] = useState<PlayerMode>("stream");
   const [archiveName, setArchiveName] = useState<string | null>(null);
+  const [archiveShowSlug, setArchiveShowSlug] = useState<string | null>(null);
   const [archiveMetadata, setArchiveMetadata] = useState<{
     author: string;
     album: string;
@@ -52,6 +55,33 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
   const [countedView, setCountedView] = useState<boolean>(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function resolveShowSlug() {
+      if (episodeId === null) {
+        setArchiveShowSlug(null);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/show-by-episode/${episodeId}`);
+        if (!res.ok) {
+          setArchiveShowSlug(null);
+          return;
+        }
+        const data = await res.json();
+        console.log(data);
+        if (!cancelled) setArchiveShowSlug(data.slug ?? null);
+      } catch (err) {
+        console.error('Failed to resolve show slug for episode', episodeId, err);
+        if (!cancelled) setArchiveShowSlug(null);
+      }
+    }
+
+    resolveShowSlug();
+    return () => { cancelled = true; };
+  }, [episodeId]);
 
   useEffect(() => {
     setCountedView(false);
@@ -236,6 +266,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         duration,
         setDuration,
         setArchiveEpisodeId,
+        archiveShowSlug,
+        setArchiveShowSlug,
       }}
     >
       {children}
