@@ -19,6 +19,7 @@ export type ShowDto = {
    user_updated: string,
    date_updated: string,
    Title: string,
+   Slug: string,
    Cover: string,
    Description: string,
    Episode: Array<Episode>,

@@ -51,8 +51,10 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
     return carouselPosts.map((program: any, index: number) => {
       return (
         <SwiperSlide key={index}>
-          <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
-          <h2 className="font-argentumSansMedium text-white text-xl pt-3 font-bold">{getDate(program.Date)}</h2>
+          <Link href={`/relacie/${program.showData?.Slug}?sharedEpisode=${program.id}`} className="flex flex-col items-center">
+            <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
+            <h2 className="font-argentumSansMedium text-white text-xl pt-3 font-bold">{getDate(program.Date)}</h2>
+          </Link>
         </SwiperSlide>
       );
     });

@@ -40,7 +40,7 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
         {limitedShows.map((show: any, index: number) => (
           <Link
             key={index}
-            href={`/relacie/${show.id}`}
+            href={`/relacie/${show.Slug}`}
             className="group transition-transform hover:scale-105 flex flex-col"
           >
             <div className="aspect-square relative rounded-lg overflow-hidden shadow-lg order-1 sm:order-0 mb-8 sm:mb-2">

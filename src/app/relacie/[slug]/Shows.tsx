@@ -191,7 +191,7 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount }
         setIsLoading(true);
         const nextPage = page + 1;
         setPage(nextPage);
-        const { episodes: newEpisodes, totalCount: newTotalCount } = await loadMoreEpisodes(show.id, nextPage);
+    const { episodes: newEpisodes, totalCount: newTotalCount } = await loadMoreEpisodes(String(show.id), nextPage);
         setEpisodesList((prev: any[]) => [...prev, ...newEpisodes.episodes]);
         setHasMoreEpisodes(newTotalCount > episodesList.length + newEpisodes.episodes.length);
         setIsLoading(false);

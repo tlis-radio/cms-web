@@ -78,6 +78,26 @@ const showEndpoints = {
       }
    },
 
+   getShowBySlug: async (slug: string): Promise<Show> => {
+      const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
+         filter: { Slug: { _eq: slug } },
+         fields: ['*', 'Cast.Cast_id.Name'],
+      }));
+      if (!shows || shows.length === 0) {
+         throw new Error(`Show with slug '${slug}' not found`);
+      }
+      return shows[0];
+   },
+
+   getShowByEpisodeId: async (episodeId: number | string): Promise<Show | null> => {
+      const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
+       filter: { Episode: { _in: [Number(episodeId)] } },
+         fields: ['*', 'Cast.Cast_id.Name'],
+      }));
+      if (!shows || shows.length === 0) return null;
+      return shows[0];
+   },
+
    getShowTagsById: async (id: string): Promise<Array<Tag>> => {
       const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
          fields: ['Episode.Tags.Tags_id.*'],

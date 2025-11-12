@@ -11,6 +11,7 @@ export class Show {
    public Cover: string;
    public Description: string;
    public Episode: Array<Episode>;
+   public Slug: string;
    public Cast: ShowCast[];
    public Filter: string;
    public ModeratorNames?: string[];
@@ -23,6 +24,7 @@ export class Show {
       user_updated: string,
       date_updated: string,
       Title: string,
+      Slug: string,
       Cover: string,
       Description: string,
       Episode: Array<Episode>,
@@ -41,6 +43,7 @@ export class Show {
       this.Description = Description;
       this.Episode = Episode;
       this.Cast = Cast;
+      this.Slug = Slug;
       this.Filter = Filter;
       this.ModeratorNames = ModeratorNames;
       this.Views = Views;
@@ -54,6 +57,7 @@ export class Show {
          dto.user_updated,
          dto.date_updated,
          dto.Title,
+         dto.Slug,
          dto.Cover,
          dto.Description,
          dto.Episode,

@@ -27,7 +27,7 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
    }, []);
 
    return (
-      <Link href={`/relacie/${show.id}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
+      <Link href={`/relacie/${show.Slug}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
          <div className="sm:w-48 w-full flex-shrink-0">
             <TlisImage src={show.Cover} alt={show.Title} />
          </div>
