@@ -13,10 +13,14 @@ interface PlayerContextType {
   mode: PlayerMode;
   archiveName: string | null;
   archiveShowSlug: string | null;
+  archiveShowName: string | null;
+  archiveEpisodeCover: string | null;
   src: string;
   setMode: (mode: PlayerMode) => void;
   setArchiveName: (name: string | null) => void;
   setArchiveShowSlug: (show: string | null) => void;
+  setArchiveShowName: (name: string | null) => void;
+  setArchiveEpisodeCover: (cover: string | null) => void;
   setArchiveMetadata: (metadata: { author: string; album: string; image: string }) => void;
 
   setSrc: (src: string) => void;
@@ -42,6 +46,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [mode, setMode] = useState<PlayerMode>("stream");
   const [archiveName, setArchiveName] = useState<string | null>(null);
   const [archiveShowSlug, setArchiveShowSlug] = useState<string | null>(null);
+  const [archiveShowName, setArchiveShowName] = useState<string | null>(null);
+  const [archiveEpisodeCover, setArchiveEpisodeCover] = useState<string | null>(null);
   const [archiveMetadata, setArchiveMetadata] = useState<{
     author: string;
     album: string;
@@ -255,6 +261,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setIsPlaying,
         mode,
         archiveName,
+        archiveShowName,
+        archiveEpisodeCover,
         setArchiveMetadata,
         src,
         currentTime,
@@ -262,6 +270,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         updateCurrentTime,
         setMode,
         setArchiveName,
+        setArchiveShowName,
+        setArchiveEpisodeCover,
         setSrc,
         duration,
         setDuration,

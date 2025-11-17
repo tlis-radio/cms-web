@@ -22,7 +22,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
         };
 
         return (
-          <div key={index} className="w-full border-t">
+          <div key={index} className="w-full border-t max-[500px]">
             <button
               className="px-6 w-full hover:text-[#96120F] hover:bg-white transition-colors flex justify-center"
               onClick={(e) => {
@@ -65,7 +65,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
 
   return (
     <>
-      <div className="lg:hidden my-auto mr-4">
+      <div className="lg:hidden my-auto mr-4 ml-auto">
         <button className="flex flex-col items-center justify-center w-12 h-12" onClick={toggleVisibility}>
           <span className={classNames("block w-8 h-1 bg-white my-1 transition-transform duration-300 ease-in-out", {
             "transform rotate-45 translate-y-3": isOpen,
