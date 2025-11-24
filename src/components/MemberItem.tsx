@@ -21,6 +21,7 @@ export default function MemberGridItem({ member } :{ member: Member }) {
             <TlisImage
                 src={member.Picture}
                 alt={member.Name}
+                sizeMultiplier={2}
                 className="object-cover group-hover:scale-105 transition-transform h-full w-full"
             />
         </div>
