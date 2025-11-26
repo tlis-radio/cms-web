@@ -13,14 +13,14 @@ const inter = Inter({ subsets: ["latin"] });
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export const metadata: Metadata = {
-  title: 'Rádio TLIS',
-  description: 'Študentské rádio TLIS — alternatívna hudba, relácie a kultúra. Poslúchajte online a zistite viac o našom programe.',
+  title: 'Radio TLIS | tlis.sk',
+  description: 'Radio TLIS — alternatívna hudba, relácie a kultúra.',
   alternates: { canonical: SITE_URL + "/" },
   openGraph: {
-    title: 'Rádio TLIS',
-    description: 'Študentské rádio TLIS — alternatívna hudba, relácie a kultúra.',
+    title: 'Radio TLIS | tlis.sk',
+    description: 'Radio TLIS — alternatívna hudba, relácie a kultúra.',
     url: SITE_URL + "/",
-    siteName: 'Rádio TLIS',
+    siteName: 'Radio TLIS',
     locale: 'sk_SK',
   },
 };
