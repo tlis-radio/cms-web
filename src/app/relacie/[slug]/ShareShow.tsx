@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ShareShow() {
-    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
+    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata, setArchiveShowName, setArchiveEpisodeCover } = usePlayer();
 
     const searchParams = useSearchParams();
     const [sharedEpisode, setSharedEpisode] = useState<Episode | null>(null);
@@ -35,6 +35,8 @@ export default function ShareShow() {
     function playEpisode(episode: any) {
         setMode("archive");
         setArchiveName(episode.Title);
+        setArchiveShowName("Rádio TLIS");
+        setArchiveEpisodeCover(episode.Cover);
         setArchiveMetadata({
             author: "Rádio TLIS",
             album: "Rádio TLIS",

@@ -46,7 +46,7 @@ export async function POST(
         }
         shareTrackingMap.get(trackingKey)!.add(ip);
 
-        console.log(`Counting view for ID: ${id}, IP: ${ip}, Date: ${today}`);
+        console.log(`Counting share for ID: ${id}, IP: ${ip}, Date: ${today}`);
         const episode = await getDirectusInstance().request(readItem("Episodes", id, { fields: ['Title'] }));
         await getDirectusInstance().request(createItem("track_shares", {
             episode: id,

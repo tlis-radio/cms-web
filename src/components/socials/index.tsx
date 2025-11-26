@@ -66,8 +66,8 @@ const Socials = ({mobile, additionalLinks}: {mobile: 'mobile' | 'desktop' | 'bot
          mobile === 'both'
          ? ''
          : mobile === 'mobile'
-         ? 'min-[450px]:hidden'
-         : 'max-[450px]:hidden'
+         ? 'min-[500px]:hidden'
+         : 'max-[500px]:hidden ml-auto'
       }`}>
          {createSocialLinks()}
       </div>

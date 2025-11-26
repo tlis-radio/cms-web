@@ -32,7 +32,7 @@ function calculateContrast(hexColor: string): string {
 }
 
 function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
-    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata } = usePlayer();
+    const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata, setArchiveShowName, setArchiveEpisodeCover } = usePlayer();
 
     const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
     const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
@@ -53,6 +53,8 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
     function selectEpisode(episode: any) {
         setMode("archive");
         setArchiveName(episode.Title);
+        setArchiveShowName(ShowName);
+        setArchiveEpisodeCover(episode.Cover);
         setArchiveMetadata({
             author: ShowName,
             album: ShowName,
