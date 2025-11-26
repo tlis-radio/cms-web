@@ -6,11 +6,11 @@ import type { Metadata } from "next";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export const metadata: Metadata = {
-    title: "Kontakt | Radio TLIS | tlis.sk",
+    title: "Kontakt | Radio TLIS",
     description: "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
     alternates: { canonical: SITE_URL + "/o-radiu/kontakt" },
     openGraph: {
-        title: "Kontakt | Radio TLIS | tlis.sk",
+        title: "Kontakt | Radio TLIS",
         description: "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
         url: SITE_URL + "/o-radiu/kontakt",
         siteName: "Radio TLIS",
