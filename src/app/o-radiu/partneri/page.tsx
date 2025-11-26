@@ -6,14 +6,14 @@ import type { Metadata } from "next";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export const metadata: Metadata = {
-    title: "Partneri | Rádio TLIS",
-    description: "Partneri rádia TLIS — organizácie a subjekty, s ktorými spolupracujeme.",
+    title: "Partneri | Radio TLIS",
+    description: "Partneri Radia TLIS — organizácie a subjekty, s ktorými spolupracujeme.",
     alternates: { canonical: SITE_URL + "/o-radiu/partneri" },
     openGraph: {
-        title: "Partneri | Rádio TLIS",
-        description: "Partneri rádia TLIS — organizácie a subjekty, s ktorými spolupracujeme.",
+        title: "Partneri | Radio TLIS",
+        description: "Partneri Radia TLIS — organizácie a subjekty, s ktorými spolupracujeme.",
         url: SITE_URL + "/o-radiu/partneri",
-        siteName: "Rádio TLIS",
+        siteName: "Raio TLIS",
         locale: "sk_SK",
     },
 };

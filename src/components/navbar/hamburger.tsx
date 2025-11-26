@@ -31,7 +31,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
               }}
               type="button"
             >
-              <Link href={link.url} onClick={handleMainLinkClick} className="px-8 py-4 uppercase">
+              <Link href={link.url} onClick={handleMainLinkClick} className="font-argentumSansLight px-8 py-4 uppercase">
                 {link.text}
               </Link>
               <span className="absolute right-4 ml-2 py-4">{showSubLinks ? "▲" : "▼"}</span>
@@ -40,7 +40,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
               <div key={subIndex} className="w-full border-t bg-[#a83b38]">
                 <Link href={subLink.url} target={subLink.target}>
                   <button
-                    className="px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase"
+                    className="font-argentumSansLight px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase"
                     onClick={toggleVisibility}
                   >
                     {subLink.text}
@@ -52,7 +52,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
         );
       }
       return (
-        <div key={index} className="w-full border-t">
+        <div key={index} className="font-argentumSansLight w-full border-t">
           <Link href={link.url}>
             <button className="py-4 w-full hover:text-[#96120F] hover:bg-white transition-colors uppercase" onClick={toggleVisibility}>
               {link.text}

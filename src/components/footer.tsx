@@ -9,7 +9,7 @@
 
 import Link from "next/link";
 import Socials from "./socials";
-import { faMixcloud, faSoundcloud } from "@fortawesome/free-brands-svg-icons";
+import { faSpotify, faMixcloud, faSoundcloud, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 // Custom playlist icon definition
@@ -31,13 +31,15 @@ const Footer = () => {
    return (
       <footer className='bg-[#111111] text-white w-full py-8 px-4 mt-auto'>
          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Radio TLIS | ***strictly alternative*** | Všetky práva vyhradené</p>
+            <p className="font-argentumSansLight text-gray-400 text-sm">[ Všetky práva vyhradené . © {new Date().getFullYear()} Radio TLIS . ***strictly alternative*** ] </p>
             <div className="flex flex-col items-center md:items-end">
                <Socials mobile={'both'}
                   additionalLinks={[
+                     { icon: faYoutube, url: "https://youtube.com/@radiotlis" },
+                     { icon: faSpotify, url: "https://open.spotify.com/user/wskoqdo1mcisldwdvmzgj8bvf" },
                      { icon: faSoundcloud, url: "https://soundcloud.com/radiotlis" },
-                     { icon: faMixcloud, url: "https://mixcloud.com/radiotlis" },
-                     { icon: CustomPlaylistIcon, url: "https://radia.sk/radia/tlis/playlist" }
+                     { icon: faMixcloud, url: "https://mixcloud.com/radiotlis" }
+
                   ]} />
             </div>
          </div>

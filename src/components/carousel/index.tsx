@@ -8,6 +8,7 @@ import { EffectCoverflow, Navigation, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
+import { stringify } from "querystring";
 
 function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, loadingError?: boolean }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
@@ -37,15 +38,21 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
       swiper.slides[swiper.activeIndex].classList.add('active');
    };*/
 
-  function getDate(dateString: string) {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return date.toLocaleDateString("sk-SK", options).replace(/\//g, ".").replace(":", "_").replace(" ", " | ").toUpperCase();
-  }
+function getDate(dateString: string) {
+  const date = new Date(dateString);
+
+  const datePart = date.toLocaleDateString("sk-SK", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+
+  const timePart = date.toLocaleTimeString("sk-SK", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return `${datePart} | ${timePart.replace(":", "_")}`.toUpperCase();
+}
 
   const createProgramLinks = () => {
     return carouselPosts.map((program: any, index: number) => {
@@ -53,7 +60,7 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
         <SwiperSlide key={index}>
           <Link href={`/relacie/${program.showData?.Slug}?sharedEpisode=${program.id}`} className="flex flex-col items-center">
             <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
-            <h2 className="font-argentumSansMedium text-white text-xl pt-3 font-bold">{getDate(program.Date)}</h2>
+            <h2 className="font-argentumSansLight text-white text-xl pt-3 font-bold">[ {getDate(program.Date)} ]</h2>
           </Link>
         </SwiperSlide>
       );
@@ -109,22 +116,22 @@ function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, l
           }
 
           {carouselPosts.length > 1 ?
-            <div className="font-argentumSansMedium relative w-full sm:absolute sm:top-1/2 sm:-translate-y-1/2 z-10 pointer-events-none">
+            <div className="font-argentumSansLight relative w-full sm:absolute sm:top-1/2 sm:-translate-y-1/2 z-10 pointer-events-none">
               <div className="relative h-[100px] flex justify-between px-[2rem]">
                 <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
                   <button className="swiper-button-prev"></button>
-                  <span className="text-white relative uppercase mt-1">Zmeškal si</span>
+                  <span className="text-white relative uppercase mt-1 font-bold">Zmeškal si</span>
                 </div>
                 <div className="relative h-[100px] flex items-center flex-col gap-3 pointer-events-auto">
                   <button className="swiper-button-next"></button>
-                  <span className="text-white relative uppercase mt-1">Zmeškáš</span>
+                  <span className="text-white relative uppercase mt-1 font-bold">Zmeškáš</span>
                 </div>
               </div>
             </div> : null}
 
         </Swiper>) : (
         <div className="relative py-8">
-          <h3 className="font-argentumSansMedium text-xl mb-3 text-white">Momentálne nie je žiadny program</h3>
+          <h3 className="font-argentumSansLight text-xl mb-3 text-white">Momentálne nie je žiadny program</h3>
           <p className="text-gray-200 mb-4">Pozrite si náš archív minulých relácií</p>
           <Link
             href="/relacie"
