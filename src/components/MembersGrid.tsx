@@ -60,9 +60,9 @@ const Members: React.FC<MembersProps> = async ({ header = true }) => {
 
                 return (
                     <div key={roleKey} className="space-y-6">
-                        <h2 className="text-2xl text-left text-white font-semibold">{roleTitle}</h2>
+                        <h2 className="font-argentumSansLight text-2xl text-left text-white font-semibold">{roleTitle}</h2>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        <div className="font-argentumSansLight grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                             {roleMembers.map((member) => (
                                 <MemberGridItem member={member} key={member.id} />
                             ))}

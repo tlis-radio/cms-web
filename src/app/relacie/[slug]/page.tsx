@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
    const slug = params.slug;
    try {
       const show = await CmsApiService.Show.getShowBySlug(slug);
-      const title = show?.Title ? `${show.Title} | Rádio TLIS` : `Relácia | Rádio TLIS`;
-      const description = show?.Description || `Relácia ${show?.Title || slug} na Rádiu TLIS.`;
+      const title = show?.Title ? `${show.Title} | Radio TLIS` : `Relácia | Radio TLIS`;
+      const description = show?.Description || `Relácia ${show?.Title || slug} na Radiu TLIS.`;
       const image = show?.Cover ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${show.Cover}` : undefined;
       return {
          title,
@@ -23,17 +23,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             title,
             description,
             url: SITE_URL + "/relacie/" + slug,
-            siteName: "Rádio TLIS",
+            siteName: "Radio TLIS",
             locale: "sk_SK",
             images: image ? [{ url: image }] : undefined,
          },
       };
    } catch (e) {
       return {
-         title: `Relácia | Rádio TLIS`,
-         description: `Informácie o relácii na Rádiu TLIS.`,
+         title: `Relácia | Radio TLIS`,
+         description: `Informácie o relácii na Radiu TLIS.`,
          alternates: { canonical: SITE_URL + "/relacie/" + slug },
-         openGraph: { title: `Relácia | Rádio TLIS`, description: `Informácie o relácii.`, url: SITE_URL + "/relacie/" + slug, siteName: "Rádio TLIS", locale: "sk_SK" },
+         openGraph: { title: `Relácia | Radio TLIS`, description: `Informácie o relácii.`, url: SITE_URL + "/relacie/" + slug, siteName: "Radio TLIS", locale: "sk_SK" },
       };
    }
 }

@@ -5,14 +5,14 @@ import type { Metadata } from "next";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export const metadata: Metadata = {
-    title: "Dve percentá | Rádio TLIS",
+    title: "Dve percentá | Radio TLIS",
     description: "Ako poukázať 2% daní pre Rádio TLIS — postup, potrebné údaje a kontakty.",
     alternates: { canonical: SITE_URL + "/dve-percenta" },
     openGraph: {
-        title: "Dve percentá | Rádio TLIS",
+        title: "Dve percentá | Radio TLIS",
         description: "Ako poukázať 2% daní pre Rádio TLIS — postup, potrebné údaje a kontakty.",
         url: SITE_URL + "/dve-percenta",
-        siteName: "Rádio TLIS",
+        siteName: "Radio TLIS",
         locale: "sk_SK",
     },
 };
@@ -21,15 +21,15 @@ export default function DvePercenta() {
     return (
         <>       
         <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> dve percentá</h1>
-        <div className="max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg flex flex-col items-center">
+        <div className="font-argentumSansLight max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg flex flex-col items-center">
             <GalleryThumbnail
                 src={tlisaci.src}
                 alt="Zostava členov rádia TLIS"
                 className='rounded-xl w-full h-auto object-cover shadow-lg'
             />   
-            <p className="text-sm leading-relaxed mb-6 mt-6">Internátne rozhlasové štúdio TLIS (IRŠ TLIS) je jediným študentským rozhlasovým štúdiom v Bratislave. Dávame študentom aj neštudentom priestor a možnosť realizovať sa pri tvorbe audiovizuálnej produkcie - tvorbe rozhlasových relácií, hudobných playlistov či organizácii hudobných eventov. Ponúkame možnosť vyskúšať si prácu v masmediálnej sfére - či už spoza mikrofónu, technického pultu alebo organizačno - propagačného backgroundu. Našim cieľom je poskytnúť študentom a dobrovoľníkom neoceniteľnú prax a vychovávať tak nové generácie moderátorov, hudobných redaktorov, dramaturgov, šéfredaktorov, technikov a marketérov zameraných nielen na hudobný priemysel.</p>
-            <p className="text-lg leading-relaxed mb-6">Ak nemáte kam, dajte to nám.<br></br> Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.</p>
-            <p className="text-lg leading-relaxed mb-6">Ďakujeme! ❤</p>
+            <p className="text-sm leading-relaxed mb-6 mt-6">Internátne rozhlasové štúdio TLIS (IRŠ TLIS) je <b>jediným študentským rozhlasovým štúdiom v Bratislave.</b> Dávame študentom aj neštudentom <b>priestor a možnosť realizovať sa pri tvorbe audiovizuálnej produkcie</b> - <i>tvorbe rozhlasových relácií, hudobných playlistov či organizácii hudobných eventov</i>. Ponúkame možnosť vyskúšať si prácu v <b>masmediálnej sfére</b> - <i>či už spoza mikrofónu, technického pultu alebo organizačno - propagačného backgroundu.</i> Našim cieľom je poskytnúť študentom a dobrovoľníkom <b>neoceniteľnú prax</b> a vychovávať tak <b>nové generácie moderátorov, hudobných redaktorov, dramaturgov, šéfredaktorov, technikov a marketérov zameraných nielen na hudobný priemysel.</b></p>
+            <p className="text-xl leading-relaxed mb-6"><b>Ak nemáte kam, dajte to nám.<br></br> Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.</b></p>
+            <p className="text-2xl leading-relaxed mb-6"><b>Ďakujeme! ❤</b></p>
             <div className="border-t border-gray-100 mt-2 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <h2 className="text-xl font-semibold mb-2 text-[#d43c4a]">Daňové priznanie vám podáva zamestnávateľ:</h2></div>
             <p className="mb-2"><b>1.</b> Požiadajte svojho zamestnávateľa o vykonanie ročného zúčtovania preddavkov na daň z príjmov. Zamestnávateľ vám následne vystaví a potvrdí
@@ -66,7 +66,7 @@ export default function DvePercenta() {
                 </ul>
             </div>
 
-            <p className="text-sm text-gray-200">Ak potrebujete pomoc s vyplnením tlačív, kontaktujte nás.</p>
+            <p className="text-sm text-gray-200"><i>Ak potrebujete pomoc s vyplnením tlačív, kontaktujte nás.</i></p>
         </div>
         </>
     );

@@ -150,7 +150,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                             )}
                             <button
                                 onClick={() => setDescriptionExpanded(!isDescriptionExpanded)}
-                                className={"mt-2 hover:underline absolute bottom-0 -translate-x-1/2 text-[#D43C4A]"}
+                                className={"mt-2 font-bold underline absolute bottom-0 -translate-x-1/2 text-[#D43C4A]"}
                             >
                                 {isDescriptionExpanded ? "SKRYŤ" : "ZOBRAZIŤ VIAC"}
                             </button>
@@ -220,7 +220,7 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount }
     }, [loaderRef, isLoading, hasMoreEpisodes]);
 
     return (
-        <div className="mb-[80px] flex flex-col w-full justify-center md:mb-0">
+        <div className="font-argentumSansBold mb-[80px] flex flex-col w-full justify-center md:mb-0">
             <Link href="/relacie" className="w-full text-white text-left px-2 mb-4 flex gap-2 justify-center items-center">
                 <FontAwesomeIcon icon={faChevronLeft} className="w-4" /><p>ZOBRAZIŤ VŠETKY RELÁCIE</p>
             </Link>
@@ -239,24 +239,25 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount }
                                 />
                             </div>
                             <div className="m-auto flex h-max w-full flex-col gap-4">
-                                <h1 className="text-4xl font-semibold">{show.Title}</h1>
-                                <p className="flex flex-wrap gap-1 justify-center w-full"> Redaktori:
+                                <h1 className="font-argentumSansBold text-6xl">{show.Title}</h1>
+                                <p className="font-argentumSansLight flex flex-wrap gap-1 justify-center w-full"> Redaktori:
+                                    <b>
                                     {show.Cast.map((castMember: ShowCast, index: number) => (
-                                        <span key={index}>{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ',' : ''}</span>
-                                    ))}
+                                        <span key={index}>{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ' / ' : ''}</span>
+                                    ))}</b>
                                 </p>
-                                <p>Počet epizód: {totalCount}</p>
+                                <p className="font-argentumSansLight">Počet epizód: <b>{totalCount}</b></p>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col h-full gap-4">
+                    <div className="font-argentumSansLight flex flex-col h-full gap-4">
                         <Markdown>
                             {show.Description}
                         </Markdown>
                     </div>
                 </div>
 
-                <div className="mb-8">
+                <div className="font-argentumSansLight mb-8">
                     {showTags && showTags.length > 0 && (
                         <div className="flex flex-wrap gap-2 py-4">
                             {showTags.map((tag: any) => {

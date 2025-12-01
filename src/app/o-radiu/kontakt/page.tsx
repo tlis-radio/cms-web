@@ -6,14 +6,14 @@ import type { Metadata } from "next";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export const metadata: Metadata = {
-    title: "Kontakt | Rádio TLIS",
+    title: "Kontakt | Radio TLIS",
     description: "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
     alternates: { canonical: SITE_URL + "/o-radiu/kontakt" },
     openGraph: {
-        title: "Kontakt | Rádio TLIS",
+        title: "Kontakt | Radio TLIS",
         description: "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
         url: SITE_URL + "/o-radiu/kontakt",
-        siteName: "Rádio TLIS",
+        siteName: "Radio TLIS",
         locale: "sk_SK",
     },
 };
@@ -26,7 +26,7 @@ const AboutUs: React.FC = () => {
 
                 <div className="flex flex-col gap-8 items-center">
                     <div className="space-y-4 order-2 md:order-1">
-                        <p className='font-argentumSansRegular text-lg leading-relaxed'>
+                        <p className='font-argentumSansLight text-lg leading-relaxed'>
                             Ak máte nutkavú potrebu kontaktovať Radio TLIS, alebo nejakého člena rádia, samozrejme, že to môžete urobiť. Máme pre Vás hneď niekoľko mailových adries, ktoré Vám môžu pomôcť, čo najpresnejšie zacieliť svoje otázky, prosby či pochvaly.
                         </p>
                         <p className='font-argentumSansRegular text-lg leading-relaxed'>
