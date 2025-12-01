@@ -76,9 +76,11 @@ export default function Marquee({ data }: { data?: MarqueeLinkType[] }) {
                     <div className="marquee-content">
                         {repeatedData.map((item, index) => (
                             <span key={index} className="inline-flex items-center">
-                                <Link href={item.url} target={item.target} className="text-white text-xl mx-4 hover:underline uppercase font-bold">
-                                    {item.text}
-                                </Link>
+                                {item.url ? 
+                                    <Link href={item.url} target={item.target} className="text-white text-xl mx-4 hover:underline uppercase font-bold">
+                                        {item.text}
+                                    </Link> : <p className="text-white text-xl mx-4 hover:underline uppercase font-bold">{item.text}</p>
+                                }
                                  <Separator />
                             </span>
                         ))}
@@ -86,9 +88,12 @@ export default function Marquee({ data }: { data?: MarqueeLinkType[] }) {
                     <div className="marquee-content" aria-hidden="true">
                         {repeatedData.map((item, index) => (
                             <span key={`dup-${index}`} className="inline-flex items-center">
-                                <Link href={item.url} target={item.target} className="text-white text-xl mx-4 uppercase font-bold">
-                                    {item.text}
-                                </Link>
+                                {
+                                    item.url ? 
+                                    <Link href={item.url} target={item.target} className="text-white text-xl mx-4 hover:underline uppercase font-bold">
+                                        {item.text}
+                                    </Link> : <p className="text-white text-xl mx-4 hover:underline uppercase font-bold">{item.text}</p>
+                                }
                                 <Separator />
                             </span>
                         ))}

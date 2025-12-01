@@ -6,14 +6,14 @@ import type { Metadata } from "next";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export const metadata: Metadata = {
-   title: "Relácie | Rádio TLIS",
-   description: "Prehľad relácií rádia TLIS — vyhľadajte relácie, moderátorov a posledné epizódy.",
+   title: "Relácie | Radio TLIS",
+   description: "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a posledné epizódy.",
    alternates: { canonical: SITE_URL + "/relacie" },
    openGraph: {
-      title: "Relácie | Rádio TLIS",
-      description: "Prehľad relácií rádia TLIS — vyhľadajte relácie, moderátorov a epizódy.",
+      title: "Relácie | Radio TLIS",
+      description: "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a epizódy.",
       url: SITE_URL + "/relacie",
-      siteName: "Rádio TLIS",
+      siteName: "Radio TLIS",
       locale: "sk_SK",
    },
 };
