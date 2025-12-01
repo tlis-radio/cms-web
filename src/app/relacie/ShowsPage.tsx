@@ -83,7 +83,7 @@ export default function ShowsPage({ shows, loadingError, totalCount }: { shows: 
           <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> relácie
         </h1>
 
-        <div className="ml-auto relative min-w-[180px]">
+        <div className="font-argentumSansLight ml-auto relative min-w-[180px]">
           <Select
             options={[
               { value: "active", label: "AKTÍVNE RELÁCIE" },
