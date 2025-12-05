@@ -41,7 +41,7 @@ async function withLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
 }
 
 /**
- * Track a segment play for a session+asset.
+ * Track a segment play for a session+episode.
  * - Increments the segment count in the array
  * - Logs to console
  * - Persists to Directus
