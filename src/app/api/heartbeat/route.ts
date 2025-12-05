@@ -12,18 +12,23 @@ const SEGMENT_DURATION = 15;
  * Called by the player when segment changes to report actual playback position.
  * 
  * POST /api/heartbeat
- * Body: { episodeId: number, currentTime: number }
+ * Body: { episodeId: number, currentTime: number, sessionId?: string }
+ * 
+ * For native site: sessionId is retrieved from cookies
+ * For embed widgets: sessionId is sent in request body
  */
 export async function POST(request: NextRequest) {
   try {
-    const sessionId = getSessionId(request);
+    
+    const body = await request.json();
+    const { episodeId, currentTime, sessionId: bodySessionId } = body;
+    
+    // Try to get session ID from body (embed) or cookie (native site)
+    const sessionId = bodySessionId || getSessionId(request);
     if (!sessionId) {
       return NextResponse.json({ error: "No session" }, { status: 400 });
     }
-
-    const body = await request.json();
-    const { episodeId, currentTime } = body;
-
+    
     if (typeof episodeId !== "number" || typeof currentTime !== "number") {
       return NextResponse.json(
         { error: "Missing episodeId or currentTime" },

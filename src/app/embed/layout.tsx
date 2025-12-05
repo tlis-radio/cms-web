@@ -1,6 +1,6 @@
 import "./embed.css";
 import { EmbedPlayerProvider } from "./context/EmbedPlayerContext";
-import SessionInit from "@/components/SessionInit";
+import EmbedSessionInit from "@/components/EmbedSessionInit";
 
 export const metadata = {
   title: 'Rádio TLIS - Embed Widget',
@@ -18,7 +18,7 @@ export default function EmbedLayout({
   return (
     <html lang="sk">
       <body className="bg-transparent">
-        <SessionInit />
+        <EmbedSessionInit />
         <EmbedPlayerProvider>
           {children}
         </EmbedPlayerProvider>

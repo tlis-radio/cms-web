@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import { getEmbedSessionId } from "@/components/EmbedSessionInit";
 
 interface EmbedPlayerContextType {
   isPlaying: boolean;
@@ -176,12 +177,21 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       if (segmentIndex === lastTrackedSegment.current) return;
       lastTrackedSegment.current = segmentIndex;
 
+      const sessionId = getEmbedSessionId();
+      if (!sessionId) {
+        console.warn("No session ID available for tracking");
+        return;
+      }
+
       try {
         await fetch("/api/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ episodeId: episodeId, currentTime: audio.currentTime }),
-          credentials: "include",
+          body: JSON.stringify({ 
+            episodeId: episodeId, 
+            currentTime: audio.currentTime,
+            sessionId: sessionId 
+          }),
         });
       } catch (err) {
         console.error("Segment tracking failed:", err);
