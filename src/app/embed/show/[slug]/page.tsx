@@ -19,13 +19,20 @@ export default async function ShowEmbedPage({ params }: ShowEmbedPageProps) {
     return (
       <ShowListWidget
         show={{
-          id: show.id,
+          id: Number(show.id),
           Title: show.Title,
           Cover: show.Cover,
           Slug: show.Slug,
           Description: show.Description,
         }}
-        episodes={episodeData.episodes}
+        episodes={episodeData.episodes.map((episode) => ({
+          id: Number(episode.id),
+          Title: episode.Title,
+          Cover: episode.Cover,
+          Audio: episode.Audio,
+          Date: episode.Date,
+          Views: episode.Views,
+        }))}
         totalCount={episodeData.totalCount}
       />
     );
