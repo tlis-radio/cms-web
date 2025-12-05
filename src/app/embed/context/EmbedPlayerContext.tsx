@@ -105,18 +105,16 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   // Handle play/pause
   useEffect(() => {
-    let handleCanPlay: (() => void) | null = null;
-
     if (audioRef.current && src) {
       if (isPlaying) {
         setIsLoading(true);
         audioRef.current.load();
 
-        handleCanPlay = () => {
+        const handleCanPlay = () => {
           setIsLoading(false);
           if (audioRef.current) {
             audioRef.current.currentTime = currentTime;
-            audioRef.current.removeEventListener("canplay", handleCanPlay!);
+            audioRef.current.removeEventListener("canplay", handleCanPlay);
           }
         };
         audioRef.current.addEventListener("canplay", handleCanPlay);
@@ -125,11 +123,14 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
           console.warn(err);
           setIsLoading(false);
         });
+        
+        return () => {
+          if (audioRef.current) {
+            audioRef.current.removeEventListener("canplay", handleCanPlay);
+          }
+        };
       } else {
         audioRef.current.pause();
-        if (handleCanPlay) {
-          audioRef.current.removeEventListener("canplay", handleCanPlay);
-        }
         setIsLoading(false);
       }
     }
@@ -205,7 +206,15 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     const handleSeeked = () => sendHeartbeat();
 
-    const interval = setInterval(sendHeartbeat, 15000);
+    // Use recursive setTimeout instead of setInterval to prevent overlapping requests
+    let timeoutId: NodeJS.Timeout;
+    const scheduleNextHeartbeat = () => {
+      timeoutId = setTimeout(async () => {
+        await sendHeartbeat();
+        scheduleNextHeartbeat();
+      }, 15000);
+    };
+    scheduleNextHeartbeat();
 
     const audio = audioRef.current;
     if (audio) {
@@ -218,7 +227,7 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
 
     return () => {
-      clearInterval(interval);
+      clearTimeout(timeoutId);
       if (audio) {
         audio.removeEventListener("play", handlePlay);
         audio.removeEventListener("seeked", handleSeeked);
@@ -240,7 +249,6 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
         setEpisodeCover,
         src,
         setSrc,
-        // assetId removed; use episodeId/setEpisodeId
         currentTime,
         setCurrentTime,
         updateCurrentTime,

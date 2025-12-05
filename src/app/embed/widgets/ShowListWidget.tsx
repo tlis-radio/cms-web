@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import { useEmbedPlayer } from "../context/EmbedPlayerContext";
 import EmbedImage from "../components/EmbedImage";
 import EmbedPlayer from "../components/EmbedPlayer";

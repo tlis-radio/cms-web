@@ -286,8 +286,15 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       sendHeartbeat();
     };
 
-    // Periodic tracking every 15 seconds
-    const interval = setInterval(sendHeartbeat, 15000);
+    // Use recursive setTimeout instead of setInterval to prevent overlapping requests
+    let timeoutId: NodeJS.Timeout;
+    const scheduleNextHeartbeat = () => {
+      timeoutId = setTimeout(async () => {
+        await sendHeartbeat();
+        scheduleNextHeartbeat();
+      }, 15000);
+    };
+    scheduleNextHeartbeat();
 
     const audio = audioRef.current;
     if (audio) {
@@ -300,7 +307,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     return () => {
-      clearInterval(interval);
+      clearTimeout(timeoutId);
       if (audio) {
         audio.removeEventListener("play", handlePlay);
       }

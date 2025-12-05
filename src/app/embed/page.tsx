@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export default function EmbedIndexPage() {
   return (
     <div className="min-h-screen text-white p-8 flex flex-col items-center justify-center">

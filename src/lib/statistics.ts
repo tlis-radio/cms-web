@@ -4,12 +4,40 @@ import { createItem, readItems, updateItem } from "@directus/sdk";
 // In-memory cache to reduce DB reads (sessionId:episodeId -> segments array)
 const cache: Map<string, number[]> = new Map();
 
+// Lock map to prevent race conditions when creating/updating records
+const locks: Map<string, Promise<void>> = new Map();
+
 interface ListeningSession {
   id: string;
   session_id: string;
-  asset_id: string;
+  episode_id: number;
   segments: number[];
   updated_at?: string;
+}
+
+/**
+ * Acquire a lock for a specific cache key to prevent race conditions.
+ */
+async function withLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  // Wait for any existing operation to complete
+  const existingLock = locks.get(key);
+  if (existingLock) {
+    await existingLock;
+  }
+
+  // Create a new lock
+  let releaseLock: () => void;
+  const lockPromise = new Promise<void>((resolve) => {
+    releaseLock = resolve;
+  });
+  locks.set(key, lockPromise);
+
+  try {
+    return await fn();
+  } finally {
+    releaseLock!();
+    locks.delete(key);
+  }
 }
 
 /**
@@ -25,50 +53,50 @@ export async function trackSegment(
 ): Promise<number[]> {
   const cacheKey = `${sessionId}:${episodeId}`;
   
-  // Get current segments from cache or DB
-  let segments = cache.get(cacheKey);
-  let dbRecord: ListeningSession | null = null;
+  return withLock(cacheKey, async () => {
+    // Get current segments from cache or DB
+    let segments = cache.get(cacheKey);
+    let dbRecord: ListeningSession | null = null;
 
-  if (!segments) {
-    // Try to load from Directus
-    try {
-      const directus = getDirectusInstance();
-      const results = await directus.request<ListeningSession[]>(
-        readItems("ListeningSessions", {
-          filter: {
-            session_id: { _eq: sessionId },
-            episode_id: { _eq: episodeId },
-          },
-          limit: 1,
-        })
-      );
-      if (results && results.length > 0) {
-        dbRecord = results[0];
-        segments = Array.isArray(dbRecord.segments) ? [...dbRecord.segments] : [];
-      } else {
+    if (!segments) {
+      // Try to load from Directus
+      try {
+        const directus = getDirectusInstance();
+        const results = await directus.request<ListeningSession[]>(
+          readItems("ListeningSessions", {
+            filter: {
+              session_id: { _eq: sessionId },
+              episode_id: { _eq: episodeId },
+            },
+            limit: 1,
+          })
+        );
+        if (results && results.length > 0) {
+          dbRecord = results[0];
+          segments = Array.isArray(dbRecord.segments) ? [...dbRecord.segments] : [];
+        } else {
+          segments = [];
+        }
+      } catch (err) {
+        // Table might not exist yet, start fresh
+        console.warn("Could not load from Directus, using fresh array:", err);
         segments = [];
       }
-    } catch (err) {
-      // Table might not exist yet, start fresh
-      console.warn("Could not load from Directus, using fresh array:", err);
-      segments = [];
     }
-  }
 
-  // Ensure array is large enough
-  while (segments.length <= segmentIndex) {
-    segments.push(0);
-  }
+    // Ensure array is large enough
+    while (segments.length <= segmentIndex) {
+      segments.push(0);
+    }
 
-  segments[segmentIndex] = (segments[segmentIndex] || 0) + 1;
-  cache.set(cacheKey, segments);
+    segments[segmentIndex] = (segments[segmentIndex] || 0) + 1;
+    cache.set(cacheKey, segments);
 
-  // Persist to Directus (fire and forget, don't block response)
-  persistToDirectus(sessionId, episodeId, segments, dbRecord?.id).catch((err) => {
-    console.error("Failed to persist to Directus:", err);
+    // Persist to Directus - await to prevent race conditions
+    await persistToDirectus(sessionId, episodeId, segments, dbRecord?.id);
+
+    return segments;
   });
-
-  return segments;
 }
 
 /**
@@ -123,7 +151,7 @@ async function persistToDirectus(
 }
 
 /**
- * Get all segments for a session+asset (from cache or DB).
+ * Get all segments for a session+episode (from cache or DB).
  */
 export async function getSegments(
   sessionId: string,

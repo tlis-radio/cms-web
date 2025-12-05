@@ -34,9 +34,16 @@ const EmbedImage: React.FC<EmbedImageProps> = ({
   }, []);
 
   useEffect(() => {
-    updateSize();
-    const interval = setInterval(updateSize, 1000);
-    return () => clearInterval(interval);
+    if (!imgRef.current) return;
+    
+    const resizeObserver = new ResizeObserver(() => {
+      updateSize();
+    });
+    
+    resizeObserver.observe(imgRef.current);
+    updateSize(); // Initial size
+    
+    return () => resizeObserver.disconnect();
   }, [updateSize]);
 
   const modifiedSrc = `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${src}?width=${Math.floor(
