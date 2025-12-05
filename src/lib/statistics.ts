@@ -103,7 +103,7 @@ async function persistToDirectus(
     }
 
     // Create a new lock for this operation
-    let releaseLock: () => void;
+    let releaseLock!: () => void;
     const lockPromise = new Promise<void>((resolve) => {
       releaseLock = resolve;
     });
@@ -140,7 +140,7 @@ async function persistToDirectus(
       }
     } finally {
       // Release the lock
-      releaseLock!();
+      releaseLock();
       createLocks.delete(lockKey);
     }
   }
