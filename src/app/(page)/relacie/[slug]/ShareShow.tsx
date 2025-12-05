@@ -1,5 +1,5 @@
 "use client";
-import { GetEpisodeById } from "@/app/actions";
+import { GetEpisodeById } from "@/app/(page)/actions";
 import TlisImage from "@/components/TlisImage";
 import { usePlayer } from "@/context/PlayerContext";
 import { Episode } from "@/models/episode";
