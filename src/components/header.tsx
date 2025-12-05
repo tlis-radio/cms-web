@@ -23,12 +23,12 @@ const Header = async () => {
                   priority={true}
                />
             </Link>
+            <Navbar navbarLinks={navbarLinks} />
             <Player />
             <LiveButton />
             <Socials mobile={"desktop"} />
             <Hamburger navbarLinks={navbarLinks} />
          </div>
-         <Navbar navbarLinks={navbarLinks} />
          <Marquee data={marqueeLinks} />
       </header>
    )

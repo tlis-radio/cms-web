@@ -102,7 +102,7 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
    }
 
    return (
-      <nav className='font-argentumSansLight bg-[#96120F] flex font-semibold max-w-7xl mx-auto'>
+      <nav className='font-argentumSansLight bg-[#96120F] flex font-semibold max-w-7xl'>
          {createNavbarLinks()}
       </nav>
    )

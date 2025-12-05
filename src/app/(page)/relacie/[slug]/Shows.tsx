@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import classNames from "classnames";
 import Markdown from 'react-markdown'
 import TlisImage from "@/components/TlisImage";
-import { loadMoreEpisodes } from "@/app/actions";
+import { loadMoreEpisodes } from "@/app/(page)/actions";
 import Link from "next/link";
 import { ShowCast } from "@/types/show";
 
