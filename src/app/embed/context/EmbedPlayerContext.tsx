@@ -159,6 +159,63 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
   }
 
+  // Segment tracking for archive playback
+  const lastTrackedSegment = useRef<number>(-1);
+
+  useEffect(() => {
+    if (episodeId === null) {
+      lastTrackedSegment.current = -1;
+      return;
+    }
+
+    const sendHeartbeat = async () => {
+      const audio = audioRef.current;
+      if (!audio || audio.paused || audio.ended) return;
+
+      const segmentIndex = Math.floor(audio.currentTime / 15);
+      if (segmentIndex === lastTrackedSegment.current) return;
+      lastTrackedSegment.current = segmentIndex;
+
+      try {
+        await fetch("/api/heartbeat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ episodeId: episodeId, currentTime: audio.currentTime }),
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Segment tracking failed:", err);
+      }
+    };
+
+    const handlePlay = () => {
+      lastTrackedSegment.current = -1;
+      sendHeartbeat();
+    };
+
+    const handleSeeked = () => sendHeartbeat();
+
+    const interval = setInterval(sendHeartbeat, 15000);
+
+    const audio = audioRef.current;
+    if (audio) {
+      audio.addEventListener("play", handlePlay);
+      audio.addEventListener("seeked", handleSeeked);
+    }
+
+    if (audio && !audio.paused) {
+      sendHeartbeat();
+    }
+
+    return () => {
+      clearInterval(interval);
+      if (audio) {
+        audio.removeEventListener("play", handlePlay);
+        audio.removeEventListener("seeked", handleSeeked);
+      }
+    };
+  }, [episodeId]);
+
   return (
     <EmbedPlayerContext.Provider
       value={{
@@ -173,6 +230,7 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
         setEpisodeCover,
         src,
         setSrc,
+        // assetId removed; use episodeId/setEpisodeId
         currentTime,
         setCurrentTime,
         updateCurrentTime,

@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, use, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 
 type PlayerMode = "stream" | "archive";
 
@@ -250,6 +250,62 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     }
   }, [isPlaying, mode]);
+
+  // Segment tracking for archive playback
+  const lastTrackedSegment = useRef<number>(-1);
+
+  useEffect(() => {
+    if (mode !== "archive" || episodeId === null) {
+      lastTrackedSegment.current = -1;
+      return;
+    }
+
+    const sendHeartbeat = async () => {
+      const audio = audioRef.current;
+      if (!audio || audio.paused || audio.ended) return;
+
+      const segmentIndex = Math.floor(audio.currentTime / 15);
+      if (segmentIndex === lastTrackedSegment.current) return;
+      lastTrackedSegment.current = segmentIndex;
+
+      try {
+        await fetch("/api/heartbeat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ episodeId: episodeId, currentTime: audio.currentTime }),
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Segment tracking failed:", err);
+      }
+    };
+
+    // Track on play start
+    const handlePlay = () => {
+      lastTrackedSegment.current = -1;
+      sendHeartbeat();
+    };
+
+    // Periodic tracking every 15 seconds
+    const interval = setInterval(sendHeartbeat, 15000);
+
+    const audio = audioRef.current;
+    if (audio) {
+      audio.addEventListener("play", handlePlay);
+    }
+
+    // Send initial heartbeat if already playing
+    if (audio && !audio.paused) {
+      sendHeartbeat();
+    }
+
+    return () => {
+      clearInterval(interval);
+      if (audio) {
+        audio.removeEventListener("play", handlePlay);
+      }
+    };
+  }, [mode, episodeId]);
 
   return (
     <PlayerContext.Provider
