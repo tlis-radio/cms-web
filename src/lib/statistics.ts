@@ -4,6 +4,9 @@ import { createItem, readItems, updateItem } from "@directus/sdk";
 // In-memory cache to reduce DB reads (sessionId:episodeId -> segments array)
 const cache: Map<string, number[]> = new Map();
 
+// Locks to prevent concurrent creates for the same session+episode
+const createLocks: Map<string, Promise<void>> = new Map();
+
 interface ListeningSession {
   id: string;
   session_id: string;
@@ -74,6 +77,7 @@ export async function trackSegment(
 /**
  * Persist segments to Directus.
  * Creates a new record or updates existing.
+ * Uses locking to prevent duplicate entries from concurrent creates.
  */
 async function persistToDirectus(
   sessionId: string,
@@ -82,42 +86,62 @@ async function persistToDirectus(
   existingId?: string
 ): Promise<void> {
   const directus = getDirectusInstance();
+  const lockKey = `${sessionId}:${episodeId}`;
 
   if (existingId) {
-    // Update existing record
+    // Update existing record - no lock needed
     await directus.request(
       updateItem("ListeningSessions", existingId, {
         segments,
       })
     );
   } else {
-    // Check if record was created by another request
-    const results = await directus.request<ListeningSession[]>(
-      readItems("ListeningSessions", {
-        filter: {
-          session_id: { _eq: sessionId },
-          episode_id: { _eq: episodeId },
-        },
-        limit: 1,
-      })
-    );
+    // Wait for any existing lock for this session+episode
+    const existingLock = createLocks.get(lockKey);
+    if (existingLock) {
+      await existingLock;
+    }
 
-    if (results && results.length > 0) {
-      // Update the found record
-      await directus.request(
-        updateItem("ListeningSessions", results[0].id, {
-          segments,
+    // Create a new lock for this operation
+    let releaseLock: () => void;
+    const lockPromise = new Promise<void>((resolve) => {
+      releaseLock = resolve;
+    });
+    createLocks.set(lockKey, lockPromise);
+
+    try {
+      // Check if record was created by another request
+      const results = await directus.request<ListeningSession[]>(
+        readItems("ListeningSessions", {
+          filter: {
+            session_id: { _eq: sessionId },
+            episode_id: { _eq: episodeId },
+          },
+          limit: 1,
         })
       );
-    } else {
-      // Create new record
-      await directus.request(
-        createItem("ListeningSessions", {
-          session_id: sessionId,
-          episode_id: episodeId,
-          segments,
-        })
-      );
+
+      if (results && results.length > 0) {
+        // Update the found record
+        await directus.request(
+          updateItem("ListeningSessions", results[0].id, {
+            segments,
+          })
+        );
+      } else {
+        // Create new record
+        await directus.request(
+          createItem("ListeningSessions", {
+            session_id: sessionId,
+            episode_id: episodeId,
+            segments,
+          })
+        );
+      }
+    } finally {
+      // Release the lock
+      releaseLock!();
+      createLocks.delete(lockKey);
     }
   }
 }
