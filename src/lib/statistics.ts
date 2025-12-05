@@ -4,7 +4,7 @@ import { createItem, readItems, updateItem } from "@directus/sdk";
 // In-memory cache to reduce DB reads (sessionId:episodeId -> segments array)
 const cache: Map<string, number[]> = new Map();
 
-// Lock map to prevent race conditions when creating/updating records
+// Unified lock map to prevent race conditions
 const locks: Map<string, Promise<void>> = new Map();
 
 interface ListeningSession {
@@ -35,7 +35,7 @@ async function withLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } finally {
-    releaseLock!();
+    releaseLock();
     locks.delete(key);
   }
 }
@@ -102,6 +102,7 @@ export async function trackSegment(
 /**
  * Persist segments to Directus.
  * Creates a new record or updates existing.
+ * NOTE: This function assumes it's called within a lock from trackSegment.
  */
 async function persistToDirectus(
   sessionId: string,
@@ -116,10 +117,11 @@ async function persistToDirectus(
     await directus.request(
       updateItem("ListeningSessions", existingId, {
         segments,
+        updated_at: new Date().toISOString(),
       })
     );
   } else {
-    // Check if record was created by another request
+    // Check if record was created by another request (shouldn't happen due to lock)
     const results = await directus.request<ListeningSession[]>(
       readItems("ListeningSessions", {
         filter: {
@@ -135,6 +137,7 @@ async function persistToDirectus(
       await directus.request(
         updateItem("ListeningSessions", results[0].id, {
           segments,
+          updated_at: new Date().toISOString(),
         })
       );
     } else {
@@ -144,6 +147,7 @@ async function persistToDirectus(
           session_id: sessionId,
           episode_id: episodeId,
           segments,
+          updated_at: new Date().toISOString(),
         })
       );
     }
