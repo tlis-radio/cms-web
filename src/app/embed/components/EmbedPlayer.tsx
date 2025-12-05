@@ -25,18 +25,23 @@ export default function EmbedPlayer() {
     src,
   } = useEmbedPlayer();
 
-  const progressRef = useRef<HTMLDivElement>(null);
+  const desktopProgressRef = useRef<HTMLDivElement>(null);
+  const mobileProgressRef = useRef<HTMLDivElement>(null);
 
   if (!src) return null;
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-  function handleProgressClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (!progressRef.current || duration <= 0) return;
-    const rect = progressRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newTime = (clickX / rect.width) * duration;
-    updateCurrentTime(newTime);
+  function handleProgressClick(e: React.MouseEvent<HTMLDivElement>, ref: React.RefObject<HTMLDivElement>) {
+    if (!ref.current || !duration || duration <= 0) return;
+    const rect = ref.current.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    const clickX = Math.max(0, e.clientX - rect.left);
+    const ratio = Math.min(1, clickX / rect.width);
+    const newTime = ratio * duration;
+    if (isFinite(newTime) && !isNaN(newTime)) {
+      updateCurrentTime(newTime);
+    }
   }
 
   return (
@@ -67,8 +72,8 @@ export default function EmbedPlayer() {
 
         {/* Progress Bar */}
         <div
-          ref={progressRef}
-          onClick={handleProgressClick}
+          ref={desktopProgressRef}
+          onClick={(e) => handleProgressClick(e, desktopProgressRef)}
           className="hidden sm:flex flex-1 h-1 bg-zinc-700 rounded-full cursor-pointer"
         >
           <div
@@ -116,8 +121,8 @@ export default function EmbedPlayer() {
 
       {/* Mobile Progress Bar */}
       <div
-        ref={progressRef}
-        onClick={handleProgressClick}
+        ref={mobileProgressRef}
+        onClick={(e) => handleProgressClick(e, mobileProgressRef)}
         className="sm:hidden mt-2 h-1 bg-zinc-700 rounded-full cursor-pointer"
       >
         <div

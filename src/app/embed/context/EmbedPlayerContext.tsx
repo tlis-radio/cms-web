@@ -152,9 +152,10 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
   }, [episodeName, episodeCover]);
 
   function updateCurrentTime(newTime: number) {
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-      setCurrentTime(newTime);
+    if (audioRef.current && isFinite(newTime) && !isNaN(newTime) && newTime >= 0) {
+      const clampedTime = Math.min(newTime, audioRef.current.duration || newTime);
+      audioRef.current.currentTime = clampedTime;
+      setCurrentTime(clampedTime);
     }
   }
 
