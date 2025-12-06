@@ -4,6 +4,7 @@ import Shows from "./Shows";
 import NotFound from "@/components/NotFound";
 import ShareShow from "./ShareShow";
 import type { Metadata } from "next";
+import ShowJsonLd from "@/components/ShowJsonLd";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -45,8 +46,9 @@ const Show = async ({ params }: { params: { slug: string } }) => {
       const episodeData = await CmsApiService.Show.getShowEpisodesByIdPaginated(String(show.id), 0);
       const showTags = await CmsApiService.Show.getShowTagsById(String(show.id));
       return <>
-         <ShareShow/>
-         <Shows showTags={showTags} show={episodeData.show} episodes={episodeData.episodes} totalCount={episodeData.totalCount} ShowName={episodeData.show.Title} />
+          <ShowJsonLd show={episodeData.show} episodes={episodeData.episodes} />
+          <ShareShow/>
+          <Shows showTags={showTags} show={episodeData.show} episodes={episodeData.episodes} totalCount={episodeData.totalCount} ShowName={episodeData.show.Title} />
       </>
    } catch (error) {
       return <NotFound message={<h2 className="text-2xl text-white mb-2">Reláciu sa nepodarilo načítať.</h2>}></NotFound>

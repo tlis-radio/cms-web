@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CmsApiService from "@/services/cms-api-service";
 import ShowsPage from "./ShowsPage";
 import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -29,7 +30,23 @@ const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string
       return null;
    });
 
-   return (<ShowsPage shows={showsResult?.shows || []} totalCount={showsResult?.totalCount || 0} loadingError={loadingError} />);
+   const shows = showsResult?.shows || [];
+   const DIRECTUS = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
+   const site = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+   const seriesJson = shows.map((s: any) => ({
+      "@context": "https://schema.org",
+      "@type": ["RadioSeries", "PodcastSeries"],
+      "name": s.Title,
+      "description": s.Description || undefined,
+      "url": `${site}/relacie/${s.Slug}`,
+      "image": s.Cover ? `${DIRECTUS}/assets/${s.Cover}` : undefined,
+      "publisher": { "@type": "Organization", "name": "Radio TLIS", "url": site }
+   }));
+
+   return (<>
+      {seriesJson.map((s: any, i: number) => (<JsonLd key={i} data={s} />))}
+      <ShowsPage shows={shows} totalCount={showsResult?.totalCount || 0} loadingError={loadingError} />
+   </>);
 };
 
 export default Shows;
