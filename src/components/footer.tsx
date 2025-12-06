@@ -29,21 +29,72 @@ export const CustomPlaylistIcon: IconDefinition = {
 
 const Footer = () => {
    return (
-      <footer className='bg-[#111111] text-white w-full py-8 px-4 mt-auto'>
-         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="font-argentumSansLight text-gray-400 text-sm">[ Všetky práva vyhradené . © {new Date().getFullYear()} Radio TLIS . ***strictly alternative*** ] </p>
-            <div className="flex flex-col items-center md:items-end">
-               <Socials mobile={'both'}
-                  additionalLinks={[
-                     { icon: faYoutube, url: "https://youtube.com/@radiotlis" },
-                     { icon: faSpotify, url: "https://open.spotify.com/user/wskoqdo1mcisldwdvmzgj8bvf" },
-                     { icon: faSoundcloud, url: "https://soundcloud.com/radiotlis" },
-                     { icon: faMixcloud, url: "https://mixcloud.com/radiotlis" }
+      <footer className="bg-[#0b0b0b] text-gray-100 w-full mt-auto">
+         <div className="max-w-7xl mx-auto px-6 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+               {/* Brand / About */}
+               <div className="pr-0 md:pr-12 lg:pr-20">
+                  <Link href="/" className="inline-block">
+                     <h3 className="text-2xl font-argentumSansLight tracking-tight">Radio TLIS</h3>
+                  </Link>
+                  <p className="mt-3 text-sm text-gray-400 max-w-sm">
+                     Alternatívna rádio stanica — relácie, hudba a kultúra. Sledujte
+                     nás na sociálnych sieťach a zostaňte v spojení.
+                  </p>
+               </div>
 
-                  ]} />
+               {/* Column: Explore */}
+               <div>
+                  <h4 className="text-sm font-semibold mb-3 text-gray-200">Prehliadať</h4>
+                  <ul className="space-y-2 text-sm text-gray-400">
+                     <li><Link href="/" className="hover:text-white">Domov</Link></li>
+                     <li><Link href="/program" className="hover:text-white">Program</Link></li>
+                     <li><Link href="/relacie" className="hover:text-white">Relácie</Link></li>
+                     <li><Link href="https://www.radia.sk/radia/tlis/playlist" target="_blank" className="hover:text-white">Playlist</Link></li>
+                  </ul>
+               </div>
+
+               {/* Column: More Links */}
+               <div>
+                  <h4 className="text-sm font-semibold mb-3 text-gray-200">Viac</h4>
+                  <ul className="space-y-2 text-sm text-gray-400">
+                     <li><Link href="/o-radiu" className="hover:text-white">O rádiu</Link></li>
+                     {/* <li><Link href="/o-radiu/kontakt" className="hover:text-white">Kontakt</Link></li> */}
+                     {/* <li><Link href="/o-radiu/partneri" className="hover:text-white">Partneri</Link></li> */}
+                  </ul>
+               </div>
+
+               {/* Column: Legal */}
+               <div className="flex flex-col md:items-start">
+                  <h4 className="text-sm font-semibold mb-3 text-gray-200">Právne</h4>
+                  <ul className="space-y-2 text-sm text-gray-400 mb-4">
+                     <li><Link href="/gdpr" className="hover:text-white">GDPR</Link></li>
+                     <li><Link href="/tos" className="hover:text-white">Zásady používania</Link></li>
+                  </ul>
+               </div>
+            </div>
+
+            {/* Socials as a separate full-width row (row 2) */}
+            <div className="mt-6 md:mt-8">
+               <div className="flex justify-center md:justify-end">
+                  <Socials mobile={'both'}
+                     additionalLinks={[
+                        { icon: faYoutube, url: "https://youtube.com/@radiotlis" },
+                        { icon: faSpotify, url: "https://open.spotify.com/user/wskoqdo1mcisldwdvmzgj8bvf" },
+                        { icon: faSoundcloud, url: "https://soundcloud.com/radiotlis" },
+                        { icon: faMixcloud, url: "https://mixcloud.com/radiotlis" }
+                     ]} />
+               </div>
+            </div>
+
+            <div className="mt-8 border-t border-gray-800 pt-6">
+               <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+                  <p className="text-sm text-gray-500">© {new Date().getFullYear()} Radio TLIS. Všetky práva vyhradené.</p>
+                  <p className="text-sm text-gray-500">strictly alternative</p>
+               </div>
             </div>
          </div>
       </footer>
-   )
+   );
 }
 export default Footer;

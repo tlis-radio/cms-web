@@ -203,14 +203,11 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       sendHeartbeat();
     };
 
-    const handleSeeked = () => sendHeartbeat();
-
     const interval = setInterval(sendHeartbeat, 15000);
 
     const audio = audioRef.current;
     if (audio) {
       audio.addEventListener("play", handlePlay);
-      audio.addEventListener("seeked", handleSeeked);
     }
 
     if (audio && !audio.paused) {
@@ -221,7 +218,6 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       clearInterval(interval);
       if (audio) {
         audio.removeEventListener("play", handlePlay);
-        audio.removeEventListener("seeked", handleSeeked);
       }
     };
   }, [episodeId]);
