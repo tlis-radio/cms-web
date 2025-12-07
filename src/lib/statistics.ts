@@ -41,6 +41,7 @@ export async function trackSegment(
           filter: {
             session_id: { _eq: sessionId },
             episode_id: { _eq: episodeId },
+            date_created: { _gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() } // last 1 day
           },
           limit: 1,
         })
@@ -72,6 +73,118 @@ export async function trackSegment(
   });
 
   return segments;
+}
+
+export async function trackStreamSegment(
+  sessionId: string,
+  episodeId: string,
+  segmentIndex: number
+): Promise<number[]> {
+  const cacheKey = `stream:${sessionId}:${episodeId}`;
+
+  // Get current segments from cache or DB
+  let segments = cache.get(cacheKey);
+  let dbRecord: ListeningSession | null = null;
+
+  if (!segments) {
+    try {
+      const directus = getDirectusInstance();
+      const results = await directus.request<ListeningSession[]>(
+        readItems("ListeningSessionsStream", {
+          filter: {
+            session_id: { _eq: sessionId },
+            episode_id: { _eq: episodeId },
+            date_created: { _gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() } // last 1 day
+          },
+          limit: 1,
+        })
+      );
+      if (results && results.length > 0) {
+        dbRecord = results[0];
+        segments = Array.isArray(dbRecord.segments) ? [...dbRecord.segments] : [];
+      } else {
+        segments = [];
+      }
+    } catch (err) {
+      console.warn("Could not load from Directus (stream), using fresh array:", err);
+      segments = [];
+    }
+  }
+
+  // Ensure array is large enough
+  while (segments.length <= segmentIndex) {
+    segments.push(0);
+  }
+
+  segments[segmentIndex] = (segments[segmentIndex] || 0) + 1;
+  cache.set(cacheKey, segments);
+
+  // Persist to Directus (fire and forget)
+  persistToDirectusStream(sessionId, episodeId, segments, dbRecord?.id).catch((err) => {
+    console.error("Failed to persist stream segments to Directus:", err);
+  });
+
+  return segments;
+}
+
+async function persistToDirectusStream(
+  sessionId: string,
+  episodeId: string,
+  segments: number[],
+  existingId?: string
+): Promise<void> {
+  const directus = getDirectusInstance();
+  const lockKey = `stream:${sessionId}:${episodeId}`;
+
+  if (existingId) {
+    await directus.request(
+      updateItem("ListeningSessionsStream", existingId, {
+        segments,
+      })
+    );
+  } else {
+    const existingLock = createLocks.get(lockKey);
+    if (existingLock) {
+      await existingLock;
+    }
+
+    let releaseLock!: () => void;
+    const lockPromise = new Promise<void>((resolve) => {
+      releaseLock = resolve;
+    });
+    createLocks.set(lockKey, lockPromise);
+
+    try {
+      const results = await directus.request<ListeningSession[]>(
+        readItems("ListeningSessionsStream", {
+          filter: {
+            session_id: { _eq: sessionId },
+            episode_id: { _eq: episodeId },
+          },
+          limit: 1,
+        })
+      );
+
+      if (results && results.length > 0) {
+        await directus.request(
+          updateItem("ListeningSessionsStream", results[0].id, {
+            segments,
+          })
+        );
+      } else {
+        await directus.request(
+          createItem("ListeningSessionsStream", {
+            session_id: sessionId,
+            episode_id: episodeId,
+            segments,
+          })
+        );
+      }
+    } finally {
+      releaseLock();
+      createLocks.delete(lockKey);
+    }
+  }
 }
 
 /**

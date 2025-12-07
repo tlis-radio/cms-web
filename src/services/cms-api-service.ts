@@ -190,6 +190,13 @@ var streamEndpoints = {
       var {current_episode} = stream;
       if(!current_episode) return "";
       return current_episode.Title || "";
+   },
+   getCurrentStream: async (): Promise<{current_episode: Episode, updated_at: string} | null> => {
+      const stream = await getPublicDirectusInstance().request<{ current_episode: EpisodeDto,  updated_at: string }>(readItem("stream", 1, {
+         fields: ['current_episode.*', 'updated_at']
+      }));
+      if (!stream.current_episode) return null;
+      return stream;
    }
 }
 

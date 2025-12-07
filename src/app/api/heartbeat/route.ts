@@ -20,6 +20,14 @@ const SEGMENT_DURATION = 15;
 export async function POST(request: NextRequest) {
   try {
     
+    const enabled = process.env.TRACKER_ENABLED === 'true';
+    if (!enabled) {
+        return NextResponse.json(
+            { error: 'Tracking is disabled' },
+            { status: 403 }
+        );
+    }
+
     const body = await request.json();
     const { episodeId, currentTime, sessionId: bodySessionId } = body;
     

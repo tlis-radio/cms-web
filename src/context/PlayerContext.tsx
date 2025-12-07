@@ -251,19 +251,19 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [isPlaying, mode]);
 
-  // Segment tracking for archive playback
+  // Segment tracking for archive and periodic heartbeat for stream
   const lastTrackedSegment = useRef<number>(-1);
 
   useEffect(() => {
-    if (mode !== "archive" || episodeId === null) {
+    const audio = audioRef.current;
+    if (!audio) {
       lastTrackedSegment.current = -1;
       return;
     }
 
-    const sendHeartbeat = async () => {
-      const audio = audioRef.current;
+    // Archive heartbeat: sends episodeId + currentTime
+    const sendArchiveHeartbeat = async () => {
       if (!audio || audio.paused || audio.ended) return;
-
       const segmentIndex = Math.floor(audio.currentTime / 15);
       if (segmentIndex === lastTrackedSegment.current) return;
       lastTrackedSegment.current = segmentIndex;
@@ -280,23 +280,49 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     };
 
-    // Track on play start
-    const handlePlay = () => {
-      lastTrackedSegment.current = -1;
-      sendHeartbeat();
+    // Stream heartbeat: notify server while stream is playing
+    const sendStreamHeartbeat = async () => {
+      if (!audio || audio.paused || audio.ended) return;
+      const segmentIndex = Math.floor(audio.currentTime / 15);
+      if (segmentIndex === lastTrackedSegment.current) return;
+      lastTrackedSegment.current = segmentIndex;
+
+      try {
+        await fetch("/api/heartbeat/stream", {
+          method: "POST",
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Stream heartbeat failed:", err);
+      }
     };
 
-    // Periodic tracking every 15 seconds
-    const interval = setInterval(sendHeartbeat, 15000);
+    const handlePlay = () => {
+      lastTrackedSegment.current = -1;
+      if (mode === "archive") {
+        sendArchiveHeartbeat();
+      } else if (mode === "stream") {
+        sendStreamHeartbeat();
+      }
+    };
 
-    const audio = audioRef.current;
-    if (audio) {
-      audio.addEventListener("play", handlePlay);
+    // run appropriate heartbeat immediately if playing
+    if (!audio.paused) {
+      if (mode === "archive" && episodeId !== null) sendArchiveHeartbeat();
+      else if (mode === "stream") sendStreamHeartbeat();
     }
 
-    // Send initial heartbeat if already playing
-    if (audio && !audio.paused) {
-      sendHeartbeat();
+    // Periodic tracking every 15 seconds
+    const interval = setInterval(() => {
+      if (mode === "archive" && episodeId !== null) {
+        sendArchiveHeartbeat();
+      } else if (mode === "stream") {
+        sendStreamHeartbeat();
+      }
+    }, 15000);
+
+    if (audio) {
+      audio.addEventListener("play", handlePlay);
     }
 
     return () => {
@@ -304,6 +330,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (audio) {
         audio.removeEventListener("play", handlePlay);
       }
+      lastTrackedSegment.current = -1;
     };
   }, [mode, episodeId]);
 
