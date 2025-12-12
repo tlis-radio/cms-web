@@ -4,6 +4,7 @@ import { PlayerProvider } from "@/context/PlayerContext";
 import GalleryOverlay from "@/components/carousel/gallery/GalleryOverlay";
 import { GalleryProvider } from "@/components/carousel/gallery/GalleryProvider";
 import SessionInit from "@/components/SessionInit";
+import CookieConsent from "@/components/CookieConsent";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,6 +25,7 @@ export default function PageLayout({ children }: Readonly<{ children: React.Reac
         </div>
         <Footer />
       </PlayerProvider>
+      <CookieConsent />
     </div>
   );
 }
