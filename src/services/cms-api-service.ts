@@ -208,4 +208,6 @@ class CmsApiService {
    static Stream = streamEndpoints;
 }
 
+export const SHOWS_PAGE_SIZE = showEndpoints.PAGE_SIZE;
+
 export default CmsApiService;

@@ -7,9 +7,10 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import classNames from "classnames";
 import Markdown from 'react-markdown'
 import TlisImage from "@/components/TlisImage";
-import { loadMoreEpisodes } from "@/app/(page)/actions";
 import Link from "next/link";
 import { ShowCast } from "@/types/show";
+import Pagination from "@/components/pagination/Pagination";
+import { SHOWS_PAGE_SIZE } from "@/services/cms-api-service";
 
 function calculateContrast(hexColor: string): string {
     if (!hexColor) return '#000000';
@@ -163,12 +164,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
 
 }
 
-export default function Shows({ show, showTags, episodes, ShowName, totalCount }: { show: any, showTags: any, episodes: any, ShowName: string, totalCount: number }) {
-    const [episodesList, setEpisodesList] = useState(episodes);
-    const [hasMoreEpisodes, setHasMoreEpisodes] = useState(totalCount > episodes.length);
-    const [page, setPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
-    const loaderRef = useRef<HTMLDivElement>(null);
+export default function Shows({ show, showTags, episodes, ShowName, totalCount, currentPage }: { show: any, showTags: any, episodes: any, ShowName: string, totalCount: number, currentPage: number }) {
     // selected tag ids (stringified) used for filtering episodes
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
@@ -181,43 +177,14 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount }
     }
 
     const filteredEpisodes = useMemo(() => {
-        if (!selectedTagIds || selectedTagIds.length === 0) return episodesList;
-        return episodesList.filter((ep: any) => {
+        if (!selectedTagIds || selectedTagIds.length === 0) return episodes;
+        return episodes.filter((ep: any) => {
             if (!ep.Tags || ep.Tags.length === 0) return false;
             return ep.Tags.some((t: any) => selectedTagIds.includes(String(t.Tags_id?.id)));
         });
-    }, [episodesList, selectedTagIds]);
+    }, [episodes, selectedTagIds]);
 
-    async function loadEpisodes() {
-        if (isLoading) return;
-        setIsLoading(true);
-        const nextPage = page + 1;
-        setPage(nextPage);
-    const { episodes: newEpisodes, totalCount: newTotalCount } = await loadMoreEpisodes(String(show.id), nextPage);
-        setEpisodesList((prev: any[]) => [...prev, ...newEpisodes.episodes]);
-        setHasMoreEpisodes(newTotalCount > episodesList.length + newEpisodes.episodes.length);
-        setIsLoading(false);
-    }
-
-    useEffect(() => {
-        if (!hasMoreEpisodes) return;
-        const loader = loaderRef.current;
-        if (!loader) return;
-        let ticking = false;
-        const observer = new IntersectionObserver(
-            entries => {
-                if (entries[0].isIntersecting && !isLoading && hasMoreEpisodes && !ticking) {
-                    ticking = true;
-                    loadEpisodes().finally(() => { ticking = false; });
-                }
-            },
-            { threshold: 1.0 }
-        );
-        observer.observe(loader);
-        return () => {
-            observer.disconnect();
-        };
-    }, [loaderRef, isLoading, hasMoreEpisodes]);
+    const totalPages = Math.ceil(totalCount / SHOWS_PAGE_SIZE);
 
     return (
         <div className="font-argentumSansBold mb-[80px] flex flex-col w-full justify-center md:mb-0">
@@ -290,14 +257,8 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount }
                     {filteredEpisodes.map((episode: any, index: number) => (
                         <Episode episode={episode} key={index} ShowName={ShowName} />
                     ))}
-                    {hasMoreEpisodes && (
-                        <div className="text-center text-white mt-4" ref={loaderRef}>
-                            <svg className="mx-auto h-8 w-8 animate-spin text-[#D43C4A]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                            </svg>
-                        </div>
-                    )}
+                    
+                    {selectedTagIds.length === 0 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
                 </div>
             </div>
         </div>

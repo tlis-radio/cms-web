@@ -6,25 +6,39 @@ import JsonLd from "@/components/JsonLd";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
-export const metadata: Metadata = {
-   title: "Relácie | Radio TLIS",
-   description: "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a posledné epizódy.",
-   alternates: { canonical: SITE_URL + "/relacie" },
-   openGraph: {
+export async function generateMetadata({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
+   const pageParam = searchParams?.page;
+   const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+   const filterValue = searchParams?.filter;
+   const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
+   
+   const canonicalUrl = page === 1 
+      ? `${SITE_URL}/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
+      : `${SITE_URL}/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
+   
+   return {
       title: "Relácie | Radio TLIS",
-      description: "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a epizódy.",
-      url: SITE_URL + "/relacie",
-      siteName: "Radio TLIS",
-      locale: "sk_SK",
-   },
-};
+      description: "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a posledné epizódy.",
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+         title: "Relácie | Radio TLIS",
+         description: "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a epizódy.",
+         url: canonicalUrl,
+         siteName: "Radio TLIS",
+         locale: "sk_SK",
+      },
+   };
+}
 
 const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) => {
    let filterValue = searchParams?.filter;
    const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
+   
+   const pageParam = searchParams?.page;
+   const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
 
    var loadingError = false;
-   var showsResult = await CmsApiService.Show.listShowsPaginated(1, filter).catch((error) => {
+   var showsResult = await CmsApiService.Show.listShowsPaginated(page, filter).catch((error) => {
       console.error("Error fetching shows:", error);
       loadingError = true;
       return null;
@@ -45,7 +59,7 @@ const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string
 
    return (<>
       {seriesJson.map((s: any, i: number) => (<JsonLd key={i} data={s} />))}
-      <ShowsPage shows={shows} totalCount={showsResult?.totalCount || 0} loadingError={loadingError} />
+      <ShowsPage shows={shows} totalCount={showsResult?.totalCount || 0} loadingError={loadingError} currentPage={page} />
    </>);
 };
 

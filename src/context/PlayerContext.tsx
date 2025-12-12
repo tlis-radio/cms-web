@@ -77,7 +77,6 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           return;
         }
         const data = await res.json();
-        console.log(data);
         if (!cancelled) setArchiveShowSlug(data.slug ?? null);
       } catch (err) {
         console.error('Failed to resolve show slug for episode', episodeId, err);
