@@ -117,7 +117,7 @@ const showEndpoints = {
    getEpisodesByTagId: async (tagId: number): Promise<Array<Episode>> => {
       const episodes = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
          fields: ["*", "Tags.Tags_id.*"],
-         filter: { "Tags.Tags_id.id": { _eq: tagId } }
+         filter: { "Tags.Tags_id.id": { _eq: tagId }, status: { _eq: 'published' } },
       }));
       return episodes || [];
    },
@@ -127,7 +127,7 @@ const showEndpoints = {
       if (showData.Episode.length === 0) return [];
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
          fields: ["*", "Tags.Tags_id.*"],
-         filter: { id: { _in: showData.Episode } },
+         filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } },
          sort: ['-Date'],
       }));
 
@@ -136,7 +136,8 @@ const showEndpoints = {
 
    getEpisodeById: async (id: number): Promise<Episode | null> => {
       const episode = await getDirectusInstance().request<EpisodeDto>(readItem("Episodes", id, {
-         fields: ["*", "Tags.Tags_id.*"]
+         fields: ["*", "Tags.Tags_id.*"],
+         filter: { status: { _eq: 'published' } }
       }));
       return episode || null;
    },
@@ -145,7 +146,7 @@ const showEndpoints = {
       const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
       if (showData.Episode.length === 0) return 0;
       const showEpisodesCount = await getDirectusInstance().request(aggregate("Episodes", {
-         query: { filter: { id: { _in: showData.Episode } }, },
+         query: { filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } }, },
          aggregate: { count: '*' },
       }));
       return parseInt(showEpisodesCount[0].count!) || 0;
@@ -157,7 +158,7 @@ const showEndpoints = {
       const total_count = await showEndpoints.getShowEpisodesCountById(id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
          fields: ["*", "Tags.Tags_id.*"],
-         filter: { id: { _in: showData.Episode } },
+         filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } },
          sort: ['-Date'],
          limit: showEndpoints.PAGE_SIZE,
          page
