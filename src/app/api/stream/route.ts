@@ -2,7 +2,7 @@ import CmsApiService from "@/services/cms-api-service";
 import { Root } from "@/types/streamstatus";
 
 
-async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
+async function fetchSourceTitle(apiEndpoint: string): Promise<{ artist: string | undefined; songTitle: string | undefined }> {
    const response = await fetch(apiEndpoint, { cache: "no-store" });
    const data: Root = await response.json();
    const source = data.icestats.source;
@@ -29,24 +29,35 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<string[]> {
     */
 
    if (title === "Unknown") {
-      return ["Počúvate Rádio TLIS"];
+      return { artist: undefined, songTitle: "Počúvate Rádio TLIS" };
    }
    // Reverse used to switch artist and song title
-   return title.split(" - ").reverse();
+   const artist = title.split(" - ")[0]?.trim();
+   const songTitle = title.split(" - ")[1]?.trim();
+   return { artist, songTitle };
 }
 
 export async function GET(request: Request) {
-    const headers = new Headers({ "Cache-Control": "no-store" });
+    const headers = new Headers({ "Cache-Control": "no-store", "Content-Type": "application/json" });
     
     const currentStreamTitle = await CmsApiService.Stream.getCurrentStreamTitle();
-    if (currentStreamTitle) return new Response(currentStreamTitle, { status: 200, headers });
+    if (currentStreamTitle) {
+        // Parse if it's in "artist - song" format, otherwise return as songTitle only
+        const parts = currentStreamTitle.split(" - ");
+        if (parts.length >= 2) {
+            return new Response(JSON.stringify({ artist: parts[0].trim(), songTitle: parts[1].trim() }), { status: 200, headers });
+        }
+        return new Response(JSON.stringify({ artist: undefined, songTitle: currentStreamTitle }), { status: 200, headers });
+    }
 
     const apiEndpoint = process.env.ICECAST_ENDPOINT;
-    if (!apiEndpoint) return new Response("Neznáme rádio", { status: 200, headers });
+    if (!apiEndpoint) return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáme rádio" }), { status: 200, headers });
     
-    const parts = await fetchSourceTitle(apiEndpoint);
-    if (parts.length === 0) return new Response("Neznáme rádio", { status: 200, headers });
-    return new Response(parts.join(" "), { status: 200, headers });
+    const data = await fetchSourceTitle(apiEndpoint);
+    if (!data.artist && !data.songTitle) {
+        return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáme rádio" }), { status: 200, headers });
+    }
+    return new Response(JSON.stringify(data), { status: 200, headers });
 }
 
 export const dynamic = "force-dynamic";

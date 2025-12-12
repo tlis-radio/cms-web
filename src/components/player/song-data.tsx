@@ -11,11 +11,21 @@ function PlayerDisplay({ mode, archiveName, archiveShowSlug, currentTime, durati
       const fetchTitle = async () => {
          if (mode === "archive") return;
 
-         const currentStreamTitleResponse = await fetch('/api/stream');
-         const currentStreamTitle = await currentStreamTitleResponse.text();
-         if (currentStreamTitle) return setTitleParts([currentStreamTitle]);
-         else setTitleParts(["Neznáme rádio"]);
-         document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: titleParts.join(" ") }));
+         try {
+            const currentStreamTitleResponse = await fetch('/api/stream');
+            const data = await currentStreamTitleResponse.json();
+            if (data.artist && data.songTitle) {
+               setTitleParts([`${data.artist} - ${data.songTitle}`]);
+            } else if (data.songTitle) {
+               setTitleParts([data.songTitle]);
+            } else {
+               setTitleParts(["Neznáme rádio"]);
+            }
+            document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: titleParts.join(" ") }));
+         } catch (error) {
+            console.error('Failed to fetch stream title:', error);
+            setTitleParts(["Neznáme rádio"]);
+         }
       };
 
       // Call fetchTitle immediately when the component mounts

@@ -86,6 +86,7 @@ const Player: React.FC<{}> = () => {
    const [isVisible, setIsVisible] = useState(true);
    const [volume, setVolume] = useState(1);
    const [streamTitle, setStreamTitle] = useState("Rádio TLIS");
+   const [streamArtist, setStreamArtist] = useState<string | undefined>("Rádio TLIS");
 
    const playerWrapper = useRef<HTMLDivElement | null>(null);
 
@@ -107,12 +108,23 @@ const Player: React.FC<{}> = () => {
       const fetchTitle = async () => {
          if (mode === "archive") return;
 
-         const currentStreamTitleResponse = await fetch('/api/stream');
-         const currentStreamTitle = await currentStreamTitleResponse.text();
-         if (currentStreamTitle) {
-            setStreamTitle(currentStreamTitle);
-         } else {
+         try {
+            const currentStreamTitleResponse = await fetch('/api/stream');
+            const data = await currentStreamTitleResponse.json();
+            if (data.artist && data.songTitle) {
+               setStreamTitle(data.songTitle);
+               setStreamArtist(data.artist);
+            } else if (data.songTitle) {
+               setStreamTitle(data.songTitle);
+               setStreamArtist(undefined);
+            } else {
+               setStreamTitle("Neznáme rádio");
+               setStreamArtist(undefined);
+            }
+         } catch (error) {
+            console.error('Failed to fetch stream title:', error);
             setStreamTitle("Neznáme rádio");
+            setStreamArtist(undefined);
          }
       };
 
@@ -176,7 +188,7 @@ const Player: React.FC<{}> = () => {
    const title = mode === "archive" ? archiveName : streamTitle;
    const subtitle = mode === "archive" 
       ? archiveShowName || "Rádio TLIS"
-      : "Rádio TLIS";
+      : streamArtist || "Rádio TLIS";
 
    return (
       <>
