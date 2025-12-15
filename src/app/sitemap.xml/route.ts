@@ -48,3 +48,5 @@ export async function GET() {
     headers: { 'Content-Type': 'application/xml' },
   });
 }
+
+export const dynamic = 'force-static';
