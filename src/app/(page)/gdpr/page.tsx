@@ -3,9 +3,7 @@ import React from "react";
 export default function GdprPage() {
   return (
     <>
-      <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8">
-        GDPR a ochrana osobných údajov
-      </h1>
+<h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> GDPR a ochrana osobných údajov</h1>      
       <div className="max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg">
         <div className="flex flex-col gap-8 items-center">
           <div className="space-y-4 order-2 md:order-1">
