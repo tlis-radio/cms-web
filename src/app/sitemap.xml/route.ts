@@ -22,20 +22,16 @@ function buildSitemap(urls: string[], baseUrl: string): string {
 export async function GET() {
   // Fetch shows via CmsApiService to get slugs (uses server-side Directus instance)
   let showSlugs: string[] = [];
-  console.log('Fetching shows for sitemap via CmsApiService...');
   try {
     const shows = await CmsApiService.Show.listShows();
     console.log(shows);
     if (Array.isArray(shows)) {
-      console.log("data");
       showSlugs = shows.map((s: any) => s.Slug).filter(Boolean);
     }
   } catch (err) {
-    console.error('Error fetching shows for sitemap via CmsApiService:', err);
     showSlugs = [];
   }
   
-  console.log(showSlugs)
   const dynamicRelacie = showSlugs.map(s => `/relacie/${s}`);
 
   const urls = Array.from(new Set([...STATIC_ROUTES, ...dynamicRelacie])).sort();
@@ -49,4 +45,4 @@ export async function GET() {
   });
 }
 
-export const dynamic = 'force-static';
+export const dynamic = "force-dynamic";
