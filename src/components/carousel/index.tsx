@@ -8,7 +8,6 @@ import { EffectCoverflow, Navigation, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
-import { stringify } from "querystring";
 
 function SwiperCarousel({ carouselPosts, loadingError }: { carouselPosts: any, loadingError?: boolean }) {
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
@@ -57,7 +56,7 @@ function getDate(dateString: string) {
   const createProgramLinks = () => {
     return carouselPosts.map((program: any, index: number) => {
       return (
-        <SwiperSlide key={index}>
+        <SwiperSlide key={index}  >
           <Link href={`/relacie/${program.showData?.Slug}?sharedEpisode=${program.id}`} className="flex flex-col items-center">
             <img src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${program.Cover}`} alt={program.Title} />
             <h2 className="font-argentumSansLight text-white text-xl pt-3 font-bold">[ {getDate(program.Date)} ]</h2>
