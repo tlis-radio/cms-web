@@ -31,22 +31,22 @@ const Footer = () => {
    return (
       <footer className="bg-[#0b0b0b] text-gray-100 w-full mt-auto">
          <div className="max-w-7xl mx-auto px-6 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                {/* Brand / About */}
                <div className="pr-0 md:pr-12 lg:pr-20">
                   <Link href="/" className="inline-block">
-                     <h3 className="text-2xl font-argentumSansLight tracking-tight">Radio TLIS</h3>
+                     <h3 className="text-2xl font-argentumSansBold tracking-tight">Radio TLIS</h3>
                   </Link>
-                  <p className="mt-3 text-sm text-gray-400 max-w-sm">
-                     Alternatívna rádio stanica — relácie, hudba a kultúra. Sledujte
-                     nás na sociálnych sieťach a zostaňte v spojení.
+                  <p className="font-argentumSansLight mt-3 text-sm text-gray-400 max-w-sm">
+                     Jediné študentské, komunitné a alternatívne rádio
+                      v Bratislave.
                   </p>
                </div>
 
                {/* Column: Explore */}
                <div>
-                  <h4 className="text-sm font-semibold mb-3 text-gray-200">Prehliadať</h4>
-                  <ul className="space-y-2 text-sm text-gray-400">
+                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">Prehliadať</h4>
+                  <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400">
                      <li><Link href="/" className="hover:text-white">Domov</Link></li>
                      <li><Link href="/program" className="hover:text-white">Program</Link></li>
                      <li><Link href="/relacie" className="hover:text-white">Relácie</Link></li>
@@ -56,9 +56,10 @@ const Footer = () => {
 
                {/* Column: More Links */}
                <div>
-                  <h4 className="text-sm font-semibold mb-3 text-gray-200">Viac</h4>
-                  <ul className="space-y-2 text-sm text-gray-400">
-                     <li><Link href="/o-radiu" className="hover:text-white">O rádiu</Link></li>
+                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">O rádiu</h4>
+                  <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400">
+                     <li><Link href="/o-radiu" className="hover:text-white">Kto sme</Link></li>
+                     <li><Link href="/dve-percenta" className="hover:text-white">Dve percentá</Link></li>
                      {/* <li><Link href="/o-radiu/kontakt" className="hover:text-white">Kontakt</Link></li> */}
                      {/* <li><Link href="/o-radiu/partneri" className="hover:text-white">Partneri</Link></li> */}
                   </ul>
@@ -66,13 +67,23 @@ const Footer = () => {
 
                {/* Column: Legal */}
                <div className="flex flex-col md:items-start">
-                  <h4 className="text-sm font-semibold mb-3 text-gray-200">Právne</h4>
-                  <ul className="space-y-2 text-sm text-gray-400 mb-4">
+                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">Právne</h4>
+                  <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400 mb-4">
                      <li><Link href="/gdpr" className="hover:text-white">GDPR</Link></li>
                      <li><Link href="/tos" className="hover:text-white">Zásady používania</Link></li>
                   </ul>
                </div>
-            </div>
+
+               {/* Column: Contact */}
+               <div className="flex flex-col md:items-start">
+                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">Kontakt</h4>
+                  <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400 mb-4">
+                     <li><Link href="mailto:radio@tlis.sk" className="hover:text-white">radio@tlis.sk</Link></li>
+                     <li><Link href="mailto:media@tlis.sk" className="hover:text-white">media@tlis.sk</Link></li>
+                     <li><Link href="mailto:sef@tlis.sk" className="hover:text-white">sef@tlis.sk</Link></li>
+                  </ul>
+               </div>
+               </div>
 
             {/* Socials as a separate full-width row (row 2) */}
             <div className="mt-6 md:mt-8">
@@ -89,8 +100,8 @@ const Footer = () => {
 
             <div className="mt-8 border-t border-gray-800 pt-6">
                <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-                  <p className="text-sm text-gray-500">© {new Date().getFullYear()} Radio TLIS. Všetky práva vyhradené.</p>
-                  <p className="text-sm text-gray-500">strictly alternative</p>
+                  <p className="font-argentumSansLight text-sm text-gray-500">© {new Date().getFullYear()} Radio TLIS. Všetky práva vyhradené.</p>
+                  <p className="font-argentumSansLight text-sm text-gray-500">***strictly alternative***</p>
                </div>
             </div>
          </div>
