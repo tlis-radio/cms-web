@@ -22,6 +22,7 @@ function buildSitemap(urls: string[], baseUrl: string): string {
 export async function GET() {
   // Fetch shows via CmsApiService to get slugs (uses server-side Directus instance)
   let showSlugs: string[] = [];
+  console.log('Fetching shows for sitemap via CmsApiService...');
   try {
     const shows = await CmsApiService.Show.listShows();
     console.log(shows);

@@ -118,12 +118,12 @@ const Player: React.FC<{}> = () => {
                setStreamTitle(data.songTitle);
                setStreamArtist(undefined);
             } else {
-               setStreamTitle("Neznáme rádio");
+               setStreamTitle("Neznáma skladba");
                setStreamArtist(undefined);
             }
          } catch (error) {
             console.error('Failed to fetch stream title:', error);
-            setStreamTitle("Neznáme rádio");
+            setStreamTitle("Neznáma skladba");
             setStreamArtist(undefined);
          }
       };

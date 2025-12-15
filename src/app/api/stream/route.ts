@@ -51,11 +51,11 @@ export async function GET(request: Request) {
     }
 
     const apiEndpoint = process.env.ICECAST_ENDPOINT;
-    if (!apiEndpoint) return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáme rádio" }), { status: 200, headers });
+    if (!apiEndpoint) return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáma skladba" }), { status: 200, headers });
     
     const data = await fetchSourceTitle(apiEndpoint);
     if (!data.artist && !data.songTitle) {
-        return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáme rádio" }), { status: 200, headers });
+        return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáma skladba" }), { status: 200, headers });
     }
     return new Response(JSON.stringify(data), { status: 200, headers });
 }
