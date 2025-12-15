@@ -24,14 +24,14 @@ export async function GET() {
   let showSlugs: string[] = [];
   try {
     const shows = await CmsApiService.Show.listShows();
+    console.log(shows);
     if (Array.isArray(shows)) {
       showSlugs = shows.map((s: any) => s.Slug).filter(Boolean);
     }
   } catch (err) {
-    console.error('Error fetching shows for sitemap via CmsApiService:', err);
     showSlugs = [];
   }
-
+  
   const dynamicRelacie = showSlugs.map(s => `/relacie/${s}`);
 
   const urls = Array.from(new Set([...STATIC_ROUTES, ...dynamicRelacie])).sort();
@@ -44,3 +44,5 @@ export async function GET() {
     headers: { 'Content-Type': 'application/xml' },
   });
 }
+
+export const dynamic = "force-dynamic";

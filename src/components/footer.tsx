@@ -100,8 +100,8 @@ const Footer = () => {
 
             <div className="mt-8 border-t border-gray-800 pt-6">
                <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-                  <p className="font-argentumSansLight text-sm text-gray-500">© {new Date().getFullYear()} Radio TLIS. Všetky práva vyhradené.</p>
-                  <p className="font-argentumSansLight text-sm text-gray-500">***strictly alternative***</p>
+                  <p className="text-sm text-gray-500">© {new Date().getFullYear()} Radio TLIS. Všetky práva vyhradené. | <a href="https://webenta.sk">Webové služby Webenta</a></p>
+                  <p className="text-sm text-gray-500">strictly alternative</p>
                </div>
             </div>
          </div>

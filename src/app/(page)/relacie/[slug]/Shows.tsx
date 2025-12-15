@@ -139,7 +139,10 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                         ref={descriptionRef}
                         className={`mt-4 ${isDescriptionExpanded ? "max-h-none" : (episode.Tags.length > 0 ? "max-h-20" : "max-h-28")} overflow-hidden text-justify tlis-markdown`}
                     >
-                        <Markdown>
+                        <Markdown   components={{
+                            ol: ({ children, start }) => <p>{start}. {children}</p>,
+                            li: ({ children }) => <span>{children} </span>,
+                        }}>
                             {episode.Description}
                         </Markdown>
                     </div>
@@ -218,7 +221,10 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount, 
                         </div>
                     </div>
                     <div className="font-argentumSansLight flex flex-col h-full gap-4">
-                        <Markdown>
+                        <Markdown   components={{
+                            ol: ({ children, start }) => <p>{start}.{children}</p>,
+                            li: ({ children }) => <span>{children} </span>,
+                        }}>
                             {show.Description}
                         </Markdown>
                     </div>

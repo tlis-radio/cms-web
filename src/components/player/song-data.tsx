@@ -19,12 +19,12 @@ function PlayerDisplay({ mode, archiveName, archiveShowSlug, currentTime, durati
             } else if (data.songTitle) {
                setTitleParts([data.songTitle]);
             } else {
-               setTitleParts(["Neznáme rádio"]);
+               setTitleParts(["Neznáma skladba"]);
             }
             document.dispatchEvent(new CustomEvent("stream-title-updated", { detail: titleParts.join(" ") }));
          } catch (error) {
             console.error('Failed to fetch stream title:', error);
-            setTitleParts(["Neznáme rádio"]);
+            setTitleParts(["Neznáma skladba"]);
          }
       };
 
