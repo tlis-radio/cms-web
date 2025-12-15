@@ -24,7 +24,6 @@ export async function GET() {
   let showSlugs: string[] = [];
   try {
     const shows = await CmsApiService.Show.listShows();
-    console.log(shows);
     if (Array.isArray(shows)) {
       showSlugs = shows.map((s: any) => s.Slug).filter(Boolean);
     }
