@@ -27,7 +27,8 @@ jobs:
         --tag $IMAGE_NAME \
         --build-arg NEXT_PUBLIC_DIRECTUS_URL=${{ secrets.DIRECTUS_URL }} \
         --build-arg NEXT_PUBLIC_ANALYTICS_ID=${{ secrets.ANALYTICS_ID }} \
-        --build-arg NEXT_PUBLIC_ANALYTICS_URL=${{ secrets.ANALYTICS_URL }}
+        --build-arg NEXT_PUBLIC_ANALYTICS_URL=${{ secrets.ANALYTICS_URL }} \
+        --build-arg NEXT_PUBLIC_SITE_URL=${{ secrets.SITE_URL }} 
         docker push $IMAGE_NAME
         
     - name: Deploy to production
