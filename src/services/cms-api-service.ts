@@ -116,7 +116,7 @@ const showEndpoints = {
 
    getEpisodesByTagId: async (tagId: number): Promise<Array<Episode>> => {
       const episodes = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
-         fields: ["*", "Tags.Tags_id.*"],
+         fields: ["*", "Tags.Tags_id.*", "Audio.*"],
          filter: { "Tags.Tags_id.id": { _eq: tagId }, status: { _eq: 'published' } },
       }));
       return episodes || [];
@@ -126,7 +126,7 @@ const showEndpoints = {
       const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
       if (showData.Episode.length === 0) return [];
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
-         fields: ["*", "Tags.Tags_id.*"],
+         fields: ["*", "Tags.Tags_id.*", "Audio.*"],
          filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } },
          sort: ['-Date'],
       }));
@@ -136,7 +136,7 @@ const showEndpoints = {
 
    getEpisodeById: async (id: number): Promise<Episode | null> => {
       const episode = await getDirectusInstance().request<EpisodeDto>(readItem("Episodes", id, {
-         fields: ["*", "Tags.Tags_id.*"],
+         fields: ["*", "Tags.Tags_id.*", "Audio.*"],
          filter: { status: { _eq: 'published' } }
       }));
       return episode || null;
@@ -157,7 +157,7 @@ const showEndpoints = {
       if (showData.Episode.length === 0) return { show: showData, episodes: [], totalCount: 0 };
       const total_count = await showEndpoints.getShowEpisodesCountById(id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
-         fields: ["*", "Tags.Tags_id.*"],
+         fields: ["*", "Tags.Tags_id.*", "Audio.*"],
          filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } },
          sort: ['-Date'],
          limit: showEndpoints.PAGE_SIZE,

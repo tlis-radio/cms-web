@@ -61,7 +61,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
             album: ShowName,
             image: episode.Cover
         });
-        setSrc(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio}`);
+        setSrc(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio?.id || episode.Audio}`);
         setArchiveEpisodeId(episode.id);
     }
 
@@ -121,7 +121,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                             className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
                             <FontAwesomeIcon icon={faShare} />
                         </button>
-                        {episode.Audio && episode.Audio !== "" && episode.Audio !== null && (
+                        {episode.Audio && episode.Audio.id && (
                             <button
                                 onClick={() => {
                                     selectEpisode(episode);

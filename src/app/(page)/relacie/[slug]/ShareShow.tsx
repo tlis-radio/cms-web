@@ -42,7 +42,7 @@ export default function ShareShow() {
             album: "Rádio TLIS",
             image: episode.Cover
         });
-        setSrc(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio}`);
+        setSrc(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio?.id || episode.Audio}`);
         setArchiveEpisodeId(episode.id);
         setSharedEpisode(null);
     }
@@ -78,7 +78,7 @@ export default function ShareShow() {
                     <p className="mb-4 text-center text-sm sm:text-base">
                         {new Date(sharedEpisode.Date).toLocaleDateString("sk-SK")} • {sharedEpisode.Views} {sharedEpisode.Views == 1 ? "vypočutie" : "vypočutí"}
                     </p>
-                    {sharedEpisode.Audio && sharedEpisode.Audio !== "" && sharedEpisode.Audio !== null && (
+                    {sharedEpisode.Audio && sharedEpisode.Audio.id && (
                         <div className="flex items-center justify-center gap-2 w-full">
                             <button
                                 onClick={() => playEpisode(sharedEpisode)}

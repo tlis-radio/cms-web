@@ -28,7 +28,7 @@ export default async function EpisodeEmbedPage({ params }: EpisodeEmbedPageProps
             id: Number(episode.id),
             Title: episode.Title,
             Cover: episode.Cover,
-            Audio: episode.Audio,
+            Audio: episode.Audio?.id,
             Date: episode.Date,
             Views: episode.Views,
             Description: (episode as any).Description ?? undefined,

@@ -36,7 +36,8 @@ export default function ShowJsonLd({ show, episodes }: { show: any; episodes?: a
   };
 
   const episodeScripts = (episodes || []).map((ep: any) => {
-    const audioUrl = ep.Audio ? (ep.Audio.startsWith("http") ? ep.Audio : `${DIRECTUS}/assets/${ep.Audio}`) : undefined;
+    const audioId = ep.Audio?.id || ep.Audio;
+    const audioUrl = audioId ? (typeof audioId === 'string' && audioId.startsWith("http") ? audioId : `${DIRECTUS}/assets/${audioId}`) : undefined;
     return {
       "@context": "https://schema.org",
       "@type": ["RadioEpisode", "PodcastEpisode"],

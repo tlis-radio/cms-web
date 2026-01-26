@@ -29,7 +29,7 @@ export default async function ShowEmbedPage({ params }: ShowEmbedPageProps) {
           id: Number(episode.id),
           Title: episode.Title,
           Cover: episode.Cover,
-          Audio: episode.Audio,
+          Audio: episode.Audio?.id,
           Date: episode.Date,
           Views: episode.Views,
         }))}
