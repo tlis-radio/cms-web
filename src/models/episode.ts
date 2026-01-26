@@ -8,7 +8,7 @@ export class Episode {
    public date_updated: string;
    public Title: string;
    public Cover: string;
-   public Audio: string;
+   public Audio: { id: string; duration?: number };
    public Show_Id: string;
    public Date: string;
    public Views: number;
@@ -22,7 +22,7 @@ export class Episode {
       date_updated: string,
       Title: string,
       Cover: string,
-      Audio: string,
+      Audio: { id: string; duration?: number },
       Show_Id: string,
       Date: string,
       Views: number,

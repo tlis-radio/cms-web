@@ -18,7 +18,7 @@ export type EpisodeDto = {
    date_updated: string,
    Title: string,
    Cover: string,
-   Audio: string,
+   Audio: { id: string; duration?: number },
    Show_Id: string,
    Date: string,
    Views: number,
