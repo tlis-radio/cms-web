@@ -13,23 +13,48 @@ export default function ShareShow() {
 
     const searchParams = useSearchParams();
     const [sharedEpisode, setSharedEpisode] = useState<Episode | null>(null);
+    const [isProgramEpisode, setIsProgramEpisode] = useState(false);
 
     useEffect(() => {
         if (!searchParams) return;
-        const episodeId = searchParams.get("sharedEpisode");
-        if (!episodeId) return;
+        
+        // Check for programEpisode first (from carousel)
+        const programEpisodeId = searchParams.get("programEpisode");
+        if (programEpisodeId) {
+            GetEpisodeById(parseInt(programEpisodeId)).then((episode) => {
+                setSharedEpisode(episode);
+                setIsProgramEpisode(true);
+            });
+            
+            // Send umami event for programEpisode (no database save)
+            if (typeof window !== 'undefined' && window.umami) {
+                window.umami.track("Program Episode View", { episodeId: programEpisodeId });
+            }
+            return;
+        }
 
-        GetEpisodeById(parseInt(episodeId)).then((episode) => {
-            setSharedEpisode(episode);
-        });
-        fetch(`/api/share/${episodeId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).catch((err) => {
-            console.error("Failed to count view:", err);
-        });
+        // Check for sharedEpisode (from share button)
+        const sharedEpisodeId = searchParams.get("sharedEpisode");
+        if (sharedEpisodeId) {
+            GetEpisodeById(parseInt(sharedEpisodeId)).then((episode) => {
+                setSharedEpisode(episode);
+                setIsProgramEpisode(false);
+            });
+            
+            // Save to database and send different umami event for sharedEpisode
+            fetch(`/api/share/${sharedEpisodeId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).catch((err) => {
+                console.error("Failed to count share:", err);
+            });
+            
+            if (typeof window !== 'undefined' && window.umami) {
+                window.umami.track("Shared Episode View", { episodeId: sharedEpisodeId });
+            }
+        }
     }, []);
 
     function playEpisode(episode: any) {

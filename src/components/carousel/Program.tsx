@@ -8,7 +8,7 @@ export default async function Program() {
 
     const today = new Date();
     const threeDaysAgo = new Date(today);
-    threeDaysAgo.setDate(today.getDate() - 3);
+    threeDaysAgo.setDate(today.getDate() - 60);
     const threeDaysAhead = new Date(today);
     threeDaysAhead.setDate(today.getDate() + 3);
 
