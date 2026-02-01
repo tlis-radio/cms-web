@@ -211,9 +211,17 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount, 
                             <div className="m-auto flex h-max w-full flex-col gap-4">
                                 <h1 className="font-argentumSansBold text-6xl">{show.Title}</h1>
                                 <p className="font-argentumSansLight flex flex-wrap gap-1 justify-center w-full"> Redaktori:
-                                    <b>
+                                    <b className="flex flex-wrap gap-1">
                                     {show.Cast.map((castMember: ShowCast, index: number) => (
-                                        <span key={index}>{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ' / ' : ''}</span>
+                                        <span key={index}>
+                                            <Link 
+                                                href={`/ucinkujuci/${castMember.Cast_id.Slug}`}
+                                                className="hover:text-[#d43c4a] transition-colors underline decoration-dotted"
+                                            >
+                                                {castMember.Cast_id.Name}
+                                            </Link>
+                                            {index < show.Cast.length - 1 ? ' / ' : ''}
+                                        </span>
                                     ))}</b>
                                 </p>
                                 <p className="font-argentumSansLight">Počet epizód: <b>{totalCount}</b></p>

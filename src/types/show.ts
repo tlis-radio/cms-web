@@ -1,5 +1,4 @@
 import { Episode } from "@/models/episode";
-import { Tag } from "./episode";
 
 export type ShowCast = {
    id: number;
@@ -10,6 +9,8 @@ export type ShowCast = {
 export type CastDto = {
    id: number;
    Name: string;
+   Slug: string;
+   Description: string;
 }
 
 export type ShowDto = {

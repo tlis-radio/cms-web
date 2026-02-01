@@ -37,7 +37,20 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
             <span className="flex flex-wrap items-center gap-1">
                <p className="font-argentumSansLight text-lg">Redaktori: </p>
                {show.Cast.map((castMember: ShowCast, index) => {
-                  return <span key={index} className="font-argentumSansLight text-lg"><b>{castMember.Cast_id.Name}{index < show.Cast.length - 1 ? ' / ' : ''}</b></span>
+                  return (
+                     <span key={index} className="font-argentumSansLight text-lg">
+                        <b>
+                           <Link 
+                              href={`/ucinkujuci/${castMember.Cast_id.Slug}`}
+                              className="hover:text-[#d43c4a] transition-colors underline decoration-dotted"
+                              onClick={(e) => e.stopPropagation()}
+                           >
+                              {castMember.Cast_id.Name}
+                           </Link>
+                           {index < show.Cast.length - 1 ? ' / ' : ''}
+                        </b>
+                     </span>
+                  )
                })}
             </span>
             <div className="relative">

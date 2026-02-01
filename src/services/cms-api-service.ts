@@ -58,7 +58,7 @@ const showEndpoints = {
       const total_count = await showEndpoints.listShowsCount(filter);
       var shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
          sort: ['-Episode.Date'],
-         fields: ['*', 'Cast.Cast_id.Name'],
+         fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
          filter: { Filter: { _eq: filter } },
          limit: showEndpoints.PAGE_SIZE,
          page
@@ -69,7 +69,7 @@ const showEndpoints = {
    getShowDataById: async (id: number): Promise<Show> => {
       try {
          const data = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
-            fields: ['*', 'Cast.Cast_id.Name'],
+            fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
          }));
          return data;
       } catch (error) {
@@ -81,7 +81,7 @@ const showEndpoints = {
    getShowBySlug: async (slug: string): Promise<Show> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
          filter: { Slug: { _eq: slug } },
-         fields: ['*', 'Cast.Cast_id.Name'],
+         fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
       }));
       if (!shows || shows.length === 0) {
          throw new Error(`Show with slug '${slug}' not found`);
@@ -92,7 +92,7 @@ const showEndpoints = {
    getShowByEpisodeId: async (episodeId: number | string): Promise<Show | null> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
        filter: { Episode: { _in: [Number(episodeId)] } },
-         fields: ['*', 'Cast.Cast_id.Name'],
+         fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
       }));
       if (!shows || shows.length === 0) return null;
       return shows[0];
@@ -153,7 +153,7 @@ const showEndpoints = {
    },
 
    getShowEpisodesByIdPaginated: async (id: string, page: number): Promise<{ show: Show, episodes: Array<Episode>, totalCount: number }> => {
-      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['*', 'Cast.Cast_id.Name' ] }));
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug' ] }));
       if (showData.Episode.length === 0) return { show: showData, episodes: [], totalCount: 0 };
       const total_count = await showEndpoints.getShowEpisodesCountById(id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
@@ -169,9 +169,44 @@ const showEndpoints = {
 
 var memberEndpoints = {
    listMembers: async (): Promise<Array<Object>> => {
-      const members = await getDirectusInstance().request<Array<Object>>(readItems("Members"));
+      const members = await getDirectusInstance().request<Array<Object>>(readItems("Members", {fields: ['*', 'Cast.*']}));
       return members || [];
    }
+};
+
+var castEndpoints = {
+   PAGE_SIZE: 10,
+   
+   getCastBySlug: async (slug: string): Promise<any> => {
+      const cast = await getDirectusInstance().request<Array<any>>(readItems("Cast", {
+         filter: { Slug: { _eq: slug } },
+         fields: ['*'],
+      }));
+      if (!cast || cast.length === 0) {
+         throw new Error(`Cast member with slug '${slug}' not found`);
+      }
+      return cast[0];
+   },
+
+   getShowsByCastIdCount: async (castId: number): Promise<number> => {
+      const showsCount = await getDirectusInstance().request(aggregate("Shows", {
+         aggregate: { count: '*' },
+         query: { filter: { Cast: { Cast_id: { id: { _eq: castId } } } } }
+      }));
+      return parseInt(showsCount[0].count!) || 0;
+   },
+
+   getShowsByCastIdPaginated: async (castId: number, page: number): Promise<{ shows: Array<Show>, totalCount: number }> => {
+      const total_count = await castEndpoints.getShowsByCastIdCount(castId);
+      const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
+         sort: ['-Episode.Date'],
+         fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
+         filter: { Cast: { Cast_id: { id: { _eq: castId } } } },
+         limit: castEndpoints.PAGE_SIZE,
+         page
+      }));
+      return { shows: shows || [], totalCount: total_count };
+   },
 };
 
 var configEndpoints = {
@@ -204,10 +239,12 @@ var streamEndpoints = {
 class CmsApiService {
    static Show = showEndpoints;
    static Member = memberEndpoints;
+   static Cast = castEndpoints;
    static Config = configEndpoints;
    static Stream = streamEndpoints;
 }
 
 export const SHOWS_PAGE_SIZE = showEndpoints.PAGE_SIZE;
+export const CAST_PAGE_SIZE = castEndpoints.PAGE_SIZE;
 
 export default CmsApiService;
