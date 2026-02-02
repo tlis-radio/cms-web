@@ -1,8 +1,16 @@
 import React from "react";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function GdprPage() {
+  const breadcrumbs = [
+    { label: "GDPR", href: "/gdpr" }
+  ];
+
   return (
     <>
+      <div className="px-8 mb-4">
+        <Breadcrumbs items={breadcrumbs} />
+      </div>
 <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> GDPR a ochrana osobných údajov</h1>      
       <div className="max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg">
         <div className="flex flex-col gap-8 items-center">

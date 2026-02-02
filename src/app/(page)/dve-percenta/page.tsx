@@ -1,6 +1,7 @@
 import tlisaci from '@/../public/images/darujte_nam_2_percenta.png';
 import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -18,8 +19,15 @@ export const metadata: Metadata = {
 };
 
 export default function DvePercenta() {
+    const breadcrumbs = [
+        { label: "Dve percentá", href: "/dve-percenta" }
+    ];
+
     return (
-        <>       
+        <>
+        <div className="px-8 mb-4">
+            <Breadcrumbs items={breadcrumbs} />
+        </div>
         <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> dve percentá</h1>
         <div className="font-argentumSansLight max-w-4xl mx-auto px-4 py-8 text-white bg-black/50 rounded-lg flex flex-col items-center">
             <GalleryThumbnail

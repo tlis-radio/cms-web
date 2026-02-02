@@ -1,5 +1,6 @@
 import Program from "@/components/carousel/Program";
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -17,8 +18,15 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+    const breadcrumbs = [
+        { label: "Program", href: "/program" }
+    ];
+
     return (
         <>
+            <div className="px-8 mb-4">
+                <Breadcrumbs items={breadcrumbs} />
+            </div>
             <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8"><span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> program</h1>
             <Program />
         </>

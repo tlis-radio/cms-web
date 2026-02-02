@@ -3,6 +3,7 @@ import CmsApiService from "@/services/cms-api-service";
 import ShowsPage from "./ShowsPage";
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -57,8 +58,15 @@ const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string
       "publisher": { "@type": "Organization", "name": "Radio TLIS", "url": site }
    }));
 
+   const breadcrumbs = [
+      { label: "Relácie", href: "/relacie" }
+   ];
+
    return (<>
       {seriesJson.map((s: any, i: number) => (<JsonLd key={i} data={s} />))}
+      <div className="px-8 mb-4">
+         <Breadcrumbs items={breadcrumbs} />
+      </div>
       <ShowsPage shows={shows} totalCount={showsResult?.totalCount || 0} loadingError={loadingError} currentPage={page} />
    </>);
 };

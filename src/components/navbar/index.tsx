@@ -40,6 +40,10 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
             }
          ]
       },
+      {
+         text: "Články",
+         url: "/clanky",
+      },
       // {
       //    text: "Reporty",
       //    url: "/reporty"

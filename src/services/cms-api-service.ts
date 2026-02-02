@@ -2,6 +2,7 @@ import { ShowDto } from "@/types/show";
 import { Show } from "@/models/show";
 import { EpisodeDto, Tag } from '@/types/episode';
 import { Episode } from '@/models/episode';
+import { ArticleDto, ArticleCategory, Article } from '@/types/article';
 
 import { aggregate, createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
 import Config from "@/types/config";
@@ -177,6 +178,14 @@ var memberEndpoints = {
 var castEndpoints = {
    PAGE_SIZE: 10,
    
+   listAllCast: async (): Promise<Array<any>> => {
+      const cast = await getDirectusInstance().request<Array<any>>(readItems("Cast", {
+         fields: ['*'],
+         sort: ['Name'],
+      }));
+      return cast || [];
+   },
+   
    getCastBySlug: async (slug: string): Promise<any> => {
       const cast = await getDirectusInstance().request<Array<any>>(readItems("Cast", {
          filter: { Slug: { _eq: slug } },
@@ -236,15 +245,132 @@ var streamEndpoints = {
    }
 }
 
+var articleEndpoints = {
+   PAGE_SIZE: 10,
+
+   listArticlesCount: async (categorySlug?: string): Promise<number> => {
+      const filter: any = { status: { _eq: 'published' } };
+      if (categorySlug) {
+         filter.categories = { Article_Category_id: { slug: { _eq: categorySlug } } };
+      }
+      const articlesCount = await getDirectusInstance().request(aggregate("Article", {
+         aggregate: { count: '*' },
+         query: { filter },
+      }));
+      return parseInt(articlesCount[0].count!) || 0;
+   },
+
+   listArticlesPaginated: async (page: number, categorySlug?: string): Promise<{ articles: Array<Article>, totalCount: number }> => {
+      const total_count = await articleEndpoints.listArticlesCount(categorySlug);
+      const filter: any = { status: { _eq: 'published' } };
+      if (categorySlug) {
+         filter.categories = { Article_Category_id: { slug: { _eq: categorySlug } } };
+      }
+      const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
+         sort: ['-published_at'],
+         fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+         filter,
+         limit: articleEndpoints.PAGE_SIZE,
+         page
+      }));
+      return { articles: articles || [], totalCount: total_count };
+   },
+
+   getArticleBySlug: async (slug: string): Promise<Article> => {
+      const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
+         filter: { slug: { _eq: slug }, status: { _eq: 'published' } },
+         fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+      }));
+      if (!articles || articles.length === 0) {
+         throw new Error(`Article with slug '${slug}' not found`);
+      }
+      return articles[0];
+   },
+
+   getArticleById: async (id: number): Promise<Article | null> => {
+      const article = await getDirectusInstance().request<ArticleDto>(readItem("Article", id, {
+         fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+      }));
+      return article || null;
+   },
+
+   getArticlesByEpisodeId: async (episodeId: number): Promise<Array<Article>> => {
+      // Search for articles that mention the episode in content using custom tag @[episode:id]
+      const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
+         filter: { 
+            status: { _eq: 'published' },
+            content: { _contains: `@[episode:${episodeId}]` }
+         },
+         fields: ['id', 'title', 'slug', 'thumbnail_image', 'published_at', 'type'],
+         sort: ['-published_at'],
+         limit: 5
+      }));
+      return articles || [];
+   },
+
+   listCategories: async (): Promise<Array<ArticleCategory>> => {
+      const categories = await getDirectusInstance().request<Array<ArticleCategory>>(readItems("Article_Category", {
+         fields: ['*'],
+      }));
+      return categories || [];
+   },
+
+   getCategoryBySlug: async (slug: string): Promise<ArticleCategory> => {
+      const categories = await getDirectusInstance().request<Array<ArticleCategory>>(readItems("Article_Category", {
+         filter: { slug: { _eq: slug } },
+         fields: ['*'],
+      }));
+      if (!categories || categories.length === 0) {
+         throw new Error(`Category with slug '${slug}' not found`);
+      }
+      return categories[0];
+   },
+
+   getArticlesByAuthorIdCount: async (authorId: number): Promise<number> => {
+      const articlesCount = await getDirectusInstance().request(aggregate("Article", {
+         aggregate: { count: '*' },
+         query: { filter: { author: { id: { _eq: authorId } }, status: { _eq: 'published' } } },
+      }));
+      return parseInt(articlesCount[0].count!) || 0;
+   },
+
+   getArticlesByAuthorIdPaginated: async (authorId: number, page: number): Promise<{ articles: Array<Article>, totalCount: number }> => {
+      const total_count = await articleEndpoints.getArticlesByAuthorIdCount(authorId);
+      const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
+         sort: ['-published_at'],
+         fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+         filter: { author: { id: { _eq: authorId } }, status: { _eq: 'published' } },
+         limit: articleEndpoints.PAGE_SIZE,
+         page
+      }));
+      return { articles: articles || [], totalCount: total_count };
+   },
+
+   getRecentEvents: async (limit: number = 5): Promise<Array<Article>> => {
+      const events = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
+         sort: ['-event_time'],
+         fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+         filter: { 
+            status: { _eq: 'published' },
+            type: { _in: ['event', 'report'] }
+         },
+         limit
+      }));
+      return events || [];
+   },
+};
+
 class CmsApiService {
    static Show = showEndpoints;
    static Member = memberEndpoints;
    static Cast = castEndpoints;
    static Config = configEndpoints;
    static Stream = streamEndpoints;
+   static Article = articleEndpoints;
 }
 
 export const SHOWS_PAGE_SIZE = showEndpoints.PAGE_SIZE;
 export const CAST_PAGE_SIZE = castEndpoints.PAGE_SIZE;
+export const ARTICLES_PAGE_SIZE = articleEndpoints.PAGE_SIZE;
 
 export default CmsApiService;

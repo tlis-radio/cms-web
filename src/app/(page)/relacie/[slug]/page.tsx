@@ -5,6 +5,7 @@ import NotFound from "@/components/NotFound";
 import ShareShow from "./ShareShow";
 import type { Metadata } from "next";
 import ShowJsonLd from "@/components/ShowJsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -55,10 +56,40 @@ const Show = async ({ params, searchParams }: { params: { slug: string }, search
       const show = await CmsApiService.Show.getShowBySlug(slug);
       const episodeData = await CmsApiService.Show.getShowEpisodesByIdPaginated(String(show.id), page);
       const showTags = await CmsApiService.Show.getShowTagsById(String(show.id));
+      
+      // Fetch related articles for each episode
+      const episodeArticlesMap: Record<string, any[]> = {};
+      for (const episode of episodeData.episodes) {
+         try {
+            const relatedArticles = await CmsApiService.Article.getArticlesByEpisodeId(Number(episode.id));
+            if (relatedArticles.length > 0) {
+               episodeArticlesMap[episode.id] = relatedArticles;
+            }
+         } catch (e) {
+            // Ignore errors for related articles
+         }
+      }
+
+      const breadcrumbs = [
+         { label: "Relácie", href: "/relacie" },
+         { label: episodeData.show.Title, href: `/relacie/${slug}` }
+      ];
+      
       return <>
           <ShowJsonLd show={episodeData.show} episodes={episodeData.episodes} />
           <ShareShow/>
-          <Shows showTags={showTags} show={episodeData.show} episodes={episodeData.episodes} totalCount={episodeData.totalCount} ShowName={episodeData.show.Title} currentPage={page} />
+          <div className="px-8 mb-4">
+             <Breadcrumbs items={breadcrumbs} />
+          </div>
+          <Shows 
+            showTags={showTags} 
+            show={episodeData.show} 
+            episodes={episodeData.episodes} 
+            totalCount={episodeData.totalCount} 
+            ShowName={episodeData.show.Title} 
+            currentPage={page}
+            episodeArticles={episodeArticlesMap}
+          />
       </>
    } catch (error) {
       return <NotFound message={<h2 className="text-2xl text-white mb-2">Reláciu sa nepodarilo načítať.</h2>}></NotFound>

@@ -1,0 +1,151 @@
+.blog-content {
+   color: #e5e5e5;
+   line-height: 1.8;
+   font-size: 1.05rem;
+}
+
+.blog-content h1 {
+   font-size: 2.25rem;
+   font-weight: 700;
+   margin-top: 2.5rem;
+   margin-bottom: 1rem;
+   color: #ffffff;
+   scroll-margin-top: 100px;
+}
+
+.blog-content h2 {
+   font-size: 1.875rem;
+   font-weight: 600;
+   margin-top: 2rem;
+   margin-bottom: 0.75rem;
+   color: #ffffff;
+   scroll-margin-top: 100px;
+}
+
+.blog-content h3 {
+   font-size: 1.5rem;
+   font-weight: 600;
+   margin-top: 1.75rem;
+   margin-bottom: 0.5rem;
+   color: #ffffff;
+   scroll-margin-top: 100px;
+}
+
+.blog-content h4 {
+   font-size: 1.25rem;
+   font-weight: 600;
+   margin-top: 1.5rem;
+   margin-bottom: 0.5rem;
+   color: #ffffff;
+   scroll-margin-top: 100px;
+}
+
+.blog-content p {
+   margin-bottom: 1.25rem;
+   text-align: justify;
+}
+
+.blog-content a {
+   color: #d43c4a;
+   text-decoration: underline;
+   text-underline-offset: 2px;
+   transition: color 0.2s;
+}
+
+.blog-content a:hover {
+   color: #f05561;
+}
+
+.blog-content ul {
+   list-style-type: disc;
+   padding-left: 1.5rem;
+   margin-bottom: 1.25rem;
+}
+
+.blog-content ol {
+   list-style-type: decimal;
+   padding-left: 1.5rem;
+   margin-bottom: 1.25rem;
+}
+
+.blog-content li {
+   margin-bottom: 0.5rem;
+}
+
+.blog-content blockquote {
+   border-left: 4px solid #d43c4a;
+   padding-left: 1rem;
+   margin: 1.5rem 0;
+   font-style: italic;
+   color: #a1a1a1;
+   background-color: rgba(212, 60, 74, 0.05);
+   padding: 1rem 1rem 1rem 1.5rem;
+   border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.blog-content code {
+   background-color: #2a2a2a;
+   padding: 0.2rem 0.4rem;
+   border-radius: 0.25rem;
+   font-size: 0.9em;
+   font-family: monospace;
+}
+
+.blog-content pre {
+   background-color: #1a1a1a;
+   padding: 1rem;
+   border-radius: 0.5rem;
+   overflow-x: auto;
+   margin: 1.5rem 0;
+}
+
+.blog-content pre code {
+   background-color: transparent;
+   padding: 0;
+}
+
+.blog-content img {
+   max-width: 100%;
+   height: auto;
+   border-radius: 0.5rem;
+   margin: 1.5rem 0;
+}
+
+.blog-content hr {
+   border: none;
+   border-top: 1px solid #333;
+   margin: 2rem 0;
+}
+
+.blog-content table {
+   width: 100%;
+   border-collapse: collapse;
+   margin: 1.5rem 0;
+}
+
+.blog-content th,
+.blog-content td {
+   border: 1px solid #333;
+   padding: 0.75rem;
+   text-align: left;
+}
+
+.blog-content th {
+   background-color: #2a2a2a;
+   font-weight: 600;
+}
+
+.blog-content strong {
+   font-weight: 600;
+   color: #ffffff;
+}
+
+.blog-content em {
+   font-style: italic;
+}
+
+/* First paragraph styling */
+.blog-content > p:first-of-type {
+   font-size: 1.15rem;
+   color: #d1d1d1;
+}

@@ -3,6 +3,7 @@ import CmsApiService from "@/services/cms-api-service";
 import CastPage from "./CastPage";
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -17,8 +18,17 @@ export async function generateMetadata({
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
    
    let cast;
+   let showsCount = 0;
+   let articlesCount = 0;
+   
    try {
       cast = await CmsApiService.Cast.getCastBySlug(params.slug);
+      const [showsResult, articlesResult] = await Promise.all([
+         CmsApiService.Cast.getShowsByCastIdPaginated(cast.id, 1).catch(() => ({ totalCount: 0 })),
+         CmsApiService.Article.getArticlesByAuthorIdPaginated(cast.id, 1).catch(() => ({ totalCount: 0 }))
+      ]);
+      showsCount = showsResult.totalCount;
+      articlesCount = articlesResult.totalCount;
    } catch (error) {
       return {
          title: "Účinkujúci nenájdený | Radio TLIS",
@@ -29,16 +39,25 @@ export async function generateMetadata({
       ? `${SITE_URL}/ucinkujuci/${params.slug}`
       : `${SITE_URL}/ucinkujuci/${params.slug}?page=${page}`;
    
+   const description = cast.Description || 
+      `Profil ${cast.Name} na Rádiu TLIS. ${showsCount} ${showsCount === 1 ? 'relácia' : 'relácií'}, ${articlesCount} ${articlesCount === 1 ? 'článok' : 'článkov'}.`;
+   
    return {
       title: `${cast.Name} | Radio TLIS`,
-      description: cast.Description || `Prehľad všetkých relácií s účinkujúcim ${cast.Name} na Rádiu TLIS.`,
+      description,
       alternates: { canonical: canonicalUrl },
       openGraph: {
          title: `${cast.Name} | Radio TLIS`,
-         description: cast.Description || `Prehľad všetkých relácií s účinkujúcim ${cast.Name} na Rádiu TLIS.`,
+         description,
          url: canonicalUrl,
          siteName: "Radio TLIS",
          locale: "sk_SK",
+         type: "profile",
+      },
+      twitter: {
+         card: "summary",
+         title: `${cast.Name} | Radio TLIS`,
+         description,
       },
    };
 }
@@ -56,10 +75,12 @@ const CastMemberPage = async ({
    let loadingError = false;
    let cast = null;
    let showsResult = null;
+   let articlesResult = null;
 
    try {
       cast = await CmsApiService.Cast.getCastBySlug(params.slug);
       showsResult = await CmsApiService.Cast.getShowsByCastIdPaginated(cast.id, page);
+      articlesResult = await CmsApiService.Article.getArticlesByAuthorIdPaginated(cast.id, page);
    } catch (error) {
       console.error("Error fetching cast or shows:", error);
       loadingError = true;
@@ -89,14 +110,24 @@ const CastMemberPage = async ({
       "publisher": { "@type": "Organization", "name": "Radio TLIS", "url": site }
    }));
 
+   const breadcrumbs = [
+      { label: "Účinkujúci", href: "/ucinkujuci" },
+      { label: cast?.Name || "Načítava sa...", href: `/ucinkujuci/${params.slug}` }
+   ];
+
    return (
       <>
          {personJson && <JsonLd data={personJson} />}
          {seriesJson.map((s: any, i: number) => (<JsonLd key={i} data={s} />))}
+         <div className="px-8 mb-4">
+            <Breadcrumbs items={breadcrumbs} />
+         </div>
          <CastPage 
             cast={cast} 
             shows={shows} 
-            totalCount={showsResult?.totalCount || 0} 
+            articles={articlesResult?.articles || []}
+            showsTotalCount={showsResult?.totalCount || 0}
+            articlesTotalCount={articlesResult?.totalCount || 0}
             loadingError={loadingError} 
             currentPage={page} 
          />

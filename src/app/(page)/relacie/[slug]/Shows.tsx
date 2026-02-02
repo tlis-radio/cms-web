@@ -11,6 +11,8 @@ import Link from "next/link";
 import { ShowCast } from "@/types/show";
 import Pagination from "@/components/pagination/Pagination";
 import { SHOWS_PAGE_SIZE } from "@/services/cms-api-service";
+import RelatedArticles from "@/components/RelatedArticles";
+import { Article } from "@/types/article";
 
 function calculateContrast(hexColor: string): string {
     if (!hexColor) return '#000000';
@@ -32,7 +34,7 @@ function calculateContrast(hexColor: string): string {
     return brightness > 128 ? '#000000' : '#FFFFFF';
 }
 
-function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
+function Episode({ episode, ShowName, relatedArticles }: { episode: any, ShowName: string, relatedArticles?: Article[] }) {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata, setArchiveShowName, setArchiveEpisodeCover } = usePlayer();
 
     const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
@@ -135,6 +137,11 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
                 </div>
 
                 <div className={classNames("relative", isDescriptionExpanded ? "pb-10" : "")}>
+                    {/* Related Articles */}
+                    {relatedArticles && relatedArticles.length > 0 && (
+                        <RelatedArticles articles={relatedArticles} />
+                    )}
+                    
                     <div
                         ref={descriptionRef}
                         className={`mt-4 ${isDescriptionExpanded ? "max-h-none" : (episode.Tags.length > 0 ? "max-h-20" : "max-h-28")} overflow-hidden text-justify tlis-markdown`}
@@ -167,7 +174,7 @@ function Episode({ episode, ShowName }: { episode: any, ShowName: string }) {
 
 }
 
-export default function Shows({ show, showTags, episodes, ShowName, totalCount, currentPage }: { show: any, showTags: any, episodes: any, ShowName: string, totalCount: number, currentPage: number }) {
+export default function Shows({ show, showTags, episodes, ShowName, totalCount, currentPage, episodeArticles = {} }: { show: any, showTags: any, episodes: any, ShowName: string, totalCount: number, currentPage: number, episodeArticles?: Record<string, Article[]> }) {
     // selected tag ids (stringified) used for filtering episodes
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
@@ -269,7 +276,12 @@ export default function Shows({ show, showTags, episodes, ShowName, totalCount, 
                     )}
 
                     {filteredEpisodes.map((episode: any, index: number) => (
-                        <Episode episode={episode} key={index} ShowName={ShowName} />
+                        <Episode 
+                            episode={episode} 
+                            key={index} 
+                            ShowName={ShowName} 
+                            relatedArticles={episodeArticles[episode.id]}
+                        />
                     ))}
                     
                     {selectedTagIds.length === 0 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
