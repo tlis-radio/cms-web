@@ -54,7 +54,7 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
          {/* Cover Image Hero */}
          <div className="relative w-full max-w-7xl mx-auto mb-8">
             {article.cover_image ? (
-               <div className="relative aspect-[21/9] sm:aspect-[21/7] w-full overflow-hidden rounded-lg">
+               <div className="relative aspect-[7/9] md:aspect-[25/9] w-full overflow-hidden rounded-lg">
                   <img
                      src={`${DIRECTUS_URL}/assets/${article.cover_image}?width=1400&quality=85`}
                      alt={article.title}
@@ -160,23 +160,23 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
          </div>
 
          {/* Main Content Area */}
-         <div className="max-w-7xl mx-auto px-4 sm:px-8">
+         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative">
             {/* Gallery (if report) */}
             {hasGallery && (
                <ArticleGallery images={galleryImages} initialVisibleCount={4} />
             )}
 
             {/* Content with sidebar */}
-            <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex flex-col lg:flex-row gap-8 sticky top-10">
                {/* Main content - 9/12 */}
-               <div className="lg:w-9/12">
+               <div className="lg:w-9/12 bg-black/50 p-4 pt-0 max-lg:order-2">
                   {article.content && (
                      <ArticleContent content={article.content} episodes={episodes} episodeShows={episodeShows} />
                   )}
                </div>
 
                {/* Sidebar - 3/12 */}
-               <aside className="lg:w-3/12">
+               <aside className="lg:w-3/12 max-lg:order-1 lg:sticky lg:top-[8rem] lg:self-start">
                   {/* Author card */}
                   {article.author && (
                      <div className="bg-[#1c1c1c] rounded-lg p-4 mb-6">

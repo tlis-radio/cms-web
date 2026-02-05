@@ -53,7 +53,7 @@ export default function ArticleContent({ content, episodes = new Map(), episodeS
                      <img 
                         src={src?.startsWith("http") ? src : `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${src}`} 
                         alt={alt || ""} 
-                        className="rounded-lg max-w-full h-auto my-4"
+                        className="rounded-lg max-w-full h-auto my-4 max-h-[500px] justify-self-center"
                         loading="lazy"
                         {...props}
                      />

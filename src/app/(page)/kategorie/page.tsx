@@ -77,13 +77,15 @@ const CategoriesPage: React.FC = async () => {
                <Link
                   key={category.id}
                   href={`/kategorie/${category.slug}`}
-                  className="bg-[#1c1c1c] text-white p-6 rounded-lg border border-gray-700 hover:border-[#d43c4a] hover:bg-[#111] transition-all duration-200 group"
+                  className="relative text-white p-3 rounded-lg border border-gray-700 hover:border-[#d43c4a] hover:bg-[#111] transition-all duration-200 group min-h-36 flex flex-col"
                >
-                  <h2 className="text-xl font-semibold mb-2 group-hover:text-[#d43c4a] transition-colors">
+                  <img src={category.thumbnail ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${category.thumbnail}` : "/default-category.jpg"} alt={category.name} className="w-full h-full absolute top-0 left-0 object-cover rounded-lg z-[1]" />
+                  <div className="z-[2] bg-gradient-to-t from-black/70 via-black/40 to-transparent absolute inset-0 rounded-lg"></div>
+                  <h2 className="z-[3] block relative text-xl font-semibold mb-2 group-hover:text-[#d43c4a] transition-colors text-white mt-auto text-left">
                      {category.name}
                   </h2>
                   {category.description && (
-                     <p className="text-gray-400 text-sm line-clamp-2">
+                     <p className="z-[2] text-white/90 text-sm line-clamp-2 text-left">
                         {category.description}
                      </p>
                   )}

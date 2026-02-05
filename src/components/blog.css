@@ -5,12 +5,7 @@
 }
 
 .blog-content h1 {
-   font-size: 2.25rem;
-   font-weight: 700;
-   margin-top: 2.5rem;
-   margin-bottom: 1rem;
-   color: #ffffff;
-   scroll-margin-top: 100px;
+   display: none;
 }
 
 .blog-content h2 {
@@ -20,6 +15,7 @@
    margin-bottom: 0.75rem;
    color: #ffffff;
    scroll-margin-top: 100px;
+   text-align: left;
 }
 
 .blog-content h3 {
@@ -29,6 +25,7 @@
    margin-bottom: 0.5rem;
    color: #ffffff;
    scroll-margin-top: 100px;
+   text-align: left;
 }
 
 .blog-content h4 {
@@ -38,6 +35,7 @@
    margin-bottom: 0.5rem;
    color: #ffffff;
    scroll-margin-top: 100px;
+   text-align: left;
 }
 
 .blog-content p {
@@ -60,12 +58,14 @@
    list-style-type: disc;
    padding-left: 1.5rem;
    margin-bottom: 1.25rem;
+   text-align: left;
 }
 
 .blog-content ol {
    list-style-type: decimal;
    padding-left: 1.5rem;
    margin-bottom: 1.25rem;
+   text-align: left;
 }
 
 .blog-content li {
@@ -77,10 +77,14 @@
    padding-left: 1rem;
    margin: 1.5rem 0;
    font-style: italic;
-   color: #a1a1a1;
-   background-color: rgba(212, 60, 74, 0.05);
-   padding: 1rem 1rem 1rem 1.5rem;
+   color: white;
+   background-color: rgba(212, 60, 74, 0.5);
+   padding: 1rem;
    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.blog-content blockquote p {
+   margin: 0;
 }
 
 .blog-content code {
@@ -138,6 +142,12 @@
 .blog-content strong {
    font-weight: 600;
    color: #ffffff;
+}
+
+.blog-content img+em{
+   width: 100%;
+   text-align: center;
+   display: block;
 }
 
 .blog-content em {

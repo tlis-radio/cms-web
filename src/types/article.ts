@@ -7,6 +7,7 @@ export type ArticleCategory = {
    name: string;
    slug: string;
    description?: string;
+   thumbnail: string;
 };
 
 export type ArticleCategoryRelation = {
