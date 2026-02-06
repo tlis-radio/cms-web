@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Markdown from "react-markdown";
 import { parseCustomTags, CustomTag } from "@/lib/markdown-parser";
 import EpisodeEmbed from "@/components/EpisodeEmbed";
 import { Episode } from "@/models/episode";
 import { ShowDto } from "@/types/show";
+import { useGallery } from "@/components/carousel/gallery/GalleryProvider";
 import "./blog.css";
 
 interface ArticleContentProps {
@@ -16,6 +17,35 @@ interface ArticleContentProps {
 
 export default function ArticleContent({ content, episodes = new Map(), episodeShows = new Map() }: ArticleContentProps) {
    const parts = parseCustomTags(content);
+   const { showImages } = useGallery();
+   const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
+
+   // Extract all image URLs from markdown content
+   const markdownImages = useMemo(() => {
+      const imageRegex = /!\[.*?\]\((.*?)\)/g;
+      const images: string[] = [];
+      let match;
+      
+      parts.forEach(part => {
+         if (typeof part === "string") {
+            while ((match = imageRegex.exec(part)) !== null) {
+               const src = match[1];
+               // Build full URL
+               const fullUrl = src.startsWith("http") ? src : `${DIRECTUS_URL}/assets/${src}?quality=90`;
+               images.push(fullUrl);
+            }
+         }
+      });
+      
+      return images;
+   }, [content, DIRECTUS_URL]);
+
+   const handleImageClick = (src: string) => {
+      const index = markdownImages.findIndex(img => img.includes(src.split('?')[0]));
+      if (index !== -1) {
+         showImages(markdownImages, index);
+      }
+   };
 
    const renderPart = (part: string | CustomTag, index: number) => {
       if (typeof part === "string") {
@@ -49,15 +79,19 @@ export default function ArticleContent({ content, episodes = new Map(), episodeS
                         {children}
                      </a>
                   ),
-                  img: ({ src, alt, ...props }) => (
-                     <img 
-                        src={src?.startsWith("http") ? src : `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${src}`} 
-                        alt={alt || ""} 
-                        className="rounded-lg max-w-full h-auto my-4 max-h-[500px] justify-self-center"
-                        loading="lazy"
-                        {...props}
-                     />
-                  ),
+                  img: ({ src, alt, ...props }) => {
+                     const imgSrc = src?.startsWith("http") ? src : `${DIRECTUS_URL}/assets/${src}`;
+                     return (
+                        <img 
+                           src={imgSrc} 
+                           alt={alt || ""} 
+                           className="rounded-lg max-w-full h-auto my-4 max-h-[500px] justify-self-center cursor-pointer hover:opacity-90 transition-opacity"
+                           loading="lazy"
+                           onClick={() => handleImageClick(src || "")}
+                           {...props}
+                        />
+                     );
+                  },
                }}
             >
                {part}

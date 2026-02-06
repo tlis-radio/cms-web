@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { faXmark, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function GalleryOverlay() {
-    const { open, src, setOpen } = useGallery();
+    const { open, src, setOpen, initialIndex } = useGallery();
 
     const [current, setCurrent] = useState(0);
     const [zoom, setZoom] = useState(1);
@@ -13,17 +13,42 @@ export default function GalleryOverlay() {
     const [dragging, setDragging] = useState(false);
     const [start, setStart] = useState<{ x: number; y: number } | null>(null);
 
+    function handleKeyDown(e: KeyboardEvent) {
+        if (!open) return;
+        if (e.key === "Escape") {
+            setOpen(false);
+        }
+        if (e.key === "ArrowLeft") {
+            setCurrent((prev) => (prev === 0 ? src.length - 1 : prev - 1));
+            setZoom(1);
+            setOffset({ x: 0, y: 0 });
+        }
+        if (e.key === "ArrowRight") {
+            setCurrent((prev) => (prev === src.length - 1 ? 0 : prev + 1));
+            setZoom(1);
+            setOffset({ x: 0, y: 0 });
+        }
+    }
+
+    useEffect(()=>{
+        window.addEventListener("keyup", handleKeyDown);
+        return () => {
+            window.removeEventListener("keyup", handleKeyDown);
+        };
+    })
+
     useEffect(() => {
         setOffset({ x: 0, y: 0 });
-        setZoom(0);
+        setZoom(1);
         if (open) {
+            setCurrent(initialIndex);
             const original = document.body.style.overflow;
             document.body.style.overflow = 'hidden';
             return () => {
                 document.body.style.overflow = original;
             };
         }
-    }, [open]);
+    }, [open, initialIndex]);
 
     if (!open) return null;
 

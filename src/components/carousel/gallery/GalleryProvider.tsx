@@ -6,7 +6,8 @@ type GalleryContextType = {
     setSrc: (src: string[]) => void;
     open: boolean;
     setOpen: (open: boolean) => void;
-    showImages: (images: string[]) => void;
+    showImages: (images: string[], index?: number) => void;
+    initialIndex: number;
 };
 
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
@@ -28,14 +29,16 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({
 }) => {
     const [src, setSrc] = useState<string[]>([]);
     const [open, setOpen] = useState<boolean>(false);
+    const [initialIndex, setInitialIndex] = useState<number>(0);
 
-    function showImages(images: string[]) {
+    function showImages(images: string[], index?: number) {
+        setInitialIndex(index ?? 0);
         setSrc(images);
         setOpen(true);
     }
 
     return (
-        <GalleryContext.Provider value={{ src, setSrc, open, setOpen, showImages }}>
+        <GalleryContext.Provider value={{ src, setSrc, open, setOpen, showImages, initialIndex }}>
             {children}
         </GalleryContext.Provider>
     );

@@ -11,7 +11,7 @@ interface ArticleGalleryProps {
 
 export default function ArticleGallery({ images, initialVisibleCount = 4 }: ArticleGalleryProps) {
    const [isExpanded, setIsExpanded] = useState(false);
-   const { showImages } = useGallery();
+   const { showImages, setOpen } = useGallery();
 
    if (!images || images.length === 0) {
       return null;
@@ -21,9 +21,9 @@ export default function ArticleGallery({ images, initialVisibleCount = 4 }: Arti
    const visibleImages = isExpanded ? images : images.slice(0, initialVisibleCount);
    const hasMore = images.length > initialVisibleCount;
 
-   const handleImageClick = () => {
+   const handleImageClick = (index: number) => {
       const fullImages = images.map((img) => `${DIRECTUS_URL}/assets/${img}?quality=90`);
-      showImages(fullImages);
+      showImages(fullImages, index);
    };
 
    return (
@@ -37,7 +37,7 @@ export default function ArticleGallery({ images, initialVisibleCount = 4 }: Arti
             {visibleImages.map((image, index) => (
                <button
                   key={image}
-                  onClick={handleImageClick}
+                  onClick={() => handleImageClick(index)}
                   className="aspect-square overflow-hidden rounded bg-gray-800 hover:opacity-90 transition-opacity cursor-pointer"
                >
                   <img
