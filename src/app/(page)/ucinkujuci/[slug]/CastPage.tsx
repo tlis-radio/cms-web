@@ -7,6 +7,17 @@ import Pagination from "@/components/pagination/Pagination";
 import { CAST_PAGE_SIZE, ARTICLES_PAGE_SIZE } from "@/services/cms-api-service";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import TlisImage from "@/components/TlisImage";
+
+var roles = {
+   boss: "Vedúci a zástupcovia",
+   moderator: "Moderátori",
+   technic: "Technici",
+   pr: "PR-isti",
+   web: "Webový tím",
+   dj: "DJi",
+   playwright: "Dramaturgovia",
+};
 
 export default function CastPage({ 
    cast, 
@@ -77,25 +88,85 @@ export default function CastPage({
                </Link>
             </div>
             
-            <h1 className="text-4xl text-white font-semibold mb-4">
-               {cast.Name}
-            </h1>
+            {/* Profile header with picture if member exists */}
+            {cast.Member && (
+               <div className="flex items-start gap-6 mb-6 flex-col md:flex-row items-center">
+                  <div className="relative">
+                     <div className="aspect-square relative rounded-full overflow-hidden shadow-lg w-32 h-32">
+                        <TlisImage
+                           src={cast.Member.Picture}
+                           alt={cast.Name}
+                           sizeMultiplier={2}
+                           className="object-cover h-full w-full"
+                        />
+                     </div>
+                     {cast.Member.BestOfTheMonth && (
+                        <img
+                           src="/images/crown.webp"
+                           alt="Tlisák Mesiaca"
+                           className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 w-28 h-28 z-10"
+                           style={{
+                              transform: "translate(-50%, -33%) rotate(-18deg)",
+                              transformOrigin: "bottom center",
+                           }}
+                        />
+                     )}
+                  </div>
+                  
+                  <div className="flex-1 items-center flex flex-col">
+                     <h1 className="text-4xl text-white font-semibold mb-2">
+                        {cast.Name}
+                     </h1>
+                     
+                     {cast.Member.BestOfTheMonth && (
+                        <span className="inline-block bg-[#D43C4A] text-white text-sm px-3 py-1 rounded-full mb-2">
+                           Tlisák Mesiaca
+                        </span>
+                     )}
+                     
+                     {cast.Member.Role && (
+                        <p className="text-gray-300 text-lg mb-4">
+                           {roles[cast.Member.Role as keyof typeof roles] || cast.Member.Role}
+                        </p>
+                     )}
 
-            {cast.Description && (
-               <p className="text-gray-200 text-lg max-w-3xl mb-6">
-                  {cast.Description}
-               </p>
+                     {cast.Description && (
+                        <p className="text-gray-400 text-center mb-4 max-w-2xl">
+                           {cast.Description}
+                        </p>
+                     )}
+                     
+                     <div className="flex gap-2 text-sm">
+                        <span className="text-gray-400">
+                           {showsTotalCount} {showsTotalCount === 1 ? "relácia" : showsTotalCount < 5 ? "relácie" : "relácií"}
+                        </span>
+                        <span className="text-gray-600">•</span>
+                        <span className="text-gray-400">
+                           {articlesTotalCount} {articlesTotalCount === 1 ? "článok" : articlesTotalCount < 5 ? "články" : "článkov"}
+                        </span>
+                     </div>
+                  </div>
+               </div>
             )}
+            
+            {/* Fallback for cast without member data */}
+            {!cast.Member && (
+               <>
+                  <h1 className="text-4xl text-white font-semibold mb-4">
+                     {cast.Name}
+                  </h1>
 
-            <div className="flex gap-2 text-sm">
-               <span className="text-gray-400">
-                  {showsTotalCount} {showsTotalCount === 1 ? "relácia" : showsTotalCount < 5 ? "relácie" : "relácií"}
-               </span>
-               <span className="text-gray-600">•</span>
-               <span className="text-gray-400">
-                  {articlesTotalCount} {articlesTotalCount === 1 ? "článok" : articlesTotalCount < 5 ? "články" : "článkov"}
-               </span>
-            </div>
+                  <div className="flex gap-2 text-sm">
+                     <span className="text-gray-400">
+                        {showsTotalCount} {showsTotalCount === 1 ? "relácia" : showsTotalCount < 5 ? "relácie" : "relácií"}
+                     </span>
+                     <span className="text-gray-600">•</span>
+                     <span className="text-gray-400">
+                        {articlesTotalCount} {articlesTotalCount === 1 ? "článok" : articlesTotalCount < 5 ? "články" : "článkov"}
+                     </span>
+                  </div>
+               </>
+            )}
          </div>
 
          {/* Tabs */}

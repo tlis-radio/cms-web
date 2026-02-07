@@ -6,11 +6,19 @@ export type ShowCast = {
    Show_id: ShowDto;
 }
 
+export type MemberData = {
+   id: number;
+   Picture: string;
+   Role: string;
+   BestOfTheMonth: boolean;
+}
+
 export type CastDto = {
    id: number;
    Name: string;
    Slug: string;
-   Description: string;
+   Description?: string; // Optional, deprecated
+   Member?: MemberData; // Optional member data
 }
 
 export type ShowDto = {

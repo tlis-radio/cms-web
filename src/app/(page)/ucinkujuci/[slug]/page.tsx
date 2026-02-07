@@ -39,8 +39,7 @@ export async function generateMetadata({
       ? `${SITE_URL}/ucinkujuci/${params.slug}`
       : `${SITE_URL}/ucinkujuci/${params.slug}?page=${page}`;
    
-   const description = cast.Description || 
-      `Profil ${cast.Name} na Rádiu TLIS. ${showsCount} ${showsCount === 1 ? 'relácia' : 'relácií'}, ${articlesCount} ${articlesCount === 1 ? 'článok' : 'článkov'}.`;
+   const description = `Profil ${cast.Name} na Rádiu TLIS. ${showsCount} ${showsCount === 1 ? 'relácia' : 'relácií'}, ${articlesCount} ${articlesCount === 1 ? 'článok' : 'článkov'}.`;
    
    return {
       title: `${cast.Name} | Radio TLIS`,
@@ -95,7 +94,6 @@ const CastMemberPage = async ({
       "@context": "https://schema.org",
       "@type": "Person",
       "name": cast.Name,
-      "description": cast.Description || undefined,
       "url": `${site}/ucinkujuci/${cast.Slug}`,
    } : null;
 

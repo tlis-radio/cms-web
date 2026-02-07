@@ -194,6 +194,19 @@ var castEndpoints = {
       if (!cast || cast.length === 0) {
          throw new Error(`Cast member with slug '${slug}' not found`);
       }
+      
+      // Fetch related Member data if exists
+      const members = await getDirectusInstance().request<Array<any>>(readItems("Members", {
+         filter: { Cast: { id: { _eq: cast[0].id } } },
+         fields: ['id', 'Picture', 'Role', 'BestOfTheMonth'],
+         limit: 1
+      }));
+      
+      // Attach member data to cast if found
+      if (members && members.length > 0) {
+         cast[0].Member = members[0];
+      }
+      
       return cast[0];
    },
 
