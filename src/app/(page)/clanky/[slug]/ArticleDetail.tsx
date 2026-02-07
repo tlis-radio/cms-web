@@ -54,17 +54,17 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
          {/* Cover Image Hero */}
          <div className="relative w-full max-w-7xl mx-auto mb-8">
             {article.cover_image ? (
-               <div className="relative aspect-[7/9] md:aspect-[25/9] w-full overflow-hidden rounded-lg">
+               <div className="relative h-auto w-full overflow-hidden rounded-lg">
                   <img
                      src={`${DIRECTUS_URL}/assets/${article.cover_image}?width=1400&quality=85`}
                      alt={article.title}
-                     className="w-full h-full object-cover"
+                     className="absolute top-0 left-0 w-full h-full object-cover"
                   />
                   {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-black/60" />
                   
                   {/* Content overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                  <div className="relative p-6 sm:p-8">
                      {/* Breadcrumbs on cover */}
                      <div className="mb-4">
                         <Breadcrumbs items={breadcrumbs} className="text-gray-300" />
@@ -75,11 +75,10 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
                         <div className="flex flex-wrap gap-2 mb-3">
                            {article.categories.map((cat) => (
                               <Link
-                                 key={cat.id}
+                                 key={"category-" + cat.id}
                                  href={`/kategorie/${cat.Article_Category_id.slug}`}
                                  className="bg-[#d43c4a] text-white text-xs font-medium px-3 py-1 rounded-full hover:bg-[#b83744] transition-colors"
-                              >
-                                 {cat.Article_Category_id.name}
+                              >{cat.Article_Category_id.name}
                               </Link>
                            ))}
                         </div>
@@ -123,7 +122,7 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
 
                      {/* Description */}
                      {article.description && (
-                        <p className="mt-4 text-gray-300 text-left max-w-3xl">
+                        <p className="mt-4 text-gray-300 text-left">
                            {article.description}
                         </p>
                      )}
@@ -176,7 +175,7 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
                </div>
 
                {/* Sidebar - 3/12 */}
-               <aside className="lg:w-3/12 max-lg:order-1 lg:sticky lg:top-[8rem] lg:self-start">
+               <aside className="lg:w-3/12 max-lg:order-1">
                   {/* Author card */}
                   {article.author && (
                      <div className="bg-[#1c1c1c] rounded-lg p-4 mb-6">
@@ -201,7 +200,7 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
 
                   {/* Table of Contents */}
                   {article.content && (
-                     <div className="bg-[#1c1c1c] rounded-lg p-4">
+                     <div className="bg-[#1c1c1c] rounded-lg p-4 lg:sticky lg:top-[8rem] lg:self-start">
                         <TableOfContents content={article.content} />
                      </div>
                   )}

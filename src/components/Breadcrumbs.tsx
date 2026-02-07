@@ -57,7 +57,7 @@ export default function Breadcrumbs({ items, className = "" }: BreadcrumbsProps)
 
             {items.map((item, index) => (
                <React.Fragment key={item.href}>
-                  <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-gray-600" />
+                  <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-gray-200" />
                   {index === items.length - 1 ? (
                      <span className="text-gray-300" aria-current="page">
                         {item.label}
