@@ -164,12 +164,12 @@ function ProgramCarousel({
   const visibleSlides = getVisibleSlides();
 
   return (
-    <div className="relative w-full py-8">
-      <div className="relative flex items-center justify-center min-h-[400px] sm:min-h-[500px]">
+    <div className="relative w-full py-2">
+      <div className="relative flex items-center justify-center">
         {/* Carousel Container */}
         <div className="relative w-full max-w-7xl mx-auto px-4 overflow-hidden">
           <motion.div
-            className="relative h-[350px] sm:h-[450px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+            className="relative h-[350px] sm:h-[400px] flex items-center justify-center cursor-grab active:cursor-grabbing"
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
