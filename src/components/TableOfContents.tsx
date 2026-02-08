@@ -89,7 +89,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
             {headings.map((heading) => (
                <li
                   key={heading.id}
-                  style={{ paddingLeft: `${(heading.level - 1) * 0.75}rem` }}
+                  style={{ paddingLeft: `${(heading.level - 2) * 0.75}rem` }}
                >
                   <button
                      onClick={() => handleClick(heading.id)}
