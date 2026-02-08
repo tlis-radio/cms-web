@@ -15,7 +15,7 @@ export default function PageLayout({ children }: Readonly<{ children: React.Reac
       <SessionInit />
       <PlayerProvider>
         <Header />
-        <div className='flex flex-row justify-center w-full pt-[125px] lg:pt-[150px] mb-16'>
+        <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[105px] mb-16'>
           <GalleryProvider>
             <div className='pt-4 w-full text-center max-w-7xl' >
               {children}

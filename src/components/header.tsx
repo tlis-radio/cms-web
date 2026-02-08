@@ -14,12 +14,12 @@ const Header = async () => {
    
    return (
       <header className='bg-[#96120F] text-white fixed w-full z-20'>
-         <div className='flex flex-row items-center h-[80px] w-full max-w-7xl mx-auto px-2 gap-2'>
+         <div className='flex flex-row items-center h-[60px] w-full max-w-7xl mx-auto px-2 gap-2'>
             <Link href={"/"}>
                <Image
                   src={logo}
                   alt="Logo"
-                  height={80}
+                  height={50}
                   priority={true}
                />
             </Link>

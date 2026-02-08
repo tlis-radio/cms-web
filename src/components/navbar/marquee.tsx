@@ -71,15 +71,15 @@ export default function Marquee({ data }: { data?: MarqueeLinkType[] }) {
                 `}
             </style>
 
-            <div className="py-1 marquee-viewport">
+            <div className="marquee-viewport">
                 <div id="marquee-track" className="marquee-track-wrap" style={{ ['--marquee-distance' as any]: `${trackWidth ?? 0}px` }}>
                     <div className="marquee-content">
                         {repeatedData.map((item, index) => (
                             <span key={index} className="inline-flex items-center">
                                 {item.url ? 
-                                    <Link href={item.url} target={item.target} className="text-white text-xl mx-4 hover:underline uppercase font-bold">
+                                    <Link href={item.url} target={item.target} className="text-white text-md mx-4 hover:underline uppercase font-bold">
                                         {item.text}
-                                    </Link> : <p className="text-white text-xl mx-4 hover:underline uppercase font-bold">{item.text}</p>
+                                    </Link> : <p className="text-white text-md mx-4 hover:underline uppercase font-bold">{item.text}</p>
                                 }
                                  <Separator />
                             </span>
@@ -90,9 +90,9 @@ export default function Marquee({ data }: { data?: MarqueeLinkType[] }) {
                             <span key={`dup-${index}`} className="inline-flex items-center">
                                 {
                                     item.url ? 
-                                    <Link href={item.url} target={item.target} className="text-white text-xl mx-4 hover:underline uppercase font-bold">
+                                    <Link href={item.url} target={item.target} className="text-white text-md mx-4 hover:underline uppercase font-bold">
                                         {item.text}
-                                    </Link> : <p className="text-white text-xl mx-4 hover:underline uppercase font-bold">{item.text}</p>
+                                    </Link> : <p className="text-white text-md mx-4 hover:underline uppercase font-bold">{item.text}</p>
                                 }
                                 <Separator />
                             </span>
