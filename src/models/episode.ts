@@ -13,6 +13,7 @@ export class Episode {
    public Date: string;
    public Views: number;
    public Tags: Array<Tags>;
+   public Description?: string;
 
    constructor(
       id: string,

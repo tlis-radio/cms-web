@@ -67,7 +67,7 @@ export default function EpisodeEmbed({ episode, showName = "Radio TLIS", showSlu
    if (!episode) return null;
 
    return (
-      <div className="border bg-[#1c1c1c] p-4 text-white drop-shadow-lg my-6">
+      <div className="bg-[#1c1c1c] p-4 text-white drop-shadow-lg my-6 rounded-md">
          <div className="flex flex-col md:flex-row gap-4">
             <div className="md:w-48 w-full flex-shrink-0">
                <TlisImage
@@ -99,7 +99,7 @@ export default function EpisodeEmbed({ episode, showName = "Radio TLIS", showSlu
                            ))}
                         </div>
                      )}
-                     <h2 className="text-2xl font-semibold flex-1 text-left">{episode.Title}</h2>
+                     <h2 className="!text-[20px] font-semibold flex-1 text-left !mt-2">{episode.Title}</h2>
                      <p className="text-gray-300">
                         {new Date(episode.Date).toLocaleDateString("sk-SK")} • {episode.Views} {episode.Views === 1 ? "vypočutie" : "vypočutí"}
                         {showSlug && (
@@ -114,6 +114,7 @@ export default function EpisodeEmbed({ episode, showName = "Radio TLIS", showSlu
                            </>
                         )}
                      </p>
+                     <p className="mt-0 !text-left !text-sm !w-full">{(episode.Description?.length ?? 0) > 200 ? episode.Description!.substring(0, 200) + "..." : episode.Description}</p>
                   </div>
                   <div className="flex items-center gap-3 mt-2 md:mt-0">
                      <button
