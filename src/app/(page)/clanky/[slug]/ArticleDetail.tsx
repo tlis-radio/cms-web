@@ -187,7 +187,9 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
                            className="flex items-center gap-3 group"
                         >
                            <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold">
-                              {article.author.Name.charAt(0)}
+                              {article.author.Member?.Picture ? (
+                              <img className="rounded-full" src={`${DIRECTUS_URL}/assets/${article.author.Member?.Picture}`}></img>
+                              ) : (article.author.Name.charAt(0))}
                            </div>
                            <div>
                               <p className="text-white font-medium group-hover:text-[#d43c4a] transition-colors">

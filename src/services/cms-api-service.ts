@@ -289,6 +289,7 @@ var articleEndpoints = {
       return { articles: articles || [], totalCount: total_count };
    },
 
+   //here
    getArticleBySlug: async (slug: string): Promise<Article> => {
       const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
          filter: { slug: { _eq: slug }, status: { _eq: 'published' } },
@@ -297,6 +298,17 @@ var articleEndpoints = {
       if (!articles || articles.length === 0) {
          throw new Error(`Article with slug '${slug}' not found`);
       }
+      
+      const members = await getDirectusInstance().request<Array<any>>(readItems("Members", {
+         filter: { Cast: { id: { _eq: articles[0].author?.id } } },
+         fields: ['Picture'],
+         limit: 1
+      }));
+
+      if (members && members.length > 0) {
+         articles[0].author!.Member = members[0];
+      }
+
       return articles[0];
    },
 
