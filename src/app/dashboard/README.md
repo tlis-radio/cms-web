@@ -18,7 +18,32 @@ This is a client-side only dashboard for viewing analytics and statistics. All d
 Main dashboard showing:
 - Total shows count
 - Total unique listeners count
-- Quick links to shows
+- Stream listeners count
+- Track shares count
+- Live stream listeners graph (last 24 hours) - only shown if data exists
+- Quick links to all sections
+
+#### `/dashboard/stream-listeners`
+Stream listeners analytics with:
+- Total listener records count
+- Interactive time range selector (1 hour, 24 hours, 7 days, 30 days, all time)
+- Line graph showing concurrent listeners over time
+- Data aggregated using MAX values per time bucket:
+  - 1 hour: sampled each minute
+  - 24 hours: max from every 30 minutes
+  - 7 days: max from every hour
+  - 30 days: max from every 4 hours
+  - All time: max from every day
+- Recent activity table showing latest 50 records
+
+#### `/dashboard/track-shares`
+Track shares analytics with:
+- Total shares count
+- Unique episodes shared
+- Interactive time range selector (24 hours, 7 days, 30 days, all time)
+- Line graph showing shares over time
+- Top 10 most shared episodes
+- Recent shares table with episode details (latest 50)
 
 #### `/dashboard/shows`
 Shows listing with:

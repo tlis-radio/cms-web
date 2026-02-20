@@ -5,7 +5,7 @@ export type TrackView = {
    date_created: string;
 };
 
-export type StreamListen = {
+export type StreamListener = {
    id: number;
    count: number;
    date_created: string;

@@ -838,4 +838,37 @@ export class DashboardService {
          }
       });
    }
+
+   // Get all track shares
+   async getAllTrackShares(): Promise<Array<{ id: number; episode: { id: number; title: string }; name: string; date_created: string }>> {
+      try {
+         const shares = await this.client.request<Array<{ id: number; episode: { id: number; title: string }; name: string; date_created: string }>>(
+            readItems('track_shares', {
+               sort: ['-date_created'],
+               fields: ['id', 'episode.Title', 'episode.id', 'name', 'date_created'],
+               limit: -1,
+            })
+         );
+         return shares || [];
+      } catch (error) {
+         console.error('Error fetching track shares:', error);
+         return [];
+      }
+   }
+
+   // Get all stream listeners
+   async getAllStreamListeners(): Promise<Array<{ id: number; count: number; date_created: string }>> {
+      try {
+         const listeners = await this.client.request<Array<{ id: number; count: number; date_created: string }>>(
+            readItems('stream_listeners', {
+               sort: ['-date_created'],
+               limit: -1,
+            })
+         );
+         return listeners || [];
+      } catch (error) {
+         console.error('Error fetching stream listeners:', error);
+         return [];
+      }
+   }
 }

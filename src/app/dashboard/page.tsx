@@ -22,6 +22,10 @@ export default function DashboardPage() {
    const [dashboardData, setDashboardData] = useState<any>(null);
    const [loadingProgress, setLoadingProgress] = useState(0);
    const [loadingMessage, setLoadingMessage] = useState('');
+   const [streamListeners, setStreamListeners] = useState<Array<{ id: number; count: number; date_created: string }>>([]);
+   const [trackShares, setTrackShares] = useState<Array<{ id: number; episode: { id: number; title: string }; name: string; date_created: string }>>([]);
+   const [isLoadingStreamData, setIsLoadingStreamData] = useState(true);
+   const [maxStreamListeners, setMaxStreamListeners] = useState<number | null>(null);
 
    // Load summary first
    useEffect(() => {
@@ -33,6 +37,32 @@ export default function DashboardPage() {
          }).catch((error) => {
             console.error('Error loading dashboard summary:', error);
             setIsLoadingSummary(false);
+         });
+      }
+   }, [directusClient]);
+
+   // Load stream listeners and track shares
+   useEffect(() => {
+      if (directusClient) {
+         const service = new DashboardService(directusClient);
+         Promise.all([
+            service.getAllStreamListeners(),
+            service.getAllTrackShares(),
+         ]).then(([listenersData, sharesData]) => {
+            setStreamListeners(listenersData);
+            setTrackShares(sharesData);
+            
+            // Calculate max from last 24 hours
+            const cutoffTime = new Date();
+            cutoffTime.setHours(cutoffTime.getHours() - 24);
+            const recentListeners = listenersData.filter(l => new Date(l.date_created) >= cutoffTime);
+            const max = recentListeners.length > 0 ? Math.max(...recentListeners.map(l => l.count)) : null;
+            setMaxStreamListeners(max);
+            
+            setIsLoadingStreamData(false);
+         }).catch((error) => {
+            console.error('Error loading stream data:', error);
+            setIsLoadingStreamData(false);
          });
       }
    }, [directusClient]);
@@ -112,6 +142,8 @@ export default function DashboardPage() {
       { value: '7d', label: 'Last 7 Days' },
    ];
 
+
+
    return (
       <AuthGuard>
          <div className="min-h-screen bg-gray-900 p-8">
@@ -133,11 +165,13 @@ export default function DashboardPage() {
                   </p>
                </div>
 
+
+
                {/* Summary Cards - Show immediately */}
                {isLoadingSummary ? (
                   <div className="text-white text-center mb-8">Loading summary...</div>
                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                      <Link
                         href="/dashboard/shows"
                         className="block p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
@@ -165,6 +199,36 @@ export default function DashboardPage() {
                         </p>
                         <p className="text-gray-400 mt-2">
                            Unique listeners
+                        </p>
+                     </Link>
+
+                     <Link
+                        href="/dashboard/stream-listeners"
+                        className="block p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
+                     >
+                        <h2 className="text-2xl font-semibold text-white mb-2">
+                           Stream Listeners
+                        </h2>
+                        <p className="text-4xl font-bold text-blue-500">
+                           {isLoadingStreamData ? '...' : (maxStreamListeners !== null ? maxStreamListeners : 'No data')}
+                        </p>
+                        <p className="text-gray-400 mt-2">
+                           Max last 24 hours
+                        </p>
+                     </Link>
+
+                     <Link
+                        href="/dashboard/track-shares"
+                        className="block p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
+                     >
+                        <h2 className="text-2xl font-semibold text-white mb-2">
+                           Track Shares
+                        </h2>
+                        <p className="text-4xl font-bold text-purple-500">
+                           {isLoadingStreamData ? '...' : trackShares.length}
+                        </p>
+                        <p className="text-gray-400 mt-2">
+                           Total shares
                         </p>
                      </Link>
                   </div>
