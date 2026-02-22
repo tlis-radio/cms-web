@@ -1,5 +1,11 @@
 import { Episode } from "@/models/episode";
 
+export type ShowEpisode = {
+   id: number;
+   Episodes_id: number | Episode;
+   Shows_id: number;
+}
+
 export type ShowCast = {
    id: number;
    Cast_id: CastDto;
@@ -31,7 +37,7 @@ export type ShowDto = {
    Slug: string,
    Cover: string,
    Description: string,
-   Episode: Array<Episode>,
+   Episodes: ShowEpisode[],
    Cast: ShowCast[],
    Filter: string;
    ModeratorNames?: string[];

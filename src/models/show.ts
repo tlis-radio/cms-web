@@ -1,5 +1,4 @@
-import { ShowCast, ShowDto } from "@/types/show";
-import { Episode } from "./episode";
+import { ShowCast, ShowDto, ShowEpisode } from "@/types/show";
 
 export class Show {
    public id: number;
@@ -10,7 +9,7 @@ export class Show {
    public Title: string;
    public Cover: string;
    public Description: string;
-   public Episode: Array<Episode>;
+   public Episodes: ShowEpisode[];
    public Slug: string;
    public Cast: ShowCast[];
    public Filter: string;
@@ -27,7 +26,7 @@ export class Show {
       Slug: string,
       Cover: string,
       Description: string,
-      Episode: Array<Episode>,
+      Episodes: ShowEpisode[],
       Cast: ShowCast[],
       Filter: string,
       Views: number,
@@ -41,7 +40,7 @@ export class Show {
       this.Title = Title;
       this.Cover = Cover;
       this.Description = Description;
-      this.Episode = Episode;
+      this.Episodes = Episodes;
       this.Cast = Cast;
       this.Slug = Slug;
       this.Filter = Filter;
@@ -60,7 +59,7 @@ export class Show {
          dto.Slug,
          dto.Cover,
          dto.Description,
-         dto.Episode,
+         dto.Episodes,
          dto.Cast,
          dto.Filter,
          dto.Views,

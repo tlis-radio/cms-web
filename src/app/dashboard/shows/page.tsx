@@ -88,7 +88,7 @@ export default function DashboardShowsPage() {
                                  </p>
                               )}
                               <div className="mt-2 text-sm text-gray-500">
-                                 {show.Episode?.length || 0} episodes
+                                 {show.Episodes?.length || 0} episodes
                               </div>
                            </div>
                         </Link>

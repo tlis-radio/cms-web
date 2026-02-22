@@ -25,8 +25,8 @@ export class DashboardService {
       try {
          const shows = await this.client.request<Show[]>(
             readItems('Shows', {
-               sort: ['-Episode.Date'],
-               fields: ['*', 'Cast.Cast_id.*'],
+               sort: ['-Episodes.Episodes_id.Date'],
+               fields: ['*', 'Cast.Cast_id.*', 'Episodes.Episodes_id'],
             })
          );
          return shows || [];
@@ -56,19 +56,21 @@ export class DashboardService {
          const shows = await this.client.request<Show[]>(
             readItems('Shows', {
                filter: { id: { _eq: showId } },
-               fields: ['Episode'],
+               fields: ['Episodes.Episodes_id'],
             })
          );
          
-         if (!shows || shows.length === 0 || !shows[0].Episode || shows[0].Episode.length === 0) {
+         if (!shows || shows.length === 0 || !shows[0].Episodes || shows[0].Episodes.length === 0) {
             return [];
          }
+
+         const episodeIds = shows[0].Episodes.map(e => e.Episodes_id);
 
          const episodes = await this.client.request<Episode[]>(
             readItems('Episodes', {
                fields: ['*', 'Tags.Tags_id.*', 'Show_Id.Slug'],
                filter: { 
-                  id: { _in: shows[0].Episode },
+                  id: { _in: episodeIds },
                   status: { _eq: 'published' }
                },
                sort: ['-Date'],
@@ -387,7 +389,7 @@ export class DashboardService {
          const [shows, episodes] = await Promise.all([
             this.client.request<Show[]>(
                readItems('Shows', {
-                  fields: ['id', 'Title', 'Slug', 'Episode'],
+                  fields: ['id', 'Title', 'Slug', 'Episodes.Episodes_id'],
                   limit: -1,
                })
             ),
@@ -496,8 +498,7 @@ export class DashboardService {
       const cutoffDate = this.getCutoffDate(timeFilter);
       
       const showStats = data.shows.map(show => {
-         // Get episodes for this show
-         const showEpisodeIds = Array.isArray(show.Episode) ? show.Episode.map(String) : [];
+         const showEpisodeIds = Array.isArray(show.Episodes) ? show.Episodes.map(e => String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id)) : [];
          
          const showEpisodes = data.episodes.filter(ep => {
             const epId = String(ep.id);
@@ -561,7 +562,7 @@ export class DashboardService {
       const cutoffDate = this.getCutoffDate(timeFilter);
       
       const showStats = data.shows.map(show => {
-         const showEpisodeIds = Array.isArray(show.Episode) ? show.Episode.map(String) : [];
+         const showEpisodeIds = Array.isArray(show.Episodes) ? show.Episodes.map(e => String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id)) : [];
 
          const showEpisodes = data.episodes.filter(ep => {
             const epId = String(ep.id);
@@ -630,7 +631,7 @@ export class DashboardService {
       const cutoffDate = this.getCutoffDate(timeFilter);
       
       const showStats = data.shows.map(show => {
-         const showEpisodeIds = Array.isArray(show.Episode) ? show.Episode.map(String) : [];
+         const showEpisodeIds = Array.isArray(show.Episodes) ? show.Episodes.map(e => String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id)) : [];
 
          const showEpisodes = data.episodes.filter(ep => {
             const epId = String(ep.id);

@@ -41,8 +41,8 @@ const showEndpoints = {
    PAGE_SIZE: 10, // TODO: adjustable page size in future?
    listShows: async (): Promise<Array<Show>> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
-         sort: ['-Episode.Date'],
-         fields: ['*', 'Cast.Cast_id.*'],
+         sort: ['-Episodes.Episodes_id.Date'],
+         fields: ['*', 'Cast.Cast_id.*', 'Episodes.Episodes_id'],
       }));
       return shows || [];
    },
@@ -58,8 +58,8 @@ const showEndpoints = {
    listShowsPaginated: async (page: number, filter: string): Promise<{ shows: Array<Show>, totalCount: number }> => {
       const total_count = await showEndpoints.listShowsCount(filter);
       var shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
-         sort: ['-Episode.Date'],
-         fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
+         sort: ['-Episodes.Episodes_id.Date'],
+         fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug', 'Episodes.Episodes_id'],
          filter: { Filter: { _eq: filter } },
          limit: showEndpoints.PAGE_SIZE,
          page
@@ -92,7 +92,7 @@ const showEndpoints = {
 
    getShowByEpisodeId: async (episodeId: number | string): Promise<Show | null> => {
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
-       filter: { Episode: { _in: [Number(episodeId)] } },
+         filter: { Episodes: { Episodes_id: { _eq: Number(episodeId) } } },
          fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
       }));
       if (!shows || shows.length === 0) return null;
@@ -101,10 +101,11 @@ const showEndpoints = {
 
    getShowTagsById: async (id: string): Promise<Array<Tag>> => {
       const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
-         fields: ['Episode.Tags.Tags_id.*'],
+         fields: ['Episodes.Episodes_id.Tags.Tags_id.*'],
       }));
       var allTags: Array<Tag> = [];
-      for (let episode of showData.Episode) {
+      for (let junction of showData.Episodes) {
+         const episode = junction.Episodes_id as Episode;
          for (let tagRelation of episode.Tags) {
             const tag = tagRelation.Tags_id;
             if (!allTags.find(t => t.id === tag.id)) {
@@ -124,11 +125,14 @@ const showEndpoints = {
    },
 
    getShowEpisodesById: async (id: string): Promise<Array<Episode>> => {
-      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
-      if (showData.Episode.length === 0) return [];
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
+         fields: ['Episodes.Episodes_id'],
+      }));
+      if (!showData.Episodes || showData.Episodes.length === 0) return [];
+      const episodeIds = showData.Episodes.map(e => e.Episodes_id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
          fields: ["*", "Tags.Tags_id.*", "Audio.*"],
-         filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } },
+         filter: { id: { _in: episodeIds }, status: { _eq: 'published' } },
          sort: ['-Date'],
       }));
 
@@ -144,22 +148,26 @@ const showEndpoints = {
    },
 
    getShowEpisodesCountById: async (id: string): Promise<number> => {
-      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id));
-      if (showData.Episode.length === 0) return 0;
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, {
+         fields: ['Episodes.Episodes_id'],
+      }));
+      if (!showData.Episodes || showData.Episodes.length === 0) return 0;
+      const episodeIds = showData.Episodes.map(e => e.Episodes_id);
       const showEpisodesCount = await getDirectusInstance().request(aggregate("Episodes", {
-         query: { filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } }, },
+         query: { filter: { id: { _in: episodeIds }, status: { _eq: 'published' } }, },
          aggregate: { count: '*' },
       }));
       return parseInt(showEpisodesCount[0].count!) || 0;
    },
 
    getShowEpisodesByIdPaginated: async (id: string, page: number): Promise<{ show: Show, episodes: Array<Episode>, totalCount: number }> => {
-      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug' ] }));
-      if (showData.Episode.length === 0) return { show: showData, episodes: [], totalCount: 0 };
+      const showData = await getDirectusInstance().request<ShowDto>(readItem("Shows", id, { fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug', 'Episodes.Episodes_id' ] }));
+      if (!showData.Episodes || showData.Episodes.length === 0) return { show: showData, episodes: [], totalCount: 0 };
+      const episodeIds = showData.Episodes.map(e => e.Episodes_id);
       const total_count = await showEndpoints.getShowEpisodesCountById(id);
       var episodeData = await getDirectusInstance().request<Array<EpisodeDto>>(readItems("Episodes", {
          fields: ["*", "Tags.Tags_id.*", "Audio.*"],
-         filter: { id: { _in: showData.Episode }, status: { _eq: 'published' } },
+         filter: { id: { _in: episodeIds }, status: { _eq: 'published' } },
          sort: ['-Date'],
          limit: showEndpoints.PAGE_SIZE,
          page
