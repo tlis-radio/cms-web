@@ -253,7 +253,7 @@ function ProgramCarousel({
 
         {/* Navigation Buttons */}
         {carouselPosts.length > 1 && (
-          <div className="font-argentumSansLight absolute top-1/2 -translate-y-1/2 w-full max-w-7xl px-4 sm:px-8 pointer-events-none z-20 hidden sm:block">
+          <div className="font-argentumSansLight absolute top-1/2 -translate-y-1/2 w-full max-w-7xl px-4 sm:px-8 pointer-events-none z-10 hidden sm:block">
             <div className="flex justify-between items-center">
               <motion.div
                 className="flex flex-col items-center gap-2 pointer-events-auto"
@@ -330,7 +330,7 @@ function ProgramCarousel({
 
         {/* Indicator Dots */}
         {carouselPosts.length > 1 && (
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
             {carouselPosts.map((_: any, idx: number) => (
               <motion.button
                 key={idx}
