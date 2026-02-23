@@ -7,6 +7,7 @@ import Link from "next/link";
 import Marquee from "./navbar/marquee";
 import Player from "./player/player";
 import LiveButton from "@/components/player/live-button";
+import TranslateWidget from "./TranslateWidget";
 
 const Header = async () => {
    var navbarLinks = await getNavbarLinks();
@@ -27,6 +28,7 @@ const Header = async () => {
             <Player />
             <LiveButton />
             <Socials mobile={"desktop"} />
+            <TranslateWidget />
             <Hamburger navbarLinks={navbarLinks} />
          </div>
          <Marquee data={marqueeLinks} />
