@@ -229,7 +229,7 @@ var castEndpoints = {
    getShowsByCastIdPaginated: async (castId: number, page: number): Promise<{ shows: Array<Show>, totalCount: number }> => {
       const total_count = await castEndpoints.getShowsByCastIdCount(castId);
       const shows = await getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
-         sort: ['-Episode.Date'],
+         sort: ['-Episodes.Episodes_id.Date'],
          fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
          filter: { Cast: { Cast_id: { id: { _eq: castId } } } },
          limit: castEndpoints.PAGE_SIZE,

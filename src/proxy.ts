@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Check if the request is for the embedded route
   if (request.nextUrl.pathname.startsWith('/embedded')) {
     const response = NextResponse.next();
