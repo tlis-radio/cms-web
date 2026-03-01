@@ -14,7 +14,9 @@ export async function generateMetadata({
    params: { slug: string }; 
    searchParams?: { [key: string]: string | string[] | undefined } 
 }): Promise<Metadata> {
-   const pageParam = searchParams?.page;
+   const {slug} = await params;
+   const queryParams = await searchParams;
+   const pageParam = queryParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
    
    let cast;
@@ -22,7 +24,7 @@ export async function generateMetadata({
    let articlesCount = 0;
    
    try {
-      cast = await CmsApiService.Cast.getCastBySlug(params.slug);
+      cast = await CmsApiService.Cast.getCastBySlug(slug);
       const [showsResult, articlesResult] = await Promise.all([
          CmsApiService.Cast.getShowsByCastIdPaginated(cast.id, 1).catch(() => ({ totalCount: 0 })),
          CmsApiService.Article.getArticlesByAuthorIdPaginated(cast.id, 1).catch(() => ({ totalCount: 0 }))
@@ -36,8 +38,8 @@ export async function generateMetadata({
    }
 
    const canonicalUrl = page === 1 
-      ? `${SITE_URL}/ucinkujuci/${params.slug}`
-      : `${SITE_URL}/ucinkujuci/${params.slug}?page=${page}`;
+      ? `${SITE_URL}/ucinkujuci/${slug}`
+      : `${SITE_URL}/ucinkujuci/${slug}?page=${page}`;
    
    const description = `Profil ${cast.Name} na Rádiu TLIS. ${showsCount} ${showsCount === 1 ? 'relácia' : 'relácií'}, ${articlesCount} ${articlesCount === 1 ? 'článok' : 'článkov'}.`;
    
@@ -68,7 +70,9 @@ const CastMemberPage = async ({
    params: { slug: string }; 
    searchParams?: { [key: string]: string | string[] | undefined } 
 }) => {
-   const pageParam = searchParams?.page;
+   const { slug } = await params;
+   const queryParams = await searchParams;
+   const pageParam = queryParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
 
    let loadingError = false;
@@ -77,7 +81,7 @@ const CastMemberPage = async ({
    let articlesResult = null;
 
    try {
-      cast = await CmsApiService.Cast.getCastBySlug(params.slug);
+      cast = await CmsApiService.Cast.getCastBySlug(slug);
       showsResult = await CmsApiService.Cast.getShowsByCastIdPaginated(cast.id, page);
       articlesResult = await CmsApiService.Article.getArticlesByAuthorIdPaginated(cast.id, page);
    } catch (error) {
@@ -110,7 +114,7 @@ const CastMemberPage = async ({
 
    const breadcrumbs = [
       { label: "Účinkujúci", href: "/ucinkujuci" },
-      { label: cast?.Name || "Načítava sa...", href: `/ucinkujuci/${params.slug}` }
+      { label: cast?.Name || "Načítava sa...", href: `/ucinkujuci/${slug}` }
    ];
 
    return (
