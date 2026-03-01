@@ -3,11 +3,11 @@ import WideEpisodeWidget from "../../../widgets/WideEpisodeWidget";
 import { notFound } from "next/navigation";
 
 interface WideEpisodeEmbedPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function WideEpisodeEmbedPage({ params }: WideEpisodeEmbedPageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const episode = await CmsApiService.Show.getEpisodeById(parseInt(id));

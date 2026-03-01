@@ -3,11 +3,11 @@ import EpisodeWidget from "../../widgets/EpisodeWidget";
 import { notFound } from "next/navigation";
 
 interface EpisodeEmbedPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function EpisodeEmbedPage({ params }: EpisodeEmbedPageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const episode = await CmsApiService.Show.getEpisodeById(parseInt(id));

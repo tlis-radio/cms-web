@@ -6,9 +6,9 @@ const shareTrackingMap = new Map<string, Set<string>>();
 
 export async function POST(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const { id } = params;
+    const { id } = await params;
     const enabled = process.env.TRACKER_ENABLED === 'true';
     if (!enabled) {
         return NextResponse.json(

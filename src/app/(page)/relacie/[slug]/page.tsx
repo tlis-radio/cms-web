@@ -10,9 +10,10 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 // Dynamic metadata per show slug
-export async function generateMetadata({ params, searchParams }: { params: { slug: string }, searchParams?: { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
-   const slug = params.slug;
-   const pageParam = searchParams?.page;
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>, searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+   const { slug } = await params;
+   const resolvedSearchParams = await searchParams;
+   const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
    
    const canonicalUrl = page === 1 
@@ -47,9 +48,10 @@ export async function generateMetadata({ params, searchParams }: { params: { slu
    }
 }
 
-const Show = async ({ params, searchParams }: { params: { slug: string }, searchParams?: { [key: string]: string | string[] | undefined } }) => {
-   const { slug } = params;
-   const pageParam = searchParams?.page;
+const Show = async ({ params, searchParams }: { params: Promise<{ slug: string }>, searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }) => {
+   const { slug } = await params;
+   const resolvedSearchParams = await searchParams;
+   const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
    
    try {

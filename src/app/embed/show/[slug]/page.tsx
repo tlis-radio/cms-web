@@ -3,11 +3,11 @@ import ShowListWidget from "../../widgets/ShowListWidget";
 import { notFound } from "next/navigation";
 
 interface ShowEmbedPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function ShowEmbedPage({ params }: ShowEmbedPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   try {
     const show = await CmsApiService.Show.getShowBySlug(slug);

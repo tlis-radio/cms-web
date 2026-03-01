@@ -11,8 +11,8 @@ export async function generateMetadata({
    params, 
    searchParams 
 }: { 
-   params: { slug: string }; 
-   searchParams?: { [key: string]: string | string[] | undefined } 
+   params: Promise<{ slug: string }>; 
+   searchParams?: Promise<{ [key: string]: string | string[] | undefined }> 
 }): Promise<Metadata> {
    const {slug} = await params;
    const queryParams = await searchParams;
@@ -67,8 +67,8 @@ const CastMemberPage = async ({
    params, 
    searchParams 
 }: { 
-   params: { slug: string }; 
-   searchParams?: { [key: string]: string | string[] | undefined } 
+   params: Promise<{ slug: string }>; 
+   searchParams?: Promise<{ [key: string]: string | string[] | undefined }> 
 }) => {
    const { slug } = await params;
    const queryParams = await searchParams;

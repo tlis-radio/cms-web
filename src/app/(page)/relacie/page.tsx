@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CmsApiService from "@/services/cms-api-service";
 import ShowsPage from "./ShowsPage";
 import type { Metadata } from "next";
