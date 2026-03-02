@@ -7,10 +7,11 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
-export async function generateMetadata({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
-   const pageParam = searchParams?.page;
+export async function generateMetadata({ searchParams }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+   const resolvedSearchParams = await searchParams;
+   const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
-   const filterValue = searchParams?.filter;
+   const filterValue = resolvedSearchParams?.filter;
    const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
    
    const canonicalUrl = page === 1 
@@ -31,11 +32,12 @@ export async function generateMetadata({ searchParams }: { searchParams?: { [key
    };
 }
 
-const Shows: React.FC = async ({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) => {
-   let filterValue = searchParams?.filter;
+async function Shows ({ searchParams }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined } >} ) {
+   const resolvedSearchParams = await searchParams;
+   let filterValue = resolvedSearchParams?.filter;
    const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
    
-   const pageParam = searchParams?.page;
+   const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
 
    var loadingError = false;
