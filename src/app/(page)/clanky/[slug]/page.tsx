@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       const article = await CmsApiService.Article.getArticleBySlug(slug);
       const title = article?.title ? `${article.title} | Radio TLIS` : `Článok | Radio TLIS`;
       const description = article?.description || `Článok na Radiu TLIS.`;
-      const image = article?.cover_image ? `${DIRECTUS_URL}/assets/${article.cover_image}` : undefined;
+      const image = article?.thumbnail_image ? `${DIRECTUS_URL}/assets/${article.thumbnail_image}` : undefined;
       
       return {
          title,
