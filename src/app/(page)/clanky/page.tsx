@@ -7,8 +7,9 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
-export async function generateMetadata({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
-   const pageParam = searchParams?.page;
+export async function generateMetadata({ searchParams }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+   const requestedParams = await searchParams;
+   const pageParam = requestedParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
    
    const canonicalUrl = page === 1 
@@ -29,8 +30,9 @@ export async function generateMetadata({ searchParams }: { searchParams?: { [key
    };
 }
 
-const Articles: React.FC = async ({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) => {
-   const pageParam = searchParams?.page;
+const Articles: React.FC = async ({ searchParams }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }) => {
+   const requestedParams = await searchParams;
+   const pageParam = requestedParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
 
    let loadingError = false;
