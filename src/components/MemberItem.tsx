@@ -41,8 +41,12 @@ export default function MemberGridItem({ member } :{ member: Member }) {
 
             )}
             <h3 className="text-white font-medium mt-5">{member.Name}</h3>
+            {member.RoleDescription && (
+                <p className="text-gray-300">{member.RoleDescription}</p>
+            )}
             {member.BestOfTheMonth && (
-                <span className="text-[#D43C4A] text-sm">Tlisák Mesiaca</span>)}
+                <span className="text-[#D43C4A] text-sm">Tlisák Mesiaca</span>
+            )}
         </div>
     </Link>
     );
