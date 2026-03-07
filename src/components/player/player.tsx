@@ -92,13 +92,11 @@ const Player: React.FC<{}> = () => {
    const [displayTitle, setDisplayTitle] = useState<string>("RADIO TLIS");
    const [activeDisplayTitle, setActiveDisplayTitle] = useState<string>("RADIO TLIS");
    
-   // Ref to track the page title (e.g., "Clanky | Radio TLIS") so we can restore it
    const originalTitleRef = useRef<string>("");
 
    const titleBarLenght = 24;
    const titleBarMovement = 3;
 
-   // YOUR ORIGINAL SCROLLING LOGIC
    useEffect(() => {
       let length = displayTitle.length;
       let position = 0;
@@ -132,22 +130,18 @@ const Player: React.FC<{}> = () => {
       };
    }, [displayTitle]);
 
-   // LOGIC TO MANAGE TAB TITLE (Hidden Only)
    useEffect(() => {
       const handleVisibilityChange = () => {
          if (document.hidden) {
-            // Save the current specific page title before overwriting
             originalTitleRef.current = document.title;
             document.title = activeDisplayTitle;
          } else {
-            // Restore the specific page title when the user returns
             if (originalTitleRef.current) {
                document.title = originalTitleRef.current;
             }
          }
       };
 
-      // Real-time update while user is away
       if (document.hidden) {
          document.title = activeDisplayTitle;
       }
@@ -163,11 +157,16 @@ const Player: React.FC<{}> = () => {
    const fetchAlbumArt = async (artist: string, title: string) => {
       try {
          const query = encodeURIComponent(`${artist} ${title}`);
-         const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`);
+         const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=5`);
          const result = await response.json();
 
          if (result.results && result.results.length > 0) {
-            const artwork = result.results[0].artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg');
+            const bestMatch = result.results.find((item: any) => 
+               item.artistName.toLowerCase().includes(artist.toLowerCase()) ||
+               artist.toLowerCase().includes(item.artistName.toLowerCase())
+            ) || result.results[0];
+
+            const artwork = bestMatch.artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg');
             setAlbumCover(artwork);
          } else {
             setAlbumCover(null);
@@ -205,7 +204,7 @@ const Player: React.FC<{}> = () => {
             
             let tempDisplayTitle = "RADIO TLIS";
             if (data.artist && data.songTitle) {
-               if (data.songTitle !== streamTitle) {
+               if (data.songTitle !== streamTitle || data.artist !== streamArtist) {
                   fetchAlbumArt(data.artist, data.songTitle);
                }
                setStreamTitle(data.songTitle);
@@ -219,7 +218,6 @@ const Player: React.FC<{}> = () => {
                tempDisplayTitle = data.songTitle;
             }
             
-            // This updates the displayTitle which triggers the scroller
             setDisplayTitle(tempDisplayTitle);
 
          } catch (error) {
@@ -230,7 +228,7 @@ const Player: React.FC<{}> = () => {
       fetchTitle();
       const intervalId = setInterval(fetchTitle, 5000);
       return () => clearInterval(intervalId);
-   }, [mode, archiveName, streamTitle]);
+   }, [mode, archiveName, streamTitle, streamArtist]);
 
    function shiftBody() {
       const padding = isVisible ? playerWrapper.current?.clientHeight + 'px' : '0';
@@ -301,7 +299,6 @@ const Player: React.FC<{}> = () => {
             )}
 
             <div className="max-w-7xl mx-auto flex items-center gap-3 p-3 pt-4">
-               {/* Cover Image */}
                <div className="w-14 h-14 flex-shrink-0 relative">
                   <Image
                      src={coverImage}
@@ -312,7 +309,6 @@ const Player: React.FC<{}> = () => {
                   />
                </div>
 
-               {/* Title and Subtitle Container */}
                <div className="flex-1 min-w-0 flex flex-col justify-center">
                   {mode === "archive" && archiveShowSlug ? (
                      <Link href={`/relacie/${archiveShowSlug}`}>
@@ -338,7 +334,6 @@ const Player: React.FC<{}> = () => {
                   </div>
                </div>
 
-               {/* Actions */}
                <div className="flex items-center gap-2 flex-shrink-0">
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
