@@ -85,12 +85,98 @@ const Player: React.FC<{}> = () => {
    
    const [isVisible, setIsVisible] = useState(true);
    const [volume, setVolume] = useState(1);
-   const [streamTitle, setStreamTitle] = useState("Rádio TLIS");
-   const [streamArtist, setStreamArtist] = useState<string | undefined>("Rádio TLIS");
+   const [streamTitle, setStreamTitle] = useState("Radio TLIS");
+   const [streamArtist, setStreamArtist] = useState<string | undefined>("Radio TLIS");
+   const [albumCover, setAlbumCover] = useState<string | null>(null);
+
+   const [displayTitle, setDisplayTitle] = useState<string>("RADIO TLIS");
+   const [activeDisplayTitle, setActiveDisplayTitle] = useState<string>("RADIO TLIS");
+   
+   // Ref to track the page title (e.g., "Clanky | Radio TLIS") so we can restore it
+   const originalTitleRef = useRef<string>("");
+
+   const titleBarLenght = 24;
+   const titleBarMovement = 3;
+
+   // YOUR ORIGINAL SCROLLING LOGIC
+   useEffect(() => {
+      let length = displayTitle.length;
+      let position = 0;
+      if (length < titleBarLenght) {
+         setActiveDisplayTitle(displayTitle);
+         return;
+      }
+
+      let singleIteration: NodeJS.Timeout;
+      let waitTimeout: NodeJS.Timeout;
+
+      function startIteration() {
+         setActiveDisplayTitle(displayTitle);
+         waitTimeout = setTimeout(() => {
+            singleIteration = setInterval(() => {
+               setActiveDisplayTitle(displayTitle.substring(position, position + titleBarLenght));
+               position += titleBarMovement;
+               if (position > length - titleBarLenght) {
+                  clearInterval(singleIteration);
+                  position = 0;
+                  startIteration();
+               }
+            }, 200);
+         }, 2000);
+      }
+
+      startIteration();
+      return () => {
+         clearTimeout(waitTimeout);
+         clearInterval(singleIteration);
+      };
+   }, [displayTitle]);
+
+   // LOGIC TO MANAGE TAB TITLE (Hidden Only)
+   useEffect(() => {
+      const handleVisibilityChange = () => {
+         if (document.hidden) {
+            // Save the current specific page title before overwriting
+            originalTitleRef.current = document.title;
+            document.title = activeDisplayTitle;
+         } else {
+            // Restore the specific page title when the user returns
+            if (originalTitleRef.current) {
+               document.title = originalTitleRef.current;
+            }
+         }
+      };
+
+      // Real-time update while user is away
+      if (document.hidden) {
+         document.title = activeDisplayTitle;
+      }
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+   }, [activeDisplayTitle]);
 
    const playerWrapper = useRef<HTMLDivElement | null>(null);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
+
+   const fetchAlbumArt = async (artist: string, title: string) => {
+      try {
+         const query = encodeURIComponent(`${artist} ${title}`);
+         const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`);
+         const result = await response.json();
+
+         if (result.results && result.results.length > 0) {
+            const artwork = result.results[0].artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg');
+            setAlbumCover(artwork);
+         } else {
+            setAlbumCover(null);
+         }
+      } catch (err) {
+         console.error("Art fetch error:", err);
+         setAlbumCover(null);
+      }
+   };
 
    useEffect(() => {
       window.addEventListener("resize", shiftBody);
@@ -106,32 +192,45 @@ const Player: React.FC<{}> = () => {
 
    useEffect(() => {
       const fetchTitle = async () => {
-         if (mode === "archive") return;
+         if (mode === "archive") {
+            if (archiveName) {
+               setDisplayTitle(`▶️ ${archiveName}`);
+            }
+            return;
+         }
 
          try {
             const currentStreamTitleResponse = await fetch('/api/stream');
             const data = await currentStreamTitleResponse.json();
+            
+            let tempDisplayTitle = "RADIO TLIS";
             if (data.artist && data.songTitle) {
+               if (data.songTitle !== streamTitle) {
+                  fetchAlbumArt(data.artist, data.songTitle);
+               }
                setStreamTitle(data.songTitle);
                setStreamArtist(data.artist);
+               tempDisplayTitle = `${data.artist} - ${data.songTitle}`;
             } else if (data.songTitle) {
+               if (data.songTitle !== streamTitle) {
+                  fetchAlbumArt("", data.songTitle);
+               }
                setStreamTitle(data.songTitle);
-               setStreamArtist(undefined);
-            } else {
-               setStreamTitle("Neznáma skladba");
-               setStreamArtist(undefined);
+               tempDisplayTitle = data.songTitle;
             }
+            
+            // This updates the displayTitle which triggers the scroller
+            setDisplayTitle(tempDisplayTitle);
+
          } catch (error) {
             console.error('Failed to fetch stream title:', error);
-            setStreamTitle("Neznáma skladba");
-            setStreamArtist(undefined);
          }
       };
 
       fetchTitle();
       const intervalId = setInterval(fetchTitle, 5000);
       return () => clearInterval(intervalId);
-   }, [mode]);
+   }, [mode, archiveName, streamTitle]);
 
    function shiftBody() {
       const padding = isVisible ? playerWrapper.current?.clientHeight + 'px' : '0';
@@ -142,7 +241,6 @@ const Player: React.FC<{}> = () => {
       setVolume(Number(event.target.value));
    };
 
-   // Seek by delta seconds (positive or negative). Uses updateCurrentTime from context
    const seekBy = (delta: number) => {
       const dur = duration || 0;
       const newTime = Math.max(0, Math.min((currentTime || 0) + delta, dur || Number.MAX_SAFE_INTEGER));
@@ -151,7 +249,6 @@ const Player: React.FC<{}> = () => {
 
    useEffect(() => {
       const onKey = (e: KeyboardEvent) => {
-         // Ignore when typing in inputs or editable elements
          const target = e.target as HTMLElement | null;
          if (target) {
             const tag = target.tagName?.toLowerCase();
@@ -179,12 +276,10 @@ const Player: React.FC<{}> = () => {
       }
    );
 
-   // Determine the cover image to display
    const coverImage = mode === "archive" && archiveEpisodeCover
       ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${archiveEpisodeCover}`
-      : "/images/03_TLIS_logo2020_white_no-bkg.svg";
+      : (albumCover || "/images/03_TLIS_logo2020_white_no-bkg.svg");
 
-   // Determine the title and subtitle
    const title = mode === "archive" ? archiveName : streamTitle;
    const subtitle = mode === "archive" 
       ? archiveShowName || "Rádio TLIS"
@@ -193,7 +288,6 @@ const Player: React.FC<{}> = () => {
    return (
       <>
          <div ref={playerWrapper} className={playerClasses}>
-            {/* Progress bar for archive mode */}
             {mode === "archive" && (
                <ProgressBar
                   currentTime={currentTime}
@@ -202,12 +296,10 @@ const Player: React.FC<{}> = () => {
                   isVisible={isVisible}
                />
             )}
-            {/* If live, show a colored top border instead */}
             {mode === "stream" && (
                <div className="absolute top-0 left-0 w-full h-1 bg-[#d43c4a]" />
             )}
 
-            {/* Main player content */}
             <div className="max-w-7xl mx-auto flex items-center gap-3 p-3 pt-4">
                {/* Cover Image */}
                <div className="w-14 h-14 flex-shrink-0 relative">
@@ -216,7 +308,7 @@ const Player: React.FC<{}> = () => {
                      alt={title || "Radio TLIS"}
                      width={56}
                      height={56}
-                     className="w-full h-full object-cover rounded"
+                     className="w-full h-full object-cover rounded shadow-sm"
                   />
                </div>
 
@@ -246,13 +338,12 @@ const Player: React.FC<{}> = () => {
                   </div>
                </div>
 
-               {/* Actions: Volume (desktop only) + Play Button */}
+               {/* Actions */}
                <div className="flex items-center gap-2 flex-shrink-0">
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
                   </div>
 
-                  {/* Back 15s */}
                   { mode === "archive" && 
                   <button
                      aria-label="Back 15 seconds"
@@ -267,7 +358,6 @@ const Player: React.FC<{}> = () => {
                      </svg>
                   </button> }
 
-                  {/* Play / Pause */}
                   <button
                      className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a]/90 hover:bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
                      onClick={() => setIsPlaying(!isPlaying)}
@@ -279,7 +369,6 @@ const Player: React.FC<{}> = () => {
                      {!isLoading && isPlaying && <FontAwesomeIcon icon={faPause} />}
                   </button>
 
-                  {/* Forward 15s */}
                   { mode === "archive" &&
                   <button
                      aria-label="Forward 15 seconds"

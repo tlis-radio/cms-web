@@ -4,7 +4,7 @@ import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faShareAlt as faShare } from "@fortawesome/free-solid-svg-icons";
 import TlisImage from "@/components/TlisImage";
-import Link from "next/link";
+import { Link } from '@/navigation';
 import { Episode } from "@/models/episode";
 
 function calculateContrast(hexColor: string): string {

@@ -1,0 +1,341 @@
+{
+  "navbar": {
+    "home": "Home",
+    "podcasts": "Podcasts",
+    "active_shows": "Active Shows",
+    "archived_shows": "Archived Shows",
+    "old_archive": "Old Archive",
+    "articles": "Articles",
+    "about_radio": "About Radio",
+    "who_we_are": "Who We Are",
+    "members": "Members",
+    "language_label": "Language"
+  },
+  "player": {
+    "now_playing": "You're listening to Radio TLIS",
+    "stream_title": "Radio TLIS - Live",
+    "unknown_track": "Unknown track",
+    "radio_tlis": "Radio TLIS",
+    "back_15s": "Back 15 seconds",
+    "forward_15s": "Forward 15 seconds",
+    "play": "Play",
+    "pause": "Pause",
+    "volume": "Volume",
+    "volume_slider": "Volume control",
+    "loading": "Loading...",
+    "archive_label": "Archive"
+  },
+  "breadcrumbs": {
+    "home": "Home"
+  },
+  "cookies": {
+    "message": "We use cookies to improve your experience. By continuing, you agree to our use of cookies.",
+    "more_info": "More info",
+    "reject": "Reject",
+    "accept": "I agree"
+  },
+  "Common": {
+    "two_percent_promo": "DONATE 2️⃣% TO US AND WE WILL BROADCAST AT 1️⃣0️⃣0️⃣%"
+  },
+  "Footer": {
+    "description": "The only student, community and alternative radio in Bratislava.",
+    "rights": "All rights reserved.",
+    "strictly_alternative": "strictly alternative",
+    "explore": {
+      "title": "Explore",
+      "home": "Home",
+      "program": "Program",
+      "shows": "Shows",
+      "playlist": "Playlist"
+    },
+    "about": {
+      "title": "About Radio",
+      "whoWeAre": "Who We Are",
+      "twoPercent": "Two Percent"
+    },
+    "legal": {
+      "title": "Legal",
+      "gdpr": "GDPR",
+      "tos": "Terms of Use"
+    },
+    "contact": {
+      "title": "Contact"
+    }
+  },
+  "HomePage": {
+    "eventsTitle": "events",
+    "viewAll": "VIEW ALL"
+  },
+  "MembersPage": {
+    "title": "members",
+    "metaTitle": "Members",
+    "metaDescription": "List of Radio TLIS members — hosts, editors, and the team that creates radio content."
+  },
+  "ArticlesPage": {
+    "metaTitle": "Articles",
+    "metaDescription": "Overview of articles, reports, and events of Radio TLIS — news, reviews, and event records.",
+    "metaDescriptionOg": "Overview of articles, reports, and events of Radio TLIS.",
+    "heading": "articles",
+    "empty": "There are no articles here yet.",
+    "fetch_error_title": "Error loading articles",
+    "fetch_error_subtitle": "Please try again later.",
+    "no_image": "No image",
+    "author": "Author"
+  },
+  "CategoriesPage": {
+    "metaTitle": "Categories",
+    "metaDescription": "Overview of article categories on Radio TLIS.",
+    "metaDescriptionOg": "Overview of article categories on Radio TLIS.",
+    "breadcrumb_label": "Categories",
+    "heading": "categories",
+    "collection_name": "Article Categories",
+    "fetch_error_title": "Error loading categories",
+    "fetch_error_subtitle": "Please try again later.",
+    "empty": "There are no categories here yet."
+  },
+  "CategoryPage": {
+    "metaTitle_fallback": "Category",
+    "metaDescription_fallback": "Articles in the category on Radio TLIS.",
+    "metaDescription_template": "Articles in the {name} category on Radio TLIS.",
+    "breadcrumb_label": "Categories",
+    "load_error": "Category could not be loaded."
+  },
+  "ArticleDetailPage": {
+    "metaTitle_fallback": "Article",
+    "metaDescription_fallback": "Article on Radio TLIS.",
+    "load_error": "Article could not be loaded."
+  },
+  "ArticleGallery": {
+    "heading": "Gallery",
+    "photo_count": "photos",
+    "image_alt": "Gallery image",
+    "show_less": "Show less",
+    "show_all": "Show all"
+  },
+  "DvePercentaPage": {
+    "metaTitle": "Two Percent",
+    "metaDescription": "How to donate 2% of taxes to Radio TLIS — procedure, necessary data, and contacts.",
+    "breadcrumb_label": "Two Percent",
+    "heading": "two percent",
+    "image_alt": "Radio TLIS members lineup",
+    "intro_p1": "The TLIS Dormitory Radio Studio (IRŠ TLIS) is the only student radio studio in Bratislava. We give students and non-students space and the opportunity to realize themselves in the creation of audiovisual production - creating radio shows, music playlists, or organizing music events. We offer the chance to try working in the mass media sphere - whether from behind the microphone, the technical desk, or the organizational and promotional background. Our goal is to provide students and volunteers with invaluable practice and thus raise new generations of hosts, music editors, dramaturgs, editors-in-chief, technicians, and marketers focused not only on the music industry.",
+    "intro_p2": "If you have nowhere else, give it to us. Your support helps us continue our activities and develop new projects.",
+    "thank_you": "Thank you! ❤",
+    "employer_section_title": "Your tax return is filed by your employer:",
+    "employer_step1": "Ask your employer to perform the annual settlement of income tax advances. Your employer will then issue and confirm the",
+    "employer_step1_link": "Confirmation of payment of income tax from employment.",
+    "employer_step2": "Then fill out the",
+    "employer_step2_link": "Declaration of allocation of an amount up to 2% of the paid income tax of a natural person.",
+    "self_section_title": "You file your tax return yourself:",
+    "self_p1": "You allocate 2% by filling in the boxes directly in the tax return. You can allocate them to us if you have no income tax arrears from the past and the amount of 2% of the tax is at least 3.33 euros.",
+    "self_step1": "Fill out the 'Declaration on the allocation of a portion of paid income tax of a natural person according to § 50 of the Act' in the tax return.",
+    "data_section_title": "DATA NECESSARY FOR ALLOCATING 2%:",
+    "data_ico": "IČO (ID Number)",
+    "data_legal_form": "Legal form",
+    "data_legal_form_value": "Civic association",
+    "data_name": "Name",
+    "data_street": "Street",
+    "data_number": "Number",
+    "data_zip": "ZIP Code",
+    "data_city": "Municipality",
+    "data_city_value": "Bratislava - Karlova Ves",
+    "data_contact": "Contact",
+    "help_note": "If you need help filling out the forms, contact us."
+  },
+  "GdprPage": {
+    "breadcrumb_label": "GDPR",
+    "heading": "GDPR and Personal Data Protection",
+    "section1_title": "1. Processing of Personal Data",
+    "section1_text": "Our service does not collect any personal data from users. Exclusively anonymized radio listening statistics are used for analytical purposes and improving the quality of provided services. These statistics do not allow for the identification of individuals.",
+    "section2_title": "2. Cookies and Session Identifier",
+    "section2_text": "The service uses cookies to store a session identifier (sessionId). This identifier allows for the correct functioning of the player and the maintenance of your session. The sessionId does not contain any personal data and is used exclusively for technical purposes.",
+    "section3_title": "3. Data Security",
+    "section3_text": "Anonymized statistics and sessionId are processed and stored securely in accordance with applicable legal regulations, including GDPR. Only authorized persons have access to the data, and it is protected against unauthorized access.",
+    "section4_title": "4. User Rights",
+    "section4_text": "Users have the right to access data that was not collected about them, as well as the right to file a complaint with the supervisory authority if they suspect that a violation of personal data protection has occurred. Due to the anonymous nature of the collected data, it is not possible to identify specific individuals."
+  },
+  "TosPage": {
+    "breadcrumb_label": "Terms of Use",
+    "heading": "Podcast Terms of Use",
+    "sections": {
+      "ownership": {
+        "title": "1. Ownership Rights",
+        "content": "All podcasts published on this platform are our exclusive property and are protected by copyright. No part of the podcasts may be reproduced, distributed, or otherwise used without express permission, unless otherwise stated."
+      },
+      "sharing": {
+        "title": "2. Sharing and Redistribution",
+        "content": "Podcasts may be shared or redistributed only if appropriate attribution to the author and source is provided. Without attribution, such use is prohibited."
+      },
+      "responsibility": {
+        "title": "3. User Responsibility",
+        "content": "Users are responsible for complying with these terms in any interaction with podcast content. Violation of copyright or sharing rules may lead to legal action."
+      },
+      "changes": {
+        "title": "4. Changes to Terms",
+        "content": "We reserve the right to modify these terms at any time. Updates will be posted on this page, and by continuing to use the service, you agree to the new terms."
+      }
+    }
+  },
+  "ShowsPage": {
+    "metaTitle": "Shows",
+    "metaDescription": "Overview of Radio TLIS shows — search for shows, hosts, and latest episodes.",
+    "metaDescriptionOg": "Overview of Radio TLIS shows — search for shows, hosts, and episodes.",
+    "breadcrumb_label": "Shows",
+    "heading": "shows",
+    "filter_active": "ACTIVE SHOWS",
+    "filter_archived": "ARCHIVED SHOWS",
+    "filter_digital": "OLD ARCHIVE",
+    "fetch_error_title": "Error loading archive",
+    "fetch_error_subtitle": "Please try again later.",
+    "load_error": "The show could not be loaded."
+  },
+  "ShowPage": {
+    "metaTitle_fallback": "Show",
+    "metaDescription_fallback": "Information about the show on Radio TLIS.",
+    "metaDescription_template": "{name} show on Radio TLIS.",
+    "load_error": "The show could not be loaded.",
+    "back_to_shows": "Back to shows",
+    "views_count": "views",
+    "active_shows": "Active Shows",
+    "share": "Share",
+    "episodes": "Episodes",
+    "no_episodes": "No episodes yet",
+    "related_articles": "Related articles",
+    "episodes_count": "Number of episodes",
+    "back_to_all": "Back",
+    "show_more": "Show More",
+    "hide": "Hide"
+  },
+  "ShowsListPage": {
+    "heading": "shows"
+  },
+  "ShowListPage": {
+    "view_all": "VIEW ALL"
+  },
+  "ShareShow": {
+    "play_aria": "Play episode",
+    "close_aria": "Close",
+    "views_count": "views"
+  },
+  "ProgramCarousel": {
+    "fetch_error_title": "Error loading program",
+    "fetch_error_subtitle": "Please try again later.",
+    "empty_title": "There is currently no program",
+    "empty_subtitle": "Check out our archive of past shows",
+    "open_archive": "Open Archive",
+    "missed_label": "You missed",
+    "will_miss_label": "You will miss",
+    "prev_aria": "Previous episode",
+    "next_aria": "Next episode"
+  },
+  "ProgramPage": {
+    "metaTitle": "Program",
+    "metaDescription": "Radio TLIS program — current schedule of shows and hosts.",
+    "breadcrumb_label": "Program",
+    "heading": "program"
+  },
+  "AboutPage": {
+    "metaTitle": "About Radio",
+    "metaDescription": "About Radio TLIS — who we are, what we broadcast, and why we do radio differently. Get to know our team and history.",
+    "metaDescriptionOg": "About Radio TLIS — who we are, what we broadcast, and why we do radio differently.",
+    "breadcrumb_label": "About Radio",
+    "heading": "who we are",
+    "image_alt": "Radio TLIS members lineup",
+    "p1": "Radio TLIS is the voice of student freedom, creativity, and alternatives. For years, we have been bringing original radio broadcasting focused on the independent music scene, culture, art, and the lives of young people. Thanks to the courage to go outside the mainstream and the freedom to choose topics and music, we have become a unique phenomenon of the Bratislava region.",
+    "p2": "We don't broadcast for profit or under the baton of big players — with us, ideas, the desire to create, and the voice of young people decide. We are the only student radio in the Bratislava Region and at the same time the only one in Slovakia that consistently deals with alternative genres.",
+    "p3_prefix": "Our broadcast",
+    "p3_highlight": "runs from Monday to Thursday",
+    "p3_suffix": ", but Radio TLIS doesn't end with turning off the microphones. We meet at meetings, organize workshops, work parties, and – yes – even student bashes. Each of us functions here at our own pace, but we are united by a common passion: doing radio differently."
+  },
+  "ContactPage": {
+    "metaTitle": "Contact",
+    "metaDescription": "Contact Radio TLIS — email addresses and information on how to get in touch with us.",
+    "heading": "contact",
+    "p1": "If you have a compelling need to contact Radio TLIS, or a member of the radio, of course, you can do so. We have several email addresses for you that can help you target your questions, requests, or praise as accurately as possible."
+  },
+  "CastListPage": {
+    "metaTitle": "Cast",
+    "metaDescription": "List of all hosts, editors, and performers on Radio TLIS.",
+    "breadcrumb_label": "Cast",
+    "heading": "cast",
+    "collection_name": "Cast - Radio TLIS",
+    "fetch_error_title": "Error loading data",
+    "fetch_error_subtitle": "The cast could not be loaded. Please try again later.",
+    "empty": "No cast members yet",
+    "count_one": "performer",
+    "count_few": "performers",
+    "count_many": "performers"
+  },
+  "CastMemberPage": {
+    "metaTitle_fallback": "Performer not found",
+    "breadcrumb_label": "Cast",
+    "loading": "Loading...",
+    "fetch_error_title": "Error loading data",
+    "fetch_error_subtitle": "The performer was not found or there was an error loading data.",
+    "back_to_shows": "Back to shows",
+    "best_of_month": "Tlisák of the Month",
+    "shows_tab": "Shows",
+    "articles_tab": "Articles",
+    "no_shows": "No shows yet",
+    "no_articles": "No articles yet",
+    "shows_count": "{count, plural, =1 {show} other {# shows}}",
+    "articles_count": "{count, plural, =1 {article} other {# articles}}",
+    "profile_meta_template": "{name} profile on Radio TLIS.",
+    "roles": {
+      "boss": "Heads and Deputies",
+      "moderator": "Hosts",
+      "technic": "Technicians",
+      "pr": "PR Team",
+      "web": "Web Team",
+      "dj": "DJs",
+      "playwright": "Dramaturgs"
+    },
+    "breadcrumbParent": "Cast",
+    "tabs": {
+      "shows": "Shows",
+      "articles": "Articles"
+    }
+  },
+  "CastPage": {
+    "metaTitle": "Cast",
+    "metaDescription": "List of all hosts, editors, and performers on Radio TLIS.",
+    "heading": "cast",
+    "cast_count": "performers",
+    "breadcrumb": "Cast"
+  },
+  "not_found": {
+    "title": "404",
+    "message": "Oops, we don't have this here :(",
+    "aria_instagram": "Instagram",
+    "aria_facebook": "Facebook"
+  },
+  "TwoPercentPage": {
+    "heading": "two percent",
+    "metaTitle": "2% of Tax",
+    "metaDescription": "Support the TLIS Dormitory Radio Studio with your 2% tax donation. Help us educate a new generation of media creators.",
+    "breadcrumb_label": "2% of Tax",
+    "image_alt": "Radio TLIS members in the studio",
+    "intro_text": "The TLIS Dormitory Radio Studio (IRŠ TLIS) is the only student radio studio in Bratislava. We give students and non-students space and the opportunity to realize themselves in the creation of audiovisual production - creating radio shows, music playlists, or organizing music events. We offer the chance to try working in the mass media sphere - whether from behind the microphone, the technical desk, or the organizational-promotional background. Our goal is to provide students and volunteers with invaluable practice and thus raise new generations of hosts, music editors, dramaturgs, editors-in-chief, technicians, and marketers focused not only on the music industry.",
+    "slogan_1": "If you have nowhere else, give it to us.",
+    "slogan_2": "Your support helps us continue our activities and develop new projects.",
+    "thank_you": "Thank you! ❤️",
+    "employer_header": "Your tax return is filed by your employer:",
+    "step_1": "Ask your employer to perform the annual settlement of income tax advances. Your employer will then issue and confirm the",
+    "download_link_1": "Confirmation of payment of income tax from employment.",
+    "step_2": "Then fill out the",
+    "download_link_2": "Declaration of allocation of an amount up to 2% of the paid income tax of a natural person.",
+    "self_header": "You file your tax return yourself:",
+    "self_description": "You allocate 2% by filling in the boxes directly in the tax return. You can allocate them to us if you have no income tax arrears from the past and the amount of 2% of the tax is at least 3.33 euros.",
+    "self_step_1": "Fill out the 'Declaration on the allocation of a portion of paid income tax of a natural person according to § 50 of the Act' in the tax return.",
+    "data_header": "DATA NECESSARY FOR ALLOCATING 2%:",
+    "label_ico": "IČO (ID Number):",
+    "label_legal": "Legal form:",
+    "label_name": "Name:",
+    "label_street": "Street:",
+    "label_number": "Number:",
+    "label_psc": "ZIP Code:",
+    "label_city": "Municipality:",
+    "label_contact": "Contact:",
+    "help_footer": "If you need help filling out the forms, contact us."
+  }
+}

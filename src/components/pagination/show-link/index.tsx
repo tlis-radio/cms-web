@@ -1,6 +1,6 @@
 'use client'
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import Markdown from "react-markdown";
 import TlisImage from "@/components/TlisImage";
 import { Show } from "@/models/show";

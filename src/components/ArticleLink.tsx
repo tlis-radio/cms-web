@@ -1,6 +1,7 @@
 'use client'
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import Link from 'next/link';
+import { Link } from '@/navigation';
+import { useRouter } from 'next/navigation';
 import TlisImage from "@/components/TlisImage";
 import { Article } from "@/types/article";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +12,7 @@ type ArticleLinkProps = {
 }
 
 const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
+   const router = useRouter();
    const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
    const descriptionRef = useRef<HTMLDivElement>(null);
 
@@ -49,9 +51,14 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
    const hasGallery = article.gallery && article.gallery.length > 0;
    const isEvent = article.type === "event" || article.type === "report";
 
+   // Click handler for the whole card
+   const handleCardClick = () => {
+      router.push(`/clanky/${article.slug}`);
+   };
+
    return (
-      <Link 
-         href={`/clanky/${article.slug}`} 
+      <div 
+         onClick={handleCardClick}
          className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-start"
       >
          <div className="sm:w-48 w-full flex-shrink-0 relative">
@@ -79,11 +86,11 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
                   <>
                      <span>•</span>
                      {article.categories.map((cat, idx) => (
-                        <React.Fragment key={cat.id}>
+                        <React.Fragment key={`cat-${cat.id || idx}`}>
                            <Link 
                               href={`/kategorie/${cat.Article_Category_id.slug}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="text-[#d43c4a] hover:text-[#f05561] transition-colors underline decoration-dotted"
+                              onClick={(e) => e.stopPropagation()} // Keeps the click inside the category Link
+                              className="text-[#d43c4a] hover:text-[#f05561] transition-colors underline decoration-dotted z-10"
                            >
                               {cat.Article_Category_id.name}
                            </Link>
@@ -118,8 +125,8 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
                   Autor:{" "}
                   <Link
                      href={`/ucinkujuci/${article.author.Slug}`}
-                     onClick={(e) => e.stopPropagation()}
-                     className="text-white hover:text-[#d43c4a] transition-colors underline decoration-dotted font-bold"
+                     onClick={(e) => e.stopPropagation()} // Keeps the click inside the author Link
+                     className="text-white hover:text-[#d43c4a] transition-colors underline decoration-dotted font-bold z-10"
                   >
                      {article.author.Name}
                   </Link>
@@ -140,7 +147,7 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
                </div>
             )}
          </div>
-      </Link>
+      </div>
    );
 }
 

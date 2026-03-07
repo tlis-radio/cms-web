@@ -1,26 +1,36 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
+import createIntlMiddleware from 'next-intl/middleware';
 
-export function proxy(request: NextRequest) {
-  // Check if the request is for the embedded route
-  if (request.nextUrl.pathname.startsWith('/embedded')) {
-    const response = NextResponse.next();
-    
-    // Allow embedding in iframes from any origin
+// 1. Setup the i18n logic
+const handleI18nRouting = createIntlMiddleware({
+  locales: ['sk', 'en', 'de', 'es', 'uk', 'tpi'],
+  defaultLocale: 'sk',
+  localePrefix: 'as-needed',
+  localeDetection: false
+});
+
+export default function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 2. Run i18n routing FIRST to get the response object
+  const response = handleI18nRouting(request);
+
+  // 3. If it's an embedded path, add your headers to THAT specific response
+  if (pathname.includes('/embedded')) {
     response.headers.delete('X-Frame-Options');
     response.headers.set('Content-Security-Policy', "frame-ancestors *");
-    
-    // Add CORS headers to allow cross-origin requests
     response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    
-    return response;
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
-  matcher: '/embedded/:path*',
+  matcher: [
+    // Match all localized paths & the root
+    '/', 
+    '/(sk|en|de|es|uk|tpi)/:path*',
+    // Exclude internal Next.js paths and static files
+    '/((?!api|_next/static|_next/image|favicon.ico|images|scripts|embed).*)'
+  ],
 };

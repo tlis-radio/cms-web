@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import Link from 'next/link';
+import { Link } from '@/navigation';
 
 type NavbarLinkProps = {
    text: string,

@@ -1,5 +1,6 @@
 import React from "react";
 import JsonLd from "@/components/JsonLd";
+import { getTranslations } from "next-intl/server";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 const DIRECTUS = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
@@ -10,15 +11,18 @@ function imageUrl(id?: string) {
   return `${DIRECTUS}/assets/${id}`;
 }
 
-export default function ShowJsonLd({ show, episodes }: { show: any; episodes?: any[] }) {
+export default async function ShowJsonLd({ show, episodes }: { show: any; episodes?: any[] }) {
   if (!show) return null;
+
+  // Initialize translations
+  const t = await getTranslations("ShowPage");
 
   const series = {
     "@context": "https://schema.org",
     "@type": ["RadioSeries", "PodcastSeries"],
-    "name": show.Title || "Relácia",
-    "description": show.Description || `Relácia ${show.Title || "na Radiu TLIS"}`,
-    "url": `${SITE_URL}/relacie/${show.Slug || show.Slug}`,
+    "name": show.Title || t('fallback_show_title'),
+    "description": show.Description || t('fallback_show_description', { title: show.Title }),
+    "url": `${SITE_URL}/relacie/${show.Slug}`,
     "image": imageUrl(show.Cover),
     "publisher": {
       "@type": "Organization",

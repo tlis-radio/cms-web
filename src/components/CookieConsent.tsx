@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 
 const CONSENT_COOKIE_NAME = 'tlis_cookie_consent';
 const CONSENT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year

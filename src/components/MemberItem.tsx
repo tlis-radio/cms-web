@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link";
+import { Link } from '@/navigation';
 import { Member } from "./MembersGrid";
 import TlisImage from "./TlisImage";
 

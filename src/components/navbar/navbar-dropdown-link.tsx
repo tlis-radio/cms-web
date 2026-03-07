@@ -1,6 +1,6 @@
 'use client'
 import { FunctionComponent, ReactNode, useState } from "react";
-import Link from 'next/link';
+import { Link } from '@/navigation';
 
 export type NavbarDropdownLinkProps = {
     text: string,

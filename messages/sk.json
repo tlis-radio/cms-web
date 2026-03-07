@@ -1,0 +1,342 @@
+{
+  "navbar": {
+    "home": "Domov",
+    "podcasts": "Podcasty",
+    "active_shows": "Aktívne relácie",
+    "archived_shows": "Archívne relácie",
+    "old_archive": "Starý archív",
+    "articles": "Články",
+    "about_radio": "O rádiu",
+    "who_we_are": "Kto sme",
+    "members": "Členovia",
+    "language_label": "Jazyk"
+  },
+  "player": {
+    "now_playing": "Počúvaš Rádio TLIS",
+    "stream_title": "Rádio TLIS - Live",
+    "unknown_track": "Neznáma skladba",
+    "radio_tlis": "Rádio TLIS",
+    "back_15s": "Späť o 15 sekúnd",
+    "forward_15s": "Vpred o 15 sekúnd",
+    "play": "Prehrať",
+    "pause": "Pozastaviť",
+    "volume": "Hlasitosť",
+    "volume_slider": "Ovládanie hlasitosti",
+    "loading": "Načítavam...",
+    "archive_label": "Archív"
+  },
+  "breadcrumbs": {
+    "home": "Domov"
+  },
+  "cookies": {
+    "message": "Používame cookies na zlepšenie vášho zážitku. Pokračovaním súhlasíte s našim používaním cookies.",
+    "more_info": "Viac informácií",
+    "reject": "Odmietnuť",
+    "accept": "Súhlasím"
+  },
+  "Common": {
+    "two_percent_promo": "DARUJTE NÁM 2️⃣% A MY BUDEME VYSIELAŤ NA 1️⃣0️⃣0️⃣%"
+  },
+  "Footer": {
+    "description": "Jediné študentské, komunitné a alternatívne rádio v Bratislave.",
+    "rights": "Všetky práva vyhradené.",
+    "strictly_alternative": "strictly alternative",
+    "explore": {
+      "title": "Prehliadať",
+      "home": "Domov",
+      "program": "Program",
+      "shows": "Relácie",
+      "playlist": "Playlist"
+    },
+    "about": {
+      "title": "O rádiu",
+      "whoWeAre": "Kto sme",
+      "twoPercent": "Dve percentá"
+    },
+    "legal": {
+      "title": "Právne",
+      "gdpr": "GDPR",
+      "tos": "Zásady používania"
+    },
+    "contact": {
+      "title": "Kontakt"
+    }
+  },
+  "HomePage": {
+    "eventsTitle": "udalosti",
+    "viewAll": "ZOBRAZIŤ VŠETKY"
+  },
+  "MembersPage": {
+    "title": "členovia",
+    "metaTitle": "Členovia",
+    "metaDescription": "Zoznam členov Radia TLIS — moderátori, redaktori a tím, ktorý vytvára obsah rádia."
+  },
+  "ArticlesPage": {
+    "metaTitle": "Články",
+    "metaDescription": "Prehľad článkov, reportáží a udalostí Radia TLIS — novinky, recenzie a záznamy z akcií.",
+    "metaDescriptionOg": "Prehľad článkov, reportáží a udalostí Radia TLIS.",
+    "heading": "články",
+    "empty": "Zatiaľ tu nie sú žiadne články.",
+    "fetch_error_title": "Chyba pri načítaní článkov",
+    "fetch_error_subtitle": "Skúste to prosím neskôr.",
+    "no_image": "Bez obrázka",
+    "author": "Autor"
+  },
+  "CategoriesPage": {
+    "metaTitle": "Kategórie",
+    "metaDescription": "Prehľad kategórií článkov na Radiu TLIS.",
+    "metaDescriptionOg": "Prehľad kategórií článkov na Radiu TLIS.",
+    "breadcrumb_label": "Kategórie",
+    "heading": "kategórie",
+    "collection_name": "Kategórie článkov",
+    "fetch_error_title": "Chyba pri načítaní kategórií",
+    "fetch_error_subtitle": "Skúste to prosím neskôr.",
+    "empty": "Zatiaľ tu nie sú žiadne kategórie."
+  },
+  "CategoryPage": {
+    "metaTitle_fallback": "Kategória",
+    "metaDescription_fallback": "Články v kategórii na Radiu TLIS.",
+    "metaDescription_template": "Články v kategórii {name} na Radiu TLIS.",
+    "breadcrumb_label": "Kategórie",
+    "load_error": "Kategóriu sa nepodarilo načítať."
+  },
+  "ArticleDetailPage": {
+    "metaTitle_fallback": "Článok",
+    "metaDescription_fallback": "Článok na Radiu TLIS.",
+    "load_error": "Článok sa nepodarilo načítať."
+  },
+  "ArticleGallery": {
+    "heading": "Galéria",
+    "photo_count": "fotiek",
+    "image_alt": "Galéria obrázok",
+    "show_less": "Zobraziť menej",
+    "show_all": "Zobraziť všetky"
+  },
+  "DvePercentaPage": {
+    "metaTitle": "Dve percentá",
+    "metaDescription": "Ako poukázať 2% daní pre Rádio TLIS — postup, potrebné údaje a kontakty.",
+    "breadcrumb_label": "Dve percentá",
+    "heading": "dve percentá",
+    "image_alt": "Zostava členov rádia TLIS",
+    "intro_p1": "Internátne rozhlasové štúdio TLIS (IRŠ TLIS) je jediným študentským rozhlasovým štúdiom v Bratislave. Dávame študentom aj neštudentom priestor a možnosť realizovať sa pri tvorbe audiovizuálnej produkcie - tvorbe rozhlasových relácií, hudobných playlistov či organizácii hudobných eventov. Ponúkame možnosť vyskúšať si prácu v masmediálnej sfére - či už spoza mikrofónu, technického pultu alebo organizačno - propagačného backgroundu. Našim cieľom je poskytnúť študentom a dobrovoľníkom neoceniteľnú prax a vychovávať tak nové generácie moderátorov, hudobných redaktorov, dramaturgov, šéfredaktorov, technikov a marketérov zameraných nielen na hudobný priemysel.",
+    "intro_p2": "Ak nemáte kam, dajte to nám. Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.",
+    "thank_you": "Ďakujeme! ❤",
+    "employer_section_title": "Daňové priznanie vám podáva zamestnávateľ:",
+    "employer_step1": "Požiadajte svojho zamestnávateľa o vykonanie ročného zúčtovania preddavkov na daň z príjmov. Zamestnávateľ vám následne vystaví a potvrdí",
+    "employer_step1_link": "Potvrdenie o zaplatení dane z príjmov zo závislej činnosti.",
+    "employer_step2": "Potom vyplňte",
+    "employer_step2_link": "Vyhlásenie o poukázaní sumy do výšky 2 % zaplatenej dane z príjmov fyzickej osoby.",
+    "self_section_title": "Daňové priznanie si podávate sami:",
+    "self_p1": "2% poukazujete vyplnením koloniek priamo v daňovom priznaní. Poukázať nám ich môžete, ak nemáte z minulosti nedoplatok na dani z príjmov fyzických osôb a výška 2 % z dane je aspoň 3,33 eur.",
+    "self_step1": "Vyplňte v daňovom priznaní 'Vyhlásenie o poukázaní podielu zaplatenej dane z príjmov fyzickej osoby podľa § 50 zákona'.",
+    "data_section_title": "ÚDAJE POTREBNÉ NA POUKÁZANIE 2%:",
+    "data_ico": "IČO",
+    "data_legal_form": "Právna forma",
+    "data_legal_form_value": "Občianske združenie",
+    "data_name": "Názov",
+    "data_street": "Ulica",
+    "data_number": "Číslo",
+    "data_zip": "PSČ",
+    "data_city": "Obec",
+    "data_city_value": "Bratislava - Karlova Ves",
+    "data_contact": "Kontakt",
+    "help_note": "Ak potrebujete pomoc s vyplnením tlačív, kontaktujte nás."
+  },
+  "GdprPage": {
+    "breadcrumb_label": "GDPR",
+    "heading": "GDPR a ochrana osobných údajov",
+    "section1_title": "1. Spracúvanie osobných údajov",
+    "section1_text": "Naša služba nezhromažďuje žiadne osobné údaje používateľov. Používané sú výlučne anonymizované štatistiky počúvania rádia, ktoré slúžia na analytické účely a zlepšovanie kvality poskytovaných služieb. Tieto štatistiky neumožňujú identifikáciu jednotlivých osôb.",
+    "section2_title": "2. Cookies a identifikátor relácie",
+    "section2_text": "Služba používa súbory cookies na uloženie identifikátora relácie (sessionId). Tento identifikátor umožňuje správne fungovanie prehrávača a zachovanie vašej relácie. SessionId neobsahuje žiadne osobné údaje a je používaný výhradne na technické účely.",
+    "section3_title": "3. Zabezpečenie údajov",
+    "section3_text": "Anonymizované štatistiky a sessionId sú spracovávané a uchovávané bezpečne v súlade s platnými právnymi predpismi, vrátane GDPR. K údajom majú prístup len oprávnené osoby a sú chránené proti neoprávnenému prístupu.",
+    "section4_title": "4. Práva používateľov",
+    "section4_text": "Používatelia majú právo na prístup k údajom, ktoré o nich neboli zhromaždené, ako aj právo podať sťažnosť u dozorného orgánu, ak majú podozrenie, že došlo k porušeniu ochrany osobných údajov. Vzhľadom na anonymný charakter zhromažďovaných údajov nie je možné identifikovať konkrétne osoby."
+  },
+  "TosPage": {
+    "breadcrumb_label": "Podmienky používania",
+    "heading": "Podmienky používania podcastov",
+    "sections": {
+      "ownership": {
+        "title": "1. Vlastnícke práva",
+        "content": "Všetky podcasty publikované na tejto platforme sú výlučne naším vlastníctvom a sú chránené autorským právom. Žiadna časť podcastov nesmie byť reprodukovaná, distribuovaná alebo inak používaná bez výslovného povolenia, pokiaľ nie je uvedené inak."
+      },
+      "sharing": {
+        "title": "2. Zdieľanie a redistribúcia",
+        "content": "Podcasty môžu byť zdieľané alebo redistribuované len v prípade, že je uvedená primeraná atribúcia autorovi a zdroju. Bez uvedenia atribúcie je takéto použitie zakázané."
+      },
+      "responsibility": {
+        "title": "3. Zodpovednosť používateľa",
+        "content": "Používatelia sú zodpovední za dodržiavanie týchto podmienok pri akejkoľvek interakcii s obsahom podcastov. Porušenie autorských práv alebo pravidiel zdieľania môže viesť k právnym krokom."
+      },
+      "changes": {
+        "title": "4. Zmeny podmienok",
+        "content": "Vyhradzujeme si právo kedykoľvek upraviť tieto podmienky. Aktualizácie budú zverejnené na tejto stránke a pokračovaním v používaní služby súhlasíte s novými podmienkami."
+      }
+    }
+  },
+  "ShowsPage": {
+    "metaTitle": "Relácie",
+    "metaDescription": "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a posledné epizódy.",
+    "metaDescriptionOg": "Prehľad relácií Radia TLIS — vyhľadajte relácie, moderátorov a epizódy.",
+    "breadcrumb_label": "Relácie",
+    "heading": "relácie",
+    "filter_active": "AKTÍVNE RELÁCIE",
+    "filter_archived": "ARCHÍVNE RELÁCIE",
+    "filter_digital": "STARÝ ARCHÍV",
+    "fetch_error_title": "Chyba pri načítaní archívu",
+    "fetch_error_subtitle": "Skúste to prosím neskôr.",
+    "load_error": "Reláciu sa nepodarilo načítať."
+  },
+  "ShowPage": {
+    "metaTitle_fallback": "Relácia",
+    "metaDescription_fallback": "Informácie o relácii na Radiu TLIS.",
+    "metaDescription_template": "Relácia {name} na Radiu TLIS.",
+    "load_error": "Reláciu sa nepodarilo načítať.",
+    "back_to_shows": "Späť na relácie",
+    "views_count": "videní",
+    "active_shows": "Aktívne relácie",
+    "share": "Zdieľať",
+    "episodes": "Epizódy",
+    "no_episodes": "Zatiaľ žiadne epizódy",
+    "related_articles": "Súvisiace články",
+    
+    "episodes_count":"Počet epizód",
+    "back_to_all":"Naspäť",
+    "show_more": "Zobraziť Viac",
+    "hide": "Skryť"
+  },
+  "ShowsListPage": {
+    "heading": "relácie"
+  },
+  "ShowListPage": {
+    "view_all": "ZOBRAZIŤ VŠETKY"
+  },
+  "ShareShow": {
+    "play_aria": "Prehrať epizódu",
+    "close_aria": "Zatvoriť",
+    "views_count": "videní"
+  },
+  "ProgramCarousel": {
+    "fetch_error_title": "Chyba pri načítaní programu",
+    "fetch_error_subtitle": "Skúste to prosím neskôr.",
+    "empty_title": "Momentálne nie je žiadny program",
+    "empty_subtitle": "Pozrite si náš archív minulých relácií",
+    "open_archive": "Otvoriť archív",
+    "missed_label": "Zmeškal si",
+    "will_miss_label": "Zmeškáš",
+    "prev_aria": "Predošlá epizóda",
+    "next_aria": "Nasledujúca epizóda"
+  },
+  "ProgramPage": {
+    "metaTitle": "Program",
+    "metaDescription": "Program Radia TLIS — aktuálny rozpis relácií a moderátorov.",
+    "breadcrumb_label": "Program",
+    "heading": "program"
+  },
+  "AboutPage": {
+    "metaTitle": "O rádiu",
+    "metaDescription": "O Radiu TLIS — kto sme, čo vysielame a prečo robíme rádio inak. Zoznámte sa s naším tímom a históriou.",
+    "metaDescriptionOg": "O Radiu TLIS — kto sme, čo vysielame a prečo robíme rádio inak.",
+    "breadcrumb_label": "O rádiu",
+    "heading": "kto sme",
+    "image_alt": "Zostava členov rádia TLIS",
+    "p1": "Rádio TLIS je hlasom študentskej slobody, kreativity a alternatívy. Už roky prinášame originálne rozhlasové vysielanie zamerané na nezávislú hudobnú scénu, kultúru, umenie a život mladých ľudí. Vďaka odvahe ísť mimo hlavného prúdu a slobode výberu tém i hudby sme sa stali unikátnym fenoménom bratislavského regiónu.",
+    "p2": "Nevysielame pre zisk ani pod taktovkou veľkých hráčov — u nás rozhodujú nápady, chuť tvoriť a hlas mladých ľudí. Sme jediné študentské rádio v Bratislavskom kraji a zároveň jediné na Slovensku, ktoré sa dôsledne venuje alternatívnym žánrom.",
+    "p3_prefix": "Naše vysielanie",
+    "p3_highlight": "beží od pondelka do štvrtku",
+    "p3_suffix": ", no rádio TLIS nekončí vypnutím mikrofónov. Stretávame sa na poradách, organizujeme workshopy, brigády a – áno – aj študentské flámy. Každý z nás tu funguje vlastným tempom, no spája nás spoločná vášeň: robiť rádio inak."
+  },
+  "ContactPage": {
+    "metaTitle": "Kontakt",
+    "metaDescription": "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
+    "heading": "kontakt",
+    "p1": "Ak máte nutkavú potrebu kontaktovať Radio TLIS, alebo nejakého člena rádia, samozrejme, že to môžete urobiť. Máme pre Vás hneď niekoľko mailových adries, ktoré Vám môžu pomôcť, čo najpresnejšie zacieliť svoje otázky, prosby či pochvaly."
+  },
+  "CastListPage": {
+    "metaTitle": "Účinkujúci",
+    "metaDescription": "Zoznam všetkých moderátorov, redaktorov a účinkujúcich na Rádiu TLIS.",
+    "breadcrumb_label": "Účinkujúci",
+    "heading": "účinkujúci",
+    "collection_name": "Účinkujúci - Radio TLIS",
+    "fetch_error_title": "Chyba pri načítaní údajov",
+    "fetch_error_subtitle": "Účinkujúci sa nepodarilo načítať. Skúste to prosím neskôr.",
+    "empty": "Zatiaľ žiadni účinkujúci",
+    "count_one": "účinkujúci",
+    "count_few": "účinkujúci",
+    "count_many": "účinkujúcich"
+  },
+  "CastMemberPage": {
+    "metaTitle_fallback": "Účinkujúci nenájdený",
+    "breadcrumb_label": "Účinkujúci",
+    "loading": "Načítava sa...",
+    "fetch_error_title": "Chyba pri načítaní údajov",
+    "fetch_error_subtitle": "Účinkujúci nebol nájdený alebo došlo k chybe pri načítaní.",
+    "back_to_shows": "Späť na relácie",
+    "best_of_month": "Tlisák Mesiaca",
+    "shows_tab": "Relácie",
+    "articles_tab": "Články",
+    "no_shows": "Zatiaľ žiadne relácie",
+    "no_articles": "Zatiaľ žiadne články",
+    "shows_count": "{count, plural, =1 {relácia} few {# relácie} other {# relácií}}",
+    "articles_count": "{count, plural, =1 {článok} few {# články} other {# článkov}}",
+    "profile_meta_template": "Profil {name} na Rádiu TLIS.",
+    "roles": {
+      "boss": "Vedúci a zástupcovia",
+      "moderator": "Moderátori",
+      "technic": "Technici",
+      "pr": "PR-isti",
+      "web": "Webový tím",
+      "dj": "DJi",
+      "playwright": "Dramaturgovia"
+    },
+    "breadcrumbParent": "Účinkujúci",
+    "tabs": {
+      "shows": "Relácie",
+      "articles": "Články"
+    }
+  },
+  "CastPage":{
+    "metaTitle": "Účinkujúci",
+    "metaDescription": "Zoznam všetkých moderátorov, redaktorov a účinkujúcich na Rádiu TLIS.",
+    "heading": "účinkujúci",
+    "cast_count": "účinkujúcich",
+    "breadcrumb": "Účinkujúci"
+  },
+  "not_found": {
+    "title": "404",
+    "message": "Ajaj, toto tu nemáme :(",
+    "aria_instagram": "Instagram",
+    "aria_facebook": "Facebook"
+  },
+  "TwoPercentPage": {
+    "heading":"dve percentá",
+    "metaTitle": "2 % z dane",
+    "metaDescription": "Podporte Internátne rozhlasové štúdio TLIS svojimi 2 % z dane. Pomôžte nám vzdelávať novú generáciu mediálnych tvorcov.",
+    "breadcrumb_label": "2 % z dane",
+    "image_alt": "Členovia rádio TLIS v štúdiu",
+    "intro_text": "Internátne rozhlasové štúdio TLIS (IRŠ TLIS) je jediným študentským rozhlasovým štúdiom v Bratislave. Dávame študentom aj neštudentom priestor a možnosť realizovať sa pri tvorbe audiovizuálnej produkcie - tvorbe rozhlasových relácií, hudobných playlistov či organizácii hudobných eventov. Ponúkame možnosť vyskúšať si prácu v masmediálnej sfére - či už spoza mikrofónu, technického pultu alebo organizačno-propagačného backgroundu. Naším cieľom je poskytnúť študentom a dobrovoľníkom neoceniteľnú prax a vychovávať tak nové generácie moderátorov, hudobných redaktorov, dramaturgov, šéfredaktorov, technikov a marketérov zameraných nielen na hudobný priemysel.",
+    "slogan_1": "Ak nemáte kam, dajte to nám.",
+    "slogan_2": "Vaša podpora nám pomáha pokračovať v našej činnosti a rozvíjať nové projekty.",
+    "thank_you": "Ďakujeme! ❤️",
+    "employer_header": "Daňové priznanie vám podáva zamestnávateľ:",
+    "step_1": "Požiadajte svojho zamestnávateľa o vykonanie ročného zúčtovania preddavkov na daň z príjmov. Zamestnávateľ vám následne vystaví a potvrdí",
+    "download_link_1": "Potvrdenie o zaplatení dane z príjmov zo závislej činnosti.",
+    "step_2": "Potom vyplňte",
+    "download_link_2": "Vyhlásenie o poukázaní sumy do výšky 2 % zaplatenej dane z príjmov fyzickej osoby.",
+    "self_header": "Daňové priznanie si podávate sami:",
+    "self_description": "2% poukazujete vyplnením koloniek priamo v daňovom priznaní. Poukázať nám ich môžete, ak nemáte z minulosti nedoplatok na dani z príjmov fyzických osôb a výška 2 % z dane je aspoň 3,33 eur.",
+    "self_step_1": "Vyplňte v daňovom priznaní „Vyhlásenie o poukázaní podielu zaplatenej dane z príjmov fyzickej osoby podľa § 50 zákona“.",
+    "data_header": "ÚDAJE POTREBNÉ NA POUKÁZANIE 2%:",
+    "label_ico": "IČO:",
+    "label_legal": "Právna forma:",
+    "label_name": "Názov:",
+    "label_street": "Ulica:",
+    "label_number": "Číslo:",
+    "label_psc": "PSČ:",
+    "label_city": "Obec:",
+    "label_contact": "Kontakt:",
+    "help_footer": "Ak potrebujete pomoc s vyplnením tlačív, kontaktujte nás."
+  }
+}

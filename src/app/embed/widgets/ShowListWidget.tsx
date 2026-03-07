@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import { useEmbedPlayer } from "../context/EmbedPlayerContext";
 import EmbedImage from "../components/EmbedImage";
 import EmbedPlayer from "../components/EmbedPlayer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations, useLocale } from "next-intl"; // Added imports
 
 interface Episode {
   id: number;
@@ -31,6 +32,8 @@ interface ShowListWidgetProps {
 }
 
 function EpisodeItem({ episode, showName }: { episode: Episode; showName: string }) {
+  const t = useTranslations("ShowPage"); // Hook for translations
+  const locale = useLocale(); // Hook for date formatting
   const {
     setIsPlaying,
     setSrc,
@@ -59,7 +62,6 @@ function EpisodeItem({ episode, showName }: { episode: Episode; showName: string
 
   return (
     <div className="group flex items-center gap-3 p-3 hover:bg-zinc-800/50 transition-colors border-b border-zinc-800 last:border-b-0">
-      {/* Cover */}
       <div className="w-12 h-12 flex-shrink-0 rounded overflow-hidden relative">
         <EmbedImage
           src={episode.Cover}
@@ -82,16 +84,15 @@ function EpisodeItem({ episode, showName }: { episode: Episode; showName: string
         )}
       </div>
 
-      {/* Info */}
       <div className="flex-1 min-w-0">
         <p className="text-white text-sm font-medium truncate">{episode.Title}</p>
         <p className="text-zinc-400 text-xs">
-          {new Date(episode.Date).toLocaleDateString("sk-SK")} • {episode.Views}{" "}
-          {episode.Views === 1 ? "vypočutie" : "vypočutí"}
+          {/* Formatted Date and Translated Views */}
+          {new Date(episode.Date).toLocaleDateString(locale === 'sk' ? "sk-SK" : "en-US")} • {episode.Views}{" "}
+          {t('views_count')}
         </p>
       </div>
 
-      {/* Play Button */}
       {episode.Audio && (
         <button
           onClick={playEpisode}
@@ -113,15 +114,15 @@ function EpisodeItem({ episode, showName }: { episode: Episode; showName: string
 }
 
 export default function ShowListWidget({ show, episodes, totalCount }: ShowListWidgetProps) {
+  const t = useTranslations("ShowPage");
+  const locale = useLocale();
   const { src } = useEmbedPlayer();
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
   return (
     <div className="min-h-screen bg-zinc-900 text-white">
-      {/* Header */}
       <div className="bg-gradient-to-b from-zinc-800 to-zinc-900 p-4">
         <div className="flex items-center gap-4">
-          {/* Show Cover */}
           <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden shadow-lg">
             <EmbedImage
               src={show.Cover}
@@ -132,24 +133,25 @@ export default function ShowListWidget({ show, episodes, totalCount }: ShowListW
             />
           </div>
 
-          {/* Show Info */}
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold truncate">{show.Title}</h1>
-            <p className="text-zinc-400 text-sm mt-1">{totalCount} epizód</p>
+            <p className="text-zinc-400 text-sm mt-1">
+              {/* Translated Episode Count */}
+              {totalCount} {t('episodes_count')}
+            </p>
             <a
-              href={`${SITE_URL}/relacie/${show.Slug}`}
+              href={`${SITE_URL}/${locale}/relacie/${show.Slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[#d43c4a] text-xs mt-2 hover:underline"
             >
-              Otvoriť na tlis.sk
+              {t('open_on_site')}
               <FontAwesomeIcon icon={faExternalLinkAlt} className="text-[10px]" />
             </a>
           </div>
         </div>
       </div>
 
-      {/* Episode List */}
       <div className={`${src ? "pb-20" : ""}`}>
         {episodes.map((episode) => (
           <EpisodeItem key={episode.id} episode={episode} showName={show.Title} />
@@ -157,25 +159,24 @@ export default function ShowListWidget({ show, episodes, totalCount }: ShowListW
 
         {episodes.length === 0 && (
           <div className="p-8 text-center text-zinc-500">
-            Zatiaľ žiadne epizódy
+            {t('no_episodes')}
           </div>
         )}
 
         {totalCount > episodes.length && (
           <div className="p-4 text-center">
             <a
-              href={`${SITE_URL}/relacie/${show.Slug}`}
+              href={`${SITE_URL}/${locale}/relacie/${show.Slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#d43c4a] text-sm hover:underline"
             >
-              Zobraziť všetky epizódy ({totalCount})
+              {t('show_all_episodes')} ({totalCount})
             </a>
           </div>
         )}
       </div>
 
-      {/* Player */}
       <EmbedPlayer />
     </div>
   );

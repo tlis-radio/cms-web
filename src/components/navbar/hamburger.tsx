@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import classNames from "classnames";
-import Link from "next/link";
+import { Link } from '@/navigation';
 import Socials from "../socials";
 import { NavbarLinkType } from "./index";
 
