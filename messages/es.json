@@ -64,10 +64,10 @@
     }
   },
   "HomePage": {
-    "metaTitle": "Home",
-    "metaDescription": "Listen to Radio TLIS live. Alternative music, cultural shows, and fresh info directly from student life",
-    "eventsTitle": "events",
-    "viewAll": "VIEW ALL"
+    "metaTitle": "Inicio",
+    "metaDescription": "Escucha Radio TLIS en vivo. Música alternativa, programas culturales e información fresca directamente desde la vida estudiantil.",
+    "eventsTitle": "eventos",
+    "viewAll": "VER TODO"
   },
   "MembersPage": {
     "title": "miembros",

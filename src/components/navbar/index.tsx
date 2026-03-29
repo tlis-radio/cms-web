@@ -7,7 +7,8 @@ export type NavbarLinkType = {
    text: string,
    url: string,
    target?: string,
-   subLinks?: { text: string, url: string, target?: string }[],
+   locale?: string,
+   subLinks?: { text: string, url: string, target?: string, locale?: string }[],
 }
 
 export type MarqueeLinkType = {
@@ -17,7 +18,6 @@ export type MarqueeLinkType = {
 }
 
 export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
-   /* only use prefetch:true (default), for internal links */
    const t = await getTranslations('navbar');
 
    return [
@@ -51,10 +51,6 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
          text: t('live'),
          url: "/tlistv",
       },
-      // {
-      //    text: t('reports'),
-      //    url: "/reporty"
-      // },
       {
          text: t('about_radio'),
          url: "/o-radiu",
@@ -66,19 +62,16 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
             {
                text: t('members'),
                url: "/o-radiu/clenovia"
-            },
-            //{
-            //   text: t('history'),
-            //   url: "/o-radiu/historia"
-            //},
-            // {
-            //    text: t('partners'),
-            //    url: "/o-radiu/partneri"
-            // },
-            // {
-            //    text: t('contact'),
-            //    url: "/o-radiu/contact"
-            // }
+            }
+         ]
+      },
+      /* Dropdown na prepínanie jazykov */
+      {
+         text: t('language_label') || 'Language',
+         url: "#",
+         subLinks: [
+            { text: "Slovenčina", url: "/", locale: "sk" },
+            { text: "English", url: "/", locale: "en" }
          ]
       }
    ];
@@ -107,10 +100,10 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                <NavbarDropdownLink key={index} text={link.text} href={link.url}>
                   {link.subLinks.map((subLink, subIndex) => (
                      <NavbarLink 
-                        target={subLink.target} 
-                        key={subIndex} 
+                        key={`${index}-${subLink.locale}`} // Pridaj locale do kľúča
                         text={subLink.text} 
-                        redirectUrl={subLink.url} 
+                        redirectUrl={subLink.url}
+                        locale={subLink.locale}
                      />
                   ))}
                </NavbarDropdownLink>
@@ -121,7 +114,8 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                key={index} 
                text={link.text} 
                redirectUrl={link.url} 
-               target={link.target} 
+               target={link.target}
+               locale={link.locale}
             />
          )
       })

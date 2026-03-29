@@ -6,7 +6,8 @@ export const locales = ['sk', 'en', 'de', 'es', 'uk', 'tpi'] as const;
 export const routing = defineRouting({
   locales: locales,
   defaultLocale: 'sk',
-  localePrefix: 'always' 
+  localePrefix: 'always',
+  localeDetection: false
 });
 
 export const { Link, redirect, usePathname, useRouter } = createNavigation(routing);
@@ -17,7 +18,6 @@ const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_DE',
   es: 'es_ES',
   uk: 'uk_UA',
-  tpi: 'tpi_PG',
 };
 
 export function toOgLocale(locale: string): string {

@@ -16,6 +16,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       template: '%s | Radio TLIS', 
       default: 'Radio TLIS', 
     },
+    icons: {
+      icon: '/favicon.ico',
+      shortcut: '/favicon.ico',
+      apple: '/favicon.ico',
+    },
     description: locale === 'sk' 
       ? 'Radio TLIS — alternatívna hudba, relácie a kultúra.' 
       : 'Radio TLIS — alternative music, shows, and culture.',
@@ -46,6 +51,9 @@ export default async function LocaleLayout({
   return (
     // Added missing tags
     <html lang={locale}>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
