@@ -1,6 +1,6 @@
 'use client'
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { Link } from '@/navigation';
+import { Link, useRouter } from '@/navigation';
 import Markdown from "react-markdown";
 import TlisImage from "@/components/TlisImage";
 import { Show } from "@/models/show";
@@ -13,6 +13,7 @@ type ShowLinkProps = {
 const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
    const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
    const descriptionRef = useRef<HTMLDivElement>(null);
+   const router = useRouter();
 
    useEffect(() => {
       function checkOverflow() {
@@ -27,7 +28,10 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
    }, []);
 
    return (
-      <Link href={`/relacie/${show.Slug}`} className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center">
+      <div 
+        onClick={() => router.push(`/relacie/${show.Slug}`)}
+        className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center"
+      >
          <div className="sm:w-48 w-full flex-shrink-0">
             <TlisImage src={show.Cover} alt={show.Title} />
          </div>
@@ -42,7 +46,7 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
                         <b>
                            <Link 
                               href={`/ucinkujuci/${castMember.Cast_id.Slug}`}
-                              className="hover:text-[#d43c4a] transition-colors underline decoration-dotted"
+                              className="hover:text-[#d43c4a] transition-colors underline decoration-dotted relative z-10"
                               onClick={(e) => e.stopPropagation()}
                            >
                               {castMember.Cast_id.Name}
@@ -62,7 +66,7 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
                {isDescriptionOverflowing && <div className="w-full absolute bottom-0 h-10 bg-gradient-to-b from-transparent to-[#1C1C1C] group-hover:to-[#111111] transition-colors duration-200" />}
             </div>
          </div>
-      </Link>
+      </div>
    )
 }
 

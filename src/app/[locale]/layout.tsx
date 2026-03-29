@@ -3,10 +3,10 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
 import "@/app/globals.css";
+import { locales } from '@/navigation';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
-// Pozor: Tu by bolo lepšie importovať locales priamo z navigation.ts, aby to bolo jednotné
-const locales = ['sk', 'en', 'de', 'es', 'uk', 'tpi'];
+
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -17,8 +17,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       default: 'Radio TLIS', 
     },
     icons: {
-      icon: '/favicon.ico',
-      shortcut: '/favicon.ico',
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/favicon.ico?v=2', type: 'image/x-icon' },
+      ],
       apple: '/favicon.ico',
     },
     description: locale === 'sk' 
@@ -33,30 +35,26 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-export default async function LocaleLayout({
-  children,
-  params
-}: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+export default async function LocaleLayout({ 
+  children, 
+  params 
+}: { 
+  children: React.ReactNode; 
+  params: Promise<{ locale: string }>; 
 }) {
   const { locale } = await params;
-
-  if (!locales.includes(locale)) {
-    notFound();
-  }
-
   const messages = await getMessages();
 
   return (
-    // Added missing tags
-    <html lang={locale}>
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
-      <body>
+    <html lang={locale} suppressHydrationWarning>
+      <body suppressHydrationWarning className="antialiased"> 
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <div className="relative min-h-screen">
+            <div className="fixed inset-0 bg-acoustic-foam bg-fixed -z-10" />
+            <div className="relative z-0">
+               {children}
+            </div>
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>
