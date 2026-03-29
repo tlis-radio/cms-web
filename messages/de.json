@@ -9,7 +9,8 @@
     "about_radio": "Über das Radio",
     "who_we_are": "Wer wir sind",
     "members": "Mitglieder",
-    "language_label": "Sprache"
+    "language_label": "Sprache",
+    "live": "TLIS TV"
   },
   "player": {
     "now_playing": "Du hörst Radio TLIS",
@@ -310,6 +311,48 @@
     "message": "Hoppla, das haben wir hier nicht :(",
     "aria_instagram": "Instagram",
     "aria_facebook": "Facebook"
+  },
+  "StreamVideoHub": {
+    "live_tab": "Live",
+    "archive_tab": "Archiv",
+    "badge_live": "LIVE",
+    "badge_archive": "ARCHIV",
+    "unknown_date": "Unbekanntes Datum",
+    "no_episode": "Keine Episode",
+    "episode_number": "Episode #{n}",
+    "status_live_now": "JETZT LIVE",
+    "status_connecting": "VERBINDE",
+    "status_unsupported": "BROWSER NICHT UNTERSTÜTZT",
+    "status_offline": "OFFLINE",
+    "started": "Gestartet {date}",
+    "waiting": "Warte auf Stream-Daten",
+    "reconnect": "Erneut verbinden",
+    "connecting_message": "Verbinde mit Live-Stream...",
+    "offline_with_retry": "Live-Stream ist offline. Verbindungsversuch läuft.",
+    "offline_no_stream": "Kein Live-Stream läuft aktuell.",
+    "unsupported_message": "Dieser Browser unterstützt keine Live-Wiedergabe.",
+    "progress_aria": "Archiv-Fortschritt",
+    "play_aria": "Abspielen",
+    "pause_aria": "Pausieren",
+    "back_15s": "15 Sekunden zurück",
+    "forward_15s": "15 Sekunden vorwärts",
+    "mute": "Stumm schalten",
+    "unmute": "Ton einschalten",
+    "volume_aria": "Lautstärke",
+    "live_label": "Live",
+    "stream_offline": "Stream Offline",
+    "archive_heading": "Archiv",
+    "page_of": "Seite {page} von {total}",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "no_recordings": "Noch keine Aufnahmen verfügbar."
+  },
+  "LivePage": {
+    "metaTitle": "TLIS TV",
+    "metaDescription": "Schau dir die Live-Videoübertragung von Radio TLIS an und spiele archivierte Stream-Aufnahmen ab.",
+    "metaDescriptionOg": "Radio TLIS Livestream und Videoarchiv an einem Ort.",
+    "breadcrumb_label": "TLIS TV",
+    "heading": "TV"
   },
   "TwoPercentPage": {
     "heading": "zwei prozent",

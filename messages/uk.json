@@ -9,7 +9,8 @@
     "about_radio": "Про радіо",
     "who_we_are": "Хто ми",
     "members": "Члени команди",
-    "language_label": "Мова"
+    "language_label": "Мова",
+    "live": "TLIS TV"
   },
   "player": {
     "now_playing": "Ви слухаєте Radio TLIS",
@@ -310,6 +311,48 @@
     "message": "Ой-ой, цього у нас немає :(",
     "aria_instagram": "Instagram",
     "aria_facebook": "Facebook"
+  },
+  "StreamVideoHub": {
+    "live_tab": "Ефір",
+    "archive_tab": "Архів",
+    "badge_live": "ЕФІР",
+    "badge_archive": "АРХІВ",
+    "unknown_date": "Невідома дата",
+    "no_episode": "Без епізоду",
+    "episode_number": "Епізод #{n}",
+    "status_live_now": "ЗАРАЗ У ЕФІРІ",
+    "status_connecting": "ПІДКЛЮЧЕННЯ",
+    "status_unsupported": "БРАУЗЕР НЕ ПІДТРИМУЄТЬСЯ",
+    "status_offline": "ОФЛАЙН",
+    "started": "Почалось {date}",
+    "waiting": "Очікую дані стріму",
+    "reconnect": "Підключитися знову",
+    "connecting_message": "Підключаюся до прямого ефіру...",
+    "offline_with_retry": "Прямий ефір офлайн. Спроба перепідключення.",
+    "offline_no_stream": "Прямий ефір зараз не ведеться.",
+    "unsupported_message": "Цей браузер не підтримує пряму трансляцію.",
+    "progress_aria": "Прогрес архіву",
+    "play_aria": "Відтворити",
+    "pause_aria": "Пауза",
+    "back_15s": "Назад на 15 секунд",
+    "forward_15s": "Вперед на 15 секунд",
+    "mute": "Вимкнути звук",
+    "unmute": "Увімкнути звук",
+    "volume_aria": "Гучність",
+    "live_label": "Ефір",
+    "stream_offline": "Стрім офлайн",
+    "archive_heading": "Архів",
+    "page_of": "Сторінка {page} з {total}",
+    "prev": "Попередня",
+    "next": "Наступна",
+    "no_recordings": "Записів поки що немає."
+  },
+  "LivePage": {
+    "metaTitle": "TLIS TV",
+    "metaDescription": "Дивись пряму відеотрансляцію Radio TLIS та переглядай архівні записи стріму.",
+    "metaDescriptionOg": "Пряма трансляція та відеоархів Radio TLIS в одному місці.",
+    "breadcrumb_label": "TLIS TV",
+    "heading": "TV"
   },
   "TwoPercentPage": {
     "heading": "два відсотки",

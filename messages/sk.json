@@ -9,7 +9,8 @@
     "about_radio": "O rádiu",
     "who_we_are": "Kto sme",
     "members": "Členovia",
-    "language_label": "Jazyk"
+    "language_label": "Jazyk",
+    "live": "TLIS TV"
   },
   "player": {
     "now_playing": "Počúvaš Rádio TLIS",
@@ -311,6 +312,48 @@
     "message": "Ajaj, toto tu nemáme :(",
     "aria_instagram": "Instagram",
     "aria_facebook": "Facebook"
+  },
+  "StreamVideoHub": {
+    "live_tab": "Live",
+    "archive_tab": "Archív",
+    "badge_live": "LIVE",
+    "badge_archive": "ARCHÍV",
+    "unknown_date": "Neznámy dátum",
+    "no_episode": "Bez epizódy",
+    "episode_number": "Epizóda #{n}",
+    "status_live_now": "NAŽIVO",
+    "status_connecting": "PRIPÁJA SA",
+    "status_unsupported": "PREHLIADAČ NEPODPOROVANÝ",
+    "status_offline": "OFFLINE",
+    "started": "Začalo {date}",
+    "waiting": "Čakám na dáta streamu",
+    "reconnect": "Pripojiť znova",
+    "connecting_message": "Pripájam sa na živý stream...",
+    "offline_with_retry": "Live stream je offline. Pokúšam sa o reconnect.",
+    "offline_no_stream": "Živý stream momentálne nebeží.",
+    "unsupported_message": "Tento prehliadač nepodporuje live playback.",
+    "progress_aria": "Priebeh archívu",
+    "play_aria": "Prehrať",
+    "pause_aria": "Pozastaviť",
+    "back_15s": "Späť o 15 sekúnd",
+    "forward_15s": "Vpred o 15 sekúnd",
+    "mute": "Stlmiť",
+    "unmute": "Zapnúť zvuk",
+    "volume_aria": "Hlasitosť",
+    "live_label": "Live",
+    "stream_offline": "Stream offline",
+    "archive_heading": "Archív",
+    "page_of": "Stránka {page} z {total}",
+    "prev": "Predošlá",
+    "next": "Ďalšia",
+    "no_recordings": "Zatiaľ nie sú k dispozícii žiadne záznamy."
+  },
+  "LivePage": {
+    "metaTitle": "TLIS TV",
+    "metaDescription": "Sleduj živé video vysielanie Radio TLIS a prehrávaj archívne záznamy zo streamu.",
+    "metaDescriptionOg": "Live stream a video archív Radio TLIS na jednom mieste.",
+    "breadcrumb_label": "TLIS TV",
+    "heading": "TV"
   },
   "TwoPercentPage": {
     "heading":"dve percentá",

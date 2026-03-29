@@ -1,6 +1,7 @@
 "use client";
 
 import { PublicStreamEntry } from "@/types/stream";
+import { useTranslations, useLocale } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type PlaybackMode = "live" | "archive";
@@ -24,23 +25,27 @@ type MpegTsRuntime = {
 const RETRY_INTERVAL = 5000;
 const ARCHIVE_PAGE_SIZE = 8;
 
-function formatDate(dateRaw?: string | null): string {
-  if (!dateRaw) return "Unknown date";
+function formatDate(dateRaw: string | null | undefined, locale: string, unknownLabel: string): string {
+  if (!dateRaw) return unknownLabel;
   const date = new Date(dateRaw);
-  if (Number.isNaN(date.getTime())) return "Unknown date";
+  if (Number.isNaN(date.getTime())) return unknownLabel;
 
-  return new Intl.DateTimeFormat("sk-SK", {
+  return new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
 }
 
-function getEpisodeTitle(episode: PublicStreamEntry["episode"]): string {
-  if (!episode) return "Bez epizódy";
+function getEpisodeTitle(
+  episode: PublicStreamEntry["episode"],
+  noEpisodeLabel: string,
+  episodeNumberLabel: (n: string) => string,
+): string {
+  if (!episode) return noEpisodeLabel;
   if (typeof episode === "object" && "Title" in episode && typeof episode.Title === "string") {
     return episode.Title;
   }
-  return `Epizóda #${String(episode)}`;
+  return episodeNumberLabel(String(episode));
 }
 
 function getEpisodeCover(episode: PublicStreamEntry["episode"]): string | null {
@@ -69,6 +74,9 @@ export default function StreamVideoHub({
   currentStream,
   streams,
 }: StreamVideoHubProps) {
+  const t = useTranslations("StreamVideoHub");
+  const locale = useLocale();
+
   const [mode, setMode] = useState<PlaybackMode>("live");
   const [liveState, setLiveState] = useState<LiveState>("connecting");
   const [selectedArchiveUrl, setSelectedArchiveUrl] = useState<string | null>(null);
@@ -336,12 +344,19 @@ export default function StreamVideoHub({
 
   const liveStatusText =
     liveState === "live"
-      ? "LIVE NOW"
+      ? t("status_live_now")
       : liveState === "connecting"
-        ? "CONNECTING"
+        ? t("status_connecting")
         : liveState === "unsupported"
-          ? "BROWSER UNSUPPORTED"
-          : "OFFLINE";
+          ? t("status_unsupported")
+          : t("status_offline");
+
+  const episodeTitleFor = (entry: PublicStreamEntry) =>
+    getEpisodeTitle(
+      entry.episode,
+      t("no_episode"),
+      (n) => t("episode_number", { n }),
+    );
 
   return (
     <div className="pb-8 text-left w-full">
@@ -357,7 +372,7 @@ export default function StreamVideoHub({
               {liveStatusText}
             </span>
             {activeOverlayEntry && (
-              <span className="text-zinc-300 text-sm">• {getEpisodeTitle(activeOverlayEntry.episode)}</span>
+              <span className="text-zinc-300 text-sm">• {episodeTitleFor(activeOverlayEntry)}</span>
             )}
           </div>
 
@@ -371,7 +386,7 @@ export default function StreamVideoHub({
                   : "bg-zinc-800 text-zinc-200 hover:bg-zinc-700"
               }`}
             >
-              Live
+              {t("live_tab")}
             </button>
             <button
               type="button"
@@ -382,7 +397,7 @@ export default function StreamVideoHub({
                   : "bg-zinc-800 text-zinc-200 hover:bg-zinc-700"
               }`}
             >
-              Archive
+              {t("archive_tab")}
             </button>
           </div>
         </div>
@@ -400,13 +415,15 @@ export default function StreamVideoHub({
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide ${mode === "live" ? "bg-red-600/80 text-white" : "bg-zinc-700/80 text-zinc-100"}`}>
-                    {mode === "live" ? "LIVE" : "ARCHIVE"}
+                    {mode === "live" ? t("badge_live") : t("badge_archive")}
                   </span>
                   <h2 className="text-white text-xl sm:text-2xl font-semibold mt-3 drop-shadow-sm">
-                    {activeOverlayEntry ? getEpisodeTitle(activeOverlayEntry.episode) : "Radio TLIS stream"}
+                    {activeOverlayEntry ? episodeTitleFor(activeOverlayEntry) : "Radio TLIS stream"}
                   </h2>
                   <p className="text-zinc-200/90 text-sm mt-1">
-                    {activeOverlayEntry?.started_at ? `Started ${formatDate(activeOverlayEntry.started_at)}` : "Waiting for stream data"}
+                    {activeOverlayEntry?.started_at
+                      ? t("started", { date: formatDate(activeOverlayEntry.started_at, locale, t("unknown_date")) })
+                      : t("waiting")}
                   </p>
                 </div>
 
@@ -420,7 +437,7 @@ export default function StreamVideoHub({
                     }}
                     className="pointer-events-auto px-4 py-2 rounded-md bg-white/10 text-white text-sm font-medium hover:bg-white/20 border border-white/20 transition-colors"
                   >
-                    Reconnect
+                    {t("reconnect")}
                   </button>
                 )}
               </div>
@@ -430,11 +447,11 @@ export default function StreamVideoHub({
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/65 gap-3">
                 <span className="h-3 w-3 rounded-full bg-red-500 animate-pulse" />
                 <p className="text-sm text-zinc-300 text-center px-4">
-                  {liveState === "connecting" && "Pripájam sa na živý stream..."}
+                  {liveState === "connecting" && t("connecting_message")}
                   {liveState === "offline" && (liveStreamId
-                    ? "Live stream je offline. Pokúšam sa o reconnect."
-                    : "Živý stream momentálne nebeží.")}
-                  {liveState === "unsupported" && "Tento prehliadač nepodporuje live playback."}
+                    ? t("offline_with_retry")
+                    : t("offline_no_stream"))}
+                  {liveState === "unsupported" && t("unsupported_message")}
                 </p>
               </div>
             )}
@@ -442,7 +459,7 @@ export default function StreamVideoHub({
             <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 bg-gradient-to-t from-black/95 via-black/70 to-transparent">
               {showProgress && (
                 <input
-                  aria-label="Archive progress"
+                  aria-label={t("progress_aria")}
                   type="range"
                   min={0}
                   max={duration || 0}
@@ -459,7 +476,7 @@ export default function StreamVideoHub({
                     type="button"
                     onClick={togglePlay}
                     className="w-10 h-10 rounded-full bg-[#d43c4a] hover:bg-[#b73642] transition-colors flex items-center justify-center text-white shrink-0"
-                    aria-label={isPlaying ? "Pause" : "Play"}
+                    aria-label={isPlaying ? t("pause_aria") : t("play_aria")}
                   >
                     {isPlaying ? (
                       <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -478,6 +495,7 @@ export default function StreamVideoHub({
                         type="button"
                         onClick={() => seekBy(-15)}
                         className="h-10 px-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-sm"
+                        aria-label={t("back_15s")}
                       >
                         -15s
                       </button>
@@ -485,6 +503,7 @@ export default function StreamVideoHub({
                         type="button"
                         onClick={() => seekBy(15)}
                         className="h-10 px-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-sm"
+                        aria-label={t("forward_15s")}
                       >
                         +15s
                       </button>
@@ -498,11 +517,11 @@ export default function StreamVideoHub({
                     onClick={() => setIsMuted((prev) => !prev)}
                     className="text-sm px-3 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                   >
-                    {isMuted ? "Unmute" : "Mute"}
+                    {isMuted ? t("unmute") : t("mute")}
                   </button>
 
                   <input
-                    aria-label="Volume"
+                    aria-label={t("volume_aria")}
                     type="range"
                     min={0}
                     max={1}
@@ -515,33 +534,33 @@ export default function StreamVideoHub({
                   <span className="text-xs tabular-nums text-zinc-300 min-w-[82px] text-right">
                     {mode === "archive"
                       ? `${formatDuration(currentTime)} / ${formatDuration(duration)}`
-                      : "Live"}
+                      : t("live_label")}
                   </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
+
         {mode === "live" && !liveStreamId && (
           <div className="py-24 flex flex-col items-center justify-center bg-zinc-950/50">
-            <p className="text-zinc-400 text-lg tracking-wide uppercase font-medium">Stream Offline</p>
+            <p className="text-zinc-400 text-lg tracking-wide uppercase font-medium">{t("stream_offline")}</p>
           </div>
         )}
       </div>
 
       <div className="mt-8">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <h3 className="text-white text-xl font-semibold">Archive</h3>
+          <h3 className="text-white text-xl font-semibold">{t("archive_heading")}</h3>
           <div className="flex items-center gap-2 text-sm text-zinc-300">
-            <span>Page {archivePage} of {totalArchivePages}</span>
+            <span>{t("page_of", { page: archivePage, total: totalArchivePages })}</span>
             <button
               type="button"
               onClick={() => setArchivePage((page) => Math.max(1, page - 1))}
               disabled={archivePage === 1}
               className="h-8 px-3 rounded-md bg-zinc-800 hover:bg-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Prev
+              {t("prev")}
             </button>
             <button
               type="button"
@@ -549,14 +568,14 @@ export default function StreamVideoHub({
               disabled={archivePage === totalArchivePages}
               className="h-8 px-3 rounded-md bg-zinc-800 hover:bg-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Next
+              {t("next")}
             </button>
           </div>
         </div>
 
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {paginatedEntries.map((entry) => {
-              const episodeTitle = getEpisodeTitle(entry.episode);
+              const episodeTitle = episodeTitleFor(entry);
               const episodeCover = getEpisodeCover(entry.episode);
               const hasArchive = typeof entry.archive_url === "string" && entry.archive_url.length > 0;
 
@@ -600,7 +619,7 @@ export default function StreamVideoHub({
 
                     {entry.status === "live" && (
                       <div className="absolute top-2 left-2 px-2 py-0.5 bg-red-600 text-white text-xs font-bold rounded">
-                        LIVE
+                        {t("badge_live")}
                       </div>
                     )}
                   </div>
@@ -613,7 +632,7 @@ export default function StreamVideoHub({
             })}
 
             {paginatedEntries.length === 0 && (
-              <p className="text-zinc-400 text-sm py-4">Zatiaľ nie sú k dispozícii žiadne záznamy.</p>
+              <p className="text-zinc-400 text-sm py-4">{t("no_recordings")}</p>
             )}
         </div>
       </div>

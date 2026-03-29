@@ -2,22 +2,24 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import StreamVideoHub from "@/components/stream/StreamVideoHub";
 import CmsApiService from "@/services/cms-api-service";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "LivePage" });
 
   return {
-    title: "Live Video & Archive",
-    description: "Sleduj živé video vysielanie Radio TLIS a prehrávaj archívne záznamy zo streamu.",
+    title: t("metaTitle"),
+    description: t("metaDescription"),
     alternates: {
-      canonical: `${SITE_URL}/${locale}/live`,
+      canonical: `${SITE_URL}/${locale}/tlistv`,
     },
     openGraph: {
-      title: "Live Video & Archive",
-      description: "Live stream a video archív Radio TLIS na jednom mieste.",
-      url: `${SITE_URL}/${locale}/live`,
+      title: t("metaTitle"),
+      description: t("metaDescriptionOg"),
+      url: `${SITE_URL}/${locale}/tlistv`,
       siteName: "Radio TLIS",
       locale: locale === "sk" ? "sk_SK" : "en_US",
     },
@@ -26,6 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function LiveVideoPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "LivePage" });
 
   const [currentVideoStream, allVideoStreams] = await Promise.all([
     CmsApiService.Stream.getCurrentVideoStream().catch(() => null),
@@ -33,7 +36,7 @@ export default async function LiveVideoPage({ params }: { params: Promise<{ loca
   ]);
 
   const breadcrumbs = [
-    { label: "Live Video", href: `/${locale}/live` },
+    { label: t("breadcrumb_label"), href: `/${locale}/tlistv` },
   ];
 
   return (
@@ -44,7 +47,7 @@ export default async function LiveVideoPage({ params }: { params: Promise<{ loca
 
       <h1 className="text-4xl text-white font-semibold mb-8 text-left">
         <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span>
-        live video
+        {t("heading")}
       </h1>
 
       <StreamVideoHub

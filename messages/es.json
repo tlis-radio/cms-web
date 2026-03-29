@@ -9,7 +9,8 @@
     "about_radio": "Sobre la radio",
     "who_we_are": "Quiénes somos",
     "members": "Miembros",
-    "language_label": "Idioma"
+    "language_label": "Idioma",
+    "live": "TLIS TV"
   },
   "player": {
     "now_playing": "Estás escuchando Radio TLIS",
@@ -310,6 +311,48 @@
     "message": "Vaya, no tenemos esto aquí :(",
     "aria_instagram": "Instagram",
     "aria_facebook": "Facebook"
+  },
+  "StreamVideoHub": {
+    "live_tab": "En vivo",
+    "archive_tab": "Archivo",
+    "badge_live": "EN VIVO",
+    "badge_archive": "ARCHIVO",
+    "unknown_date": "Fecha desconocida",
+    "no_episode": "Sin episodio",
+    "episode_number": "Episodio #{n}",
+    "status_live_now": "EN VIVO AHORA",
+    "status_connecting": "CONECTANDO",
+    "status_unsupported": "NAVEGADOR NO COMPATIBLE",
+    "status_offline": "OFFLINE",
+    "started": "Iniciado {date}",
+    "waiting": "Esperando datos del stream",
+    "reconnect": "Reconectar",
+    "connecting_message": "Conectando al stream en vivo...",
+    "offline_with_retry": "El stream en vivo está offline. Intentando reconectar.",
+    "offline_no_stream": "No hay ningún stream en vivo en este momento.",
+    "unsupported_message": "Este navegador no es compatible con la reproducción en vivo.",
+    "progress_aria": "Progreso del archivo",
+    "play_aria": "Reproducir",
+    "pause_aria": "Pausar",
+    "back_15s": "Retroceder 15 segundos",
+    "forward_15s": "Avanzar 15 segundos",
+    "mute": "Silenciar",
+    "unmute": "Activar sonido",
+    "volume_aria": "Volumen",
+    "live_label": "En vivo",
+    "stream_offline": "Stream Offline",
+    "archive_heading": "Archivo",
+    "page_of": "Página {page} de {total}",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "no_recordings": "Aún no hay grabaciones disponibles."
+  },
+  "LivePage": {
+    "metaTitle": "TLIS TV",
+    "metaDescription": "Mira la transmisión en vivo de Radio TLIS y reproduce grabaciones archivadas del stream.",
+    "metaDescriptionOg": "Stream en vivo y archivo de video de Radio TLIS en un solo lugar.",
+    "breadcrumb_label": "TLIS TV",
+    "heading": "TV"
   },
   "TwoPercentPage": {
     "heading": "dos por ciento",

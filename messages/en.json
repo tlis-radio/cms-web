@@ -9,7 +9,8 @@
     "about_radio": "About Radio",
     "who_we_are": "Who We Are",
     "members": "Members",
-    "language_label": "Language"
+    "language_label": "Language",
+    "live": "TLIS TV"
   },
   "player": {
     "now_playing": "You're listening to Radio TLIS",
@@ -310,6 +311,48 @@
     "message": "Oops, we don't have this here :(",
     "aria_instagram": "Instagram",
     "aria_facebook": "Facebook"
+  },
+  "StreamVideoHub": {
+    "live_tab": "Live",
+    "archive_tab": "Archive",
+    "badge_live": "LIVE",
+    "badge_archive": "ARCHIVE",
+    "unknown_date": "Unknown date",
+    "no_episode": "No episode",
+    "episode_number": "Episode #{n}",
+    "status_live_now": "LIVE NOW",
+    "status_connecting": "CONNECTING",
+    "status_unsupported": "BROWSER UNSUPPORTED",
+    "status_offline": "OFFLINE",
+    "started": "Started {date}",
+    "waiting": "Waiting for stream data",
+    "reconnect": "Reconnect",
+    "connecting_message": "Connecting to live stream...",
+    "offline_with_retry": "Live stream is offline. Attempting to reconnect.",
+    "offline_no_stream": "No live stream is currently running.",
+    "unsupported_message": "This browser does not support live playback.",
+    "progress_aria": "Archive progress",
+    "play_aria": "Play",
+    "pause_aria": "Pause",
+    "back_15s": "Back 15 seconds",
+    "forward_15s": "Forward 15 seconds",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "volume_aria": "Volume",
+    "live_label": "Live",
+    "stream_offline": "Stream Offline",
+    "archive_heading": "Archive",
+    "page_of": "Page {page} of {total}",
+    "prev": "Prev",
+    "next": "Next",
+    "no_recordings": "No recordings available yet."
+  },
+  "LivePage": {
+    "metaTitle": "TLIS TV",
+    "metaDescription": "Watch Radio TLIS live video broadcasting and play back archived stream recordings.",
+    "metaDescriptionOg": "Radio TLIS live stream and video archive in one place.",
+    "breadcrumb_label": "TLIS TV",
+    "heading": "TV"
   },
   "TwoPercentPage": {
     "heading": "two percent",

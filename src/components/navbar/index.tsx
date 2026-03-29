@@ -47,6 +47,10 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
          text: t('articles'),
          url: "/clanky",
       },
+      {
+         text: t('live'),
+         url: "/tlistv",
+      },
       // {
       //    text: t('reports'),
       //    url: "/reporty"
