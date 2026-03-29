@@ -207,7 +207,8 @@
     "episodes_count": "Anzahl der Episoden",
     "back_to_all": "Zurück",
     "show_more": "Mehr anzeigen",
-    "hide": "Ausblenden"
+    "hide": "Ausblenden",
+    "open_on_site": "Auf tlis.sk öffnen"
   },
   "ShowsListPage": {
     "metaTitle": "Sendungen",
