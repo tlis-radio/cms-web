@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
 import { useEffect } from 'react';
 

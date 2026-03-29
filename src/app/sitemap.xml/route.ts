@@ -10,7 +10,9 @@ const STATIC_ROUTES: string[] = [
   '/o-radiu',
   '/program',
   '/relacie',
-  '/tos'
+  '/tos',
+  '/dashboard',
+  '/embeded'
 ];
 
 function buildSitemap(urls: string[], baseUrl: string): string {

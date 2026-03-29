@@ -2,8 +2,10 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
+import "@/app/globals.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+// Pozor: Tu by bolo lepšie importovať locales priamo z navigation.ts, aby to bolo jednotné
 const locales = ['sk', 'en', 'de', 'es', 'uk', 'tpi'];
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -18,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'Radio TLIS — alternatívna hudba, relácie a kultúra.' 
       : 'Radio TLIS — alternative music, shows, and culture.',
     alternates: { 
-      canonical: `${SITE_URL}/`, 
+      canonical: `${SITE_URL}/${locale}`, // Opravené: kanonická URL by mala obsahovať locale
       languages: Object.fromEntries(
         locales.map((l) => [l, `${SITE_URL}/${l}`])
       ),
@@ -42,8 +44,13 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
-    </NextIntlClientProvider>
+    // Added missing tags
+    <html lang={locale}>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
