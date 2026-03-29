@@ -5,10 +5,10 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
+import { locales } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
-// 1. Dynamické metadáta pre SEO
 export async function generateMetadata({ 
     params, 
     searchParams 
@@ -25,25 +25,35 @@ export async function generateMetadata({
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
     
+    // Bod od kolegu: Canonical smerujeme na hlavnú verziu (sk)
     const canonicalUrl = page === 1 
-       ? `${SITE_URL}/${locale}/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
-       : `${SITE_URL}/${locale}/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
+       ? `${SITE_URL}/sk/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
+       : `${SITE_URL}/sk/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
     
     return {
-       title: `${t('metaTitle')}`,
+       // Vymazané "| Radio TLIS" (DRY princíp z layoutu)
+       title: t('metaTitle'),
        description: t('metaDescription'),
-       alternates: { canonical: canonicalUrl },
+       alternates: { 
+          canonical: canonicalUrl,
+          // Preloopovanie cez jazyky pre SEO
+          languages: Object.fromEntries(
+            locales.map((l) => [
+                l, 
+                `${SITE_URL}/${l}/relacie${page > 1 ? `?page=${page}` : ""}${filter !== "active" ? `${page > 1 ? '&' : '?'}filter=${filter}` : ""}`
+            ])
+          ),
+       },
        openGraph: {
-          title: `${t('metaTitle')}`,
+          title: t('metaTitle'),
           description: t('metaDescription'),
-          url: canonicalUrl,
+          url: `${SITE_URL}/${locale}/relacie`,
           siteName: "Radio TLIS",
           locale: locale === 'sk' ? 'sk_SK' : 'en_US',
        },
     };
 }
 
-// 2. Hlavný komponent
 async function Shows({ 
     params, 
     searchParams 
@@ -56,9 +66,8 @@ async function Shows({
     const t = await getTranslations({ locale, namespace: 'ShowsListPage' });
     const b = await getTranslations({ locale, namespace: 'navbar' });
 
-    let filterValue = resolvedSearchParams?.filter;
+    const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
-    
     const pageParam = resolvedSearchParams?.page;
     const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
 
@@ -88,26 +97,25 @@ async function Shows({
 
     return (
         <>
-           {seriesJson.map((s: any, i: number) => (<JsonLd key={i} data={s} />))}
-           <div className="px-8 mb-4">
-              <Breadcrumbs items={breadcrumbs} />
-           </div>
-           
-           {/* Nadpis s prekladom */}
-           <div className="px-8 mb-4">
+            {seriesJson.map((s: any, i: number) => (<JsonLd key={`jsonld-${i}`} data={s} />))}
+            <div className="px-8 mb-4">
+               <Breadcrumbs items={breadcrumbs} />
+            </div>
+            
+            <div className="px-8 mb-4">
                 <h1 className="text-4xl text-white font-semibold">
-                    <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> 
+                    <span className="text-[#d43c4a] italic text-[1.4em] mr-2 uppercase">TLIS</span> 
                     {t('heading')}
                 </h1>
-           </div>
+            </div>
 
-           <ShowsPage 
+            <ShowsPage 
                 shows={shows} 
                 totalCount={showsResult?.totalCount || 0} 
                 loadingError={loadingError} 
                 currentPage={page} 
                 locale={locale} 
-           />
+            />
         </>
     );
 };
