@@ -68,6 +68,7 @@ const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: Reac
 };
 
 const Player: React.FC<{}> = () => {
+   const [isClient, setIsClient] = useState(false);
    const { 
       mode, 
       archiveName, 
@@ -88,33 +89,30 @@ const Player: React.FC<{}> = () => {
    const [streamTitle, setStreamTitle] = useState("Radio TLIS");
    const [streamArtist, setStreamArtist] = useState<string | undefined>("Radio TLIS");
    const [albumCover, setAlbumCover] = useState<string | null>(null);
-
    const [displayTitle, setDisplayTitle] = useState<string>("RADIO TLIS");
    const [activeDisplayTitle, setActiveDisplayTitle] = useState<string>("RADIO TLIS");
-   
    const originalTitleRef = useRef<string>("");
 
-   const titleBarLenght = 24;
-   const titleBarMovement = 3;
+   useEffect(() => {
+      setIsClient(true);
+   }, []);
 
    useEffect(() => {
       let length = displayTitle.length;
       let position = 0;
-      if (length < titleBarLenght) {
+      if (length < 24) {
          setActiveDisplayTitle(displayTitle);
          return;
       }
-
       let singleIteration: NodeJS.Timeout;
       let waitTimeout: NodeJS.Timeout;
-
       function startIteration() {
          setActiveDisplayTitle(displayTitle);
          waitTimeout = setTimeout(() => {
             singleIteration = setInterval(() => {
-               setActiveDisplayTitle(displayTitle.substring(position, position + titleBarLenght));
-               position += titleBarMovement;
-               if (position > length - titleBarLenght) {
+               setActiveDisplayTitle(displayTitle.substring(position, position + 24));
+               position += 3;
+               if (position > length - 24) {
                   clearInterval(singleIteration);
                   position = 0;
                   startIteration();
@@ -122,7 +120,6 @@ const Player: React.FC<{}> = () => {
             }, 200);
          }, 2000);
       }
-
       startIteration();
       return () => {
          clearTimeout(waitTimeout);
@@ -141,11 +138,9 @@ const Player: React.FC<{}> = () => {
             }
          }
       };
-
       if (document.hidden) {
          document.title = activeDisplayTitle;
       }
-
       document.addEventListener("visibilitychange", handleVisibilityChange);
       return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
    }, [activeDisplayTitle]);
@@ -159,20 +154,17 @@ const Player: React.FC<{}> = () => {
          const query = encodeURIComponent(`${artist} ${title}`);
          const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=5`);
          const result = await response.json();
-
          if (result.results && result.results.length > 0) {
             const bestMatch = result.results.find((item: any) => 
                item.artistName.toLowerCase().includes(artist.toLowerCase()) ||
                artist.toLowerCase().includes(item.artistName.toLowerCase())
             ) || result.results[0];
-
             const artwork = bestMatch.artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg');
             setAlbumCover(artwork);
          } else {
             setAlbumCover(null);
          }
       } catch (err) {
-         console.error("Art fetch error:", err);
          setAlbumCover(null);
       }
    };
@@ -197,12 +189,13 @@ const Player: React.FC<{}> = () => {
             }
             return;
          }
-
          try {
-            const currentStreamTitleResponse = await fetch('/api/stream');
-            const data = await currentStreamTitleResponse.json();
-            
-            let tempDisplayTitle = "RADIO TLIS";
+            const response = await fetch('/api/stream');
+            if (!response.ok) return;
+            const text = await response.text();
+            if (!text) return;
+            const data = JSON.parse(text);
+            let tempDisplayTitle = "Radio TLIS";
             if (data.artist && data.songTitle) {
                if (data.songTitle !== streamTitle || data.artist !== streamArtist) {
                   fetchAlbumArt(data.artist, data.songTitle);
@@ -217,14 +210,11 @@ const Player: React.FC<{}> = () => {
                setStreamTitle(data.songTitle);
                tempDisplayTitle = data.songTitle;
             }
-            
             setDisplayTitle(tempDisplayTitle);
-
          } catch (error) {
             console.error('Failed to fetch stream title:', error);
          }
       };
-
       fetchTitle();
       const intervalId = setInterval(fetchTitle, 5000);
       return () => clearInterval(intervalId);
@@ -252,7 +242,6 @@ const Player: React.FC<{}> = () => {
             const tag = target.tagName?.toLowerCase();
             if (tag === 'input' || tag === 'textarea' || target.isContentEditable) return;
          }
-
          if (e.key === 'ArrowLeft') {
             e.preventDefault();
             seekBy(-15);
@@ -261,10 +250,11 @@ const Player: React.FC<{}> = () => {
             seekBy(15);
          }
       };
-
       window.addEventListener('keydown', onKey);
       return () => window.removeEventListener('keydown', onKey);
    }, [currentTime, duration]);
+
+   if (!isClient) return null;
 
    const playerClasses = classNames(
       'fixed bottom-0 inset-x-0 w-full z-10 bg-[#2e2b2c] transition-transform duration-300 ease-in-out',
@@ -297,7 +287,6 @@ const Player: React.FC<{}> = () => {
             {mode === "stream" && (
                <div className="absolute top-0 left-0 w-full h-1 bg-[#d43c4a]" />
             )}
-
             <div className="max-w-7xl mx-auto flex items-center gap-3 p-3 pt-4">
                <div className="w-14 h-14 flex-shrink-0 relative">
                   <Image
@@ -308,7 +297,6 @@ const Player: React.FC<{}> = () => {
                      className="w-full h-full object-cover rounded shadow-sm"
                   />
                </div>
-
                <div className="flex-1 min-w-0 flex flex-col justify-center">
                   {mode === "archive" && archiveShowSlug ? (
                      <Link href={`/relacie/${archiveShowSlug}`}>
@@ -324,21 +312,19 @@ const Player: React.FC<{}> = () => {
                      />
                   )}
                   <div className="flex items-center gap-2 text-xs text-gray-300 flex-wrap">
-                     <span>{subtitle}</span>
+                     <span suppressHydrationWarning>{subtitle}</span>
                      {mode === "archive" && duration > 0 && (
                         <>
                            <span>•</span>
-                           <span>{getTimeFromMs(currentTime)} / {getTimeFromMs(duration)}</span>
+                           <span suppressHydrationWarning>{getTimeFromMs(currentTime)} / {getTimeFromMs(duration)}</span>
                         </>
                      )}
                   </div>
                </div>
-
                <div className="flex items-center gap-2 flex-shrink-0">
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
                   </div>
-
                   { mode === "archive" && 
                   <button
                      aria-label="Back 15 seconds"
@@ -352,7 +338,6 @@ const Player: React.FC<{}> = () => {
                         <path d="M14 4.5L12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C8.7288 22 5.82446 20.4293 4 18.001M8 2.83209C6.87754 3.32251 5.86251 4.01303 5 4.85857C3.14864 6.67349 2 9.20261 2 12C2 12.6849 2.06886 13.3538 2.20004 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                      </svg>
                   </button> }
-
                   <button
                      className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a]/90 hover:bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
                      onClick={() => setIsPlaying(!isPlaying)}
@@ -363,7 +348,6 @@ const Player: React.FC<{}> = () => {
                      {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
                      {!isLoading && isPlaying && <FontAwesomeIcon icon={faPause} />}
                   </button>
-
                   { mode === "archive" &&
                   <button
                      aria-label="Forward 15 seconds"
