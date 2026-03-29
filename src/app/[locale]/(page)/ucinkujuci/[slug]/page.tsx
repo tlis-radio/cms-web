@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -60,7 +61,7 @@ export async function generateMetadata({
          description,
          url: canonicalUrl,
          siteName: "Radio TLIS",
-         locale: locale === 'sk' ? "sk_SK" : "en_US",
+         locale: toOgLocale(locale),
          type: "profile",
       },
       twitter: {

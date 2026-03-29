@@ -5,6 +5,7 @@ import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CastGrid from "./CastGrid";
 import { getTranslations } from "next-intl/server";
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -27,7 +28,7 @@ export async function generateMetadata({
          description: t('metaDescription'),
          url: canonicalUrl,
          siteName: "Radio TLIS",
-         locale: locale === 'sk' ? 'sk_SK' : 'en_US',
+         locale: toOgLocale(locale),
       },
    };
 }

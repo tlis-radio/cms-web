@@ -3,6 +3,7 @@ import StreamVideoHub from "@/components/stream/StreamVideoHub";
 import CmsApiService from "@/services/cms-api-service";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description: t("metaDescriptionOg"),
       url: `${SITE_URL}/${locale}/tlistv`,
       siteName: "Radio TLIS",
-      locale: locale === "sk" ? "sk_SK" : "en_US",
+      locale: toOgLocale(locale),
     },
   };
 }

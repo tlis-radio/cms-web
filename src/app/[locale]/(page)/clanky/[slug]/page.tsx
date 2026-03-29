@@ -5,12 +5,13 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import { extractEpisodeIds } from "@/lib/markdown-parser";
 import ArticleDetail from "./ArticleDetail";
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-   const { slug } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string, locale: string }> }): Promise<Metadata> {
+   const { slug, locale } = await params;
    const canonicalUrl = `${SITE_URL}/clanky/${slug}`;
    
    try {
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             description,
             url: canonicalUrl,
             siteName: "Radio TLIS",
-            locale: "sk_SK",
+            locale: toOgLocale(locale),
             type: "article",
             publishedTime: article?.published_at,
             authors: article?.author?.Name ? [article.author.Name] : undefined,
@@ -51,7 +52,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             description: `Článok na Radiu TLIS.`, 
             url: canonicalUrl, 
             siteName: "Radio TLIS", 
-            locale: "sk_SK" 
+            locale: toOgLocale(locale) 
          },
       };
    }

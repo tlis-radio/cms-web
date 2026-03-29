@@ -1,5 +1,6 @@
 import Members from "@/components/MembersGrid";
 import { getTranslations } from 'next-intl/server';
+import { toOgLocale } from "@/navigation";
 import type { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             description: t('metaDescription'),
             url: `${SITE_URL}/${locale}/o-radiu/clenovia`,
             siteName: "Radio TLIS",
-            locale: locale === 'sk' ? 'sk_SK' : 'en_US',
+            locale: toOgLocale(locale),
         },
     };
 }

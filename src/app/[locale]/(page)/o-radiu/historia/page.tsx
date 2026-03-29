@@ -3,6 +3,7 @@ import tlisaci from '@/../public/images/tlisaci.jpg';
 import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
 import type { Metadata } from "next";
 import { getTranslations } from 'next-intl/server';
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             description: t('metaDescription'),
             url: `${SITE_URL}/${locale}/o-radiu/historia`,
             siteName: "Radio TLIS",
-            locale: locale === 'sk' ? 'sk_SK' : 'en_US',
+            locale: toOgLocale(locale),
         },
     };
 }

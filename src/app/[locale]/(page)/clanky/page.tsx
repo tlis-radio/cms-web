@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 const locales = ['sk', 'en', 'de', 'es', 'uk', 'tpi'];
@@ -43,7 +44,7 @@ export async function generateMetadata({
          description: t('metaDescription') || "Prehľad článkov, reportáží a udalostí Radia TLIS.",
          url: `${SITE_URL}/${locale}/clanky`,
          siteName: "Radio TLIS",
-         locale: locale === 'sk' ? 'sk_SK' : 'en_US',
+         locale: toOgLocale(locale),
       },
    };
 }

@@ -5,11 +5,12 @@ import NotFound from "@/components/NotFound";
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
-export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>, searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
-   const { slug } = await params;
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string, locale: string }>, searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+   const { slug, locale } = await params;
    const resolvedSearchParams = await searchParams;
    const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
@@ -32,7 +33,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
             description,
             url: canonicalUrl,
             siteName: "Radio TLIS",
-            locale: "sk_SK",
+            locale: toOgLocale(locale),
          },
       };
    } catch (e) {
@@ -45,7 +46,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
             description: `Články v kategórii.`, 
             url: canonicalUrl, 
             siteName: "Radio TLIS", 
-            locale: "sk_SK" 
+            locale: toOgLocale(locale) 
          },
       };
    }
