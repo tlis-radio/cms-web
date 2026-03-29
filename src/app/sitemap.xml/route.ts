@@ -1,5 +1,7 @@
 import CmsApiService from '@/services/cms-api-service';
 
+import { locales } from '@/navigation';
+
 const STATIC_ROUTES: string[] = [
   '/',
   '/dve-percenta',
@@ -12,9 +14,8 @@ const STATIC_ROUTES: string[] = [
 ];
 
 function buildSitemap(urls: string[], baseUrl: string): string {
-  const allUrls = urls.map(u => `${baseUrl.replace(/\/$/, '')}${u}`);
-  const items = allUrls
-    .map(u => `  <url>\n    <loc>${u}</loc>\n  </url>`)
+  const items = urls
+    .map(u => `  <url>\n    <loc>${baseUrl}${u}</loc>\n  </url>`)
     .join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${items}\n</urlset>`;
 }
@@ -33,11 +34,18 @@ export async function GET() {
   
   const dynamicRelacie = showSlugs.map(s => `/relacie/${s}`);
 
-  const urls = Array.from(new Set([...STATIC_ROUTES, ...dynamicRelacie])).sort();
+  const basePaths = Array.from(new Set([...STATIC_ROUTES, ...dynamicRelacie])).sort();
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:3000';
-  const xml = buildSitemap(urls, baseUrl);
+  const localizedUrls: string[] = [];
+  basePaths.forEach(path => {
+    locales.forEach(locale => {
+      const fullPath = path === '/' ? `/${locale}` : `/${locale}${path}`;
+      localizedUrls.push(fullPath);
+    });
+  });
 
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://tlis.sk').replace(/\/$/, '');
+  const xml = buildSitemap(localizedUrls, baseUrl);
   return new Response(xml, {
     status: 200,
     headers: { 'Content-Type': 'application/xml' },
