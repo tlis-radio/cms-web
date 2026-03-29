@@ -64,6 +64,8 @@
     }
   },
   "HomePage": {
+    "metaTitle": "Startseite",
+    "metaDescription": "Hören Sie Radio TLIS live. Alternative Musik, Kultursendungen und frische Infos direkt aus dem Studentenleben",
     "eventsTitle": "events",
     "viewAll": "ALLE ANZEIGEN"
   },

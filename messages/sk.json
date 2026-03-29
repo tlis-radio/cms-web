@@ -64,6 +64,8 @@
     }
   },
   "HomePage": {
+    "metaTitle": "Domov",
+    "metaDescription": "Počúvajte Radio TLIS naživo. Alternatívna hudba, relácie o kultúre a čerstvé info priamo zo študentského života",
     "eventsTitle": "udalosti",
     "viewAll": "ZOBRAZIŤ VŠETKY"
   },
