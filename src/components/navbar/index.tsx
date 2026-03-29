@@ -64,15 +64,6 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
                url: "/o-radiu/clenovia"
             }
          ]
-      },
-      /* Dropdown na prepínanie jazykov */
-      {
-         text: t('language_label') || 'Language',
-         url: "#",
-         subLinks: [
-            { text: "Slovenčina", url: "/", locale: "sk" },
-            { text: "English", url: "/", locale: "en" }
-         ]
       }
    ];
 }
