@@ -384,5 +384,25 @@
     "label_city": "Gemeinde:",
     "label_contact": "Kontakt:",
     "help_footer": "Wenn Sie Hilfe beim Ausfüllen der Formulare benötigen, kontaktieren Sie uns."
+  },
+  "EmbedIndex": {
+    "title": "Embed-Widgets",
+    "description": "Diese Seite enthält einbettbare Widgets für Radio TLIS.",
+    "available_widgets": "Verfügbare Widgets:",
+    "show_list_title": "Show-Listen-Widget",
+    "show_list_desc": "Zeigt eine Liste der Sendungen mit einem Player an.",
+    "episode_title": "Episoden-Widget",
+    "episode_desc": "Kompaktes Widget für eine einzelne Episode (quadratisch).",
+    "wide_episode_title": "Breites Episoden-Widget",
+    "wide_episode_desc": "Breites Widget für eine einzelne Episode (horizontal)."
+  },
+  "DashboardLogin": {
+    "title": "Dashboard-Login",
+    "description": "Melden Sie sich an, um auf die Analysen zuzugreifen",
+    "email_label": "E-Mail-Adresse",
+    "password_label": "Passwort",
+    "button": "Anmelden",
+    "loading": "Anmeldung...",
+    "error": "Ungültige E-Mail oder Passwort"
   }
 }

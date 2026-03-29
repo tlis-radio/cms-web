@@ -385,5 +385,26 @@
     "label_city": "Obec:",
     "label_contact": "Kontakt:",
     "help_footer": "Ak potrebujete pomoc s vyplnením tlačív, kontaktujte nás."
+  },
+  "EmbedIndex": {
+    "title": "Embed Widgety",
+    "description": "Táto stránka obsahuje embedovateľné widgety pre Rádio TLIS.",
+    "available_widgets": "Dostupné widgety:",
+    "show_list_title": "Show List Widget",
+    "show_list_desc": "Zobrazí zoznam epizód relácie s prehrávačom.",
+    "episode_title": "Episode Widget",
+    "episode_desc": "Kompaktný widget pre jednu epizódu (štvorcový).",
+    "wide_episode_title": "Wide Episode Widget",
+    "wide_episode_desc": "Široký widget pre jednu epizódu (horizontálny)."
+  },
+  "DashboardLogin": {
+    "title": "Dashboard Login",
+    "description": "Prihláste sa pre prístup k analytike",
+    "email_label": "Emailová adresa",
+    "password_label": "Heslo",
+    "button": "Prihlásiť sa",
+    "loading": "Prihlasovanie...",
+    "error": "Nesprávny email alebo heslo"
   }
+
 }

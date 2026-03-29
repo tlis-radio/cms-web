@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from '@/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from '@/navigation'; 
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
-import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function LoginPage() {
+   const t = useTranslations('DashboardLogin');
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
    const [error, setError] = useState('');
@@ -29,10 +30,10 @@ export default function LoginPage() {
          if (success) {
             router.push('/dashboard');
          } else {
-            setError('Invalid email or password');
+            setError(t('error'));
          }
       } catch (err) {
-         setError('An error occurred during login');
+         setError('An error occurred');
       } finally {
          setIsLoading(false);
       }
@@ -43,43 +44,37 @@ export default function LoginPage() {
          <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg shadow-xl">
             <div>
                <h2 className="text-center text-3xl font-bold text-white">
-                  Dashboard Login
+                  {t('title')}
                </h2>
                <p className="mt-2 text-center text-sm text-gray-400">
-                  Sign in to access analytics
+                  {t('description')}
                </p>
             </div>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                <div className="rounded-md shadow-sm space-y-4">
                   <div>
-                     <label htmlFor="email" className="sr-only">
-                        Email address
-                     </label>
+                     <label htmlFor="email" className="sr-only">{t('email_label')}</label>
                      <input
                         id="email"
                         name="email"
                         type="email"
-                        autoComplete="email"
                         required
-                        className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-600 bg-gray-700 placeholder-gray-400 text-white focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                        placeholder="Email address"
+                        className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-600 bg-gray-700 placeholder-gray-400 text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        placeholder={t('email_label')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         disabled={isLoading}
                      />
                   </div>
                   <div>
-                     <label htmlFor="password" className="sr-only">
-                        Password
-                     </label>
+                     <label htmlFor="password" className="sr-only">{t('password_label')}</label>
                      <input
                         id="password"
                         name="password"
                         type="password"
-                        autoComplete="current-password"
                         required
-                        className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-600 bg-gray-700 placeholder-gray-400 text-white focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                        placeholder="Password"
+                        className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-600 bg-gray-700 placeholder-gray-400 text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        placeholder={t('password_label')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={isLoading}
@@ -93,15 +88,13 @@ export default function LoginPage() {
                   </div>
                )}
 
-               <div>
-                  <button
-                     type="submit"
-                     disabled={isLoading}
-                     className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                     {isLoading ? 'Signing in...' : 'Sign in'}
-                  </button>
-               </div>
+               <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+               >
+                  {isLoading ? t('loading') : t('button')}
+               </button>
             </form>
          </div>
       </div>

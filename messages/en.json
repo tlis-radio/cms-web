@@ -384,5 +384,25 @@
     "label_city": "Municipality:",
     "label_contact": "Contact:",
     "help_footer": "If you need help filling out the forms, contact us."
+  },
+  "EmbedIndex": {
+    "title": "Embed Widgets",
+    "description": "This page contains embeddable widgets for Radio TLIS.",
+    "available_widgets": "Available widgets:",
+    "show_list_title": "Show List Widget",
+    "show_list_desc": "Displays a list of show episodes with a player.",
+    "episode_title": "Episode Widget",
+    "episode_desc": "Compact widget for a single episode (square).",
+    "wide_episode_title": "Wide Episode Widget",
+    "wide_episode_desc": "Wide widget for a single episode (horizontal)."
+  },
+  "DashboardLogin": {
+    "title": "Dashboard Login",
+    "description": "Sign in to access analytics",
+    "email_label": "Email address",
+    "password_label": "Password",
+    "button": "Sign in",
+    "loading": "Signing in...",
+    "error": "Invalid email or password"
   }
 }

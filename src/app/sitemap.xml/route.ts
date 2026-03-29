@@ -12,7 +12,7 @@ const STATIC_ROUTES: string[] = [
   '/relacie',
   '/tos',
   '/dashboard',
-  '/embeded'
+  '/embed'
 ];
 
 function buildSitemap(urls: string[], baseUrl: string): string {

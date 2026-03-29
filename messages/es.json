@@ -384,5 +384,25 @@
     "label_city": "Municipio:",
     "label_contact": "Contacto:",
     "help_footer": "Si necesita ayuda para completar los formularios, contáctenos."
+  },
+  "EmbedIndex": {
+    "title": "Widgets de Inserción",
+    "description": "Esta página contiene widgets integrables para Radio TLIS.",
+    "available_widgets": "Widgets disponibles:",
+    "show_list_title": "Widget de Lista de Programas",
+    "show_list_desc": "Muestra una lista de episodios con un reproductor.",
+    "episode_title": "Widget de Episodio",
+    "episode_desc": "Widget compacto para un solo episodio (cuadrado).",
+    "wide_episode_title": "Widget de Episodio Ancho",
+    "wide_episode_desc": "Widget ancho para un solo episodio (horizontal)."
+  },
+  "DashboardLogin": {
+    "title": "Inicio de sesión del Panel",
+    "description": "Inicie sesión para acceder a las analíticas",
+    "email_label": "Correo electrónico",
+    "password_label": "Contraseña",
+    "button": "Iniciar sesión",
+    "loading": "Iniciando sesión...",
+    "error": "Correo electrónico o contraseña incorrectos"
   }
 }

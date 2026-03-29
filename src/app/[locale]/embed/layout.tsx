@@ -16,13 +16,11 @@ export default function EmbedLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="sk">
-      <body className="bg-transparent">
-        <EmbedSessionInit />
-        <EmbedPlayerProvider>
-          {children}
-        </EmbedPlayerProvider>
-      </body>
-    </html>
+    <>
+      <EmbedSessionInit />
+      <EmbedPlayerProvider>
+        {children}
+      </EmbedPlayerProvider>
+    </>
   );
 }
