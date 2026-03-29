@@ -1,6 +1,6 @@
 import Members from "@/components/MembersGrid";
 import { getTranslations } from 'next-intl/server';
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 import type { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
@@ -13,8 +13,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: `${t('metaTitle')}`,
         description: t('metaDescription'),
-        alternates: { 
-            canonical: `${SITE_URL}/${locale}/o-radiu/clenovia` 
+        alternates: {
+            canonical: `${SITE_URL}/${locale}/o-radiu/clenovia`,
+            languages: Object.fromEntries(
+                locales.map((l) => [l, `${SITE_URL}/${l}/o-radiu/clenovia`])
+            ),
         },
         openGraph: {
             title: `${t('metaTitle')}`,

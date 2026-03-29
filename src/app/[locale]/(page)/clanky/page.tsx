@@ -5,10 +5,9 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
-const locales = ['sk', 'en', 'de', 'es', 'uk', 'tpi'];
 
 export async function generateMetadata({ 
    params, 
@@ -24,11 +23,9 @@ export async function generateMetadata({
    
    const t = await getTranslations({ locale, namespace: 'ArticlesPage' });
    
-   // Bod od kolegu: Canonical by mal smerovať na hlavnú verziu (často .sk)
-   // Ak chcete canonical podľa jazyka, nechaj tam ${locale}, ale on písal "vždy sk"
-   const canonicalUrl = page === 1 
-      ? `${SITE_URL}/sk/clanky`
-      : `${SITE_URL}/sk/clanky?page=${page}`;
+   const canonicalUrl = page === 1
+      ? `${SITE_URL}/${locale}/clanky`
+      : `${SITE_URL}/${locale}/clanky?page=${page}`;
    
    return {
       title: t('metaTitle') || 'Články',

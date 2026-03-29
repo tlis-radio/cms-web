@@ -25,10 +25,9 @@ export async function generateMetadata({
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
     
-    // Bod od kolegu: Canonical smerujeme na hlavnú verziu (sk)
-    const canonicalUrl = page === 1 
-       ? `${SITE_URL}/sk/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
-       : `${SITE_URL}/sk/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
+    const canonicalUrl = page === 1
+       ? `${SITE_URL}/${locale}/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
+       : `${SITE_URL}/${locale}/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
     
     return {
        // Vymazané "| Radio TLIS" (DRY princíp z layoutu)

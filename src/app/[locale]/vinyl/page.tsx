@@ -1,6 +1,6 @@
 import VinylPlayer from "@/components/vinyl/VinylPlayer";
 import type { Metadata } from "next";
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -9,11 +9,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: "Vinyl | Rádio TLIS",
         description: "Vinyl prehrávač a archív — prehrávajte naše relácie a hudbu študentského rádia TLIS.",
-        alternates: { canonical: SITE_URL + "/vinyl" },
+        alternates: {
+            canonical: `${SITE_URL}/${locale}/vinyl`,
+            languages: Object.fromEntries(
+                locales.map((l) => [l, `${SITE_URL}/${l}/vinyl`])
+            ),
+        },
         openGraph: {
             title: "Vinyl | Rádio TLIS",
             description: "Vinyl prehrávač a archív — prehrávajte relácie a hudbu TLIS.",
-            url: SITE_URL + "/vinyl",
+            url: `${SITE_URL}/${locale}/vinyl`,
             siteName: "Rádio TLIS",
             locale: toOgLocale(locale),
         },

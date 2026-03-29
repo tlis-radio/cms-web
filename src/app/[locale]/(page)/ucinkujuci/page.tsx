@@ -5,7 +5,7 @@ import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CastGrid from "./CastGrid";
 import { getTranslations } from "next-intl/server";
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -22,7 +22,12 @@ export async function generateMetadata({
    return {
       title: `${t('metaTitle')}`,
       description: t('metaDescription'),
-      alternates: { canonical: canonicalUrl },
+      alternates: {
+         canonical: canonicalUrl,
+         languages: Object.fromEntries(
+            locales.map((l) => [l, `${SITE_URL}/${l}/ucinkujuci`])
+         ),
+      },
       openGraph: {
          title: `${t('metaTitle')}`,
          description: t('metaDescription'),

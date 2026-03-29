@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import ShowJsonLd from "@/components/ShowJsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -39,7 +39,12 @@ export async function generateMetadata({
       return {
          title,
          description,
-         alternates: { canonical: canonicalUrl },
+         alternates: {
+            canonical: canonicalUrl,
+            languages: Object.fromEntries(
+               locales.map((l) => [l, `${SITE_URL}/${l}/relacie/${slug}`])
+            ),
+         },
          openGraph: {
             title,
             description,
@@ -53,13 +58,18 @@ export async function generateMetadata({
       return {
          title: `${t('metaTitle_fallback')} | Radio TLIS`,
          description: t('metaDescription_fallback'),
-         alternates: { canonical: canonicalUrl },
-         openGraph: { 
-            title: `${t('metaTitle_fallback')} | Radio TLIS`, 
-            description: t('metaDescription_fallback'), 
-            url: canonicalUrl, 
-            siteName: "Radio TLIS", 
-            locale: toOgLocale(locale)
+         alternates: {
+            canonical: canonicalUrl,
+            languages: Object.fromEntries(
+               locales.map((l) => [l, `${SITE_URL}/${l}/relacie/${slug}`])
+            ),
+         },
+         openGraph: {
+            title: `${t('metaTitle_fallback')} | Radio TLIS`,
+            description: t('metaDescription_fallback'),
+            url: canonicalUrl,
+            siteName: "Radio TLIS",
+            locale: toOgLocale(locale),
          },
       };
    }

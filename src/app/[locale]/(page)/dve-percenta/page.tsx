@@ -1,10 +1,9 @@
-import React from 'react';
 import tlisaci from '@/../public/images/darujte_nam_2_percenta.png';
 import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -16,8 +15,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: `${t('metaTitle')}`,
         description: t('metaDescription'),
-        alternates: { 
-            canonical: `${SITE_URL}/${locale}/dve-percenta` 
+        alternates: {
+            canonical: `${SITE_URL}/${locale}/dve-percenta`,
+            languages: Object.fromEntries(
+                locales.map((l) => [l, `${SITE_URL}/${l}/dve-percenta`])
+            ),
         },
         openGraph: {
             title: `${t('metaTitle')}`,
@@ -32,7 +34,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function DvePercenta({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'TwoPercentPage' });
-    const b = await getTranslations({ locale, namespace: 'navbar' });
 
     const breadcrumbs = [
         { label: t('breadcrumb_label') || "Dve percentá", href: `/${locale}/dve-percenta` }

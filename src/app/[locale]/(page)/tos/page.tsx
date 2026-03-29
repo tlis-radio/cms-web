@@ -1,6 +1,32 @@
-import React from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { locales, toOgLocale } from "@/navigation";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'TosPage' });
+
+  return {
+    title: t('title'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/tos`,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `${SITE_URL}/${l}/tos`])
+      ),
+    },
+    openGraph: {
+      title: t('title'),
+      description: t('metaDescription'),
+      url: `${SITE_URL}/${locale}/tos`,
+      siteName: "Radio TLIS",
+      locale: toOgLocale(locale),
+    },
+  };
+}
 
 export default async function TosPage({ 
   params 

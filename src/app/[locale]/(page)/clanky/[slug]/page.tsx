@@ -5,25 +5,30 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import { extractEpisodeIds } from "@/lib/markdown-parser";
 import ArticleDetail from "./ArticleDetail";
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string, locale: string }> }): Promise<Metadata> {
    const { slug, locale } = await params;
-   const canonicalUrl = `${SITE_URL}/clanky/${slug}`;
-   
+   const canonicalUrl = `${SITE_URL}/${locale}/clanky/${slug}`;
+
    try {
       const article = await CmsApiService.Article.getArticleBySlug(slug);
       const title = article?.title ? `${article.title} | Radio TLIS` : `Článok | Radio TLIS`;
       const description = article?.description || `Článok na Radiu TLIS.`;
       const image = article?.thumbnail_image ? `${DIRECTUS_URL}/assets/${article.thumbnail_image}` : undefined;
-      
+
       return {
          title,
          description,
-         alternates: { canonical: canonicalUrl },
+         alternates: {
+            canonical: canonicalUrl,
+            languages: Object.fromEntries(
+               locales.map((l) => [l, `${SITE_URL}/${l}/clanky/${slug}`])
+            ),
+         },
          openGraph: {
             title,
             description,
@@ -46,13 +51,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       return {
          title: `Článok | Radio TLIS`,
          description: `Článok na Radiu TLIS.`,
-         alternates: { canonical: canonicalUrl },
-         openGraph: { 
-            title: `Článok | Radio TLIS`, 
-            description: `Článok na Radiu TLIS.`, 
-            url: canonicalUrl, 
-            siteName: "Radio TLIS", 
-            locale: toOgLocale(locale) 
+         alternates: {
+            canonical: canonicalUrl,
+            languages: Object.fromEntries(
+               locales.map((l) => [l, `${SITE_URL}/${l}/clanky/${slug}`])
+            ),
+         },
+         openGraph: {
+            title: `Článok | Radio TLIS`,
+            description: `Článok na Radiu TLIS.`,
+            url: canonicalUrl,
+            siteName: "Radio TLIS",
+            locale: toOgLocale(locale),
          },
       };
    }

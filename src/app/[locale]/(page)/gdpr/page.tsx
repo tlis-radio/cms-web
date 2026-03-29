@@ -1,8 +1,7 @@
-import React from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import type { Metadata } from "next";
 import { getTranslations } from 'next-intl/server';
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -14,8 +13,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: `${t('metaTitle')}`,
         description: t('metaDescription'),
-        alternates: { 
-            canonical: `${SITE_URL}/${locale}/gdpr` 
+        alternates: {
+            canonical: `${SITE_URL}/${locale}/gdpr`,
+            languages: Object.fromEntries(
+                locales.map((l) => [l, `${SITE_URL}/${l}/gdpr`])
+            ),
         },
         openGraph: {
             title: `${t('metaTitle')}`,
@@ -30,7 +32,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function GdprPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'GdprPage' });
-    const b = await getTranslations({ locale, namespace: 'breadcrumbs' });
 
     const breadcrumbs = [
         { label: "GDPR", href: `/${locale}/gdpr` }

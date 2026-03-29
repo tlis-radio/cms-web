@@ -2,7 +2,7 @@ import Program from "@/components/carousel/Program";
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { toOgLocale } from "@/navigation";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -14,8 +14,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: `${t('metaTitle')}`,
         description: t('metaDescription'),
-        alternates: { 
-            canonical: `${SITE_URL}/${locale}/program` 
+        alternates: {
+            canonical: `${SITE_URL}/${locale}/program`,
+            languages: Object.fromEntries(
+                locales.map((l) => [l, `${SITE_URL}/${l}/program`])
+            ),
         },
         openGraph: {
             title: `${t('metaTitle')}`,

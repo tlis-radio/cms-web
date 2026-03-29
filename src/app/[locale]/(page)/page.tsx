@@ -4,13 +4,37 @@ import ArticleLink from "@/components/ArticleLink";
 import JsonLd from "@/components/JsonLd";
 import CmsApiService from "@/services/cms-api-service";
 import Link from "next/link";
-import { getTranslations } from 'next-intl/server'; // Use server version for Async components
+import { getTranslations } from 'next-intl/server';
+import type { Metadata } from "next";
+import { locales, toOgLocale } from "@/navigation";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
-// 1. Define the props type correctly for Next.js 15
 interface HomeProps {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: HomeProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'HomePage' });
+
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: {
+      canonical: `${SITE_URL}/${locale}`,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `${SITE_URL}/${l}`])
+      ),
+    },
+    openGraph: {
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      url: `${SITE_URL}/${locale}`,
+      siteName: "Radio TLIS",
+      locale: toOgLocale(locale),
+    },
+  };
 }
 
 export default async function Home({ params }: HomeProps) {
