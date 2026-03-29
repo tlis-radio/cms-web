@@ -19,11 +19,11 @@ export async function generateMetadata({
    const canonicalUrl = `${SITE_URL}/${locale}/ucinkujuci`;
 
    return {
-      title: `${t('metaTitle')} | Radio TLIS`,
+      title: `${t('metaTitle')}`,
       description: t('metaDescription'),
       alternates: { canonical: canonicalUrl },
       openGraph: {
-         title: `${t('metaTitle')} | Radio TLIS`,
+         title: `${t('metaTitle')}`,
          description: t('metaDescription'),
          url: canonicalUrl,
          siteName: "Radio TLIS",

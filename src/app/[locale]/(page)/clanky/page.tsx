@@ -7,8 +7,8 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+const locales = ['sk', 'en', 'de', 'es', 'uk', 'tpi'];
 
-// 1. Updated Metadata to handle locale properly
 export async function generateMetadata({ 
    params, 
    searchParams 
@@ -21,28 +21,33 @@ export async function generateMetadata({
    const pageParam = requestedParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
    
-   // Namespace should match your translation file (e.g., 'ArticlesPage')
    const t = await getTranslations({ locale, namespace: 'ArticlesPage' });
    
+   // Bod od kolegu: Canonical by mal smerovať na hlavnú verziu (často .sk)
+   // Ak chcete canonical podľa jazyka, nechaj tam ${locale}, ale on písal "vždy sk"
    const canonicalUrl = page === 1 
-      ? `${SITE_URL}/${locale}/clanky`
-      : `${SITE_URL}/${locale}/clanky?page=${page}`;
+      ? `${SITE_URL}/sk/clanky`
+      : `${SITE_URL}/sk/clanky?page=${page}`;
    
    return {
-      title: `${t('metaTitle') || 'Články'} | Radio TLIS`,
+      title: t('metaTitle') || 'Články',
       description: t('metaDescription') || "Prehľad článkov, reportáží a udalostí Radia TLIS.",
-      alternates: { canonical: canonicalUrl },
+      alternates: { 
+         canonical: canonicalUrl,
+         languages: Object.fromEntries(
+            locales.map((l) => [l, `${SITE_URL}/${l}/clanky${page > 1 ? `?page=${page}` : ''}`])
+         ),
+      },
       openGraph: {
-         title: `${t('metaTitle') || 'Články'} | Radio TLIS`,
+         title: t('metaTitle') || 'Články',
          description: t('metaDescription') || "Prehľad článkov, reportáží a udalostí Radia TLIS.",
-         url: canonicalUrl,
+         url: `${SITE_URL}/${locale}/clanky`,
          siteName: "Radio TLIS",
          locale: locale === 'sk' ? 'sk_SK' : 'en_US',
       },
    };
 }
 
-// 2. Updated Main Component (Catching params to fix loading issue)
 const Articles = async ({ 
    params, 
    searchParams 
@@ -50,14 +55,12 @@ const Articles = async ({
    params: Promise<{ locale: string }>, 
    searchParams?: Promise<{ [key: string]: string | string[] | undefined }> 
 }) => {
-   // Await the route parameters first
    const { locale } = await params;
    const requestedParams = await searchParams;
    
    const pageParam = requestedParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
 
-   // Fetch data
    let loadingError = false;
    const articlesResult = await CmsApiService.Article.listArticlesPaginated(page).catch((error) => {
       console.error("Error fetching articles:", error);
@@ -69,7 +72,6 @@ const Articles = async ({
    const DIRECTUS = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
    const site = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
    
-   // SEO Schema
    const articlesJson = articles.map((a: any) => ({
       "@context": "https://schema.org",
       "@type": "Article",
@@ -91,7 +93,6 @@ const Articles = async ({
 
    return (
       <>
-         {/* Map logic for JSON-LD is fine as long as keys are present */}
          {articlesJson.map((a: any, i: number) => (
             <JsonLd key={`jsonld-${a.url || i}`} data={a} />
          ))}
@@ -100,7 +101,6 @@ const Articles = async ({
             <Breadcrumbs items={breadcrumbs} />
          </div>
 
-         {/* If this still shows a blank screen, check your console for errors inside ArticlesPage */}
          <ArticlesPage 
             articles={articles} 
             totalCount={articlesResult?.totalCount || 0} 

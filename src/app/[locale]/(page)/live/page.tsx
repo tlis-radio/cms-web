@@ -9,13 +9,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
 
   return {
-    title: "Live Video & Archive | Radio TLIS",
+    title: "Live Video & Archive",
     description: "Sleduj živé video vysielanie Radio TLIS a prehrávaj archívne záznamy zo streamu.",
     alternates: {
       canonical: `${SITE_URL}/${locale}/live`,
     },
     openGraph: {
-      title: "Live Video & Archive | Radio TLIS",
+      title: "Live Video & Archive",
       description: "Live stream a video archív Radio TLIS na jednom mieste.",
       url: `${SITE_URL}/${locale}/live`,
       siteName: "Radio TLIS",

@@ -13,13 +13,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const t = await getTranslations({ locale, namespace: 'AboutPage' });
 
     return {
-        title: `${t('metaTitle')} | Radio TLIS`,
+        title: `${t('metaTitle')}`,
         description: t('metaDescription'),
         alternates: { 
             canonical: `${SITE_URL}/${locale}/o-radiu` 
         },
         openGraph: {
-            title: `${t('metaTitle')} | Radio TLIS`,
+            title: `${t('metaTitle')}`,
             description: t('metaDescription'),
             url: `${SITE_URL}/${locale}/o-radiu`,
             siteName: "Radio TLIS",

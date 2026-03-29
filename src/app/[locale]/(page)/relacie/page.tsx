@@ -30,11 +30,11 @@ export async function generateMetadata({
        : `${SITE_URL}/${locale}/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
     
     return {
-       title: `${t('metaTitle')} | Radio TLIS`,
+       title: `${t('metaTitle')}`,
        description: t('metaDescription'),
        alternates: { canonical: canonicalUrl },
        openGraph: {
-          title: `${t('metaTitle')} | Radio TLIS`,
+          title: `${t('metaTitle')}`,
           description: t('metaDescription'),
           url: canonicalUrl,
           siteName: "Radio TLIS",
