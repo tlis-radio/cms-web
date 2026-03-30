@@ -1,7 +1,6 @@
 'use client'
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { Link } from '@/navigation';
-import { useRouter } from 'next/navigation';
+import { Link, useRouter } from '@/navigation';
 import TlisImage from "@/components/TlisImage";
 import { Article } from "@/types/article";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
