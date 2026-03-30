@@ -37,12 +37,7 @@ const TranslateWidget = () => {
       const cleanPathSegments = hasLangPrefix ? segments.slice(1) : segments;
       const cleanPath = `/${cleanPathSegments.join('/')}`;
 
-      // If target is Slovak, return the clean path (no /sk/ prefix as per your logic)
-      if (targetCode === 'sk') {
-         return cleanPath === '' ? '/' : cleanPath;
-      }
-
-      // For other languages, add the code as a prefix
+      // All locales are prefixed under localePrefix: 'always'
       return `/${targetCode}${cleanPath === '/' ? '' : cleanPath}`;
    };
 
