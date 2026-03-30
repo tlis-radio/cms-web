@@ -29,8 +29,16 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
 
    return (
       <div 
-        onClick={() => router.push(`/relacie/${show.Slug}`)}
-        className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center"
+         role="link"
+         tabIndex={0}
+         onClick={() => router.push(`/relacie/${show.Slug}`)}
+         onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            router.push(`/relacie/${show.Slug}`);
+          }
+        }}
+         className="bg-[#1c1c1c] text-white flex cursor-pointer flex-col gap-4 border-b-2 p-4 group hover:bg-[#111] transition-colors duration-200 sm:flex-row items-center"
       >
          <div className="sm:w-48 w-full flex-shrink-0">
             <TlisImage src={show.Cover} alt={show.Title} />
