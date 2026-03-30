@@ -3,6 +3,7 @@ import { Show } from "@/models/show";
 import { EpisodeDto, Tag } from '@/types/episode';
 import { Episode } from '@/models/episode';
 import { ArticleDto, ArticleCategory, Article } from '@/types/article';
+import { DirectusStreamDto, PublicStreamEntry } from '@/types/stream';
 
 import { aggregate, createDirectus, readItem, readItems, rest, RestClient, staticToken } from '@directus/sdk';
 import Config from "@/types/config";
@@ -263,6 +264,48 @@ var streamEndpoints = {
       }));
       if (!stream.current_episode) return null;
       return stream;
+   },
+
+   getCurrentVideoStream: async (): Promise<PublicStreamEntry | null> => {
+      const streamsCollection = process.env.STREAMS_COLLECTION || "video_streams";
+      const streams = await getDirectusInstance().request<Array<DirectusStreamDto>>(readItems(streamsCollection, {
+         filter: {
+            status: { _eq: 'live' },
+            episode: { _nnull: true }
+         },
+         sort: ['-started_at', '-date_created'],
+         limit: 1,
+         fields: ['id', 'status', 'episode.*', 'archive_url', 'started_at', 'ended_at']
+      }));
+
+      if (!streams || streams.length === 0) return null;
+
+      const current = streams[0];
+      return {
+         id: current.id,
+         status: current.status,
+         episode: current.episode,
+         archive_url: current.archive_url,
+         started_at: current.started_at,
+         ended_at: current.ended_at,
+      };
+   },
+
+   listVideoStreams: async (): Promise<Array<PublicStreamEntry>> => {
+      const streamsCollection = process.env.STREAMS_COLLECTION || "video_streams";
+      const streams = await getDirectusInstance().request<Array<DirectusStreamDto>>(readItems(streamsCollection, {
+         sort: ['-started_at', '-date_created'],
+         fields: ['id', 'status', 'episode.*', 'archive_url', 'started_at', 'ended_at']
+      }));
+
+      return (streams || []).map((stream) => ({
+         id: stream.id,
+         status: stream.status,
+         episode: stream.episode,
+         archive_url: stream.archive_url,
+         started_at: stream.started_at,
+         ended_at: stream.ended_at,
+      }));
    }
 }
 

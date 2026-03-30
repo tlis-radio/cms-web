@@ -1,0 +1,409 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "podcasts": "Podcasts",
+    "active_shows": "Programas activos",
+    "archived_shows": "Programas archivados",
+    "old_archive": "Archivo antiguo",
+    "articles": "Artículos",
+    "about_radio": "Sobre la radio",
+    "who_we_are": "Quiénes somos",
+    "members": "Miembros",
+    "language_label": "Idioma",
+    "live": "TLIS TV"
+  },
+  "player": {
+    "now_playing": "Estás escuchando Radio TLIS",
+    "stream_title": "Radio TLIS - En vivo",
+    "unknown_track": "Canción desconocida",
+    "radio_tlis": "Radio TLIS",
+    "back_15s": "Atrás 15 segundos",
+    "forward_15s": "Adelante 15 segundos",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "volume": "Volumen",
+    "volume_slider": "Control de volumen",
+    "loading": "Cargando...",
+    "archive_label": "Archivo"
+  },
+  "breadcrumbs": {
+    "home": "Inicio"
+  },
+  "cookies": {
+    "message": "Utilizamos cookies para mejorar su experiencia. Al continuar, acepta nuestro uso de cookies.",
+    "more_info": "Más información",
+    "reject": "Rechazar",
+    "accept": "Acepto"
+  },
+  "Common": {
+    "two_percent_promo": "¡DONA EL 2️⃣% Y TRANSMITIREMOS AL 1️⃣0️⃣0️⃣%!"
+  },
+  "Footer": {
+    "description": "La única radio estudiantil, comunitaria y alternativa de Bratislava.",
+    "rights": "Todos los derechos reservados.",
+    "strictly_alternative": "strictly alternative",
+    "explore": {
+      "title": "Explorar",
+      "home": "Inicio",
+      "program": "Programación",
+      "shows": "Programas",
+      "playlist": "Playlist"
+    },
+    "about": {
+      "title": "Sobre la radio",
+      "whoWeAre": "Quiénes somos",
+      "twoPercent": "Dos por ciento"
+    },
+    "legal": {
+      "title": "Legal",
+      "gdpr": "RGPD",
+      "tos": "Términos de uso"
+    },
+    "contact": {
+      "title": "Contacto"
+    }
+  },
+  "HomePage": {
+    "metaTitle": "Inicio",
+    "metaDescription": "Escucha Radio TLIS en vivo. Música alternativa, programas culturales e información fresca directamente desde la vida estudiantil.",
+    "eventsTitle": "eventos",
+    "viewAll": "VER TODO"
+  },
+  "MembersPage": {
+    "title": "miembros",
+    "metaTitle": "Miembros",
+    "metaDescription": "Lista de miembros de Radio TLIS: locutores, redactores y el equipo que crea el contenido de la radio."
+  },
+  "ArticlesPage": {
+    "metaTitle": "Artículos",
+    "metaDescription": "Resumen de artículos, reportajes y eventos de Radio TLIS: noticias, reseñas y registros de eventos.",
+    "metaDescriptionOg": "Resumen de artículos, reportajes y eventos de Radio TLIS.",
+    "heading": "artículos",
+    "empty": "Todavía no hay artículos aquí.",
+    "fetch_error_title": "Error al cargar artículos",
+    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
+    "no_image": "Sin imagen",
+    "author": "Autor"
+  },
+  "CategoriesPage": {
+    "metaTitle": "Categorías",
+    "metaDescription": "Resumen de las categorías de artículos en Radio TLIS.",
+    "metaDescriptionOg": "Resumen de las categorías de artículos en Radio TLIS.",
+    "breadcrumb_label": "Categorías",
+    "heading": "categorías",
+    "collection_name": "Categorías de artículos",
+    "fetch_error_title": "Error al cargar categorías",
+    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
+    "empty": "Todavía no hay categorías aquí."
+  },
+  "CategoryPage": {
+    "metaTitle_fallback": "Categoría",
+    "metaDescription_fallback": "Artículos en la categoría en Radio TLIS.",
+    "metaDescription_template": "Artículos en la categoría {name} en Radio TLIS.",
+    "breadcrumb_label": "Categorías",
+    "load_error": "No se pudo cargar la categoría."
+  },
+  "ArticleDetailPage": {
+    "metaTitle_fallback": "Artículo",
+    "metaDescription_fallback": "Artículo en Radio TLIS.",
+    "load_error": "No se pudo cargar el artículo."
+  },
+  "ArticleGallery": {
+    "heading": "Galería",
+    "photo_count": "fotos",
+    "image_alt": "Imagen de galería",
+    "show_less": "Ver menos",
+    "show_all": "Ver todo"
+  },
+  "DvePercentaPage": {
+    "metaTitle": "Dos por ciento",
+    "metaDescription": "Cómo donar el 2% de los impuestos a Radio TLIS: procedimiento, datos necesarios y contactos.",
+    "breadcrumb_label": "Dos por ciento",
+    "heading": "dos por ciento",
+    "image_alt": "Formación de miembros de Radio TLIS",
+    "intro_p1": "El Estudio de Radio Residencia TLIS (IRŠ TLIS) es el único estudio de radio estudiantil en Bratislava. Ofrecemos a estudiantes y no estudiantes espacio y la oportunidad de realizarse en la creación de producción audiovisual: creación de programas de radio, listas de reproducción de música u organización de eventos musicales. Ofrecemos la posibilidad de probar el trabajo en la esfera de los medios de comunicación, ya sea detrás del micrófono, la mesa técnica o el trasfondo organizativo y promocional. Nuestro objetivo es proporcionar a los estudiantes y voluntarios una práctica inestimable y así formar a nuevas generaciones de locutores, redactores musicales, dramaturgos, redactores jefe, técnicos y especialistas en marketing centrados no solo en la industria musical.",
+    "intro_p2": "Si no tiene a dónde más, dánoslo a nosotros. Su apoyo nos ayuda a continuar con nuestras actividades y desarrollar nuevos proyectos.",
+    "thank_you": "¡Gracias! ❤",
+    "employer_section_title": "Su declaración de impuestos es presentada por su empleador:",
+    "employer_step1": "Pida a su empleador que realice la liquidación anual de los anticipos del impuesto sobre la renta. Su empleador emitirá y confirmará entonces el",
+    "employer_step1_link": "Certificado de pago del impuesto sobre la renta por cuenta ajena.",
+    "employer_step2": "Luego complete la",
+    "employer_step2_link": "Declaración de asignación de una cantidad de hasta el 2% del impuesto sobre la renta pagado de una persona física.",
+    "self_section_title": "Usted presenta su declaración de impuestos por su cuenta:",
+    "self_p1": "Usted asigna el 2% completando las casillas directamente en la declaración de impuestos. Puede asignárnoslo si no tiene atrasos en el impuesto sobre la renta del pasado y el monto del 2% del impuesto es de al menos 3,33 euros.",
+    "self_step1": "Complete en la declaración de impuestos la 'Declaración sobre la asignación de una parte del impuesto sobre la renta pagado de una persona física de acuerdo con el § 50 de la Ley'.",
+    "data_section_title": "DATOS NECESARIOS PARA LA ASIGNACIÓN DEL 2%:",
+    "data_ico": "IČO (Número de identificación)",
+    "data_legal_form": "Forma legal",
+    "data_legal_form_value": "Asociación cívica",
+    "data_name": "Nombre",
+    "data_street": "Calle",
+    "data_number": "Número",
+    "data_zip": "Código postal",
+    "data_city": "Municipio",
+    "data_city_value": "Bratislava - Karlova Ves",
+    "data_contact": "Contacto",
+    "help_note": "Si necesita ayuda para completar los formularios, contáctenos."
+  },
+  "GdprPage": {
+    "breadcrumb_label": "RGPD",
+    "heading": "RGPD y Protección de Datos Personales",
+    "section1_title": "1. Tratamiento de Datos Personales",
+    "section1_text": "Nuestro servicio no recopila ningún dato personal de los usuarios. Se utilizan exclusivamente estadísticas anonimizadas de escucha de radio con fines analíticos y para mejorar la calidad de los servicios prestados. Estas estadísticas no permiten la identificación de personas físicas.",
+    "section2_title": "2. Cookies e identificador de sesión",
+    "section2_text": "El servicio utiliza cookies para almacenar un identificador de sesión (sessionId). Este identificador permite el funcionamiento correcto del reproductor y el mantenimiento de su sesión. El sessionId no contiene ningún dato personal y se utiliza exclusivamente para fines técnicos.",
+    "section3_title": "3. Seguridad de los datos",
+    "section3_text": "Las estadísticas anonimizadas y el sessionId se procesan y almacenan de forma segura de acuerdo con las normativas legales aplicables, incluido el RGPD. Solo las personas autorizadas tienen acceso a los datos y están protegidos contra el acceso no autorizado.",
+    "section4_title": "4. Derechos de los usuarios",
+    "section4_text": "Los usuarios tienen derecho a acceder a los datos que no fueron recopilados sobre ellos, así como el derecho a presentar una queja ante la autoridad de control si sospechan que se ha producido una violación de la protección de datos personales. Debido a la naturaleza anónima de los datos recopilados, no es posible identificar a personas específicas."
+  },
+  "TosPage": {
+    "breadcrumb_label": "Términos de uso",
+    "heading": "Términos de uso de podcasts",
+    "sections": {
+      "ownership": {
+        "title": "1. Derechos de propiedad",
+        "content": "Todos los podcasts publicados en esta plataforma son nuestra propiedad exclusiva y están protegidos por derechos de autor. Ninguna parte de los podcasts puede ser reproducida, distribuida o utilizada de otro modo sin permiso expreso, a menos que se indique lo contrario."
+      },
+      "sharing": {
+        "title": "2. Compartir y redistribución",
+        "content": "Los podcasts pueden ser compartidos o redistribuidos solo si se proporciona la atribución apropiada al autor y a la fuente. Sin atribución, dicho uso está prohibido."
+      },
+      "responsibility": {
+        "title": "3. Responsabilidad del usuario",
+        "content": "Los usuarios son responsables de cumplir con estos términos en cualquier interacción con el contenido de los podcasts. La violación de los derechos de autor o de las reglas para compartir puede dar lugar a acciones legales."
+      },
+      "changes": {
+        "title": "4. Cambios en los términos",
+        "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Las actualizaciones se publicarán en esta página y, al continuar usando el servicio, usted acepta los nuevos términos."
+      }
+    }
+  },
+  "ShowsPage": {
+    "metaTitle": "Programas",
+    "metaDescription": "Resumen de programas de Radio TLIS: busque programas, locutores y últimos episodios.",
+    "metaDescriptionOg": "Resumen de programas de Radio TLIS: busque programas, locutores y episodios.",
+    "breadcrumb_label": "Programas",
+    "heading": "programas",
+    "filter_active": "PROGRAMAS ACTIVOS",
+    "filter_archived": "PROGRAMAS ARCHIVADOS",
+    "filter_digital": "ARCHIVO ANTIGUO",
+    "fetch_error_title": "Error al cargar el archivo",
+    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
+    "load_error": "No se pudo cargar el programa."
+  },
+  "ShowPage": {
+    "metaTitle_fallback": "Programa",
+    "metaDescription_fallback": "Información sobre el programa en Radio TLIS.",
+    "metaDescription_template": "Programa {name} en Radio TLIS.",
+    "load_error": "No se pudo cargar el programa.",
+    "back_to_shows": "Volver a programas",
+    "views_count": "vistas",
+    "active_shows": "Programas activos",
+    "share": "Compartir",
+    "episodes": "Episodios",
+    "no_episodes": "Todavía no hay episodios",
+    "related_articles": "Artículos relacionados",
+    "episodes_count": "Número de episodios",
+    "back_to_all": "Volver",
+    "show_more": "Ver más",
+    "hide": "Ocultar",
+    "open_on_site": "Abrir en tlis.sk"
+  },
+  "ShowsListPage": {
+    "metaTitle": "Programas",
+    "metaDescription": "Explora el archivo de programas de Radio TLIS. Desde música alternativa hasta debates sobre cultura y arte.",
+    "heading": "programas"
+  },
+  "ShowListPage": {
+    "view_all": "VER TODO"
+  },
+  "ShareShow": {
+    "play_aria": "Reproducir episodio",
+    "close_aria": "Cerrar",
+    "views_count": "vistas"
+  },
+  "ProgramCarousel": {
+    "fetch_error_title": "Error al cargar la programación",
+    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
+    "empty_title": "Actualmente no hay programación",
+    "empty_subtitle": "Consulte nuestro archivo de programas anteriores",
+    "open_archive": "Abrir archivo",
+    "missed_label": "Te perdiste",
+    "will_miss_label": "Te perderás",
+    "prev_aria": "Episodio anterior",
+    "next_aria": "Próximo episodio"
+  },
+  "ProgramPage": {
+    "metaTitle": "Programación",
+    "metaDescription": "Programación de Radio TLIS: horario actual de programas y locutores.",
+    "breadcrumb_label": "Programación",
+    "heading": "programación"
+  },
+  "AboutPage": {
+    "metaTitle": "Sobre la radio",
+    "metaDescription": "Sobre Radio TLIS: quiénes somos, qué transmitimos y por qué hacemos radio de manera diferente. Conozca a nuestro equipo y nuestra historia.",
+    "metaDescriptionOg": "Sobre Radio TLIS: quiénes somos, qué transmitimos y por qué hacemos radio de manera diferente.",
+    "breadcrumb_label": "Sobre la radio",
+    "heading": "quiénes somos",
+    "image_alt": "Formación de miembros de Radio TLIS",
+    "p1": "Radio TLIS es la voz de la libertad estudiantil, la creatividad y las alternativas. Durante años, hemos brindado una transmisión de radio original centrada en la escena musical independiente, la cultura, el arte y la vida de los jóvenes. Gracias al valor de salir de lo convencional y la libertad de elegir temas y música, nos hemos convertido en un fenómeno único de la región de Bratislava.",
+    "p2": "No transmitimos con fines de lucro ni bajo la batuta de grandes corporaciones: con nosotros, las ideas, el deseo de crear y la voz de los jóvenes deciden. Somos la única radio estudiantil en la región de Bratislava y, al mismo tiempo, la única en Eslovaquia que se dedica constantemente a los géneros alternativos.",
+    "p3_prefix": "Nuestra transmisión",
+    "p3_highlight": "funciona de lunes a jueves",
+    "p3_suffix": ", pero Radio TLIS no termina al apagar los micrófonos. Nos reunimos en asambleas, organizamos talleres, jornadas de trabajo y, sí, incluso fiestas estudiantiles. Cada uno de nosotros funciona aquí a su propio ritmo, pero nos une una pasión común: hacer radio de manera diferente."
+  },
+  "ContactPage": {
+    "metaTitle": "Contacto",
+    "metaDescription": "Contacte con Radio TLIS: direcciones de correo electrónico e información sobre cómo ponerse en contacto con nosotros.",
+    "heading": "contacto",
+    "p1": "Si tiene una necesidad apremiante de contactar con Radio TLIS, o con algún miembro de la radio, por supuesto que puede hacerlo. Tenemos varias direcciones de correo electrónico para usted que pueden ayudarle a dirigir sus preguntas, solicitudes o elogios con la mayor precisión posible."
+  },
+  "CastListPage": {
+    "metaTitle": "Elenco",
+    "metaDescription": "Lista de todos los locutores, redactores e intérpretes de Radio TLIS.",
+    "breadcrumb_label": "Elenco",
+    "heading": "elenco",
+    "collection_name": "Elenco - Radio TLIS",
+    "fetch_error_title": "Error al cargar datos",
+    "fetch_error_subtitle": "No se pudo cargar el elenco. Por favor, inténtelo de nuevo más tarde.",
+    "empty": "Todavía no hay miembros en el elenco",
+    "count_one": "intérprete",
+    "count_few": "intérpretes",
+    "count_many": "intérpretes"
+  },
+  "CastMemberPage": {
+    "metaTitle_fallback": "Intérprete no encontrado",
+    "breadcrumb_label": "Elenco",
+    "loading": "Cargando...",
+    "fetch_error_title": "Error al cargar datos",
+    "fetch_error_subtitle": "No se encontró al intérprete o hubo un error al cargar los datos.",
+    "back_to_shows": "Volver a programas",
+    "best_of_month": "Tlisák del Mes",
+    "shows_tab": "Programas",
+    "articles_tab": "Artículos",
+    "no_shows": "Todavía no hay programas",
+    "no_articles": "Todavía no hay artículos",
+    "shows_count": "{count, plural, =1 {programa} other {# programas}}",
+    "articles_count": "{count, plural, =1 {artículo} other {# artículos}}",
+    "profile_meta_template": "Perfil de {name} en Radio TLIS.",
+    "roles": {
+      "boss": "Directores y Delegados",
+      "moderator": "Locutores",
+      "technic": "Técnicos",
+      "pr": "Equipo de PR",
+      "web": "Equipo Web",
+      "dj": "DJs",
+      "playwright": "Dramaturgos"
+    },
+    "breadcrumbParent": "Elenco",
+    "tabs": {
+      "shows": "Programas",
+      "articles": "Artículos"
+    }
+  },
+  "CastPage": {
+    "metaTitle": "Elenco",
+    "metaDescription": "Lista de todos los locutores, redactores e intérpretes de Radio TLIS.",
+    "heading": "elenco",
+    "cast_count": "intérpretes",
+    "breadcrumb": "Elenco"
+  },
+  "not_found": {
+    "title": "404",
+    "message": "Vaya, no tenemos esto aquí :(",
+    "aria_instagram": "Instagram",
+    "aria_facebook": "Facebook"
+  },
+  "StreamVideoHub": {
+    "live_tab": "En vivo",
+    "archive_tab": "Archivo",
+    "badge_live": "EN VIVO",
+    "badge_archive": "ARCHIVO",
+    "unknown_date": "Fecha desconocida",
+    "no_episode": "Sin episodio",
+    "episode_number": "Episodio #{n}",
+    "status_live_now": "EN VIVO AHORA",
+    "status_connecting": "CONECTANDO",
+    "status_unsupported": "NAVEGADOR NO COMPATIBLE",
+    "status_offline": "OFFLINE",
+    "started": "Iniciado {date}",
+    "waiting": "Esperando datos del stream",
+    "reconnect": "Reconectar",
+    "connecting_message": "Conectando al stream en vivo...",
+    "offline_with_retry": "El stream en vivo está offline. Intentando reconectar.",
+    "offline_no_stream": "No hay ningún stream en vivo en este momento.",
+    "unsupported_message": "Este navegador no es compatible con la reproducción en vivo.",
+    "progress_aria": "Progreso del archivo",
+    "play_aria": "Reproducir",
+    "pause_aria": "Pausar",
+    "back_15s": "Retroceder 15 segundos",
+    "forward_15s": "Avanzar 15 segundos",
+    "mute": "Silenciar",
+    "unmute": "Activar sonido",
+    "volume_aria": "Volumen",
+    "live_label": "En vivo",
+    "stream_offline": "Stream Offline",
+    "archive_heading": "Archivo",
+    "page_of": "Página {page} de {total}",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "no_recordings": "Aún no hay grabaciones disponibles."
+  },
+  "LivePage": {
+    "metaTitle": "TLIS TV",
+    "metaDescription": "Mira la transmisión en vivo de Radio TLIS y reproduce grabaciones archivadas del stream.",
+    "metaDescriptionOg": "Stream en vivo y archivo de video de Radio TLIS en un solo lugar.",
+    "breadcrumb_label": "TLIS TV",
+    "heading": "TV"
+  },
+  "TwoPercentPage": {
+    "heading": "dos por ciento",
+    "metaTitle": "2% de impuestos",
+    "metaDescription": "Apoye al Estudio de Radio Residencia TLIS con su donación del 2% de impuestos. Ayúdenos a educar a una nueva generación de creadores de medios.",
+    "breadcrumb_label": "2% de impuestos",
+    "image_alt": "Miembros de Radio TLIS en el estudio",
+    "intro_text": "El Estudio de Radio Residencia TLIS (IRŠ TLIS) es el único estudio de radio estudiantil en Bratislava. Ofrecemos a estudiantes y no estudiantes espacio y la oportunidad de realizarse en la creación de producción audiovisual: creación de programas de radio, listas de reproducción de música u organización de eventos musicales. Ofrecemos la posibilidad de probar el trabajo en la esfera de los medios de comunicación, ya sea detrás del micrófono, la mesa técnica o el trasfondo organizativo-promocional. Nuestro objetivo es proporcionar a los estudiantes y voluntarios una práctica inestimable y así formar a nuevas generaciones de locutores, redactores musicales, dramaturgos, redactores jefe, técnicos y especialistas en marketing centrados no solo en la industria musical.",
+    "slogan_1": "Si no tiene a dónde más, dánoslo a nosotros.",
+    "slogan_2": "Su apoyo nos ayuda a continuar con nuestras actividades y desarrollar nuevos proyectos.",
+    "thank_you": "¡Gracias! ❤️",
+    "employer_header": "Su declaración de impuestos es presentada por su empleador:",
+    "step_1": "Pida a su empleador que realice la liquidación anual de los anticipos del impuesto sobre la renta. Su empleador emitirá y confirmará entonces el",
+    "download_link_1": "Certificado de pago del impuesto sobre la renta por cuenta ajena.",
+    "step_2": "Luego complete la",
+    "download_link_2": "Declaración de asignación de una cantidad de hasta el 2% del impuesto sobre la renta pagado de una persona física.",
+    "self_header": "Usted presenta su declaración de impuestos por su cuenta:",
+    "self_description": "Usted asigna el 2% completando las casillas directamente en la declaración de impuestos. Puede asignárnoslo si no tiene atrasos en el impuesto sobre la renta del pasado y el monto del 2% del impuesto es de al menos 3,33 euros.",
+    "self_step_1": "Complete en la declaración de impuestos la «Declaración sobre la asignación de una parte del impuesto sobre la renta pagado de una persona física de acuerdo con el § 50 de la Ley».",
+    "data_header": "DATOS NECESARIOS PARA LA ASIGNACIÓN DEL 2%:",
+    "label_ico": "IČO (Número de identificación):",
+    "label_legal": "Forma legal:",
+    "label_name": "Nombre:",
+    "label_street": "Calle:",
+    "label_number": "Número:",
+    "label_psc": "Código postal:",
+    "label_city": "Municipio:",
+    "label_contact": "Contacto:",
+    "help_footer": "Si necesita ayuda para completar los formularios, contáctenos."
+  },
+  "EmbedIndex": {
+    "title": "Widgets de Inserción",
+    "description": "Esta página contiene widgets integrables para Radio TLIS.",
+    "available_widgets": "Widgets disponibles:",
+    "show_list_title": "Widget de Lista de Programas",
+    "show_list_desc": "Muestra una lista de episodios con un reproductor.",
+    "episode_title": "Widget de Episodio",
+    "episode_desc": "Widget compacto para un solo episodio (cuadrado).",
+    "wide_episode_title": "Widget de Episodio Ancho",
+    "wide_episode_desc": "Widget ancho para un solo episodio (horizontal)."
+  },
+  "DashboardLogin": {
+    "title": "Inicio de sesión del Panel",
+    "description": "Inicie sesión para acceder a las analíticas",
+    "email_label": "Correo electrónico",
+    "password_label": "Contraseña",
+    "button": "Iniciar sesión",
+    "loading": "Iniciando sesión...",
+    "error": "Correo electrónico o contraseña incorrectos"
+  }
+}
