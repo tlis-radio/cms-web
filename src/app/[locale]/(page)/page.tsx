@@ -3,7 +3,7 @@ import Program from "@/components/carousel/Program";
 import ArticleLink from "@/components/ArticleLink";
 import JsonLd from "@/components/JsonLd";
 import CmsApiService from "@/services/cms-api-service";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from "next";
 import { locales, toOgLocale } from "@/navigation";
