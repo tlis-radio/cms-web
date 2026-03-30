@@ -33,18 +33,22 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
               className="px-6 w-full hover:text-[#96120F] hover:bg-white transition-colors flex justify-center relative"
               onClick={() => setExpandedLinkIndex(isExpanded ? null : index)}
               type="button"
+              aria-expanded={isExpanded}
             >
-              <Link href={link.url} onClick={toggleVisibility} className="font-argentumSansMedium px-8 py-4 uppercase">
+              <span className="font-argentumSansMedium px-8 py-4 uppercase">
                 {link.text}
-              </Link>
+              </span>
               <span className="absolute right-4 ml-2 py-4">{isExpanded ? "▲" : "▼"}</span>
             </button>
             {isExpanded && link.subLinks.map((subLink, subIndex) => (
               <div key={subIndex} className="w-full border-t bg-[#a83b38]">
-                <Link href={subLink.url} target={subLink.target} onClick={toggleVisibility}>
-                  <button className="font-argentumSansMedium px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase">
-                    {subLink.text}
-                  </button>
+                <Link
+                  href={subLink.url}
+                  target={subLink.target}
+                  onClick={toggleVisibility}
+                  className="font-argentumSansMedium block px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase"
+                >
+                  {subLink.text}
                 </Link>
               </div>
             ))}
@@ -53,15 +57,17 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
       }
       return (
         <div key={index} className="font-argentumSansMedium w-full border-t">
-          <Link href={link.url} onClick={toggleVisibility}>
-            <button className="py-4 w-full hover:text-[#96120F] hover:bg-white transition-colors uppercase">
-              {link.text}
-            </button>
+          <Link
+            href={link.url}
+            onClick={toggleVisibility}
+            className="block py-4 w-full hover:text-[#96120F] hover:bg-white transition-colors uppercase"
+          >
+            {link.text}
           </Link>
         </div>
-      )
-    })
-  }
+      );
+    });
+  } 
 
   return (
     <>
