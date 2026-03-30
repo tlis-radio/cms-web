@@ -9,6 +9,7 @@ import { NavbarLinkType } from "./index";
 
 const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedLinkIndex, setExpandedLinkIndex] = useState<number | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const currentLocale = useLocale();
@@ -24,21 +25,21 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
   const createNavbarLinks = () => {
     return navbarLinks.map((link, index) => {
       if (link.subLinks) {
-        const [showSubLinks, setShowSubLinks] = useState(false);
+        const isExpanded = expandedLinkIndex === index;
 
         return (
           <div key={index} className="w-full border-t max-[500px]">
             <button
               className="px-6 w-full hover:text-[#96120F] hover:bg-white transition-colors flex justify-center relative"
-              onClick={() => setShowSubLinks(!showSubLinks)}
+              onClick={() => setExpandedLinkIndex(isExpanded ? null : index)}
               type="button"
             >
               <Link href={link.url} onClick={toggleVisibility} className="font-argentumSansMedium px-8 py-4 uppercase">
                 {link.text}
               </Link>
-              <span className="absolute right-4 ml-2 py-4">{showSubLinks ? "▲" : "▼"}</span>
+              <span className="absolute right-4 ml-2 py-4">{isExpanded ? "▲" : "▼"}</span>
             </button>
-            {showSubLinks && link.subLinks.map((subLink, subIndex) => (
+            {isExpanded && link.subLinks.map((subLink, subIndex) => (
               <div key={subIndex} className="w-full border-t bg-[#a83b38]">
                 <Link href={subLink.url} target={subLink.target} onClick={toggleVisibility}>
                   <button className="font-argentumSansMedium px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase">
