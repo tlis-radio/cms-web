@@ -27,8 +27,8 @@ export default function ShareShow() {
             });
             
             // Send umami event for programEpisode (no database save)
-            if (typeof window !== 'undefined' && window.umami) {
-                window.umami.track("Program Episode View", { episodeId: programEpisodeId });
+            if (typeof window !== 'undefined' && (window as any).umami) {
+                (window as any).umami.track("Program Episode View", { episodeId: programEpisodeId });
             }
             return;
         }
@@ -51,8 +51,8 @@ export default function ShareShow() {
                 console.error("Failed to count share:", err);
             });
             
-            if (typeof window !== 'undefined' && window.umami) {
-                window.umami.track("Shared Episode View", { episodeId: sharedEpisodeId });
+            if (typeof window !== 'undefined' && (window as any).umami) {
+                (window as any).umami.track("Shared Episode View", { episodeId: sharedEpisodeId });
             }
         }
     }, []);
