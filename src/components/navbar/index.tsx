@@ -91,7 +91,7 @@ const Navbar = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                <NavbarDropdownLink key={index} text={link.text} href={link.url}>
                   {link.subLinks.map((subLink, subIndex) => (
                      <NavbarLink 
-                        key={`${index}-${subLink.locale}`} // Pridaj locale do kľúča
+                        key={subLink.url}
                         text={subLink.text} 
                         redirectUrl={subLink.url}
                         locale={subLink.locale}
