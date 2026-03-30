@@ -46,17 +46,13 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body suppressHydrationWarning className="antialiased"> 
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="relative min-h-screen">
-            <div className="fixed inset-0 bg-acoustic-foam bg-fixed -z-10" />
-            <div className="relative z-0">
-               {children}
-            </div>
-          </div>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <div className="relative min-h-screen antialiased">
+        <div className="fixed inset-0 bg-acoustic-foam bg-fixed -z-10" />
+        <div className="relative z-0">
+           {children}
+        </div>
+      </div>
+    </NextIntlClientProvider>
   );
 }
