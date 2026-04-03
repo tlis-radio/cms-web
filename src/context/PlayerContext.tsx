@@ -1,6 +1,8 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 
+import { UmamiTrack } from "@/components/Analytics";
+
 type PlayerMode = "stream" | "archive";
 
 interface PlayerContextType {
@@ -296,6 +298,20 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     };
 
+    // Analytics: Umami track listening duration
+    const analyticsInterval = isPlaying ? setInterval(() => {
+      const minutes = Math.floor(audio.currentTime / 60);
+      // Track at 5, 15, 30, 60+ minute marks for stream/archive
+      if (minutes > 0 && minutes % 5 === 0) {
+        UmamiTrack('player_listening_time', {
+          duration_minutes: minutes,
+          mode: mode,
+          episode_id: mode === 'archive' ? (episodeId || undefined) : undefined,
+          show_slug: mode === 'archive' ? (archiveShowSlug || undefined) : undefined
+        });
+      }
+    }, 60000) : null;
+
     const handlePlay = () => {
       lastTrackedSegment.current = -1;
       if (mode === "archive") {
@@ -326,6 +342,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     return () => {
       clearInterval(interval);
+      if (analyticsInterval) clearInterval(analyticsInterval);
       if (audio) {
         audio.removeEventListener("play", handlePlay);
       }

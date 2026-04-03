@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import Pagination from "@/components/pagination/Pagination";
 import { SHOWS_PAGE_SIZE } from "@/services/cms-api-service";
 import { useTranslations } from "next-intl";
+import { UmamiTrack } from "@/components/Analytics";
 
 type FilterProps = "active" | "archived" | "digital";
 
@@ -37,8 +38,7 @@ export default function ShowsPage({
 
   useEffect(() => {
     const filter = searchParams.get('filter');
-    if (!(window as any).umami) { return; }
-    (window as any).umami.track("Filter Shows", { filter: filter });
+    UmamiTrack("Filter Shows", { filter: filter });
   }, [searchParams.get('filter')]);
 
   const totalPages = Math.ceil(totalCount / SHOWS_PAGE_SIZE);
