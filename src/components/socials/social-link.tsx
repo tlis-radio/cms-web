@@ -1,3 +1,4 @@
+"use client";
 import { FunctionComponent } from "react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

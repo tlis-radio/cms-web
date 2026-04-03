@@ -1,3 +1,4 @@
+"use client";
 import { FunctionComponent } from "react";
 import { Link } from '@/navigation';
 import { UmamiTrack } from "@/components/Analytics";
