@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useRef } from "react";
 
-export function UmamiTrack(name: string, value: { [key: string]: any }) {
+export function UmamiTrack(name: string, value?: { [key: string]: any }) {
   if (typeof window === "undefined") return;
   if (!(window as any).umami) return;
   (window as any).umami.track(name, value);

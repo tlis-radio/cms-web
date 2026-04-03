@@ -6,6 +6,7 @@ import { Link, usePathname, useRouter, locales } from '@/navigation';
 import { useLocale } from "next-intl";
 import Socials from "../socials";
 import { NavbarLinkType } from "./index";
+import { UmamiTrack } from "@/components/Analytics";
 
 const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
   const toggleVisibility = () => setIsOpen(!isOpen);
 
   const handleLocaleChange = (newLocale: string) => {
+    UmamiTrack("language_change", { locale: newLocale });
     // @ts-ignore - Turbopack/TS niekedy frfle na string vs enum locale
     router.replace(pathname, { locale: newLocale });
     setIsOpen(false);
@@ -31,7 +33,10 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
           <div key={index} className="w-full border-t max-[500px]">
             <button
               className="px-6 w-full hover:text-[#96120F] hover:bg-white transition-colors flex justify-center relative"
-              onClick={() => setExpandedLinkIndex(isExpanded ? null : index)}
+              onClick={() => {
+                UmamiTrack("nav_mobile_dropdown_toggle", { text: link.text, isExpanded: !isExpanded });
+                setExpandedLinkIndex(isExpanded ? null : index);
+              }}
               type="button"
               aria-expanded={isExpanded}
             >
@@ -45,7 +50,10 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                 <Link
                   href={subLink.url}
                   target={subLink.target}
-                  onClick={toggleVisibility}
+                  onClick={() => {
+                    UmamiTrack("nav_mobile_link_click", { text: subLink.text, url: subLink.url });
+                    toggleVisibility();
+                  }}
                   className="font-argentumSansMedium block px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase"
                 >
                   {subLink.text}
@@ -59,7 +67,10 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
         <div key={index} className="font-argentumSansMedium w-full border-t">
           <Link
             href={link.url}
-            onClick={toggleVisibility}
+            onClick={() => {
+              UmamiTrack("nav_mobile_link_click", { text: link.text, url: link.url });
+              toggleVisibility();
+            }}
             className="block py-4 w-full hover:text-[#96120F] hover:bg-white transition-colors uppercase"
           >
             {link.text}

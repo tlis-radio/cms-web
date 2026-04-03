@@ -1,5 +1,6 @@
 "use client";
 import { usePlayer } from "@/context/PlayerContext";
+import { UmamiTrack } from "@/components/Analytics";
 
 const LiveButton = () => {
    const { mode, setMode, setIsPlaying } = usePlayer();
@@ -7,8 +8,9 @@ const LiveButton = () => {
    if (mode === "stream") return null;
 
    return (
-      <button 
+      <button
          onClick={() => {
+            UmamiTrack("player_return_live");
             setMode("stream");
             setIsPlaying(true);
          }}

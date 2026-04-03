@@ -60,6 +60,7 @@ function ProgramCarousel({
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
+      UmamiTrack("carousel_swipe", { action: "previous", currentIndex });
       setDirection(-1);
       setCurrentIndex((prev) => prev - 1);
     }
@@ -67,6 +68,7 @@ function ProgramCarousel({
 
   const handleNext = () => {
     if (currentIndex < carouselPosts.length - 1) {
+      UmamiTrack("carousel_swipe", { action: "next", currentIndex });
       setDirection(1);
       setCurrentIndex((prev) => prev + 1);
     }

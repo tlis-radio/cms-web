@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 import { Link } from '@/navigation';
+import { UmamiTrack } from "@/components/Analytics";
 
 type NavbarLinkProps = {
    text: string,
@@ -10,7 +11,7 @@ type NavbarLinkProps = {
 }
 
 const NavbarLink: FunctionComponent<NavbarLinkProps> = ({ text, redirectUrl, target, locale, className }) => {
-   return <Link href={redirectUrl} locale={locale} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors whitespace-nowrap uppercase ${className ?? ''}`} target={target}>
+   return <Link onClick={() => UmamiTrack("nav_link_click", { text, url: redirectUrl })} href={redirectUrl} locale={locale} className={`hidden lg:block hover:text-[#96120F] hover:bg-white px-2 transition-colors whitespace-nowrap uppercase ${className ?? ''}`} target={target}>
       {text}
    </Link>
 }

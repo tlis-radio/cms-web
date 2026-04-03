@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import VolumeControl from './volume-control';
 import { usePlayer } from '@/context/PlayerContext';
+import { UmamiTrack } from "@/components/Analytics";
 
 /**
  ** https://youtu.be/Of_8YG8b760?si=59_oOEfijIUgVrGx
@@ -31,7 +32,10 @@ const PlayerControl: React.FC<PlayerControlProps> = () => {
         <div className="flex items-center gap-2 sm:gap-3">
             <button
                 className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={() => {
+                    UmamiTrack(isPlaying ? "player_pause" : "player_play", { context: "controls" });
+                    setIsPlaying(!isPlaying);
+                }}
                 aria-label={isPlaying ? "Pause" : "Play"}
             >
                 {isLoading && <FontAwesomeIcon className="animate-spin" icon={faSpinner} />}

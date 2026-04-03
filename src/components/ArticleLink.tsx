@@ -5,6 +5,7 @@ import TlisImage from "@/components/TlisImage";
 import { Article } from "@/types/article";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faMapMarkerAlt, faImages } from "@fortawesome/free-solid-svg-icons";
+import { UmamiTrack } from "@/components/Analytics";
 
 type ArticleLinkProps = {
    article: Article;
@@ -51,8 +52,7 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
    const isEvent = article.type === "event" || article.type === "report";
 
    // Click handler for the whole card
-   const handleCardClick = () => {
-      router.push(`/clanky/${article.slug}`);
+   const handleCardClick = () => {      UmamiTrack("article_click", { article_slug: article.slug, article_type: article.type });      router.push(`/clanky/${article.slug}`);
    };
 
    return (
