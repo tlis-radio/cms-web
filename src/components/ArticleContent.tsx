@@ -1,6 +1,8 @@
 "use client";
 import React, { useMemo } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import { parseCustomTags, CustomTag } from "@/lib/markdown-parser";
 import EpisodeEmbed from "@/components/EpisodeEmbed";
 import { Episode } from "@/models/episode";
@@ -52,6 +54,8 @@ export default function ArticleContent({ content, episodes = new Map(), episodeS
          return (
             <Markdown
                key={index}
+               remarkPlugins={[remarkGfm]}
+               rehypePlugins={[rehypeRaw]}
                components={{
                   h1: ({ children, ...props }) => {
                      const id = children?.toString().toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "") || `heading-${index}`;
