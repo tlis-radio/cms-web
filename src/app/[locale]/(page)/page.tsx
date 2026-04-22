@@ -2,6 +2,7 @@ import ArchiveGrid from "@/components/ArchiveGrid";
 import Program from "@/components/carousel/Program";
 import ArticleLink from "@/components/ArticleLink";
 import JsonLd from "@/components/JsonLd";
+import CockroachVibe from "@/components/CockroachVibe";
 import CmsApiService from "@/services/cms-api-service";
 import { Link } from "@/navigation";
 import { getTranslations } from 'next-intl/server';
@@ -62,6 +63,7 @@ export default async function Home({ params }: HomeProps) {
   return (
     <>
       <JsonLd data={broadcast} />
+      <CockroachVibe />
       <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8">
         <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> radio
       </h1>
