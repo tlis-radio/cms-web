@@ -240,18 +240,69 @@ export function useBeatSyncedGif({
       return () => window.clearInterval(pollId);
     }
 
-    const graph = getOrCreateAudioGraph(audio);
-    if (!graph) {
+    // Use a separate muted element for analysis so the main audio element's output
+    // is never routed through Web Audio (which would silence it on cross-origin streams).
+    const analysisAudio = document.createElement("audio");
+    analysisAudio.crossOrigin = "anonymous";
+    analysisAudio.muted = true;
+    analysisAudio.volume = 0;
+
+    const syncAndPlay = () => {
+      const src = audio.currentSrc || audio.src;
+      if (!src) return;
+      if (analysisAudio.src !== src) {
+        analysisAudio.src = src;
+        analysisAudio.load();
+      }
+      if (analysisAudio.paused) {
+        analysisAudio.play().catch(() => {});
+      }
+    };
+
+    const handleMainPlay = () => syncAndPlay();
+    const handleMainPause = () => analysisAudio.pause();
+
+    audio.addEventListener("play", handleMainPlay);
+    audio.addEventListener("pause", handleMainPause);
+
+    if (!audio.paused) syncAndPlay();
+
+    const AudioContextCtor =
+      window.AudioContext ||
+      (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextCtor) {
       setStatus("unsupported");
-      return;
+      return () => {
+        audio.removeEventListener("play", handleMainPlay);
+        audio.removeEventListener("pause", handleMainPause);
+        analysisAudio.pause();
+        analysisAudio.src = "";
+      };
     }
 
-    analyserRef.current = graph.analyser;
-    audioContextRef.current = graph.context;
-    sourceRef.current = graph.source;
+    const audioContext = new AudioContextCtor();
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 1024;
+    analyser.smoothingTimeConstant = 0.82;
+
+    const source = audioContext.createMediaElementSource(analysisAudio);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    analyserRef.current = analyser;
+    audioContextRef.current = audioContext;
+    sourceRef.current = source;
     setStatus("running");
 
-    const frequencyData = new Uint8Array(graph.analyser.frequencyBinCount);
+    const resumeCtx = () => {
+      if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+    };
+    document.addEventListener("click", resumeCtx, { capture: true });
+    document.addEventListener("touchstart", resumeCtx, { capture: true });
+    analysisAudio.addEventListener("play", resumeCtx);
+    if (!analysisAudio.paused) resumeCtx();
+
+    const frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
     const frame = () => {
       rafRef.current = requestAnimationFrame(frame);
@@ -260,8 +311,8 @@ export function useBeatSyncedGif({
       const now = performance.now() / 1000;
       const cooldownSeconds = beatCooldownMs / 1000;
 
-      if (!audio.paused && audioContextRef.current.state === "suspended") {
-        void audioContextRef.current.resume();
+      if (!analysisAudio.paused && audioContext.state === "suspended") {
+        void audioContext.resume();
       }
 
       analyserRef.current.getByteFrequencyData(frequencyData);
@@ -291,7 +342,8 @@ export function useBeatSyncedGif({
         }, 0) / Math.max(1, history.length);
       const threshold = avgFlux + Math.sqrt(variance) * beatSensitivity;
 
-      const beatDetected = !audio.paused && flux > threshold && now - lastBeatRef.current > cooldownSeconds;
+      const beatDetected =
+        !audio.paused && flux > threshold && now - lastBeatRef.current > cooldownSeconds;
       if (beatDetected) {
         lastBeatRef.current = now;
         setLastBeatAtSeconds(now);
@@ -357,10 +409,21 @@ export function useBeatSyncedGif({
     rafRef.current = requestAnimationFrame(frame);
 
     return () => {
+      document.removeEventListener("click", resumeCtx, { capture: true });
+      document.removeEventListener("touchstart", resumeCtx, { capture: true });
+      analysisAudio.removeEventListener("play", resumeCtx);
+      audio.removeEventListener("play", handleMainPlay);
+      audio.removeEventListener("pause", handleMainPause);
+
+      analysisAudio.pause();
+      analysisAudio.src = "";
+
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
       rafRef.current = null;
+
+      void audioContext.close();
 
       sourceRef.current = null;
       analyserRef.current = null;
