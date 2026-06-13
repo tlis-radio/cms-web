@@ -32,6 +32,12 @@ export async function POST(
         const today = new Date().toISOString().split('T')[0];
         const trackingKey = `${id}_${today}`;
 
+        for (const key of shareTrackingMap.keys()) {
+            if (!key.endsWith(`_${today}`)) {
+                shareTrackingMap.delete(key);
+            }
+        }
+
         if (shareTrackingMap.has(trackingKey)) {
             const ipSet = shareTrackingMap.get(trackingKey)!;
             if (ipSet.has(ip)) {
