@@ -204,7 +204,7 @@ export default function Shows({
 
     return (
         <div className="font-argentumSansBold mb-[80px] flex flex-col w-full justify-center md:mb-0">
-            <Link href={`/${locale}/relacie`} className="w-full text-white text-center px-4 py-3 mb-4 flex gap-2 justify-center items-center bg-[#1c1c1c] border border-gray-700 hover:bg-[#252525] transition-colors uppercase">
+            <Link href={`/${locale}/relacie`} className="w-full text-white text-left px-2 mb-4 flex gap-2 justify-center items-center">
                 <FontAwesomeIcon icon={faChevronLeft} className="w-4" />
                 <p>{t('back_to_all')}</p>
             </Link>
