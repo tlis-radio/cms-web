@@ -333,6 +333,11 @@ var articleEndpoints = {
       const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
          sort: ['-published_at'],
          fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+         deep: {
+            gallery: {
+               _limit: -1,
+            },
+         },
          filter,
          limit: articleEndpoints.PAGE_SIZE,
          page
@@ -345,6 +350,11 @@ var articleEndpoints = {
       const articles = await getDirectusInstance().request<Array<ArticleDto>>(readItems("Article", {
          filter: { slug: { _eq: slug }, status: { _eq: 'published' } },
          fields: ['*', 'author.*', 'categories.Article_Category_id.*', 'gallery.directus_files_id'],
+         deep: {
+            gallery: {
+               _limit: -1,
+            },
+         },
       }));
       if (!articles || articles.length === 0) {
          throw new Error(`Article with slug '${slug}' not found`);

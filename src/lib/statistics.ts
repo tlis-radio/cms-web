@@ -4,8 +4,41 @@ import { createItem, readItems, updateItem } from "@directus/sdk";
 // In-memory cache to reduce DB reads (sessionId:episodeId -> segments array)
 const cache: Map<string, number[]> = new Map();
 
+// Last-access timestamp per cache key, used to evict stale sessions.
+const cacheTimestamps: Map<string, number> = new Map();
+
 // Locks to prevent concurrent creates for the same session+episode
 const createLocks: Map<string, Promise<void>> = new Map();
+
+// Content (episode/stream segment) is at most ~2h. A session untouched for
+// longer than this has ended; its data is already persisted in Directus and
+// can be reloaded on demand, so it is safe to drop from memory.
+const SESSION_TTL_MS = 3 * 60 * 60 * 1000; // 3 hours
+// Don't iterate the whole map on every heartbeat; sweep at most this often.
+const SWEEP_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+// Safety cap on segment count (~2h at 15s/segment = 480) to guard against a
+// stale stream.updated_at producing a huge zero-filled array.
+const MAX_SEGMENT_INDEX = 500;
+
+let lastSweep = 0;
+
+/** Record that a cache key was just used. */
+function touch(key: string): void {
+  cacheTimestamps.set(key, Date.now());
+}
+
+/** Evict cache entries whose last access is older than SESSION_TTL_MS. */
+function sweepStaleSessions(): void {
+  const now = Date.now();
+  if (now - lastSweep < SWEEP_INTERVAL_MS) return;
+  lastSweep = now;
+  for (const [key, ts] of cacheTimestamps) {
+    if (now - ts > SESSION_TTL_MS) {
+      cache.delete(key);
+      cacheTimestamps.delete(key);
+    }
+  }
+}
 
 interface ListeningSession {
   id: string;
@@ -26,8 +59,9 @@ export async function trackSegment(
   episodeId: number,
   segmentIndex: number
 ): Promise<number[]> {
+  segmentIndex = Math.min(Math.max(segmentIndex, 0), MAX_SEGMENT_INDEX);
   const cacheKey = `${sessionId}:${episodeId}`;
-  
+
   // Get current segments from cache or DB
   let segments = cache.get(cacheKey);
   let dbRecord: ListeningSession | null = null;
@@ -66,6 +100,8 @@ export async function trackSegment(
 
   segments[segmentIndex] = (segments[segmentIndex] || 0) + 1;
   cache.set(cacheKey, segments);
+  touch(cacheKey);
+  sweepStaleSessions();
 
   // Persist to Directus (fire and forget, don't block response)
   persistToDirectus(sessionId, episodeId, segments, dbRecord?.id).catch((err) => {
@@ -80,6 +116,7 @@ export async function trackStreamSegment(
   episodeId: string,
   segmentIndex: number
 ): Promise<number[]> {
+  segmentIndex = Math.min(Math.max(segmentIndex, 0), MAX_SEGMENT_INDEX);
   const cacheKey = `stream:${sessionId}:${episodeId}`;
 
   // Get current segments from cache or DB
@@ -118,6 +155,8 @@ export async function trackStreamSegment(
 
   segments[segmentIndex] = (segments[segmentIndex] || 0) + 1;
   cache.set(cacheKey, segments);
+  touch(cacheKey);
+  sweepStaleSessions();
 
   // Persist to Directus (fire and forget)
   persistToDirectusStream(sessionId, episodeId, segments, dbRecord?.id).catch((err) => {
@@ -269,7 +308,10 @@ export async function getSegments(
   const cacheKey = `${sessionId}:${episodeId}`;
   
   const cached = cache.get(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    touch(cacheKey);
+    return cached;
+  }
 
   try {
     const directus = getDirectusInstance();
@@ -285,6 +327,7 @@ export async function getSegments(
     if (results && results.length > 0) {
       const segments = Array.isArray(results[0].segments) ? results[0].segments : [];
       cache.set(cacheKey, segments);
+      touch(cacheKey);
       return segments;
     }
   } catch (err) {
