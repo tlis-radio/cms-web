@@ -1,7 +1,7 @@
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLanguage } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -60,10 +60,10 @@ const TranslateWidget = () => {
       <div className="relative max-[500px]:hidden" ref={wrapperRef}>
          <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex h-10 w-10 items-center justify-center border-2 rounded-full hover:text-[#96120F] hover:bg-white transition-all shadow-sm focus:outline-none"
+            className="flex h-8 w-8 items-center justify-center border-2 rounded-3xl hover:text-[#96120F] hover:bg-white transition-all shadow-sm focus:outline-none"
             aria-label="Change language"
          >
-            <FontAwesomeIcon className="text-xl" icon={faLanguage} />
+            <FontAwesomeIcon className="text-xl" icon={faGlobe} />
          </button>
 
          {isOpen && (
