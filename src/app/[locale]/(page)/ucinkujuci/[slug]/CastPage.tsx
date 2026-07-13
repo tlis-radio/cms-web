@@ -144,11 +144,11 @@ export default function CastPage({
                   
                   <div className="flex gap-2 text-sm">
                      <span className="text-gray-400">
-                        {showsTotalCount} {t('shows_count', { count: showsTotalCount })}
+                        {t('shows_count', { count: showsTotalCount })}
                      </span>
                      <span className="text-gray-600">•</span>
                      <span className="text-gray-400">
-                        {articlesTotalCount} {t('articles_count', { count: articlesTotalCount })}
+                        {t('articles_count', { count: articlesTotalCount })}
                      </span>
                   </div>
                </div>
