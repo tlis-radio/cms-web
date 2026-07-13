@@ -35,7 +35,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
               type="button"
               aria-expanded={isExpanded}
             >
-              <span className="font-argentumSansMedium px-8 py-4 uppercase">
+              <span className="font-argentumSansBold px-8 py-4 uppercase">
                 {link.text}
               </span>
               <span className="absolute right-4 ml-2 py-4">{isExpanded ? "▲" : "▼"}</span>
@@ -46,7 +46,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                   href={subLink.url}
                   target={subLink.target}
                   onClick={toggleVisibility}
-                  className="font-argentumSansMedium block px-6 py-4 w-full text-left hover:text-[#96120F] hover:bg-white transition-colors text-center uppercase"
+                  className="font-argentumSansBold block px-6 py-4 w-full text-center hover:text-[#96120F] hover:bg-white transition-colors uppercase"
                 >
                   {subLink.text}
                 </Link>
@@ -56,11 +56,11 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
         );
       }
       return (
-        <div key={index} className="font-argentumSansMedium w-full border-t">
+        <div key={index} className="font-argentumSansBold w-full border-t">
           <Link
             href={link.url}
             onClick={toggleVisibility}
-            className="block py-4 w-full hover:text-[#96120F] hover:bg-white transition-colors uppercase"
+            className="block py-4 w-full text-center hover:text-[#96120F] hover:bg-white transition-colors uppercase"
           >
             {link.text}
           </Link>
