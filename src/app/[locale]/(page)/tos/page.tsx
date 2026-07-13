@@ -37,7 +37,7 @@ export default async function TosPage({
   const t = await getTranslations({ locale, namespace: 'TosPage' });
 
   const breadcrumbs = [
-    { label: t('breadcrumb'), href: `/${locale}/tos` }
+    { label: t('breadcrumb'), href: `/tos` }
   ];
 
   return (

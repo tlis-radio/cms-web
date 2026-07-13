@@ -85,17 +85,6 @@
     "no_image": "Bez obrázka",
     "author": "Autor"
   },
-  "CategoriesPage": {
-    "metaTitle": "Kategórie",
-    "metaDescription": "Prehľad kategórií článkov na Radiu TLIS.",
-    "metaDescriptionOg": "Prehľad kategórií článkov na Radiu TLIS.",
-    "breadcrumb_label": "Kategórie",
-    "heading": "kategórie",
-    "collection_name": "Kategórie článkov",
-    "fetch_error_title": "Chyba pri načítaní kategórií",
-    "fetch_error_subtitle": "Skúste to prosím neskôr.",
-    "empty": "Zatiaľ tu nie sú žiadne kategórie."
-  },
   "CategoryPage": {
     "metaTitle_fallback": "Kategória",
     "metaDescription_fallback": "Články v kategórii na Radiu TLIS.",
@@ -110,10 +99,10 @@
   },
   "ArticleGallery": {
     "heading": "Galéria",
-    "photo_count": "fotiek",
     "image_alt": "Galéria obrázok",
     "show_less": "Zobraziť menej",
-    "show_all": "Zobraziť všetky"
+    "show_all": "Zobraziť všetky",
+    "photos_count": "fotiek"
   },
   "DvePercentaPage": {
     "metaTitle": "Dve percentá",
@@ -146,35 +135,37 @@
     "help_note": "Ak potrebujete pomoc s vyplnením tlačív, kontaktujte nás."
   },
   "GdprPage": {
-    "breadcrumb_label": "GDPR",
-    "heading": "GDPR a ochrana osobných údajov",
-    "section1_title": "1. Spracúvanie osobných údajov",
+    "metaTitle": "GDPR",
+    "metaDescription": "Zásady ochrany osobných údajov Rádia TLIS.",
+    "heading": "GDPR",
+    "section1_title": "Spracúvanie osobných údajov",
     "section1_text": "Naša služba nezhromažďuje žiadne osobné údaje používateľov. Používané sú výlučne anonymizované štatistiky počúvania rádia, ktoré slúžia na analytické účely a zlepšovanie kvality poskytovaných služieb. Tieto štatistiky neumožňujú identifikáciu jednotlivých osôb.",
-    "section2_title": "2. Cookies a identifikátor relácie",
+    "section2_title": "Cookies a identifikátor relácie",
     "section2_text": "Služba používa súbory cookies na uloženie identifikátora relácie (sessionId). Tento identifikátor umožňuje správne fungovanie prehrávača a zachovanie vašej relácie. SessionId neobsahuje žiadne osobné údaje a je používaný výhradne na technické účely.",
-    "section3_title": "3. Zabezpečenie údajov",
+    "section3_title": "Zabezpečenie údajov",
     "section3_text": "Anonymizované štatistiky a sessionId sú spracovávané a uchovávané bezpečne v súlade s platnými právnymi predpismi, vrátane GDPR. K údajom majú prístup len oprávnené osoby a sú chránené proti neoprávnenému prístupu.",
-    "section4_title": "4. Práva používateľov",
+    "section4_title": "Práva používateľov",
     "section4_text": "Používatelia majú právo na prístup k údajom, ktoré o nich neboli zhromaždené, ako aj právo podať sťažnosť u dozorného orgánu, ak majú podozrenie, že došlo k porušeniu ochrany osobných údajov. Vzhľadom na anonymný charakter zhromažďovaných údajov nie je možné identifikovať konkrétne osoby."
   },
   "TosPage": {
-    "breadcrumb_label": "Podmienky používania",
-    "heading": "Podmienky používania podcastov",
+    "title": "Zásady používania",
+    "metaDescription": "Zásady používania webu Rádia TLIS.",
+    "breadcrumb": "Zásady používania",
     "sections": {
       "ownership": {
-        "title": "1. Vlastnícke práva",
+        "title": "Vlastnícke práva",
         "content": "Všetky podcasty publikované na tejto platforme sú výlučne naším vlastníctvom a sú chránené autorským právom. Žiadna časť podcastov nesmie byť reprodukovaná, distribuovaná alebo inak používaná bez výslovného povolenia, pokiaľ nie je uvedené inak."
       },
       "sharing": {
-        "title": "2. Zdieľanie a redistribúcia",
+        "title": "Zdieľanie a redistribúcia",
         "content": "Podcasty môžu byť zdieľané alebo redistribuované len v prípade, že je uvedená primeraná atribúcia autorovi a zdroju. Bez uvedenia atribúcie je takéto použitie zakázané."
       },
       "responsibility": {
-        "title": "3. Zodpovednosť používateľa",
+        "title": "Zodpovednosť používateľa",
         "content": "Používatelia sú zodpovední za dodržiavanie týchto podmienok pri akejkoľvek interakcii s obsahom podcastov. Porušenie autorských práv alebo pravidiel zdieľania môže viesť k právnym krokom."
       },
       "changes": {
-        "title": "4. Zmeny podmienok",
+        "title": "Zmeny podmienok",
         "content": "Vyhradzujeme si právo kedykoľvek upraviť tieto podmienky. Aktualizácie budú zverejnené na tejto stránke a pokračovaním v používaní služby súhlasíte s novými podmienkami."
       }
     }
@@ -196,19 +187,23 @@
     "metaTitle_fallback": "Relácia",
     "metaDescription_fallback": "Informácie o relácii na Radiu TLIS.",
     "metaDescription_template": "Relácia {name} na Radiu TLIS.",
+    "fallback_show_title": "Relácia Radio TLIS",
+    "fallback_show_description": "Relácia {title} na Radiu TLIS.",
     "load_error": "Reláciu sa nepodarilo načítať.",
     "back_to_shows": "Späť na relácie",
-    "views_count": "videní",
+    "editors": "Redaktori",
+    "show_all_episodes": "Zobraziť všetky epizódy",
+    "views_count": "vypočutí",
     "active_shows": "Aktívne relácie",
     "share": "Zdieľať",
     "episodes": "Epizódy",
     "no_episodes": "Zatiaľ žiadne epizódy",
     "related_articles": "Súvisiace články",
     "open_on_site": "Otvoriť na tlis.sk",
-    "episodes_count":"Počet epizód",
-    "back_to_all":"Naspäť",
-    "show_more": "Zobraziť Viac",
-    "hide": "Skryť"
+    "episodes_count": "Počet epizód",
+    "back_to_all": "ZOBRAZIŤ VŠETKY RELÁCIE",
+    "show_more": "ZOBRAZIŤ VIAC",
+    "hide": "SKRYŤ"
   },
   "ShowsListPage": {
     "metaTitle": "Relácie",
@@ -216,7 +211,9 @@
     "heading": "relácie"
   },
   "ShowListPage": {
-    "view_all": "ZOBRAZIŤ VŠETKY"
+    "view_all": "ZOBRAZIŤ VŠETKY",
+    "fetch_error_title": "Chyba pri načítaní archívu",
+    "fetch_error_subtitle": "Skúste to prosím neskôr."
   },
   "ShareShow": {
     "play_aria": "Prehrať epizódu",
@@ -257,7 +254,12 @@
     "metaTitle": "Kontakt",
     "metaDescription": "Kontaktujte Rádio TLIS — e-mailové adresy a informácie, ako sa s nami spojiť.",
     "heading": "kontakt",
-    "p1": "Ak máte nutkavú potrebu kontaktovať Radio TLIS, alebo nejakého člena rádia, samozrejme, že to môžete urobiť. Máme pre Vás hneď niekoľko mailových adries, ktoré Vám môžu pomôcť, čo najpresnejšie zacieliť svoje otázky, prosby či pochvaly."
+    "p1": "Ak máte nutkavú potrebu kontaktovať Radio TLIS, alebo nejakého člena rádia, samozrejme, že to môžete urobiť. Máme pre Vás hneď niekoľko mailových adries, ktoré Vám môžu pomôcť, čo najpresnejšie zacieliť svoje otázky, prosby či pochvaly.",
+    "p2": "Obsah pripravujeme.",
+    "p3_prefix": "Obsah pripravujeme.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Zostava členov rádia TLIS"
   },
   "CastListPage": {
     "metaTitle": "Účinkujúci",
@@ -273,20 +275,18 @@
     "count_many": "účinkujúcich"
   },
   "CastMemberPage": {
-    "metaTitle_fallback": "Účinkujúci nenájdený",
+    "notFoundTitle": "Účinkujúci nenájdený",
     "breadcrumb_label": "Účinkujúci",
     "loading": "Načítava sa...",
-    "fetch_error_title": "Chyba pri načítaní údajov",
-    "fetch_error_subtitle": "Účinkujúci nebol nájdený alebo došlo k chybe pri načítaní.",
+    "error_title": "Chyba pri načítaní údajov",
+    "error_subtitle": "Účinkujúci nebol nájdený alebo došlo k chybe pri načítaní.",
     "back_to_shows": "Späť na relácie",
     "best_of_month": "Tlisák Mesiaca",
-    "shows_tab": "Relácie",
-    "articles_tab": "Články",
-    "no_shows": "Zatiaľ žiadne relácie",
-    "no_articles": "Zatiaľ žiadne články",
+    "empty_shows": "Zatiaľ žiadne relácie",
+    "empty_articles": "Zatiaľ žiadne články",
     "shows_count": "{count, plural, =1 {relácia} few {# relácie} other {# relácií}}",
     "articles_count": "{count, plural, =1 {článok} few {# články} other {# článkov}}",
-    "profile_meta_template": "Profil {name} na Rádiu TLIS.",
+    "metaDescription": "Profil {name} na Rádiu TLIS. {showsCount} relácií, {articlesCount} článkov.",
     "roles": {
       "boss": "Vedúci a zástupcovia",
       "moderator": "Moderátori",
@@ -302,12 +302,15 @@
       "articles": "Články"
     }
   },
-  "CastPage":{
+  "CastPage": {
     "metaTitle": "Účinkujúci",
     "metaDescription": "Zoznam všetkých moderátorov, redaktorov a účinkujúcich na Rádiu TLIS.",
     "heading": "účinkujúci",
     "cast_count": "účinkujúcich",
-    "breadcrumb": "Účinkujúci"
+    "breadcrumb": "Účinkujúci",
+    "error_title": "Chyba pri načítaní údajov",
+    "error_subtitle": "Zoznam účinkujúcich sa nepodarilo načítať.",
+    "no_cast": "Zatiaľ žiadni účinkujúci"
   },
   "not_found": {
     "title": "404",
@@ -358,7 +361,7 @@
     "heading": "TV"
   },
   "TwoPercentPage": {
-    "heading":"dve percentá",
+    "heading": "dve percentá",
     "metaTitle": "2 % z dane",
     "metaDescription": "Podporte Internátne rozhlasové štúdio TLIS svojimi 2 % z dane. Pomôžte nám vzdelávať novú generáciu mediálnych tvorcov.",
     "breadcrumb_label": "2 % z dane",
@@ -405,6 +408,38 @@
     "button": "Prihlásiť sa",
     "loading": "Prihlasovanie...",
     "error": "Nesprávny email alebo heslo"
+  },
+  "HistoryPage": {
+    "metaTitle": "História",
+    "metaDescription": "História Rádia TLIS.",
+    "heading": "história",
+    "p1": "Obsah pripravujeme.",
+    "p2": "Obsah pripravujeme.",
+    "p3_prefix": "Obsah pripravujeme.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Zostava členov rádia TLIS"
+  },
+  "PartnersPage": {
+    "metaTitle": "Partneri",
+    "metaDescription": "Partneri Rádia TLIS.",
+    "heading": "partneri",
+    "p1": "Obsah pripravujeme.",
+    "p2": "Obsah pripravujeme.",
+    "p3_prefix": "Obsah pripravujeme.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Zostava členov rádia TLIS"
+  },
+  "CategoryListPage": {
+    "metaTitle": "Kategórie",
+    "metaDescription": "Prehľad kategórií článkov na Radiu TLIS.",
+    "metaDescriptionOg": "Prehľad kategórií článkov na Radiu TLIS.",
+    "breadcrumb_label": "Kategórie",
+    "heading": "kategórie",
+    "collection_name": "Kategórie článkov",
+    "fetch_error_title": "Chyba pri načítaní kategórií",
+    "fetch_error_subtitle": "Skúste to prosím neskôr.",
+    "empty": "Zatiaľ tu nie sú žiadne kategórie."
   }
-
 }

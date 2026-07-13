@@ -1,7 +1,8 @@
 'use client';
 
+import 'flag-icons/css/flag-icons.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLanguage } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,14 +12,14 @@ const TranslateWidget = () => {
    const t = useTranslations('navbar'); // 2. Initialize translations (using 'navbar' namespace based on your JSON files)
    const [isOpen, setIsOpen] = useState(false);
    const wrapperRef = useRef<HTMLDivElement>(null);
-   const pathname = usePathname() || '/'; 
+   const pathname = usePathname() || '/';
 
    const languages = [
-      { code: 'sk', name: 'Slovenčina', flag: '🇸🇰' },
-      { code: 'en', name: 'English', flag: '🇬🇧' },
-      { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-      { code: 'es', name: 'Español', flag: '🇪🇸' },
-      { code: 'uk', name: 'Українська', flag: '🇺🇦' },
+      { code: 'sk', name: 'Slovenčina', flagCode: 'sk' },
+      { code: 'en', name: 'English', flagCode: 'gb' },
+      { code: 'de', name: 'Deutsch', flagCode: 'de' },
+      { code: 'es', name: 'Español', flagCode: 'es' },
+      { code: 'uk', name: 'Українська', flagCode: 'ua' },
    ];
 
    /**
@@ -60,10 +61,10 @@ const TranslateWidget = () => {
       <div className="relative max-[500px]:hidden" ref={wrapperRef}>
          <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex h-10 w-10 items-center justify-center border-2 rounded-full hover:text-[#96120F] hover:bg-white transition-all shadow-sm focus:outline-none"
+            className="flex h-8 w-8 items-center justify-center border-2 rounded-3xl hover:text-[#96120F] hover:bg-white transition-all shadow-sm focus:outline-none"
             aria-label="Change language"
          >
-            <FontAwesomeIcon className="text-xl" icon={faLanguage} />
+            <FontAwesomeIcon className="text-xl" icon={faGlobe} />
          </button>
 
          {isOpen && (
@@ -85,7 +86,7 @@ const TranslateWidget = () => {
                         }}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 rounded-lg transition-colors text-gray-700 hover:text-[#96120F]"
                      >
-                        <span className="text-xl leading-none">{lang.flag}</span>
+                        <span className={`fi fi-${lang.flagCode} rounded-sm text-lg`}></span>
                         <span className="font-medium text-sm">{lang.name}</span>
                         {/* Checkmark for active language */}
                         {(pathname.startsWith(`/${lang.code}`) || (lang.code === 'sk' && !languages.some(l => l.code !== 'sk' && pathname.startsWith(`/${l.code}`)))) && (

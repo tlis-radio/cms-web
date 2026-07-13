@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
    try {
       const article = await CmsApiService.Article.getArticleBySlug(slug);
-      const title = article?.title ? `${article.title} | Radio TLIS` : `Článok | Radio TLIS`;
+      const title = article?.title || `Článok`;
       const description = article?.description || `Článok na Radiu TLIS.`;
       const image = article?.thumbnail_image ? `${DIRECTUS_URL}/assets/${article.thumbnail_image}` : undefined;
 
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       };
    } catch (e) {
       return {
-         title: `Článok | Radio TLIS`,
+         title: `Článok`,
          description: `Článok na Radiu TLIS.`,
          alternates: {
             canonical: canonicalUrl,
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             ),
          },
          openGraph: {
-            title: `Článok | Radio TLIS`,
+            title: `Článok`,
             description: `Článok na Radiu TLIS.`,
             url: canonicalUrl,
             siteName: "Radio TLIS",

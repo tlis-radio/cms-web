@@ -86,7 +86,7 @@ const Articles = async ({
    }));
 
    const breadcrumbs = [
-      { label: locale === 'sk' ? "Články" : "Articles", href: `/${locale}/clanky` }
+      { label: locale === 'sk' ? "Články" : "Articles", href: `/clanky` }
    ];
 
    return (

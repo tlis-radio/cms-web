@@ -71,7 +71,7 @@ const CastPage = async ({
    };
 
    const breadcrumbs = [
-      { label: t('breadcrumb'), href: `/${locale}/ucinkujuci` }
+      { label: t('breadcrumb'), href: `/ucinkujuci` }
    ];
 
    return (

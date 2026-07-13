@@ -32,7 +32,7 @@ export async function generateMetadata({
    
    try {
       const show = await CmsApiService.Show.getShowBySlug(slug);
-      const title = show?.Title ? `${show.Title} | Radio TLIS` : `${t('metaTitle_fallback')} | Radio TLIS`;
+      const title = show?.Title || t('metaTitle_fallback');
       const description = show?.Description || t('metaDescription_template', { name: show?.Title || slug });
       const image = show?.Cover ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${show.Cover}` : undefined;
       
@@ -56,7 +56,7 @@ export async function generateMetadata({
       };
    } catch (e) {
       return {
-         title: `${t('metaTitle_fallback')} | Radio TLIS`,
+         title: t('metaTitle_fallback'),
          description: t('metaDescription_fallback'),
          alternates: {
             canonical: canonicalUrl,
@@ -65,7 +65,7 @@ export async function generateMetadata({
             ),
          },
          openGraph: {
-            title: `${t('metaTitle_fallback')} | Radio TLIS`,
+            title: t('metaTitle_fallback'),
             description: t('metaDescription_fallback'),
             url: canonicalUrl,
             siteName: "Radio TLIS",
@@ -86,7 +86,7 @@ const Show = async ({
    const { slug, locale } = await params;
    const resolvedSearchParams = await searchParams;
    const t = await getTranslations({ locale, namespace: 'ShowPage' });
-   const n = await getTranslations({ locale, namespace: 'navbar' });
+   const s = await getTranslations({ locale, namespace: 'ShowsPage' });
    
    const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
@@ -110,8 +110,8 @@ const Show = async ({
       }
 
       const breadcrumbs = [
-         { label: n('active_shows'), href: `/${locale}/relacie` },
-         { label: episodeData.show.Title, href: `/${locale}/relacie/${slug}` }
+         { label: s('breadcrumb_label'), href: `/relacie` },
+         { label: episodeData.show.Title, href: `/relacie/${slug}` }
       ];
       
       return <>

@@ -58,7 +58,7 @@ export default function ShowsPage({
     <>
       <div className="flex flex-wrap items-center justify-between mb-8 px-8">
         <h1 className="text-4xl text-white font-semibold">
-          <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> 
+          <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span>{' '}
           {t('heading')} {/* Dynamický preklad nadpisu 'shows' */}
         </h1>
 

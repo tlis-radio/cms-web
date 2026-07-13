@@ -39,7 +39,7 @@ const AboutUs = async ({ params }: { params: Promise<{ locale: string }> }) => {
     const b = await getTranslations({ locale, namespace: 'navbar' });
 
     const breadcrumbs = [
-        { label: b('about_radio'), href: `/${locale}/o-radiu` }
+        { label: b('about_radio'), href: `/o-radiu` }
     ];
 
     return (

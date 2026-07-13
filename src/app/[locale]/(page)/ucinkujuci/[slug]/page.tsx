@@ -37,7 +37,7 @@ export async function generateMetadata({
       articlesCount = articlesResult.totalCount;
    } catch (error) {
       return {
-         title: `${t('notFoundTitle')} | Radio TLIS`,
+         title: t('notFoundTitle'),
       };
    }
 
@@ -53,7 +53,7 @@ export async function generateMetadata({
    });
    
    return {
-      title: `${cast.Name} | Radio TLIS`,
+      title: cast.Name,
       description,
       alternates: {
          canonical: canonicalUrl,
@@ -62,7 +62,7 @@ export async function generateMetadata({
          ),
       },
       openGraph: {
-         title: `${cast.Name} | Radio TLIS`,
+         title: cast.Name,
          description,
          url: canonicalUrl,
          siteName: "Radio TLIS",
@@ -71,7 +71,7 @@ export async function generateMetadata({
       },
       twitter: {
          card: "summary",
-         title: `${cast.Name} | Radio TLIS`,
+         title: cast.Name,
          description,
       },
    };
@@ -126,8 +126,8 @@ const CastMemberPage = async ({
    }));
 
    const breadcrumbs = [
-      { label: t('breadcrumbParent'), href: `/${locale}/ucinkujuci` },
-      { label: cast?.Name || t('loading'), href: `/${locale}/ucinkujuci/${slug}` }
+      { label: t('breadcrumbParent'), href: `/ucinkujuci` },
+      { label: cast?.Name || t('loading'), href: `/ucinkujuci/${slug}` }
    ];
 
    return (

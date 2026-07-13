@@ -85,17 +85,6 @@
     "no_image": "No image",
     "author": "Author"
   },
-  "CategoriesPage": {
-    "metaTitle": "Categories",
-    "metaDescription": "Overview of article categories on Radio TLIS.",
-    "metaDescriptionOg": "Overview of article categories on Radio TLIS.",
-    "breadcrumb_label": "Categories",
-    "heading": "categories",
-    "collection_name": "Article Categories",
-    "fetch_error_title": "Error loading categories",
-    "fetch_error_subtitle": "Please try again later.",
-    "empty": "There are no categories here yet."
-  },
   "CategoryPage": {
     "metaTitle_fallback": "Category",
     "metaDescription_fallback": "Articles in the category on Radio TLIS.",
@@ -110,10 +99,10 @@
   },
   "ArticleGallery": {
     "heading": "Gallery",
-    "photo_count": "photos",
     "image_alt": "Gallery image",
     "show_less": "Show less",
-    "show_all": "Show all"
+    "show_all": "Show all",
+    "photos_count": "photos"
   },
   "DvePercentaPage": {
     "metaTitle": "Two Percent",
@@ -146,36 +135,38 @@
     "help_note": "If you need help filling out the forms, contact us."
   },
   "GdprPage": {
-    "breadcrumb_label": "GDPR",
-    "heading": "GDPR and Personal Data Protection",
-    "section1_title": "1. Processing of Personal Data",
-    "section1_text": "Our service does not collect any personal data from users. Exclusively anonymized radio listening statistics are used for analytical purposes and improving the quality of provided services. These statistics do not allow for the identification of individuals.",
-    "section2_title": "2. Cookies and Session Identifier",
-    "section2_text": "The service uses cookies to store a session identifier (sessionId). This identifier allows for the correct functioning of the player and the maintenance of your session. The sessionId does not contain any personal data and is used exclusively for technical purposes.",
-    "section3_title": "3. Data Security",
-    "section3_text": "Anonymized statistics and sessionId are processed and stored securely in accordance with applicable legal regulations, including GDPR. Only authorized persons have access to the data, and it is protected against unauthorized access.",
-    "section4_title": "4. User Rights",
-    "section4_text": "Users have the right to access data that was not collected about them, as well as the right to file a complaint with the supervisory authority if they suspect that a violation of personal data protection has occurred. Due to the anonymous nature of the collected data, it is not possible to identify specific individuals."
+    "metaTitle": "GDPR",
+    "metaDescription": "Radio TLIS privacy policy.",
+    "heading": "GDPR",
+    "section1_title": "Processing of Personal Data",
+    "section1_text": "Our service does not collect any personal data from users. We use only anonymized radio listening statistics, which serve analytical purposes and help improve the quality of our services. These statistics do not allow the identification of individual persons.",
+    "section2_title": "Cookies and Session Identifier",
+    "section2_text": "The service uses cookies to store a session identifier (sessionId). This identifier enables the player to function correctly and preserves your session. The sessionId does not contain any personal data and is used exclusively for technical purposes.",
+    "section3_title": "Data Security",
+    "section3_text": "Anonymized statistics and the sessionId are processed and stored securely in accordance with applicable legal regulations, including the GDPR. Only authorized persons have access to the data, and it is protected against unauthorized access.",
+    "section4_title": "User Rights",
+    "section4_text": "Users have the right to access data that has not been collected about them, as well as the right to lodge a complaint with a supervisory authority if they suspect a breach of data protection. Due to the anonymous nature of the collected data, it is not possible to identify specific individuals."
   },
   "TosPage": {
-    "breadcrumb_label": "Terms of Use",
-    "heading": "Podcast Terms of Use",
+    "title": "Terms of Use",
+    "metaDescription": "Terms of use of the Radio TLIS website.",
+    "breadcrumb": "Terms of Use",
     "sections": {
       "ownership": {
-        "title": "1. Ownership Rights",
-        "content": "All podcasts published on this platform are our exclusive property and are protected by copyright. No part of the podcasts may be reproduced, distributed, or otherwise used without express permission, unless otherwise stated."
+        "title": "Ownership Rights",
+        "content": "All podcasts published on this platform are our exclusive property and are protected by copyright. No part of the podcasts may be reproduced, distributed, or otherwise used without express permission, unless stated otherwise."
       },
       "sharing": {
-        "title": "2. Sharing and Redistribution",
-        "content": "Podcasts may be shared or redistributed only if appropriate attribution to the author and source is provided. Without attribution, such use is prohibited."
+        "title": "Sharing and Redistribution",
+        "content": "Podcasts may be shared or redistributed only if proper attribution is given to the author and source. Such use is prohibited without attribution."
       },
       "responsibility": {
-        "title": "3. User Responsibility",
-        "content": "Users are responsible for complying with these terms in any interaction with podcast content. Violation of copyright or sharing rules may lead to legal action."
+        "title": "User Responsibility",
+        "content": "Users are responsible for complying with these terms in any interaction with podcast content. Violation of copyright or sharing rules may result in legal action."
       },
       "changes": {
-        "title": "4. Changes to Terms",
-        "content": "We reserve the right to modify these terms at any time. Updates will be posted on this page, and by continuing to use the service, you agree to the new terms."
+        "title": "Changes to Terms",
+        "content": "We reserve the right to modify these terms at any time. Updates will be published on this page, and by continuing to use the service you agree to the new terms."
       }
     }
   },
@@ -196,18 +187,22 @@
     "metaTitle_fallback": "Show",
     "metaDescription_fallback": "Information about the show on Radio TLIS.",
     "metaDescription_template": "{name} show on Radio TLIS.",
+    "fallback_show_title": "Radio TLIS Show",
+    "fallback_show_description": "{title} show on Radio TLIS.",
     "load_error": "The show could not be loaded.",
     "back_to_shows": "Back to shows",
-    "views_count": "views",
+    "editors": "Editors",
+    "show_all_episodes": "View all episodes",
+    "views_count": "listens",
     "active_shows": "Active Shows",
     "share": "Share",
     "episodes": "Episodes",
     "no_episodes": "No episodes yet",
     "related_articles": "Related articles",
     "episodes_count": "Number of episodes",
-    "back_to_all": "Back",
-    "show_more": "Show More",
-    "hide": "Hide",
+    "back_to_all": "VIEW ALL SHOWS",
+    "show_more": "SHOW MORE",
+    "hide": "HIDE",
     "open_on_site": "Open on tlis.sk"
   },
   "ShowsListPage": {
@@ -216,7 +211,9 @@
     "heading": "shows"
   },
   "ShowListPage": {
-    "view_all": "VIEW ALL"
+    "view_all": "VIEW ALL",
+    "fetch_error_title": "Error loading the archive",
+    "fetch_error_subtitle": "Please try again later."
   },
   "ShareShow": {
     "play_aria": "Play episode",
@@ -257,7 +254,12 @@
     "metaTitle": "Contact",
     "metaDescription": "Contact Radio TLIS — email addresses and information on how to get in touch with us.",
     "heading": "contact",
-    "p1": "If you have a compelling need to contact Radio TLIS, or a member of the radio, of course, you can do so. We have several email addresses for you that can help you target your questions, requests, or praise as accurately as possible."
+    "p1": "If you have a compelling need to contact Radio TLIS, or a member of the radio, of course, you can do so. We have several email addresses for you that can help you target your questions, requests, or praise as accurately as possible.",
+    "p2": "Content coming soon.",
+    "p3_prefix": "Content coming soon.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Radio TLIS team"
   },
   "CastListPage": {
     "metaTitle": "Cast",
@@ -273,20 +275,18 @@
     "count_many": "performers"
   },
   "CastMemberPage": {
-    "metaTitle_fallback": "Performer not found",
+    "notFoundTitle": "Performer not found",
     "breadcrumb_label": "Cast",
     "loading": "Loading...",
-    "fetch_error_title": "Error loading data",
-    "fetch_error_subtitle": "The performer was not found or there was an error loading data.",
+    "error_title": "Error loading data",
+    "error_subtitle": "The performer was not found or there was an error loading data.",
     "back_to_shows": "Back to shows",
     "best_of_month": "Tlisák of the Month",
-    "shows_tab": "Shows",
-    "articles_tab": "Articles",
-    "no_shows": "No shows yet",
-    "no_articles": "No articles yet",
+    "empty_shows": "No shows yet",
+    "empty_articles": "No articles yet",
     "shows_count": "{count, plural, =1 {show} other {# shows}}",
     "articles_count": "{count, plural, =1 {article} other {# articles}}",
-    "profile_meta_template": "{name} profile on Radio TLIS.",
+    "metaDescription": "{name} profile on Radio TLIS. {showsCount} shows, {articlesCount} articles.",
     "roles": {
       "boss": "Heads and Deputies",
       "moderator": "Hosts",
@@ -307,7 +307,10 @@
     "metaDescription": "List of all hosts, editors, and performers on Radio TLIS.",
     "heading": "cast",
     "cast_count": "performers",
-    "breadcrumb": "Cast"
+    "breadcrumb": "Cast",
+    "error_title": "Error loading data",
+    "error_subtitle": "The cast list could not be loaded.",
+    "no_cast": "No performers yet"
   },
   "not_found": {
     "title": "404",
@@ -405,5 +408,38 @@
     "button": "Sign in",
     "loading": "Signing in...",
     "error": "Invalid email or password"
+  },
+  "HistoryPage": {
+    "metaTitle": "History",
+    "metaDescription": "History of Radio TLIS.",
+    "heading": "history",
+    "p1": "Content coming soon.",
+    "p2": "Content coming soon.",
+    "p3_prefix": "Content coming soon.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Radio TLIS team"
+  },
+  "PartnersPage": {
+    "metaTitle": "Partners",
+    "metaDescription": "Partners of Radio TLIS.",
+    "heading": "partners",
+    "p1": "Content coming soon.",
+    "p2": "Content coming soon.",
+    "p3_prefix": "Content coming soon.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Radio TLIS team"
+  },
+  "CategoryListPage": {
+    "metaTitle": "Categories",
+    "metaDescription": "Overview of article categories on Radio TLIS.",
+    "metaDescriptionOg": "Overview of article categories on Radio TLIS.",
+    "breadcrumb_label": "Categories",
+    "heading": "categories",
+    "collection_name": "Article Categories",
+    "fetch_error_title": "Error loading categories",
+    "fetch_error_subtitle": "Please try again later.",
+    "empty": "There are no categories here yet."
   }
 }

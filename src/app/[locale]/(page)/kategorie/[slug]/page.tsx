@@ -21,7 +21,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
    
    try {
       const category = await CmsApiService.Article.getCategoryBySlug(slug);
-      const title = category?.name ? `${category.name} | Radio TLIS` : `Kategória | Radio TLIS`;
+      const title = category?.name || `Kategória`;
       const description = category?.description || `Články v kategórii ${category?.name || slug} na Radiu TLIS.`;
       
       return {
@@ -43,7 +43,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
       };
    } catch (e) {
       return {
-         title: `Kategória | Radio TLIS`,
+         title: `Kategória`,
          description: `Články v kategórii na Radiu TLIS.`,
          alternates: {
             canonical: canonicalUrl,
@@ -52,7 +52,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
             ),
          },
          openGraph: {
-            title: `Kategória | Radio TLIS`,
+            title: `Kategória`,
             description: `Články v kategórii.`,
             url: canonicalUrl,
             siteName: "Radio TLIS",
