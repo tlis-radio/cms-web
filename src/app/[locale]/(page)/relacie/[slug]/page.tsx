@@ -32,7 +32,7 @@ export async function generateMetadata({
    
    try {
       const show = await CmsApiService.Show.getShowBySlug(slug);
-      const title = show?.Title ? `${show.Title} | Radio TLIS` : `${t('metaTitle_fallback')} | Radio TLIS`;
+      const title = show?.Title || t('metaTitle_fallback');
       const description = show?.Description || t('metaDescription_template', { name: show?.Title || slug });
       const image = show?.Cover ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${show.Cover}` : undefined;
       
@@ -56,7 +56,7 @@ export async function generateMetadata({
       };
    } catch (e) {
       return {
-         title: `${t('metaTitle_fallback')} | Radio TLIS`,
+         title: t('metaTitle_fallback'),
          description: t('metaDescription_fallback'),
          alternates: {
             canonical: canonicalUrl,
@@ -65,7 +65,7 @@ export async function generateMetadata({
             ),
          },
          openGraph: {
-            title: `${t('metaTitle_fallback')} | Radio TLIS`,
+            title: t('metaTitle_fallback'),
             description: t('metaDescription_fallback'),
             url: canonicalUrl,
             siteName: "Radio TLIS",
