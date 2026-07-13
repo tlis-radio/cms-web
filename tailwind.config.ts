@@ -15,6 +15,10 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        argentumSansRegular: ["ArgentumSans-Regular", "sans-serif"],
+        argentumSansBold: ["ArgentumSans-Bold", "sans-serif"],
+        argentumSansMedium: ["ArgentumSans-Medium", "sans-serif"],
+        argentumSansLight: ["ArgentumSans-Light", "sans-serif"],
       },
       backgroundImage: {
         "acoustic-foam": "url('/images/bgimage_29x29.png')",
