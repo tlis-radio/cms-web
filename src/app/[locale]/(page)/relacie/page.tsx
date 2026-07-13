@@ -62,8 +62,7 @@ async function Shows({
 }) {
     const { locale } = await params;
     const resolvedSearchParams = await searchParams;
-    const t = await getTranslations({ locale, namespace: 'ShowsListPage' });
-    const b = await getTranslations({ locale, namespace: 'navbar' });
+    const s = await getTranslations({ locale, namespace: 'ShowsPage' });
 
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
@@ -91,24 +90,17 @@ async function Shows({
     }));
 
     const breadcrumbs = [
-       { label: b('active_shows'), href: `/relacie` }
+       { label: s('breadcrumb_label'), href: `/relacie` }
     ];
 
     return (
         <>
-            {seriesJson.map((s: any, i: number) => (<JsonLd key={`jsonld-${i}`} data={s} />))}
+            {seriesJson.map((show: any, i: number) => (<JsonLd key={`jsonld-${i}`} data={show} />))}
             <div className="px-8 mb-4">
                <Breadcrumbs items={breadcrumbs} />
             </div>
-            
-            <div className="px-8 mb-4">
-                <h1 className="text-4xl text-white font-semibold">
-                    <span className="text-[#d43c4a] italic text-[1.4em] mr-2 uppercase">TLIS</span> 
-                    {t('heading')}
-                </h1>
-            </div>
 
-            <ShowsPage 
+            <ShowsPage
                 shows={shows} 
                 totalCount={showsResult?.totalCount || 0} 
                 loadingError={loadingError} 
