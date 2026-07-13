@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faShareAlt as faShare } from "@fortawesome/free-solid-svg-icons";
@@ -66,6 +68,16 @@ export default function EpisodeEmbed({ episode, showName = "Radio TLIS", showSlu
 
    if (!episode) return null;
 
+   const description = episode.Description || "";
+   const shortenedDescription = description.length > 200 ? `${description.substring(0, 200)}...` : description;
+   const isExternalLink = (href?: string) => {
+      if (!href) return false;
+      const normalizedHref = href.toLowerCase();
+      const isHttpLink = normalizedHref.startsWith("http://") || normalizedHref.startsWith("https://");
+      const isTlisDomain = /^https?:\/\/(www\.)?tlis\.sk(\/|$)/.test(normalizedHref);
+      return isHttpLink && !isTlisDomain;
+   };
+
    return (
       <div className="bg-[#1c1c1c] p-4 text-white drop-shadow-lg my-6 rounded-md">
          <div className="flex flex-col md:flex-row gap-4">
@@ -114,7 +126,30 @@ export default function EpisodeEmbed({ episode, showName = "Radio TLIS", showSlu
                            </>
                         )}
                      </p>
-                     <p className="mt-0 !text-left !text-sm !w-full">{(episode.Description?.length ?? 0) > 200 ? episode.Description!.substring(0, 200) + "..." : episode.Description}</p>
+                     <div className="mt-0 !text-left !text-sm !w-full text-gray-200">
+                        <Markdown
+                           remarkPlugins={[remarkGfm]}
+                           components={{
+                              p: ({ children }) => <p className="mt-0 mb-2 last:mb-0">{children}</p>,
+                              a: ({ href, children, ...props }) => {
+                                 const external = isExternalLink(href);
+                                 return (
+                                    <a
+                                       href={href}
+                                       target={external ? "_blank" : undefined}
+                                       rel={external ? "noopener noreferrer" : undefined}
+                                       className="text-[#d43c4a] hover:text-[#f05561] underline decoration-dotted"
+                                       {...props}
+                                    >
+                                       {children}
+                                    </a>
+                                 );
+                              },
+                           }}
+                        >
+                           {shortenedDescription}
+                        </Markdown>
+                     </div>
                   </div>
                   <div className="flex items-center gap-3 mt-2 md:mt-0">
                      <button

@@ -32,6 +32,12 @@ export async function POST(
         const today = new Date().toISOString().split('T')[0];
         const trackingKey = `${id}_${today}`;
 
+        for (const key of viewTrackingMap.keys()) {
+            if (!key.endsWith(`_${today}`)) {
+                viewTrackingMap.delete(key);
+            }
+        }
+
         if (viewTrackingMap.has(trackingKey)) {
             const ipSet = viewTrackingMap.get(trackingKey)!;
             if (ipSet.has(ip)) {
