@@ -85,17 +85,6 @@
     "no_image": "Sin imagen",
     "author": "Autor"
   },
-  "CategoriesPage": {
-    "metaTitle": "Categorías",
-    "metaDescription": "Resumen de las categorías de artículos en Radio TLIS.",
-    "metaDescriptionOg": "Resumen de las categorías de artículos en Radio TLIS.",
-    "breadcrumb_label": "Categorías",
-    "heading": "categorías",
-    "collection_name": "Categorías de artículos",
-    "fetch_error_title": "Error al cargar categorías",
-    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
-    "empty": "Todavía no hay categorías aquí."
-  },
   "CategoryPage": {
     "metaTitle_fallback": "Categoría",
     "metaDescription_fallback": "Artículos en la categoría en Radio TLIS.",
@@ -110,10 +99,10 @@
   },
   "ArticleGallery": {
     "heading": "Galería",
-    "photo_count": "fotos",
     "image_alt": "Imagen de galería",
     "show_less": "Ver menos",
-    "show_all": "Ver todo"
+    "show_all": "Ver todo",
+    "photos_count": "fotos"
   },
   "DvePercentaPage": {
     "metaTitle": "Dos por ciento",
@@ -146,36 +135,38 @@
     "help_note": "Si necesita ayuda para completar los formularios, contáctenos."
   },
   "GdprPage": {
-    "breadcrumb_label": "RGPD",
-    "heading": "RGPD y Protección de Datos Personales",
-    "section1_title": "1. Tratamiento de Datos Personales",
-    "section1_text": "Nuestro servicio no recopila ningún dato personal de los usuarios. Se utilizan exclusivamente estadísticas anonimizadas de escucha de radio con fines analíticos y para mejorar la calidad de los servicios prestados. Estas estadísticas no permiten la identificación de personas físicas.",
-    "section2_title": "2. Cookies e identificador de sesión",
-    "section2_text": "El servicio utiliza cookies para almacenar un identificador de sesión (sessionId). Este identificador permite el funcionamiento correcto del reproductor y el mantenimiento de su sesión. El sessionId no contiene ningún dato personal y se utiliza exclusivamente para fines técnicos.",
-    "section3_title": "3. Seguridad de los datos",
-    "section3_text": "Las estadísticas anonimizadas y el sessionId se procesan y almacenan de forma segura de acuerdo con las normativas legales aplicables, incluido el RGPD. Solo las personas autorizadas tienen acceso a los datos y están protegidos contra el acceso no autorizado.",
-    "section4_title": "4. Derechos de los usuarios",
-    "section4_text": "Los usuarios tienen derecho a acceder a los datos que no fueron recopilados sobre ellos, así como el derecho a presentar una queja ante la autoridad de control si sospechan que se ha producido una violación de la protección de datos personales. Debido a la naturaleza anónima de los datos recopilados, no es posible identificar a personas específicas."
+    "metaTitle": "GDPR",
+    "metaDescription": "Política de privacidad de Radio TLIS.",
+    "heading": "GDPR",
+    "section1_title": "Protección de datos",
+    "section1_text": "Contenido próximamente.",
+    "section2_title": "Datos que procesamos",
+    "section2_text": "Contenido próximamente.",
+    "section3_title": "Sus derechos",
+    "section3_text": "Contenido próximamente.",
+    "section4_title": "Contacto",
+    "section4_text": "Contenido próximamente."
   },
   "TosPage": {
-    "breadcrumb_label": "Términos de uso",
-    "heading": "Términos de uso de podcasts",
+    "title": "Términos de uso",
+    "metaDescription": "Términos de uso del sitio web de Radio TLIS.",
+    "breadcrumb": "Términos de uso",
     "sections": {
       "ownership": {
-        "title": "1. Derechos de propiedad",
-        "content": "Todos los podcasts publicados en esta plataforma son nuestra propiedad exclusiva y están protegidos por derechos de autor. Ninguna parte de los podcasts puede ser reproducida, distribuida o utilizada de otro modo sin permiso expreso, a menos que se indique lo contrario."
+        "title": "Propiedad del contenido",
+        "content": "Contenido próximamente."
       },
       "sharing": {
-        "title": "2. Compartir y redistribución",
-        "content": "Los podcasts pueden ser compartidos o redistribuidos solo si se proporciona la atribución apropiada al autor y a la fuente. Sin atribución, dicho uso está prohibido."
+        "title": "Compartir contenido",
+        "content": "Contenido próximamente."
       },
       "responsibility": {
-        "title": "3. Responsabilidad del usuario",
-        "content": "Los usuarios son responsables de cumplir con estos términos en cualquier interacción con el contenido de los podcasts. La violación de los derechos de autor o de las reglas para compartir puede dar lugar a acciones legales."
+        "title": "Responsabilidad",
+        "content": "Contenido próximamente."
       },
       "changes": {
-        "title": "4. Cambios en los términos",
-        "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Las actualizaciones se publicarán en esta página y, al continuar usando el servicio, usted acepta los nuevos términos."
+        "title": "Cambios en los términos",
+        "content": "Contenido próximamente."
       }
     }
   },
@@ -196,8 +187,12 @@
     "metaTitle_fallback": "Programa",
     "metaDescription_fallback": "Información sobre el programa en Radio TLIS.",
     "metaDescription_template": "Programa {name} en Radio TLIS.",
+    "fallback_show_title": "Programa de Radio TLIS",
+    "fallback_show_description": "Programa {title} en Radio TLIS.",
     "load_error": "No se pudo cargar el programa.",
     "back_to_shows": "Volver a programas",
+    "editors": "Editores",
+    "show_all_episodes": "Ver todos los episodios",
     "views_count": "vistas",
     "active_shows": "Programas activos",
     "share": "Compartir",
@@ -216,7 +211,9 @@
     "heading": "programas"
   },
   "ShowListPage": {
-    "view_all": "VER TODO"
+    "view_all": "VER TODO",
+    "fetch_error_title": "Error al cargar el archivo",
+    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde."
   },
   "ShareShow": {
     "play_aria": "Reproducir episodio",
@@ -257,7 +254,12 @@
     "metaTitle": "Contacto",
     "metaDescription": "Contacte con Radio TLIS: direcciones de correo electrónico e información sobre cómo ponerse en contacto con nosotros.",
     "heading": "contacto",
-    "p1": "Si tiene una necesidad apremiante de contactar con Radio TLIS, o con algún miembro de la radio, por supuesto que puede hacerlo. Tenemos varias direcciones de correo electrónico para usted que pueden ayudarle a dirigir sus preguntas, solicitudes o elogios con la mayor precisión posible."
+    "p1": "Si tiene una necesidad apremiante de contactar con Radio TLIS, o con algún miembro de la radio, por supuesto que puede hacerlo. Tenemos varias direcciones de correo electrónico para usted que pueden ayudarle a dirigir sus preguntas, solicitudes o elogios con la mayor precisión posible.",
+    "p2": "Contenido próximamente.",
+    "p3_prefix": "Contenido próximamente.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Equipo de Radio TLIS"
   },
   "CastListPage": {
     "metaTitle": "Elenco",
@@ -273,20 +275,18 @@
     "count_many": "intérpretes"
   },
   "CastMemberPage": {
-    "metaTitle_fallback": "Intérprete no encontrado",
+    "notFoundTitle": "Intérprete no encontrado",
     "breadcrumb_label": "Elenco",
     "loading": "Cargando...",
-    "fetch_error_title": "Error al cargar datos",
-    "fetch_error_subtitle": "No se encontró al intérprete o hubo un error al cargar los datos.",
+    "error_title": "Error al cargar datos",
+    "error_subtitle": "No se encontró al intérprete o hubo un error al cargar los datos.",
     "back_to_shows": "Volver a programas",
     "best_of_month": "Tlisák del Mes",
-    "shows_tab": "Programas",
-    "articles_tab": "Artículos",
-    "no_shows": "Todavía no hay programas",
-    "no_articles": "Todavía no hay artículos",
+    "empty_shows": "Todavía no hay programas",
+    "empty_articles": "Todavía no hay artículos",
     "shows_count": "{count, plural, =1 {programa} other {# programas}}",
     "articles_count": "{count, plural, =1 {artículo} other {# artículos}}",
-    "profile_meta_template": "Perfil de {name} en Radio TLIS.",
+    "metaDescription": "Perfil de {name} en Radio TLIS. {showsCount} programas, {articlesCount} artículos.",
     "roles": {
       "boss": "Directores y Delegados",
       "moderator": "Locutores",
@@ -307,7 +307,10 @@
     "metaDescription": "Lista de todos los locutores, redactores e intérpretes de Radio TLIS.",
     "heading": "elenco",
     "cast_count": "intérpretes",
-    "breadcrumb": "Elenco"
+    "breadcrumb": "Elenco",
+    "error_title": "Error al cargar datos",
+    "error_subtitle": "No se pudo cargar la lista de intérpretes.",
+    "no_cast": "Todavía no hay intérpretes"
   },
   "not_found": {
     "title": "404",
@@ -405,5 +408,38 @@
     "button": "Iniciar sesión",
     "loading": "Iniciando sesión...",
     "error": "Correo electrónico o contraseña incorrectos"
+  },
+  "HistoryPage": {
+    "metaTitle": "Historia",
+    "metaDescription": "Historia de Radio TLIS.",
+    "heading": "historia",
+    "p1": "Contenido próximamente.",
+    "p2": "Contenido próximamente.",
+    "p3_prefix": "Contenido próximamente.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Equipo de Radio TLIS"
+  },
+  "PartnersPage": {
+    "metaTitle": "Socios",
+    "metaDescription": "Socios de Radio TLIS.",
+    "heading": "socios",
+    "p1": "Contenido próximamente.",
+    "p2": "Contenido próximamente.",
+    "p3_prefix": "Contenido próximamente.",
+    "p3_highlight": "",
+    "p3_suffix": "",
+    "image_alt": "Equipo de Radio TLIS"
+  },
+  "CategoryListPage": {
+    "metaTitle": "Categorías",
+    "metaDescription": "Resumen de las categorías de artículos en Radio TLIS.",
+    "metaDescriptionOg": "Resumen de las categorías de artículos en Radio TLIS.",
+    "breadcrumb_label": "Categorías",
+    "heading": "categorías",
+    "collection_name": "Categorías de artículos",
+    "fetch_error_title": "Error al cargar categorías",
+    "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
+    "empty": "Todavía no hay categorías aquí."
   }
 }
