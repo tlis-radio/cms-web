@@ -193,7 +193,7 @@
     "back_to_shows": "Späť na relácie",
     "editors": "Redaktori",
     "show_all_episodes": "Zobraziť všetky epizódy",
-    "views_count": "videní",
+    "views_count": "vypočutí",
     "active_shows": "Aktívne relácie",
     "share": "Zdieľať",
     "episodes": "Epizódy",
@@ -201,9 +201,9 @@
     "related_articles": "Súvisiace články",
     "open_on_site": "Otvoriť na tlis.sk",
     "episodes_count": "Počet epizód",
-    "back_to_all": "Naspäť",
-    "show_more": "Zobraziť Viac",
-    "hide": "Skryť"
+    "back_to_all": "ZOBRAZIŤ VŠETKY RELÁCIE",
+    "show_more": "ZOBRAZIŤ VIAC",
+    "hide": "SKRYŤ"
   },
   "ShowsListPage": {
     "metaTitle": "Relácie",

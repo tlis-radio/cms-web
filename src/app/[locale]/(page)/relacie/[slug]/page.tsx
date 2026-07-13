@@ -86,7 +86,7 @@ const Show = async ({
    const { slug, locale } = await params;
    const resolvedSearchParams = await searchParams;
    const t = await getTranslations({ locale, namespace: 'ShowPage' });
-   const n = await getTranslations({ locale, namespace: 'navbar' });
+   const s = await getTranslations({ locale, namespace: 'ShowsPage' });
    
    const pageParam = resolvedSearchParams?.page;
    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
@@ -110,7 +110,7 @@ const Show = async ({
       }
 
       const breadcrumbs = [
-         { label: n('active_shows'), href: `/relacie` },
+         { label: s('breadcrumb_label'), href: `/relacie` },
          { label: episodeData.show.Title, href: `/relacie/${slug}` }
       ];
       
