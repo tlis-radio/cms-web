@@ -138,14 +138,14 @@
     "metaTitle": "GDPR",
     "metaDescription": "Zásady ochrany osobných údajov Rádia TLIS.",
     "heading": "GDPR",
-    "section1_title": "Ochrana osobných údajov",
-    "section1_text": "Obsah pripravujeme.",
-    "section2_title": "Spracúvané údaje",
-    "section2_text": "Obsah pripravujeme.",
-    "section3_title": "Práva dotknutých osôb",
-    "section3_text": "Obsah pripravujeme.",
-    "section4_title": "Kontakt",
-    "section4_text": "Obsah pripravujeme."
+    "section1_title": "Spracúvanie osobných údajov",
+    "section1_text": "Naša služba nezhromažďuje žiadne osobné údaje používateľov. Používané sú výlučne anonymizované štatistiky počúvania rádia, ktoré slúžia na analytické účely a zlepšovanie kvality poskytovaných služieb. Tieto štatistiky neumožňujú identifikáciu jednotlivých osôb.",
+    "section2_title": "Cookies a identifikátor relácie",
+    "section2_text": "Služba používa súbory cookies na uloženie identifikátora relácie (sessionId). Tento identifikátor umožňuje správne fungovanie prehrávača a zachovanie vašej relácie. SessionId neobsahuje žiadne osobné údaje a je používaný výhradne na technické účely.",
+    "section3_title": "Zabezpečenie údajov",
+    "section3_text": "Anonymizované štatistiky a sessionId sú spracovávané a uchovávané bezpečne v súlade s platnými právnymi predpismi, vrátane GDPR. K údajom majú prístup len oprávnené osoby a sú chránené proti neoprávnenému prístupu.",
+    "section4_title": "Práva používateľov",
+    "section4_text": "Používatelia majú právo na prístup k údajom, ktoré o nich neboli zhromaždené, ako aj právo podať sťažnosť u dozorného orgánu, ak majú podozrenie, že došlo k porušeniu ochrany osobných údajov. Vzhľadom na anonymný charakter zhromažďovaných údajov nie je možné identifikovať konkrétne osoby."
   },
   "TosPage": {
     "title": "Zásady používania",
@@ -153,20 +153,20 @@
     "breadcrumb": "Zásady používania",
     "sections": {
       "ownership": {
-        "title": "Vlastníctvo obsahu",
-        "content": "Obsah pripravujeme."
+        "title": "Vlastnícke práva",
+        "content": "Všetky podcasty publikované na tejto platforme sú výlučne naším vlastníctvom a sú chránené autorským právom. Žiadna časť podcastov nesmie byť reprodukovaná, distribuovaná alebo inak používaná bez výslovného povolenia, pokiaľ nie je uvedené inak."
       },
       "sharing": {
-        "title": "Zdieľanie obsahu",
-        "content": "Obsah pripravujeme."
+        "title": "Zdieľanie a redistribúcia",
+        "content": "Podcasty môžu byť zdieľané alebo redistribuované len v prípade, že je uvedená primeraná atribúcia autorovi a zdroju. Bez uvedenia atribúcie je takéto použitie zakázané."
       },
       "responsibility": {
-        "title": "Zodpovednosť",
-        "content": "Obsah pripravujeme."
+        "title": "Zodpovednosť používateľa",
+        "content": "Používatelia sú zodpovední za dodržiavanie týchto podmienok pri akejkoľvek interakcii s obsahom podcastov. Porušenie autorských práv alebo pravidiel zdieľania môže viesť k právnym krokom."
       },
       "changes": {
         "title": "Zmeny podmienok",
-        "content": "Obsah pripravujeme."
+        "content": "Vyhradzujeme si právo kedykoľvek upraviť tieto podmienky. Aktualizácie budú zverejnené na tejto stránke a pokračovaním v používaní služby súhlasíte s novými podmienkami."
       }
     }
   },

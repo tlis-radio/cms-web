@@ -138,14 +138,14 @@
     "metaTitle": "GDPR",
     "metaDescription": "Política de privacidad de Radio TLIS.",
     "heading": "GDPR",
-    "section1_title": "Protección de datos",
-    "section1_text": "Contenido próximamente.",
-    "section2_title": "Datos que procesamos",
-    "section2_text": "Contenido próximamente.",
-    "section3_title": "Sus derechos",
-    "section3_text": "Contenido próximamente.",
-    "section4_title": "Contacto",
-    "section4_text": "Contenido próximamente."
+    "section1_title": "Tratamiento de datos personales",
+    "section1_text": "Nuestro servicio no recopila ningún dato personal de los usuarios. Solo se utilizan estadísticas anonimizadas de escucha de la radio, que sirven para fines analíticos y para mejorar la calidad de los servicios prestados. Estas estadísticas no permiten identificar a personas individuales.",
+    "section2_title": "Cookies e identificador de sesión",
+    "section2_text": "El servicio utiliza cookies para almacenar un identificador de sesión (sessionId). Este identificador permite el correcto funcionamiento del reproductor y la conservación de su sesión. El sessionId no contiene ningún dato personal y se utiliza exclusivamente con fines técnicos.",
+    "section3_title": "Seguridad de los datos",
+    "section3_text": "Las estadísticas anonimizadas y el sessionId se procesan y almacenan de forma segura de acuerdo con la normativa legal vigente, incluido el RGPD. Solo el personal autorizado tiene acceso a los datos, que están protegidos contra el acceso no autorizado.",
+    "section4_title": "Derechos de los usuarios",
+    "section4_text": "Los usuarios tienen derecho a acceder a los datos que no se hayan recopilado sobre ellos, así como el derecho a presentar una reclamación ante una autoridad de control si sospechan que se ha producido una infracción de la protección de datos. Debido al carácter anónimo de los datos recopilados, no es posible identificar a personas concretas."
   },
   "TosPage": {
     "title": "Términos de uso",
@@ -153,20 +153,20 @@
     "breadcrumb": "Términos de uso",
     "sections": {
       "ownership": {
-        "title": "Propiedad del contenido",
-        "content": "Contenido próximamente."
+        "title": "Derechos de propiedad",
+        "content": "Todos los podcasts publicados en esta plataforma son de nuestra exclusiva propiedad y están protegidos por derechos de autor. Ninguna parte de los podcasts puede ser reproducida, distribuida o utilizada de otro modo sin autorización expresa, salvo que se indique lo contrario."
       },
       "sharing": {
-        "title": "Compartir contenido",
-        "content": "Contenido próximamente."
+        "title": "Compartir y redistribuir",
+        "content": "Los podcasts solo pueden compartirse o redistribuirse si se indica la atribución adecuada al autor y a la fuente. Sin dicha atribución, este uso está prohibido."
       },
       "responsibility": {
-        "title": "Responsabilidad",
-        "content": "Contenido próximamente."
+        "title": "Responsabilidad del usuario",
+        "content": "Los usuarios son responsables de cumplir con estos términos en cualquier interacción con el contenido de los podcasts. La infracción de los derechos de autor o de las normas de uso compartido puede dar lugar a acciones legales."
       },
       "changes": {
         "title": "Cambios en los términos",
-        "content": "Contenido próximamente."
+        "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Las actualizaciones se publicarán en esta página, y al continuar utilizando el servicio, usted acepta los nuevos términos."
       }
     }
   },

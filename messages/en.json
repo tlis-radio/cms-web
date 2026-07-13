@@ -138,14 +138,14 @@
     "metaTitle": "GDPR",
     "metaDescription": "Radio TLIS privacy policy.",
     "heading": "GDPR",
-    "section1_title": "Data Protection",
-    "section1_text": "Content coming soon.",
-    "section2_title": "Data We Process",
-    "section2_text": "Content coming soon.",
-    "section3_title": "Your Rights",
-    "section3_text": "Content coming soon.",
-    "section4_title": "Contact",
-    "section4_text": "Content coming soon."
+    "section1_title": "Processing of Personal Data",
+    "section1_text": "Our service does not collect any personal data from users. We use only anonymized radio listening statistics, which serve analytical purposes and help improve the quality of our services. These statistics do not allow the identification of individual persons.",
+    "section2_title": "Cookies and Session Identifier",
+    "section2_text": "The service uses cookies to store a session identifier (sessionId). This identifier enables the player to function correctly and preserves your session. The sessionId does not contain any personal data and is used exclusively for technical purposes.",
+    "section3_title": "Data Security",
+    "section3_text": "Anonymized statistics and the sessionId are processed and stored securely in accordance with applicable legal regulations, including the GDPR. Only authorized persons have access to the data, and it is protected against unauthorized access.",
+    "section4_title": "User Rights",
+    "section4_text": "Users have the right to access data that has not been collected about them, as well as the right to lodge a complaint with a supervisory authority if they suspect a breach of data protection. Due to the anonymous nature of the collected data, it is not possible to identify specific individuals."
   },
   "TosPage": {
     "title": "Terms of Use",
@@ -153,20 +153,20 @@
     "breadcrumb": "Terms of Use",
     "sections": {
       "ownership": {
-        "title": "Content Ownership",
-        "content": "Content coming soon."
+        "title": "Ownership Rights",
+        "content": "All podcasts published on this platform are our exclusive property and are protected by copyright. No part of the podcasts may be reproduced, distributed, or otherwise used without express permission, unless stated otherwise."
       },
       "sharing": {
-        "title": "Content Sharing",
-        "content": "Content coming soon."
+        "title": "Sharing and Redistribution",
+        "content": "Podcasts may be shared or redistributed only if proper attribution is given to the author and source. Such use is prohibited without attribution."
       },
       "responsibility": {
-        "title": "Responsibility",
-        "content": "Content coming soon."
+        "title": "User Responsibility",
+        "content": "Users are responsible for complying with these terms in any interaction with podcast content. Violation of copyright or sharing rules may result in legal action."
       },
       "changes": {
         "title": "Changes to Terms",
-        "content": "Content coming soon."
+        "content": "We reserve the right to modify these terms at any time. Updates will be published on this page, and by continuing to use the service you agree to the new terms."
       }
     }
   },
