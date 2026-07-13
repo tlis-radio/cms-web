@@ -1,5 +1,6 @@
 'use client';
 
+import 'flag-icons/css/flag-icons.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
@@ -11,14 +12,14 @@ const TranslateWidget = () => {
    const t = useTranslations('navbar'); // 2. Initialize translations (using 'navbar' namespace based on your JSON files)
    const [isOpen, setIsOpen] = useState(false);
    const wrapperRef = useRef<HTMLDivElement>(null);
-   const pathname = usePathname() || '/'; 
+   const pathname = usePathname() || '/';
 
    const languages = [
-      { code: 'sk', name: 'Slovenčina', flag: '/flags/sk.svg' },
-      { code: 'en', name: 'English', flag: '/flags/gb.svg' },
-      { code: 'de', name: 'Deutsch', flag: '/flags/de.svg' },
-      { code: 'es', name: 'Español', flag: '/flags/es.svg' },
-      { code: 'uk', name: 'Українська', flag: '/flags/ua.svg' },
+      { code: 'sk', name: 'Slovenčina', flagCode: 'sk' },
+      { code: 'en', name: 'English', flagCode: 'gb' },
+      { code: 'de', name: 'Deutsch', flagCode: 'de' },
+      { code: 'es', name: 'Español', flagCode: 'es' },
+      { code: 'uk', name: 'Українська', flagCode: 'ua' },
    ];
 
    /**
@@ -82,7 +83,7 @@ const TranslateWidget = () => {
                         onClick={() => setIsOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 rounded-lg transition-colors text-gray-700 hover:text-[#96120F]"
                      >
-                        <img src={lang.flag} alt="" className="h-4 w-6 rounded-sm object-cover" />
+                        <span className={`fi fi-${lang.flagCode} rounded-sm text-lg`}></span>
                         <span className="font-medium text-sm">{lang.name}</span>
                         {/* Checkmark for active language */}
                         {(pathname.startsWith(`/${lang.code}`) || (lang.code === 'sk' && !languages.some(l => l.code !== 'sk' && pathname.startsWith(`/${l.code}`)))) && (
