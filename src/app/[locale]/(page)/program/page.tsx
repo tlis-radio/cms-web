@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     const b = await getTranslations({ locale, namespace: 'navbar' });
 
     const breadcrumbs = [
-        { label: t('breadcrumb_label') || "Program", href: `/${locale}/program` }
+        { label: t('breadcrumb_label') || "Program", href: `/program` }
     ];
 
     return (

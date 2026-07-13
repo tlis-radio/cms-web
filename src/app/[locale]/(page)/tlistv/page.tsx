@@ -40,7 +40,7 @@ export default async function LiveVideoPage({ params }: { params: Promise<{ loca
   ]);
 
   const breadcrumbs = [
-    { label: t("breadcrumb_label"), href: `/${locale}/tlistv` },
+    { label: t("breadcrumb_label"), href: `/tlistv` },
   ];
 
   return (

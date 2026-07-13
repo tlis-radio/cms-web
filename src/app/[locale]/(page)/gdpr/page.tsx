@@ -34,7 +34,7 @@ export default async function GdprPage({ params }: { params: Promise<{ locale: s
     const t = await getTranslations({ locale, namespace: 'GdprPage' });
 
     const breadcrumbs = [
-        { label: "GDPR", href: `/${locale}/gdpr` }
+        { label: "GDPR", href: `/gdpr` }
     ];
 
     return (

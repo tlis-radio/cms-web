@@ -36,7 +36,7 @@ export default async function DvePercenta({ params }: { params: Promise<{ locale
     const t = await getTranslations({ locale, namespace: 'TwoPercentPage' });
 
     const breadcrumbs = [
-        { label: t('breadcrumb_label') || "Dve percentá", href: `/${locale}/dve-percenta` }
+        { label: t('breadcrumb_label') || "Dve percentá", href: `/dve-percenta` }
     ];
 
     return (

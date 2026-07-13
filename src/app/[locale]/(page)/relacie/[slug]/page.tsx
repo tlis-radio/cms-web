@@ -110,8 +110,8 @@ const Show = async ({
       }
 
       const breadcrumbs = [
-         { label: n('active_shows'), href: `/${locale}/relacie` },
-         { label: episodeData.show.Title, href: `/${locale}/relacie/${slug}` }
+         { label: n('active_shows'), href: `/relacie` },
+         { label: episodeData.show.Title, href: `/relacie/${slug}` }
       ];
       
       return <>

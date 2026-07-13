@@ -50,7 +50,7 @@ const CategoriesPage = async ({ params }: { params: Promise<{ locale: string }> 
     }
 
     const breadcrumbs = [
-        { label: b('articles'), href: `/${locale}/kategorie` }
+        { label: b('articles'), href: `/kategorie` }
     ];
 
     const jsonLd = {

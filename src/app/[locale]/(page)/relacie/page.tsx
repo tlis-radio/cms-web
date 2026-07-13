@@ -91,7 +91,7 @@ async function Shows({
     }));
 
     const breadcrumbs = [
-       { label: b('active_shows'), href: `/${locale}/relacie` }
+       { label: b('active_shows'), href: `/relacie` }
     ];
 
     return (

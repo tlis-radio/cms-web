@@ -126,8 +126,8 @@ const CastMemberPage = async ({
    }));
 
    const breadcrumbs = [
-      { label: t('breadcrumbParent'), href: `/${locale}/ucinkujuci` },
-      { label: cast?.Name || t('loading'), href: `/${locale}/ucinkujuci/${slug}` }
+      { label: t('breadcrumbParent'), href: `/ucinkujuci` },
+      { label: cast?.Name || t('loading'), href: `/ucinkujuci/${slug}` }
    ];
 
    return (
