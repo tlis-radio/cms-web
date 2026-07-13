@@ -6,8 +6,8 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl'; // 1. Import useTranslations
-
+import { useTranslations } from 'next-intl'; // 1. Import useTranslationsimport { UmamiTrack } from "@/components/Analytics";
+import { UmamiTrack } from './Analytics';
 const TranslateWidget = () => {
    const t = useTranslations('navbar'); // 2. Initialize translations (using 'navbar' namespace based on your JSON files)
    const [isOpen, setIsOpen] = useState(false);
@@ -80,7 +80,10 @@ const TranslateWidget = () => {
                      <Link
                         key={lang.code}
                         href={getLanguagePath(lang.code)}
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => {
+                           UmamiTrack("language_change", { locale: lang.code });
+                           setIsOpen(false);
+                        }}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 rounded-lg transition-colors text-gray-700 hover:text-[#96120F]"
                      >
                         <span className={`fi fi-${lang.flagCode} rounded-sm text-lg`}></span>

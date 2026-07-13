@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { UmamiTrack } from "@/components/Analytics";
 
 export default function ShareShow() {
     const { setMode, setArchiveName, setSrc, setArchiveEpisodeId, setArchiveMetadata, setArchiveShowName, setArchiveEpisodeCover } = usePlayer();
@@ -27,9 +28,7 @@ export default function ShareShow() {
             });
             
             // Send umami event for programEpisode (no database save)
-            if (typeof window !== 'undefined' && (window as any).umami) {
-                (window as any).umami.track("Program Episode View", { episodeId: programEpisodeId });
-            }
+            UmamiTrack("Program Episode View", { episodeId: programEpisodeId });
             return;
         }
 
@@ -51,9 +50,7 @@ export default function ShareShow() {
                 console.error("Failed to count share:", err);
             });
             
-            if (typeof window !== 'undefined' && (window as any).umami) {
-                (window as any).umami.track("Shared Episode View", { episodeId: sharedEpisodeId });
-            }
+            UmamiTrack("Shared Episode View", { episodeId: sharedEpisodeId });
         }
     }, []);
 

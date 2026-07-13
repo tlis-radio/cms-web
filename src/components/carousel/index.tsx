@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl"; // Added imports
+import { UmamiTrack } from "@/components/Analytics";
 
 function ProgramCarousel({
   carouselPosts,
@@ -59,6 +60,7 @@ function ProgramCarousel({
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
+      UmamiTrack("carousel_swipe", { action: "previous", currentIndex });
       setDirection(-1);
       setCurrentIndex((prev) => prev - 1);
     }
@@ -66,6 +68,7 @@ function ProgramCarousel({
 
   const handleNext = () => {
     if (currentIndex < carouselPosts.length - 1) {
+      UmamiTrack("carousel_swipe", { action: "next", currentIndex });
       setDirection(1);
       setCurrentIndex((prev) => prev + 1);
     }
@@ -85,9 +88,7 @@ function ProgramCarousel({
   };
 
   const handleEpisodeClick = (episodeId: number) => {
-    if (typeof window !== "undefined" && (window as any).umami) {
-      (window as any).umami.track("Program Episode Click", { episodeId });
-    }
+    UmamiTrack("Program Episode Click", { episodeId });
   };
 
   const getVisibleSlides = () => {

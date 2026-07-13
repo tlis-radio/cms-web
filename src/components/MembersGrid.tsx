@@ -11,6 +11,7 @@ export interface Member {
   Role: string;
   BestOfTheMonth: boolean;
   Cast: CastDto; 
+  RoleDescription: string;
 }
 
 var roles = {

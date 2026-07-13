@@ -5,6 +5,7 @@ import Markdown from "react-markdown";
 import TlisImage from "@/components/TlisImage";
 import { Show } from "@/models/show";
 import { ShowCast } from "@/types/show";
+import { UmamiTrack } from "@/components/Analytics";
 
 type ShowLinkProps = {
    show: Show;
@@ -28,10 +29,13 @@ const ShowLink: FunctionComponent<ShowLinkProps> = ({ show }) => {
    }, []);
 
    return (
-      <div 
+      <div
          role="link"
          tabIndex={0}
-         onClick={() => router.push(`/relacie/${show.Slug}`)}
+         onClick={() => {
+            UmamiTrack("show_click", { show_slug: show.Slug });
+            router.push(`/relacie/${show.Slug}`);
+         }}
          onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
