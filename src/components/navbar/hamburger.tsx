@@ -1,5 +1,6 @@
 "use client";
 
+import 'flag-icons/css/flag-icons.min.css';
 import { useState } from "react";
 import classNames from "classnames";
 import { Link, usePathname, useRouter, locales } from '@/navigation';
@@ -99,12 +100,12 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
         {/* Language Selector s dominantnou vlajkou - BEZ TPI */}
         <div className="w-full border-t bg-[#7a0e0c] flex justify-center gap-6 py-5 px-4">
           {locales.filter(l => l !== 'tpi').map((l) => {
-            const flags: Record<string, string> = {
-              sk: "🇸🇰",
-              en: "🇬🇧",
-              de: "🇩🇪",
-              es: "🇪🇸",
-              uk: "🇺🇦"
+            const flagCodes: Record<string, string> = {
+              sk: "sk",
+              en: "gb",
+              de: "de",
+              es: "es",
+              uk: "ua"
             };
 
             return (
@@ -112,7 +113,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                 key={l}
                 onClick={() => handleLocaleChange(l)}
                 className={classNames(
-                  "flex flex-col items-center justify-center transition-all duration-200 active:scale-90", 
+                  "flex flex-col items-center justify-center transition-all duration-200 active:scale-90",
                   {
                     "scale-110 opacity-100": currentLocale === l,
                     "opacity-40 hover:opacity-80": currentLocale !== l,
@@ -120,9 +121,7 @@ const Hamburger = ({ navbarLinks }: { navbarLinks: NavbarLinkType[] }) => {
                 )}
               >
                 {/* Vlajka */}
-                <span className="text-3xl leading-none mb-1 shadow-sm">
-                  {flags[l]}
-                </span>
+                <span className={`fi fi-${flagCodes[l]} rounded-sm text-2xl leading-none mb-1 shadow-sm`}></span>
 
                 {/* Text pod vlajkou */}
                 <span 
