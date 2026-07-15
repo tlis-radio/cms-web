@@ -45,7 +45,7 @@ const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: Reac
       <div className="group relative inline-flex items-center">
          <button
             aria-label="Volume"
-            className="flex items-center justify-center w-12 h-12 cursor-pointer text-xl rounded-full bg-[#d43c4a] text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+            className="flex items-center justify-center w-10 h-10 cursor-pointer text-lg rounded-full bg-[#d43c4a] text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
          >
             <FontAwesomeIcon icon={faVolumeHigh} />
          </button>
@@ -287,31 +287,31 @@ const Player: React.FC<{}> = () => {
             {mode === "stream" && (
                <div className="absolute top-0 left-0 w-full h-1 bg-[#d43c4a]" />
             )}
-            <div className="max-w-7xl mx-auto flex items-center gap-4 p-4">
-               <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 relative">
+            <div className="max-w-7xl mx-auto flex items-center gap-3 p-3 pt-4">
+               <div className="w-14 h-14 flex-shrink-0 relative">
                   <Image
                      src={coverImage}
                      alt={title || "Radio TLIS"}
-                     width={80}
-                     height={80}
-                     className="w-full h-full object-cover rounded-md shadow-md"
+                     width={56}
+                     height={56}
+                     className="w-full h-full object-cover rounded shadow-sm"
                   />
                </div>
                <div className="flex-1 min-w-0 flex flex-col justify-center">
                   {mode === "archive" && archiveShowSlug ? (
                      <Link href={`/relacie/${archiveShowSlug}`}>
-                        <Marquee
-                           className="font-argentumSansLight text-base sm:text-lg font-semibold text-white"
+                        <Marquee 
+                           className="font-argentumSansLight text-sm sm:text-base font-semibold text-white"
                            text={title || ''}
                         />
                      </Link>
                   ) : (
-                     <Marquee
-                        className="font-argentumSansLight text-base sm:text-lg font-semibold text-white"
+                     <Marquee 
+                        className="font-argentumSansLight text-sm sm:text-base font-semibold text-white"
                         text={title || ''}
                      />
                   )}
-                  <div className="flex items-center gap-2 text-sm text-gray-300 flex-wrap">
+                  <div className="flex items-center gap-2 text-xs text-gray-300 flex-wrap">
                      <span suppressHydrationWarning>{subtitle}</span>
                      {mode === "archive" && duration > 0 && (
                         <>
@@ -321,25 +321,25 @@ const Player: React.FC<{}> = () => {
                      )}
                   </div>
                </div>
-               <div className="flex items-center gap-3 flex-shrink-0">
+               <div className="flex items-center gap-2 flex-shrink-0">
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
                   </div>
-                  { mode === "archive" &&
+                  { mode === "archive" && 
                   <button
                      aria-label="Back 15 seconds"
                      onClick={() => seekBy(-15)}
-                     className="hidden md:flex ml-5 items-center justify-center w-12 h-12 cursor-pointer text-xl rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none"
+                     className="hidden md:flex ml-5 items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none"
                      type="button"
                   >
-                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
                         <path d="M16.5 8.5H13.8604C13.6452 8.5 13.4541 8.63772 13.386 8.84189L12.7194 10.8419C12.6114 11.1657 12.8524 11.5 13.1937 11.5H14.5C15.6046 11.5 16.5 12.3954 16.5 13.5C16.5 14.6046 15.6046 15.5 14.5 15.5H12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                         <path d="M7.5 10.5L10 8.5V15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M14 4.5L12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C8.7288 22 5.82446 20.4293 4 18.001M8 2.83209C6.87754 3.32251 5.86251 4.01303 5 4.85857C3.14864 6.67349 2 9.20261 2 12C2 12.6849 2.06886 13.3538 2.20004 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                      </svg>
                   </button> }
                   <button
-                     className="flex items-center justify-center w-14 h-14 cursor-pointer text-2xl rounded-full bg-[#d43c4a]/90 hover:bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                     className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a]/90 hover:bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
                      onClick={() => setIsPlaying(!isPlaying)}
                      aria-label={isPlaying ? "Pause" : "Play"}
                      type="button"
@@ -352,7 +352,7 @@ const Player: React.FC<{}> = () => {
                   <button
                      aria-label="Forward 15 seconds"
                      onClick={() => seekBy(15)}
-                     className="hidden md:flex items-center justify-center w-12 h-12 cursor-pointer text-xl rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none"
+                     className="hidden md:flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none"
                      type="button"
                   >
                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
