@@ -83,7 +83,12 @@ export default async function Home({ params }: HomeProps) {
             <h2 className="text-4xl text-white font-semibold pb-0">
               <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> {t('eventsTitle')}
             </h2>
-            <Link href="/clanky" className="..."> {t('viewAll')} </Link>
+            <Link
+              href="/clanky"
+              className="font-argentumSansBold bg-[#d43c4a] rounded-full px-4 py-2 text-white hover:underline mt-2 md:mt-0"
+            >
+              {t('viewAll')}
+            </Link>
           </div>
           <div className="px-4 md:px-8">
             {events.map((event, index) => (
