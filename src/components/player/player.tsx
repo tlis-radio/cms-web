@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { faChevronDown, faPause, faPlay, faSpinner, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
+import { faChevronDown, faClockRotateLeft, faPause, faPlay, faSpinner, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { usePlayer } from "@/context/PlayerContext";
@@ -8,15 +9,19 @@ import Image from "next/image";
 import ProgressBar from "./progress-bar";
 import Marquee from "./marquee";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ isVisible, onClick }) => {
+const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void, extraOffset: number }> = ({ isVisible, onClick, extraOffset }) => {
    const buttonStyle = {
       transform: isVisible ? 'rotate(0deg)' : 'rotate(180deg)',
       transition: 'transform 0.3s ease-in-out',
    };
 
    return (
-      <div className={`fixed inset-x-0 ${isVisible ? 'bottom-[8rem]' : 'bottom-[3.5rem]'} z-20 transition-all duration-300 ease-in-out pointer-events-none`}>
+      <div
+         className="fixed inset-x-0 z-20 transition-[bottom] duration-300 ease-in-out pointer-events-none"
+         style={{ bottom: `calc(${isVisible ? '8rem' : '3.5rem'} + ${extraOffset}px)` }}
+      >
          <div className="max-w-7xl mx-auto relative px-4">
             <div className="absolute right-0 -translate-x-3 2xl:translate-x-12">
                <span
@@ -67,9 +72,34 @@ const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: Reac
    );
 };
 
+interface RecentTrack {
+   artist?: string;
+   title: string;
+   cover: string | null;
+}
+
+const RECENT_TRACKS_LIMIT = 5;
+
+const QueueButton: React.FC<{ isOpen: boolean; onClick: () => void; label: string }> = ({ isOpen, onClick, label }) => {
+   return (
+      <button
+         aria-label={label}
+         aria-pressed={isOpen}
+         onClick={onClick}
+         className={classNames(
+            "flex items-center justify-center w-10 h-10 cursor-pointer text-lg rounded-full text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-colors",
+            { "bg-white/20": isOpen, "bg-[#d43c4a]": !isOpen }
+         )}
+      >
+         <FontAwesomeIcon icon={faClockRotateLeft} />
+      </button>
+   );
+};
+
 const Player: React.FC<{}> = () => {
+   const t = useTranslations("player");
    const [isClient, setIsClient] = useState(false);
-   const { 
+   const {
       mode, 
       archiveName, 
       archiveShowSlug, 
@@ -92,6 +122,20 @@ const Player: React.FC<{}> = () => {
    const [displayTitle, setDisplayTitle] = useState<string>("RADIO TLIS");
    const [activeDisplayTitle, setActiveDisplayTitle] = useState<string>("RADIO TLIS");
    const originalTitleRef = useRef<string>("");
+   const [recentTracks, setRecentTracks] = useState<RecentTrack[]>([]);
+   const [isQueueOpen, setIsQueueOpen] = useState(false);
+   const [queuePanelHeight, setQueuePanelHeight] = useState(0);
+   const queuePanelRef = useRef<HTMLDivElement>(null);
+
+   useEffect(() => {
+      const node = queuePanelRef.current;
+      if (!node || typeof ResizeObserver === "undefined") return;
+      const observer = new ResizeObserver((entries) => {
+         setQueuePanelHeight(entries[0]?.contentRect.height || 0);
+      });
+      observer.observe(node);
+      return () => observer.disconnect();
+   }, []);
 
    useEffect(() => {
       setIsClient(true);
@@ -149,16 +193,39 @@ const Player: React.FC<{}> = () => {
 
    const toggleVisibility = () => setIsVisible(!isVisible);
 
-   const fetchAlbumArt = async (artist: string, title: string) => {
+   const resolveCover = async (artist: string, title: string): Promise<string | null> => {
       try {
          const params = new URLSearchParams({ artist, title });
          const response = await fetch(`/api/album-art?${params.toString()}`);
          const result = await response.json();
-         setAlbumCover(result.artworkUrl || null);
+         return result.artworkUrl || null;
       } catch (err) {
-         setAlbumCover(null);
+         return null;
       }
    };
+
+   const fetchAlbumArt = async (artist: string, title: string) => {
+      setAlbumCover(await resolveCover(artist, title));
+   };
+
+   const albumCoverRef = useRef<string | null>(null);
+   useEffect(() => {
+      albumCoverRef.current = albumCover;
+   }, [albumCover]);
+
+   const hasSeededHistoryRef = useRef(false);
+
+   useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+         if (playerWrapper.current && !playerWrapper.current.contains(event.target as Node)) {
+            setIsQueueOpen(false);
+         }
+      };
+      if (isQueueOpen) {
+         document.addEventListener("mousedown", handleClickOutside);
+      }
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+   }, [isQueueOpen]);
 
    useEffect(() => {
       window.addEventListener("resize", shiftBody);
@@ -186,16 +253,60 @@ const Player: React.FC<{}> = () => {
             const text = await response.text();
             if (!text) return;
             const data = JSON.parse(text);
+
+            if (!hasSeededHistoryRef.current) {
+               hasSeededHistoryRef.current = true;
+               if (Array.isArray(data.history) && data.history.length > 0) {
+                  Promise.all(
+                     (data.history as Array<{ artist?: string; songTitle?: string }>).map(async (item) => ({
+                        artist: item.artist,
+                        title: item.songTitle || "",
+                        cover: await resolveCover(item.artist || "", item.songTitle || ""),
+                     }))
+                  ).then((seeded) => {
+                     setRecentTracks((prev) => (prev.length > 0 ? prev : seeded.filter((track) => track.title)));
+                  });
+               }
+            }
+
+            const idleTitle = t("now_playing");
+            const isPlaceholderTitle = (value?: string) => !value || value === "Radio TLIS" || value === idleTitle;
+
             let tempDisplayTitle = "Radio TLIS";
             if (data.artist && data.songTitle) {
                if (data.songTitle !== streamTitle || data.artist !== streamArtist) {
+                  if (!isPlaceholderTitle(streamTitle)) {
+                     setRecentTracks((prev) => [
+                        { artist: streamArtist, title: streamTitle, cover: albumCoverRef.current },
+                        ...prev,
+                     ].slice(0, RECENT_TRACKS_LIMIT));
+                  }
                   fetchAlbumArt(data.artist, data.songTitle);
                }
                setStreamTitle(data.songTitle);
                setStreamArtist(data.artist);
                tempDisplayTitle = `${data.artist} - ${data.songTitle}`;
+            } else if (data.idle) {
+               if (idleTitle !== streamTitle) {
+                  if (!isPlaceholderTitle(streamTitle)) {
+                     setRecentTracks((prev) => [
+                        { artist: streamArtist, title: streamTitle, cover: albumCoverRef.current },
+                        ...prev,
+                     ].slice(0, RECENT_TRACKS_LIMIT));
+                  }
+                  setAlbumCover(null);
+               }
+               setStreamTitle(idleTitle);
+               setStreamArtist(undefined);
+               tempDisplayTitle = idleTitle;
             } else if (data.songTitle) {
                if (data.songTitle !== streamTitle) {
+                  if (!isPlaceholderTitle(streamTitle)) {
+                     setRecentTracks((prev) => [
+                        { artist: streamArtist, title: streamTitle, cover: albumCoverRef.current },
+                        ...prev,
+                     ].slice(0, RECENT_TRACKS_LIMIT));
+                  }
                   fetchAlbumArt("", data.songTitle);
                }
                setStreamTitle(data.songTitle);
@@ -267,6 +378,49 @@ const Player: React.FC<{}> = () => {
    return (
       <>
          <div ref={playerWrapper} className={playerClasses}>
+            <motion.div
+               ref={queuePanelRef}
+               initial={false}
+               animate={{ height: isQueueOpen ? "auto" : 0, opacity: isQueueOpen ? 1 : 0 }}
+               transition={{ duration: 0.3, ease: "easeInOut" }}
+               className={classNames(
+                  "absolute bottom-full inset-x-0 bg-[#2e2b2c] shadow-2xl rounded-t-2xl overflow-hidden",
+                  { "border-t border-white/10": isQueueOpen }
+               )}
+               style={{ pointerEvents: isQueueOpen ? "auto" : "none" }}
+            >
+               <div className="max-w-7xl mx-auto px-4 py-3 max-h-[50vh] overflow-y-auto">
+                  <p className="text-xs font-bold uppercase tracking-wide text-gray-400 px-1 pb-2">
+                     {t("recently_played")}
+                  </p>
+                  {recentTracks.length === 0 ? (
+                     <p className="text-sm text-gray-400 px-1 pb-3">{t("recently_played_empty")}</p>
+                  ) : (
+                     <ul className="flex flex-col gap-1 pb-1">
+                        {recentTracks.map((track, index) => (
+                           <li
+                              key={`${track.title}-${track.artist}-${index}`}
+                              className="flex items-center gap-3 px-1 py-2 rounded-lg hover:bg-white/5"
+                           >
+                              <div className="w-10 h-10 flex-shrink-0 relative">
+                                 <Image
+                                    src={track.cover || "/images/03_TLIS_logo2020_white_no-bkg.svg"}
+                                    alt={track.title}
+                                    width={40}
+                                    height={40}
+                                    className="w-full h-full object-cover rounded shadow-sm"
+                                 />
+                              </div>
+                              <div className="min-w-0">
+                                 <p className="text-sm text-white truncate">{track.title}</p>
+                                 <p className="text-xs text-gray-400 truncate">{track.artist || t("radio_tlis")}</p>
+                              </div>
+                           </li>
+                        ))}
+                     </ul>
+                  )}
+               </div>
+            </motion.div>
             {mode === "archive" && (
                <ProgressBar
                   currentTime={currentTime}
@@ -316,7 +470,8 @@ const Player: React.FC<{}> = () => {
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
                   </div>
-                  { mode === "archive" && 
+                  <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
+                  { mode === "archive" &&
                   <button
                      aria-label="Back 15 seconds"
                      onClick={() => seekBy(-15)}
@@ -355,7 +510,7 @@ const Player: React.FC<{}> = () => {
                </div>
             </div>
          </div>
-         <SlideButton isVisible={isVisible} onClick={toggleVisibility} />
+         <SlideButton isVisible={isVisible} onClick={toggleVisibility} extraOffset={queuePanelHeight} />
       </>
    );
 };

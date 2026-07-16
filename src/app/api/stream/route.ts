@@ -1,8 +1,32 @@
 import CmsApiService from "@/services/cms-api-service";
 import { Root } from "@/types/streamstatus";
 
+const DEFAULT_TITLE = "Radio TLIS";
+const HISTORY_LIMIT = 5;
 
-async function fetchSourceTitle(apiEndpoint: string): Promise<{ artist: string | undefined; songTitle: string | undefined }> {
+interface TrackInfo {
+   artist?: string;
+   songTitle?: string;
+   idle?: boolean;
+}
+
+// Module-scoped so it survives across requests for the lifetime of the server process.
+let lastTrack: TrackInfo | null = null;
+let trackHistory: TrackInfo[] = [];
+
+function recordTrackChange(current: TrackInfo) {
+   if (!current.songTitle || current.songTitle === DEFAULT_TITLE) return;
+
+   const changed = !lastTrack || lastTrack.songTitle !== current.songTitle || lastTrack.artist !== current.artist;
+   if (!changed) return;
+
+   if (lastTrack && lastTrack.songTitle && lastTrack.songTitle !== DEFAULT_TITLE) {
+      trackHistory = [lastTrack, ...trackHistory].slice(0, HISTORY_LIMIT);
+   }
+   lastTrack = current;
+}
+
+async function fetchSourceTitle(apiEndpoint: string): Promise<TrackInfo> {
    const response = await fetch(apiEndpoint, { cache: "no-store" });
    const data: Root = await response.json();
    const source = data.icestats.source;
@@ -29,7 +53,7 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<{ artist: string |
     */
 
    if (title === "Unknown") {
-      return { artist: undefined, songTitle: "Počúvate Rádio TLIS" };
+      return { artist: undefined, songTitle: undefined, idle: true };
    }
    // Reverse used to switch artist and song title
    var artist, songTitle;
@@ -46,25 +70,28 @@ async function fetchSourceTitle(apiEndpoint: string): Promise<{ artist: string |
 
 export async function GET(request: Request) {
     const headers = new Headers({ "Cache-Control": "no-store", "Content-Type": "application/json" });
-    
+
     const currentStreamTitle = await CmsApiService.Stream.getCurrentStreamTitle();
+    let result: TrackInfo;
+
     if (currentStreamTitle) {
         // Parse if it's in "artist - song" format, otherwise return as songTitle only
         const parts = currentStreamTitle.split(" - ");
-        if (parts.length >= 2) {
-            return new Response(JSON.stringify({ artist: parts[0].trim(), songTitle: parts[1].trim() }), { status: 200, headers });
-        }
-        return new Response(JSON.stringify({ artist: undefined, songTitle: currentStreamTitle }), { status: 200, headers });
+        result = parts.length >= 2
+            ? { artist: parts[0].trim(), songTitle: parts[1].trim() }
+            : { artist: undefined, songTitle: currentStreamTitle };
+    } else {
+        const apiEndpoint = process.env.ICECAST_ENDPOINT;
+        result = apiEndpoint ? await fetchSourceTitle(apiEndpoint) : { artist: undefined, songTitle: undefined };
     }
 
-    const apiEndpoint = process.env.ICECAST_ENDPOINT;
-    if (!apiEndpoint) return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáma skladba" }), { status: 200, headers });
-    
-    const data = await fetchSourceTitle(apiEndpoint);
-    if (!data.artist && !data.songTitle) {
-        return new Response(JSON.stringify({ artist: undefined, songTitle: "Neznáma skladba" }), { status: 200, headers });
+    if (!result.artist && !result.songTitle) {
+        result = { ...result, artist: undefined, songTitle: DEFAULT_TITLE };
     }
-    return new Response(JSON.stringify(data), { status: 200, headers });
+
+    recordTrackChange(result);
+
+    return new Response(JSON.stringify({ ...result, history: trackHistory }), { status: 200, headers });
 }
 
 export const dynamic = "force-dynamic";
