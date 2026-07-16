@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { faChevronDown, faClockRotateLeft, faPause, faPlay, faSpinner, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faClockRotateLeft, faPause, faPlay, faSpinner, faVolumeHigh, faVolumeLow, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import classNames from "classnames";
 import { usePlayer } from "@/context/PlayerContext";
 import Image from "next/image";
@@ -45,29 +46,52 @@ function getTimeFromMs(ms: number): string {
    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
-const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: React.ChangeEvent<HTMLInputElement>) => void }> = ({ volume, handleVolumeChange }) => {
+// FontAwesome's free set only ships speaker icons with one wave (faVolumeLow) or
+// three waves (faVolumeHigh) - no two-wave variant. Built from FontAwesome's own
+// speaker + inner-wave + middle-wave path segments so it matches their style exactly.
+const faVolumeMedium: IconDefinition = {
+   prefix: "fas",
+   iconName: "volume-medium" as IconDefinition["iconName"],
+   icon: [
+      544,
+      512,
+      [],
+      "",
+      "M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM412.6 181.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5z",
+   ],
+};
+
+function getVolumeIcon(volume: number) {
+   if (volume === 0) return faVolumeXmark;
+   if (volume <= 0.33) return faVolumeLow;
+   if (volume <= 0.66) return faVolumeMedium;
+   return faVolumeHigh;
+}
+
+const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: React.ChangeEvent<HTMLInputElement>) => void; onToggleMute: () => void }> = ({ volume, handleVolumeChange, onToggleMute }) => {
+   const isMuted = volume === 0;
+
    return (
-      <div className="group relative inline-flex items-center">
+      <div className="group relative flex flex-row-reverse items-center h-10 w-10 hover:w-48 focus-within:w-48 rounded-full bg-[#d43c4a] text-white overflow-hidden transition-[width] duration-300 ease-in-out">
          <button
-            aria-label="Volume"
-            className="flex items-center justify-center w-10 h-10 cursor-pointer text-lg rounded-full bg-[#d43c4a] text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+            type="button"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            aria-pressed={isMuted}
+            onClick={onToggleMute}
+            className="flex items-center justify-center w-10 h-10 flex-shrink-0 text-lg cursor-pointer focus:outline-none"
          >
-            <FontAwesomeIcon icon={faVolumeHigh} />
+            <FontAwesomeIcon icon={getVolumeIcon(volume)} />
          </button>
-         <div className="absolute z-50 right-full pr-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-150">
-            <div className="px-3 py-2 rounded-full bg-[#d43c4a]">
-               <input
-                  aria-label="Volume slider"
-                  className="w-[150px] cursor-pointer"
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={handleVolumeChange}
-               />
-            </div>
-         </div>
+         <input
+            aria-label="Volume slider"
+            className="w-0 group-hover:w-[150px] group-focus-within:w-[150px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pl-2 cursor-pointer transition-all duration-300 ease-in-out"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+         />
       </div>
    );
 };
@@ -116,6 +140,7 @@ const Player: React.FC<{}> = () => {
    
    const [isVisible, setIsVisible] = useState(true);
    const [volume, setVolume] = useState(1);
+   const previousVolumeRef = useRef(1);
    const [streamTitle, setStreamTitle] = useState("Radio TLIS");
    const [streamArtist, setStreamArtist] = useState<string | undefined>("Radio TLIS");
    const [albumCover, setAlbumCover] = useState<string | null>(null);
@@ -237,6 +262,9 @@ const Player: React.FC<{}> = () => {
       if (audioRef.current) {
          audioRef.current.volume = volume;
       }
+      if (volume > 0) {
+         previousVolumeRef.current = volume;
+      }
    }, [volume, audioRef]);
 
    useEffect(() => {
@@ -329,6 +357,10 @@ const Player: React.FC<{}> = () => {
 
    const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setVolume(Number(event.target.value));
+   };
+
+   const toggleMute = () => {
+      setVolume((current) => (current > 0 ? 0 : previousVolumeRef.current || 1));
    };
 
    const seekBy = (delta: number) => {
@@ -468,7 +500,7 @@ const Player: React.FC<{}> = () => {
                </div>
                <div className="flex items-center gap-2 flex-shrink-0">
                   <div className='hidden lg:block'>
-                     <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
+                     <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} onToggleMute={toggleMute} />
                   </div>
                   <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
                   { mode === "archive" &&
