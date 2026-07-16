@@ -429,7 +429,7 @@ const Player: React.FC<{}> = () => {
                animate={{ height: isQueueOpen ? "auto" : 0, opacity: isQueueOpen ? 1 : 0 }}
                transition={{ duration: 0.3, ease: "easeInOut" }}
                className={classNames(
-                  "absolute bottom-full inset-x-0 bg-[#2e2b2c] shadow-2xl rounded-t-2xl overflow-hidden",
+                  "absolute bottom-full inset-x-0 bg-[#2e2b2c] shadow-2xl rounded-t-md overflow-hidden",
                   { "border-t border-white/10": isQueueOpen }
                )}
                style={{ pointerEvents: isQueueOpen ? "auto" : "none" }}
