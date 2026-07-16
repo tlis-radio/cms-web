@@ -151,7 +151,7 @@ function ProgramCarousel({
   return (
     <div className="relative w-full py-2">
       <div className="relative flex items-center justify-center">
-        <div className="relative w-full max-w-7xl mx-auto px-4 overflow-hidden">
+        <div className="relative w-full max-w-7xl mx-auto px-4">
           <motion.div
             className="relative h-[350px] sm:h-[400px] flex items-center justify-center cursor-grab active:cursor-grabbing"
             drag="x"
@@ -192,7 +192,7 @@ function ProgramCarousel({
                         <img
                           src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.Cover}`}
                           alt={slide.Title}
-                          className="w-full h-auto object-cover select-none"
+                          className="w-full h-auto object-cover select-none aspect-square"
                           draggable="false"
                         />
                       </motion.div>
