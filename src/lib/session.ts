@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const SESSION_COOKIE_NAME = "tlis_session_id";
 const SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+const CONSENT_COOKIE_NAME = "tlis_cookie_consent";
 
 /**
  * Gets or creates a session ID from cookies.
@@ -43,4 +44,13 @@ export function setSessionCookie(
  */
 export function getSessionId(request: NextRequest): string | null {
   return request.cookies.get(SESSION_COOKIE_NAME)?.value ?? null;
+}
+
+/**
+ * Whether the request comes from a visitor who rejected (or never answered)
+ * the cookie consent banner.
+ */
+export function isAnonymousRequest(request: NextRequest): boolean {
+  const consent = request.cookies.get(CONSENT_COOKIE_NAME)?.value;
+  return consent === "rejected" || !consent;
 }
