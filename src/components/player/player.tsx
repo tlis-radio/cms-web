@@ -266,10 +266,21 @@ const Player: React.FC<{}> = () => {
    }, [isQueueOpen]);
 
    useEffect(() => {
+      const node = playerWrapper.current;
       window.addEventListener("resize", shiftBody);
       shiftBody();
-      return () => window.removeEventListener("resize", shiftBody);
-   }, [isVisible]);
+
+      if (!node || typeof ResizeObserver === "undefined") {
+         return () => window.removeEventListener("resize", shiftBody);
+      }
+
+      const observer = new ResizeObserver(() => shiftBody());
+      observer.observe(node);
+      return () => {
+         window.removeEventListener("resize", shiftBody);
+         observer.disconnect();
+      };
+   }, [isVisible, isClient]);
 
    useEffect(() => {
       if (audioRef.current) {
