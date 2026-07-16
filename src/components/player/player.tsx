@@ -417,8 +417,8 @@ const Player: React.FC<{}> = () => {
 
    const title = mode === "archive" ? archiveName : streamTitle;
    const subtitle = mode === "archive" 
-      ? archiveShowName || "Rádio TLIS"
-      : streamArtist || "Rádio TLIS";
+      ? archiveShowName || "Radio TLIS"
+      : streamArtist || "Radio TLIS";
 
    return (
       <>
