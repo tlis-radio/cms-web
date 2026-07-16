@@ -11,6 +11,7 @@ import ProgressBar from "./progress-bar";
 import Marquee from "./marquee";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { UmamiTrack } from '../Analytics';
 
 const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void, extraOffset: number }> = ({ isVisible, onClick, extraOffset }) => {
    const buttonStyle = {
@@ -531,7 +532,10 @@ const Player: React.FC<{}> = () => {
                   </button> }
                   <button
                      className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a]/90 hover:bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-                     onClick={() => setIsPlaying(!isPlaying)}
+                     onClick={() =>{
+                        UmamiTrack("Play/Pause", { isPlaying: !isPlaying, mode: mode, title: title, subtitle: subtitle });                        
+                        setIsPlaying(!isPlaying)
+                     }}
                      aria-label={isPlaying ? "Pause" : "Play"}
                      type="button"
                   >
