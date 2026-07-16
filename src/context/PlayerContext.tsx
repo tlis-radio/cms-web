@@ -177,7 +177,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   function handleAudioTimeUpdate() {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
-      if (countedView === false && mode === "archive" && episodeId !== null && audioRef.current.duration > 0 && audioRef.current.currentTime >= 300) {
+      if (countedView === false && mode === "archive" && episodeId !== null && audioRef.current.duration > 0 && audioRef.current.currentTime >= Math.min(300, audioRef.current.duration * 0.33)) {
         setCountedView(true);
         fetch(`/api/view/${episodeId}`, {
           method: "POST",
