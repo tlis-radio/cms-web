@@ -1,13 +1,30 @@
 'use client';
 
 import 'flag-icons/css/flag-icons.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl'; // 1. Import useTranslationsimport { UmamiTrack } from "@/components/Analytics";
 import { UmamiTrack } from './Analytics';
+
+// Material Icons "translate" glyph - not part of FontAwesome's free set. Rendered
+// as a plain SVG (rather than through FontAwesomeIcon) so a stroke can be added
+// on top of the fill, bulking up the linework to match FontAwesome's bolder,
+// rounder solid-icon style used by the rest of the header.
+const TranslateIcon = ({ className }: { className?: string }) => (
+   <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth="0.75"
+      strokeLinejoin="round"
+      strokeLinecap="round"
+   >
+      <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" />
+   </svg>
+);
+
 const TranslateWidget = () => {
    const t = useTranslations('navbar'); // 2. Initialize translations (using 'navbar' namespace based on your JSON files)
    const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +81,7 @@ const TranslateWidget = () => {
             className="flex h-8 w-8 items-center justify-center border-2 rounded-3xl hover:text-[#96120F] hover:bg-white transition-all shadow-sm focus:outline-none"
             aria-label="Change language"
          >
-            <FontAwesomeIcon className="text-xl" icon={faGlobe} />
+            <TranslateIcon className="w-[18px] h-[18px]" />
          </button>
 
          {isOpen && (
