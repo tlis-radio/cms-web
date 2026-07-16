@@ -32,6 +32,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <div className="fixed inset-0 bg-acoustic-foam bg-fixed -z-10" />
       {/* 1. inter.variable - vytvorí prepojenie na Tailwind
           2. font-sans - nastaví Inter ako základný font pre tento div a všetko v ňom
           3. antialiased - dôležité pre Windows/Chrome, aby font nebol príliš hrubý
