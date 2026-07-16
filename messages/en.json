@@ -24,7 +24,9 @@
     "volume": "Volume",
     "volume_slider": "Volume control",
     "loading": "Loading...",
-    "archive_label": "Archive"
+    "archive_label": "Archive",
+    "recently_played": "Recently played",
+    "recently_played_empty": "Nothing played yet"
   },
   "breadcrumbs": {
     "home": "Home"

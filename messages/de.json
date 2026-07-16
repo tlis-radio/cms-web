@@ -24,7 +24,9 @@
     "volume": "Lautstärke",
     "volume_slider": "Lautstärkeregler",
     "loading": "Wird geladen...",
-    "archive_label": "Archiv"
+    "archive_label": "Archiv",
+    "recently_played": "Zuletzt gespielt",
+    "recently_played_empty": "Bisher nichts gespielt"
   },
   "breadcrumbs": {
     "home": "Startseite"

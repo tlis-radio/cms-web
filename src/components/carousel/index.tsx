@@ -17,6 +17,14 @@ function ProgramCarousel({
   const locale = useLocale(); // Hook for date formatting
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.innerWidth < 640);
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
+    return () => window.removeEventListener("resize", updateIsMobile);
+  }, []);
 
   const getNextEventIndex = () => {
     const now = new Date();
@@ -157,7 +165,6 @@ function ProgramCarousel({
                 const zIndex = slide.position === 0 ? 10 : 1;
                 const opacity = slide.position === 0 ? 1 : 0.4;
                 
-                const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
                 const baseOffset = isMobile ? 160 : 280;
                 const xOffset = slide.position === -1 ? -baseOffset : slide.position === 1 ? baseOffset : 0;
 

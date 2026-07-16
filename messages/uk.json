@@ -24,7 +24,9 @@
     "volume": "Гучність",
     "volume_slider": "Регулювання гучності",
     "loading": "Завантаження...",
-    "archive_label": "Архів"
+    "archive_label": "Архів",
+    "recently_played": "Нещодавно грало",
+    "recently_played_empty": "Поки що нічого не грало"
   },
   "breadcrumbs": {
     "home": "Головна"

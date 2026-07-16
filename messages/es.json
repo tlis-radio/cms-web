@@ -24,7 +24,9 @@
     "volume": "Volumen",
     "volume_slider": "Control de volumen",
     "loading": "Cargando...",
-    "archive_label": "Archivo"
+    "archive_label": "Archivo",
+    "recently_played": "Reproducido recientemente",
+    "recently_played_empty": "Aún no ha sonado nada"
   },
   "breadcrumbs": {
     "home": "Inicio"
