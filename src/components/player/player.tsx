@@ -151,19 +151,10 @@ const Player: React.FC<{}> = () => {
 
    const fetchAlbumArt = async (artist: string, title: string) => {
       try {
-         const query = encodeURIComponent(`${artist} ${title}`);
-         const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=5`);
+         const params = new URLSearchParams({ artist, title });
+         const response = await fetch(`/api/album-art?${params.toString()}`);
          const result = await response.json();
-         if (result.results && result.results.length > 0) {
-            const bestMatch = result.results.find((item: any) => 
-               item.artistName.toLowerCase().includes(artist.toLowerCase()) ||
-               artist.toLowerCase().includes(item.artistName.toLowerCase())
-            ) || result.results[0];
-            const artwork = bestMatch.artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg');
-            setAlbumCover(artwork);
-         } else {
-            setAlbumCover(null);
-         }
+         setAlbumCover(result.artworkUrl || null);
       } catch (err) {
          setAlbumCover(null);
       }

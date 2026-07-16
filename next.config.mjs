@@ -22,7 +22,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'is1-ssl.mzstatic.com',
+                hostname: 'cdn-images.dzcdn.net',
             },
         ],
     },
