@@ -1,6 +1,5 @@
 'use client';
 
-import { AuthGuard } from '@/lib/dashboard/auth-guard';
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
 import { DashboardService } from '@/lib/dashboard/dashboard-service';
 import { useEffect, useState } from 'react';
@@ -8,7 +7,8 @@ import Link from 'next/link';
 import { Show } from '@/models/show';
 import { Episode } from '@/models/episode';
 import { useParams, useRouter } from 'next/navigation';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import FilterBar from '@/components/dashboard/FilterBar';
+import CoverThumb from '@/components/dashboard/CoverThumb';
 
 type EpisodeWithViews = Episode & { viewCount: number };
 type SortBy = 'date' | 'views';
@@ -29,7 +29,7 @@ export default function DashboardShowDetailPage() {
       if (!directusClient || !slug) return;
 
       const service = new DashboardService(directusClient);
-      
+
       service.getShowBySlug(slug).then(async (showData) => {
          if (!showData) {
             router.push('/404');
@@ -37,13 +37,12 @@ export default function DashboardShowDetailPage() {
          }
          setShow(showData);
          const episodesData = await service.getShowEpisodes(showData.id);
-         
-         // Use Views field from episode directly
+
          const episodesWithViews = episodesData.map((episode) => ({
             ...episode,
             viewCount: episode.Views || 0,
          }));
-         
+
          setEpisodes(episodesWithViews);
          setIsLoading(false);
       });
@@ -80,145 +79,120 @@ export default function DashboardShowDetailPage() {
    };
 
    return (
-      <AuthGuard>
-         <div className="min-h-screen bg-gray-900 p-8">
-            <div className="max-w-7xl mx-auto">
-               <DashboardHeader>
-                  <Link
-                     href="/dashboard/shows"
-                     className="text-red-400 hover:text-red-300 transition"
-                  >
-                     ← Back to Shows
-                  </Link>
-               </DashboardHeader>
+      <div className="max-w-7xl mx-auto">
+         <Link
+            href="/dashboard/shows"
+            className="text-red-400 hover:text-red-300 transition text-sm mb-4 inline-block"
+         >
+            ← Späť na relácie
+         </Link>
 
-               {isLoading ? (
-                  <div className="text-white text-center">Loading...</div>
-               ) : show ? (
-                  <>
-                     <div className="bg-gray-800 rounded-lg p-6 mb-8">
-                        <div className="flex gap-6">
-                           {show.Cover && (
-                              <div className="w-48 h-48 bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
-                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${show.Cover}`}
-                                    alt={show.Title}
-                                    className="w-full h-full object-cover"
-                                 />
+         {isLoading ? (
+            <div className="text-white text-center text-sm">Načítavam...</div>
+         ) : show ? (
+            <>
+               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+                  <div className="flex gap-4">
+                     <CoverThumb assetId={show.Cover} alt={show.Title} className="w-32 h-32 rounded-lg" />
+                     <div className="flex-1">
+                        <h1 className="text-xl font-bold text-white mb-2">
+                           {show.Title}
+                        </h1>
+                        {show.Description && (
+                           <p className="text-gray-300 text-sm mb-2 line-clamp-3">{show.Description}</p>
+                        )}
+                        {show.Cast && show.Cast.length > 0 && (
+                           <div className="text-gray-400 text-xs">
+                              <strong>Obsadenie:</strong>{' '}
+                              {show.Cast.map((c) => c.Cast_id.Name).join(', ')}
+                           </div>
+                        )}
+                        <div className="text-gray-400 text-xs mt-1">
+                           {episodes.length} epizód
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <FilterBar title="Epizódy">
+                  <button
+                     onClick={() => toggleSort('date')}
+                     className={`px-3 py-1.5 text-xs rounded transition ${
+                        sortBy === 'date'
+                           ? 'bg-red-600 text-white'
+                           : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                     }`}
+                  >
+                     Dátum {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button
+                     onClick={() => toggleSort('views')}
+                     className={`px-3 py-1.5 text-xs rounded transition ${
+                        sortBy === 'views'
+                           ? 'bg-red-600 text-white'
+                           : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                     }`}
+                  >
+                     Vypočutia {sortBy === 'views' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+               </FilterBar>
+
+               <div className="space-y-2">
+                  {getSortedEpisodes().map((episode) => (
+                     <Link
+                        key={episode.id}
+                        href={`/dashboard/shows/${slug}/${episode.id}`}
+                        className="block bg-gray-800 rounded-lg p-3 hover:bg-gray-700 transition"
+                     >
+                        <div className="flex gap-3 items-center">
+                           <CoverThumb assetId={episode.Cover} alt={episode.Title} size="md" />
+                           <div className="flex-1 min-w-0">
+                              <h3 className="text-sm font-medium text-white truncate">
+                                 {episode.Title}
+                              </h3>
+                              <div className="flex items-center gap-3">
+                                 <div className="text-gray-400 text-xs">
+                                    {formatDate(episode.Date)}
+                                 </div>
+                                 <div className="text-red-400 text-xs font-semibold">
+                                    {episode.viewCount} vypočutí
+                                 </div>
                               </div>
-                           )}
-                           <div className="flex-1">
-                              <h1 className="text-4xl font-bold text-white mb-4">
-                                 {show.Title}
-                              </h1>
-                              {show.Description && (
-                                 <p className="text-gray-300 mb-4">{show.Description}</p>
-                              )}
-                              {show.Cast && show.Cast.length > 0 && (
-                                 <div className="text-gray-400">
-                                    <strong>Cast:</strong>{' '}
-                                    {show.Cast.map((c) => c.Cast_id.Name).join(', ')}
+                              {episode.Tags && episode.Tags.length > 0 && (
+                                 <div className="flex gap-1.5 mt-1">
+                                    {episode.Tags.map((tagRelation) => (
+                                       <span
+                                          key={tagRelation.Tags_id.id}
+                                          className="px-1.5 py-0.5 text-[10px] rounded"
+                                          style={{
+                                             backgroundColor: tagRelation.Tags_id.Color || '#666',
+                                          }}
+                                       >
+                                          {tagRelation.Tags_id.Title}
+                                       </span>
+                                    ))}
                                  </div>
                               )}
-                              <div className="text-gray-400 mt-2">
-                                 {episodes.length} episodes
-                              </div>
+                           </div>
+                           <div className="text-red-400 text-xs flex-shrink-0">
+                              Analytika →
                            </div>
                         </div>
-                     </div>
+                     </Link>
+                  ))}
+               </div>
 
-                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-white">Episodes</h2>
-                        <div className="flex gap-2">
-                           <button
-                              onClick={() => toggleSort('date')}
-                              className={`px-4 py-2 rounded transition ${
-                                 sortBy === 'date' 
-                                    ? 'bg-red-600 text-white' 
-                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                              }`}
-                           >
-                              Date {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
-                           </button>
-                           <button
-                              onClick={() => toggleSort('views')}
-                              className={`px-4 py-2 rounded transition ${
-                                 sortBy === 'views' 
-                                    ? 'bg-red-600 text-white' 
-                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                              }`}
-                           >
-                              Views {sortBy === 'views' && (sortOrder === 'asc' ? '↑' : '↓')}
-                           </button>
-                        </div>
-                     </div>
-
-                     <div className="space-y-4">
-                        {getSortedEpisodes().map((episode) => (
-                           <Link
-                              key={episode.id}
-                              href={`/dashboard/shows/${slug}/${episode.id}`}
-                              className="block bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition"
-                           >
-                              <div className="flex gap-4">
-                                 {episode.Cover && (
-                                    <div className="w-20 h-20 bg-gray-700 rounded overflow-hidden flex-shrink-0">
-                                       <img
-                                          src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Cover}`}
-                                          alt={episode.Title}
-                                          className="w-full h-full object-cover"
-                                       />
-                                    </div>
-                                 )}
-                                 <div className="flex-1">
-                                    <h3 className="text-xl font-semibold text-white mb-2">
-                                       {episode.Title}
-                                    </h3>
-                                    <div className="flex items-center gap-4">
-                                       <div className="text-gray-400 text-sm">
-                                          {formatDate(episode.Date)}
-                                       </div>
-                                       <div className="text-red-400 text-sm font-semibold">
-                                          {episode.viewCount} views
-                                       </div>
-                                    </div>
-                                    {episode.Tags && episode.Tags.length > 0 && (
-                                       <div className="flex gap-2 mt-2">
-                                          {episode.Tags.map((tagRelation) => (
-                                             <span
-                                                key={tagRelation.Tags_id.id}
-                                                className="px-2 py-1 text-xs rounded"
-                                                style={{
-                                                   backgroundColor: tagRelation.Tags_id.Color || '#666',
-                                                }}
-                                             >
-                                                {tagRelation.Tags_id.Title}
-                                             </span>
-                                          ))}
-                                       </div>
-                                    )}
-                                 </div>
-                                 <div className="text-red-400 self-center">
-                                    View Analytics →
-                                 </div>
-                              </div>
-                           </Link>
-                        ))}
-                     </div>
-
-                     {episodes.length === 0 && (
-                        <div className="text-center text-gray-400 mt-12">
-                           No episodes found for this show.
-                        </div>
-                     )}
-                  </>
-               ) : (
-                  <div className="text-center text-gray-400 mt-12">
-                     Show not found.
+               {episodes.length === 0 && (
+                  <div className="text-center text-gray-400 mt-12 text-sm">
+                     Pre túto reláciu neboli nájdené žiadne epizódy.
                   </div>
                )}
+            </>
+         ) : (
+            <div className="text-center text-gray-400 mt-12 text-sm">
+               Relácia nebola nájdená.
             </div>
-         </div>
-      </AuthGuard>
+         )}
+      </div>
    );
 }

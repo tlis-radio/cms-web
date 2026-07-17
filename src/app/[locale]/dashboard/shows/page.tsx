@@ -1,13 +1,13 @@
 'use client';
 
-import { AuthGuard } from '@/lib/dashboard/auth-guard';
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
 import { DashboardService } from '@/lib/dashboard/dashboard-service';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Show } from '@/models/show';
 import Select from '@/components/primitives/Select';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import FilterBar from '@/components/dashboard/FilterBar';
+import CoverThumb from '@/components/dashboard/CoverThumb';
 
 type FilterProps = 'active' | 'archived' | 'digital';
 
@@ -33,76 +33,50 @@ export default function DashboardShowsPage() {
    const filteredShows = shows.filter((show) => show.Filter === filter);
 
    return (
-      <AuthGuard>
-         <div className="min-h-screen bg-gray-900 p-8">
-            <div className="max-w-7xl mx-auto">
-               <DashboardHeader>
+      <div className="max-w-7xl mx-auto">
+         <FilterBar title="Relácie">
+            <Select
+               compact
+               options={[
+                  { value: 'active', label: 'Aktívne' },
+                  { value: 'archived', label: 'Archívne' },
+                  { value: 'digital', label: 'Starý archív' },
+               ]}
+               value={filter}
+               onChange={(val) => setFilter(val as FilterProps)}
+               className="bg-gray-800 text-white min-w-[140px]"
+            />
+         </FilterBar>
+
+         {isLoading ? (
+            <div className="text-white text-center text-sm">Načítavam relácie...</div>
+         ) : (
+            <div data-tour="list-density" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+               {filteredShows.map((show) => (
                   <Link
-                     href="/dashboard"
-                     className="text-red-400 hover:text-red-300 transition"
+                     key={show.id}
+                     href={`/dashboard/shows/${show.Slug}`}
+                     className="block bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition"
                   >
-                     ← Back to Dashboard
+                     <CoverThumb assetId={show.Cover} alt={show.Title} className="w-full aspect-square" />
+                     <div className="p-2">
+                        <h3 className="text-sm font-medium text-white line-clamp-1">
+                           {show.Title}
+                        </h3>
+                        <div className="mt-1 text-xs text-gray-500">
+                           {show.Episodes?.length || 0} epizód
+                        </div>
+                     </div>
                   </Link>
-                  <h1 className="text-4xl font-bold text-white">Shows</h1>
-               </DashboardHeader>
-
-               <div className="mb-6">
-                  <Select
-                     options={[
-                        { value: 'active', label: 'ACTIVE SHOWS' },
-                        { value: 'archived', label: 'ARCHIVED SHOWS' },
-                        { value: 'digital', label: 'OLD ARCHIVE' },
-                     ]}
-                     value={filter}
-                     onChange={(val) => setFilter(val as FilterProps)}
-                     className="bg-gray-800 text-white min-w-[180px]"
-                  />
-               </div>
-
-               {isLoading ? (
-                  <div className="text-white text-center">Loading shows...</div>
-               ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                     {filteredShows.map((show) => (
-                        <Link
-                           key={show.id}
-                           href={`/dashboard/shows/${show.Slug}`}
-                           className="block bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition"
-                        >
-                           {show.Cover && (
-                              <div className="aspect-square bg-gray-700">
-                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${show.Cover}`}
-                                    alt={show.Title}
-                                    className="w-full h-full object-cover"
-                                 />
-                              </div>
-                           )}
-                           <div className="p-4">
-                              <h3 className="text-xl font-semibold text-white mb-2">
-                                 {show.Title}
-                              </h3>
-                              {show.Description && (
-                                 <p className="text-gray-400 text-sm line-clamp-2">
-                                    {show.Description}
-                                 </p>
-                              )}
-                              <div className="mt-2 text-sm text-gray-500">
-                                 {show.Episodes?.length || 0} episodes
-                              </div>
-                           </div>
-                        </Link>
-                     ))}
-                  </div>
-               )}
-
-               {!isLoading && filteredShows.length === 0 && (
-                  <div className="text-center text-gray-400 mt-12">
-                     No shows found in this category.
-                  </div>
-               )}
+               ))}
             </div>
-         </div>
-      </AuthGuard>
+         )}
+
+         {!isLoading && filteredShows.length === 0 && (
+            <div className="text-center text-gray-400 mt-12 text-sm">
+               V tejto kategórii sa nenašli žiadne relácie.
+            </div>
+         )}
+      </div>
    );
 }

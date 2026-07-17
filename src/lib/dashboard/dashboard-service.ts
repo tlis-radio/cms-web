@@ -8,10 +8,24 @@ import {
    ListeningSessionStream,
    BaseListeningSession,
    EpisodeAnalytics,
-   ListenerSessionDisplay
+   ListenerSessionDisplay,
+   UserAggregate,
+   UserOverviewStats,
+   BounceClass,
+   EpisodesPerUserBucket,
+   CompletionBucket,
 } from '@/types/statistics';
 import { Show } from '@/models/show';
 import { Episode } from '@/models/episode';
+
+// A user counts as a "bounce" only if they were seen exactly once AND that
+// single session totalled under 5 minutes of actual listening.
+const BOUNCE_MAX_SESSIONS = 1;
+const BOUNCE_MAX_SECONDS = 300;
+// Fallback track duration (seconds) used when computing completion % in bulk
+// aggregates where per-episode audio duration isn't loaded - matches the same
+// approximation already used by getTopShowsByRetention/getTopShowsByStreamRetention.
+const FALLBACK_TRACK_DURATION = 3600;
 
 export class DashboardService {
    private client: RestClient<any>;
@@ -195,7 +209,7 @@ export class DashboardService {
             this.client.request<ListeningSession[]>(
                readItems('ListeningSessions', {
                   filter: { session_id: { _eq: sessionId } },
-                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments'],
+                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments', 'is_anonymous'],
                   sort: ['-date_created'],
                   limit: -1,
                })
@@ -203,7 +217,7 @@ export class DashboardService {
             this.client.request<ListeningSessionStream[]>(
                readItems('ListeningSessionsStream', {
                   filter: { session_id: { _eq: sessionId } },
-                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments'],
+                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments', 'is_anonymous'],
                   sort: ['-date_created'],
                   limit: -1,
                })
@@ -233,7 +247,7 @@ export class DashboardService {
             this.client.request<ListeningSession[]>(
                readItems('ListeningSessions', {
                   filter: { session_id: { _eq: sessionId } },
-                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments'],
+                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments', 'is_anonymous'],
                   sort: ['-date_created'],
                   limit: limit + 1,
                   offset: offset
@@ -242,7 +256,7 @@ export class DashboardService {
             this.client.request<ListeningSessionStream[]>(
                readItems('ListeningSessionsStream', {
                   filter: { session_id: { _eq: sessionId } },
-                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments'],
+                  fields: ['id', 'session_id', 'date_created', 'episode_id', 'segments', 'is_anonymous'],
                   sort: ['-date_created'],
                   limit: limit + 1,
                   offset: offset
@@ -263,6 +277,41 @@ export class DashboardService {
       } catch (error) {
          console.error('Error fetching user history:', error);
          return { sessions: [], hasMore: false };
+      }
+   }
+
+   // Cheap lookup for the earliest session date_created for a listener, used to
+   // label the user detail page without loading their full session history.
+   async getUserFirstSeen(sessionId: string): Promise<string | null> {
+      try {
+         const [sessions, streamSessions] = await Promise.all([
+            this.client.request<Array<{ date_created: string }>>(
+               readItems('ListeningSessions', {
+                  filter: { session_id: { _eq: sessionId } },
+                  fields: ['date_created'],
+                  sort: ['date_created'],
+                  limit: 1,
+               })
+            ),
+            this.client.request<Array<{ date_created: string }>>(
+               readItems('ListeningSessionsStream', {
+                  filter: { session_id: { _eq: sessionId } },
+                  fields: ['date_created'],
+                  sort: ['date_created'],
+                  limit: 1,
+               })
+            ),
+         ]);
+
+         const dates = [...(sessions || []), ...(streamSessions || [])]
+            .map((s) => s.date_created)
+            .filter(Boolean);
+
+         if (dates.length === 0) return null;
+         return dates.reduce((min, d) => (new Date(d) < new Date(min) ? d : min));
+      } catch (error) {
+         console.error('Error fetching user first seen:', error);
+         return null;
       }
    }
 
@@ -435,9 +484,9 @@ export class DashboardService {
             while(hasMore) {
                const chunk = await this.client.request<any[]>(
                    readItems(collection as any, {
-                       fields: collection === 'ListeningSessions' 
-                           ? ['id', 'session_id', 'segments', 'date_created', 'episode_id']
-                           : ['id', 'session_id', 'episode_id', 'segments', 'date_created'],
+                       fields: collection === 'ListeningSessions'
+                           ? ['id', 'session_id', 'segments', 'date_created', 'episode_id', 'is_anonymous']
+                           : ['id', 'session_id', 'episode_id', 'segments', 'date_created', 'is_anonymous'],
                        limit: CHUNK_SIZE,
                        page: page
                    })
@@ -688,6 +737,144 @@ export class DashboardService {
          .slice(0, 10);
    }
 
+   // Users overview: bounce-vs-returning split + episodes-per-user / completion
+   // distributions, computed entirely from the bulk-loaded session arrays
+   // (getAllDashboardDataWithProgress) - no additional network calls.
+   getUserOverviewStats(
+      data: { listeningSessions: ListeningSession[]; listeningSessionsStream: ListeningSessionStream[]; episodes: Episode[] },
+      filter?: { showId?: number; episodeId?: string }
+   ): UserOverviewStats {
+      let sessions: BaseListeningSession[] = [
+         ...data.listeningSessions.map((s) => ({ ...s, type: 'archive' as const })),
+         ...data.listeningSessionsStream.map((s) => ({ ...s, type: 'live' as const })),
+      ];
+
+      if (filter?.episodeId) {
+         sessions = sessions.filter((s) => String(s.episode_id) === String(filter.episodeId));
+      } else if (filter?.showId) {
+         const showEpisodeIds = new Set(
+            data.episodes
+               .filter((ep) => {
+                  const epShowId = (ep.Show_Id as any)?.id || ep.Show_Id;
+                  return epShowId && String(epShowId) === String(filter.showId);
+               })
+               .map((ep) => String(ep.id))
+         );
+         sessions = sessions.filter((s) => s.episode_id && showEpisodeIds.has(String(s.episode_id)));
+      }
+
+      const groups = new Map<string, BaseListeningSession[]>();
+      sessions.forEach((s) => {
+         const arr = groups.get(s.session_id) || [];
+         arr.push(s);
+         groups.set(s.session_id, arr);
+      });
+
+      const users: UserAggregate[] = [];
+      groups.forEach((rows, sessionId) => {
+         let firstSeen = rows[0].date_created;
+         let lastSeen = rows[0].date_created;
+         let totalListenedSeconds = 0;
+         let totalProgress = 0;
+         let isAnonymous = false;
+         const episodeIds = new Set<string>();
+         const episodeCounts = new Map<string, number>();
+
+         rows.forEach((row) => {
+            if (new Date(row.date_created) < new Date(firstSeen)) firstSeen = row.date_created;
+            if (new Date(row.date_created) > new Date(lastSeen)) lastSeen = row.date_created;
+            if (row.is_anonymous) isAnonymous = true;
+
+            const { duration, progress } = this.calculateListeningDuration(row.segments || [], FALLBACK_TRACK_DURATION);
+            totalListenedSeconds += duration;
+            totalProgress += progress;
+
+            const epId = row.episode_id || row.asset_id;
+            if (epId) {
+               episodeIds.add(String(epId));
+               episodeCounts.set(String(epId), (episodeCounts.get(String(epId)) || 0) + 1);
+            }
+         });
+
+         let favoriteEpisodeId: string | null = null;
+         let favoriteCount = 0;
+         episodeCounts.forEach((count, epId) => {
+            if (count > favoriteCount) {
+               favoriteCount = count;
+               favoriteEpisodeId = epId;
+            }
+         });
+
+         const sessionCount = rows.length;
+         const avgCompletionPct = sessionCount > 0 ? totalProgress / sessionCount : 0;
+         const bounceClass: BounceClass =
+            sessionCount <= BOUNCE_MAX_SESSIONS && totalListenedSeconds < BOUNCE_MAX_SECONDS ? 'bounce' : 'returning';
+
+         users.push({
+            sessionId,
+            firstSeen,
+            lastSeen,
+            sessionCount,
+            totalListenedSeconds,
+            episodeCount: episodeIds.size,
+            avgCompletionPct,
+            favoriteEpisodeId,
+            bounceClass,
+            isAnonymous,
+         });
+      });
+
+      const bounceVsReturning = users.reduce(
+         (acc, u) => {
+            acc[u.bounceClass]++;
+            return acc;
+         },
+         { bounce: 0, returning: 0 }
+      );
+
+      const bounceAnonymity = users.reduce(
+         (acc, u) => {
+            if (u.bounceClass !== 'bounce') return acc;
+            acc[u.isAnonymous ? 'anonymous' : 'known']++;
+            return acc;
+         },
+         { anonymous: 0, known: 0 }
+      );
+
+      const episodeBucketOrder: EpisodesPerUserBucket[] = ['1', '2-3', '4-10', '11-25', '25+'];
+      const episodeBucketCounts = new Map<EpisodesPerUserBucket, number>(episodeBucketOrder.map((b) => [b, 0]));
+      users.forEach((u) => {
+         let bucket: EpisodesPerUserBucket;
+         if (u.episodeCount <= 1) bucket = '1';
+         else if (u.episodeCount <= 3) bucket = '2-3';
+         else if (u.episodeCount <= 10) bucket = '4-10';
+         else if (u.episodeCount <= 25) bucket = '11-25';
+         else bucket = '25+';
+         episodeBucketCounts.set(bucket, (episodeBucketCounts.get(bucket) || 0) + 1);
+      });
+
+      const completionBucketOrder: CompletionBucket[] = ['0-20%', '20-40%', '40-60%', '60-80%', '80-100%'];
+      const completionBucketCounts = new Map<CompletionBucket, number>(completionBucketOrder.map((b) => [b, 0]));
+      users.forEach((u) => {
+         let bucket: CompletionBucket;
+         const pct = Math.min(u.avgCompletionPct, 100);
+         if (pct < 20) bucket = '0-20%';
+         else if (pct < 40) bucket = '20-40%';
+         else if (pct < 60) bucket = '40-60%';
+         else if (pct < 80) bucket = '60-80%';
+         else bucket = '80-100%';
+         completionBucketCounts.set(bucket, (completionBucketCounts.get(bucket) || 0) + 1);
+      });
+
+      return {
+         users,
+         bounceVsReturning,
+         bounceAnonymity,
+         episodesPerUserHistogram: episodeBucketOrder.map((bucket) => ({ bucket, count: episodeBucketCounts.get(bucket) || 0 })),
+         completionDistribution: completionBucketOrder.map((bucket) => ({ bucket, count: completionBucketCounts.get(bucket) || 0 })),
+      };
+   }
+
    private getCutoffDate(timeFilter: string): Date | null {
       const now = new Date();
       switch (timeFilter) {
@@ -841,12 +1028,12 @@ export class DashboardService {
    }
 
    // Get all track shares
-   async getAllTrackShares(): Promise<Array<{ id: number; episode: { id: number; title: string }; name: string; date_created: string }>> {
+   async getAllTrackShares(): Promise<Array<{ id: number; episode: { id: number; title: string; Cover?: string }; name: string; date_created: string }>> {
       try {
-         const shares = await this.client.request<Array<{ id: number; episode: { id: number; title: string }; name: string; date_created: string }>>(
+         const shares = await this.client.request<Array<{ id: number; episode: { id: number; title: string; Cover?: string }; name: string; date_created: string }>>(
             readItems('track_shares', {
                sort: ['-date_created'],
-               fields: ['id', 'episode.Title', 'episode.id', 'name', 'date_created'],
+               fields: ['id', 'episode.Title', 'episode.id', 'episode.Cover', 'name', 'date_created'],
                limit: -1,
             })
          );
@@ -871,5 +1058,162 @@ export class DashboardService {
          console.error('Error fetching stream listeners:', error);
          return [];
       }
+   }
+
+   async getEpisodeStreamStats(): Promise<{
+      episodes: Episode[];
+      sessions: Array<{ episode_id: string; session_id: string; date_created: string }>;
+      episodeShowSlugs: Map<string, string>;
+   }> {
+      try {
+         const [episodes, sessions, shows] = await Promise.all([
+            this.client.request<Episode[]>(
+               readItems('Episodes', {
+                  fields: ['id', 'Title', 'Cover', 'Date'],
+                  filter: { status: { _eq: 'published' } },
+                  sort: ['-Date'],
+                  limit: -1,
+               })
+            ),
+            this.client.request<Array<{ episode_id: string; session_id: string; date_created: string }>>(
+               readItems('ListeningSessionsStream', {
+                  fields: ['episode_id', 'session_id', 'date_created'],
+                  limit: -1,
+               })
+            ),
+            this.client.request<Array<{ id: number; Slug: string; Episodes: Array<{ Episodes_id: any }> }>>(
+               readItems('Shows', {
+                  fields: ['id', 'Slug', 'Episodes.Episodes_id'],
+                  limit: -1,
+               })
+            ),
+         ]);
+
+         const episodeShowSlugs = new Map<string, string>();
+         (shows || []).forEach((show) => {
+            (show.Episodes || []).forEach((e) => {
+               const epId = typeof e.Episodes_id === 'object' ? e.Episodes_id?.id : e.Episodes_id;
+               if (epId != null) episodeShowSlugs.set(String(epId), show.Slug);
+            });
+         });
+
+         const now = Date.now();
+         const pastEpisodes = (episodes || []).filter((ep) => !ep.Date || new Date(ep.Date).getTime() <= now);
+
+         return { episodes: pastEpisodes, sessions: sessions || [], episodeShowSlugs };
+      } catch (error) {
+         console.error('Error fetching episode stream stats:', error);
+         return { episodes: [], sessions: [], episodeShowSlugs: new Map() };
+      }
+   }
+
+   getStreamListenerInsights(
+      listeners: Array<{ id: number; count: number; date_created: string }>,
+      episodes: Episode[],
+      sessions: Array<{ episode_id: string; session_id: string; date_created: string }>,
+      episodeShowSlugs: Map<string, string> = new Map()
+   ): {
+      lastStream: {
+         start: string;
+         end: string;
+         peakListeners: number;
+         avgListeners: number;
+         uniqueListeners: number;
+         episode: Episode | null;
+         showSlug: string | null;
+      } | null;
+      topEpisodes: Array<{ episode: Episode; uniqueListeners: number; peakListeners: number; showSlug: string | null }>;
+      allTimePeak: { count: number; date: string } | null;
+   } {
+      const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000; // 2 hours
+      const STREAM_GAP_MS = 45 * 60 * 1000; // 45 min gap = separate stream
+
+      const showSlugFor = (episode: Episode | null): string | null =>
+         episode ? episodeShowSlugs.get(String(episode.id)) ?? null : null;
+
+      const uniqueListenersFor = (episodeId: string | number): number =>
+         new Set(sessions.filter((s) => String(s.episode_id) === String(episodeId)).map((s) => s.session_id)).size;
+
+      let allTimePeak: { count: number; date: string } | null = null;
+      listeners.forEach((l) => {
+         if (!allTimePeak || l.count > allTimePeak.count) {
+            allTimePeak = { count: l.count, date: l.date_created };
+         }
+      });
+
+      // Cluster samples chronologically into distinct streams
+      const sorted = [...listeners].sort(
+         (a, b) => new Date(a.date_created).getTime() - new Date(b.date_created).getTime()
+      );
+      const clusters: Array<typeof sorted> = [];
+      sorted.forEach((sample) => {
+         const last = clusters[clusters.length - 1];
+         const lastSample = last?.[last.length - 1];
+         if (
+            last &&
+            lastSample &&
+            new Date(sample.date_created).getTime() - new Date(lastSample.date_created).getTime() <= STREAM_GAP_MS
+         ) {
+            last.push(sample);
+         } else {
+            clusters.push([sample]);
+         }
+      });
+
+      let lastStream = null as ReturnType<DashboardService['getStreamListenerInsights']>['lastStream'];
+      const lastCluster = clusters[clusters.length - 1];
+      if (lastCluster && lastCluster.length > 0) {
+         const start = lastCluster[0].date_created;
+         const end = lastCluster[lastCluster.length - 1].date_created;
+         const peakListeners = Math.max(...lastCluster.map((s) => s.count));
+         const avgListeners = lastCluster.reduce((sum, s) => sum + s.count, 0) / lastCluster.length;
+         const startTime = new Date(start).getTime();
+
+         // Best-matching episode: most recent one scheduled at/just before the
+         // stream start (allowing a little slack for clock drift/late starts).
+         const SLACK_MS = 30 * 60 * 1000;
+         let episode: Episode | null = null;
+         let bestDiff = Infinity;
+         episodes.forEach((ep) => {
+            if (!ep.Date) return;
+            const epTime = new Date(ep.Date).getTime();
+            if (epTime > startTime + SLACK_MS) return;
+            if (epTime < startTime - LIVE_WINDOW_MS) return;
+            const diff = startTime - epTime;
+            if (diff < bestDiff) {
+               bestDiff = diff;
+               episode = ep;
+            }
+         });
+
+         lastStream = {
+            start,
+            end,
+            peakListeners,
+            avgListeners,
+            uniqueListeners: episode ? uniqueListenersFor((episode as Episode).id) : 0,
+            episode,
+            showSlug: showSlugFor(episode),
+         };
+      }
+
+      const topEpisodes = episodes
+         .filter((ep) => ep.Date)
+         .map((ep) => {
+            const epStart = new Date(ep.Date).getTime();
+            const epEnd = epStart + LIVE_WINDOW_MS;
+            const samplesInWindow = listeners.filter((l) => {
+               const t = new Date(l.date_created).getTime();
+               return t >= epStart && t <= epEnd;
+            });
+            const peakListeners = samplesInWindow.length > 0 ? Math.max(...samplesInWindow.map((s) => s.count)) : 0;
+            const uniqueListeners = uniqueListenersFor(ep.id);
+            return { episode: ep, uniqueListeners, peakListeners, showSlug: showSlugFor(ep) };
+         })
+         .filter((stat) => stat.uniqueListeners > 0 || stat.peakListeners > 0)
+         .sort((a, b) => b.uniqueListeners - a.uniqueListeners || b.peakListeners - a.peakListeners)
+         .slice(0, 5);
+
+      return { lastStream, topEpisodes, allTimePeak };
    }
 }

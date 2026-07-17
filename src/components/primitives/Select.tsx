@@ -11,9 +11,10 @@ type SelectProps = {
 	onChange: (value: string) => void;
 	placeholder?: string;
 	className?: string;
+	compact?: boolean;
 };
 
-const Select: React.FC<SelectProps> = ({ options, value, onChange, placeholder = "Select...", className }) => {
+const Select: React.FC<SelectProps> = ({ options, value, onChange, placeholder = "Select...", className, compact = false }) => {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -39,7 +40,8 @@ const Select: React.FC<SelectProps> = ({ options, value, onChange, placeholder =
 		   <div ref={ref} className={`relative select-none ${className || ""}`.trim()}>
 			   <div
 				   className={
-					   `cursor-pointer border border-white/30 rounded px-3 py-2 bg-[#18181b] flex items-center justify-between transition-colors duration-150 ` +
+					   `cursor-pointer border border-white/30 rounded bg-[#18181b] flex items-center justify-between transition-colors duration-150 ` +
+					   (compact ? "px-2 py-1 text-sm " : "px-3 py-2 ") +
 					   (open ? "ring-2 ring-[#d43c4a]" : "hover:border-[#d43c4a]")
 				   }
 				   onClick={() => setOpen((o) => !o)}
