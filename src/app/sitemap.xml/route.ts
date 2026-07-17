@@ -11,8 +11,8 @@ const STATIC_ROUTES: string[] = [
   '/program',
   '/relacie',
   '/tos',
-  '/dashboard',
-  '/embed'
+  // '/dashboard',
+  // '/embed'
 ];
 
 function buildSitemap(urls: string[], baseUrl: string): string {
