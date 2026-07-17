@@ -25,7 +25,7 @@ const ShowGrid: React.FC<ShowGridProps> = async ({ limit = 5 }) => {
       <div className="mb-12 py-16">
          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 px-4 md:px-8 pb-2">
             <h2 className="text-4xl text-white font-semibold pb-0">
-               <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> 
+               <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span>
                {tNav('archive_label')}
             </h2>
             <Link

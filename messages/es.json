@@ -24,7 +24,7 @@
     "volume": "Volumen",
     "volume_slider": "Control de volumen",
     "loading": "Cargando...",
-    "archive_label": "Archivo",
+    "archive_label": " programas",
     "recently_played": "Reproducido recientemente",
     "recently_played_empty": "Aún no ha sonado nada"
   },
@@ -72,7 +72,7 @@
     "viewAll": "VER TODO"
   },
   "MembersPage": {
-    "title": "miembros",
+    "title": " miembros",
     "metaTitle": "Miembros",
     "metaDescription": "Lista de miembros de Radio TLIS: locutores, redactores y el equipo que crea el contenido de la radio."
   },
@@ -244,7 +244,7 @@
     "metaDescription": "Sobre Radio TLIS: quiénes somos, qué transmitimos y por qué hacemos radio de manera diferente. Conozca a nuestro equipo y nuestra historia.",
     "metaDescriptionOg": "Sobre Radio TLIS: quiénes somos, qué transmitimos y por qué hacemos radio de manera diferente.",
     "breadcrumb_label": "Sobre la radio",
-    "heading": "quiénes somos",
+    "heading": " quiénes somos",
     "image_alt": "Formación de miembros de Radio TLIS",
     "p1": "Radio TLIS es la voz de la libertad estudiantil, la creatividad y las alternativas. Durante años, hemos brindado una transmisión de radio original centrada en la escena musical independiente, la cultura, el arte y la vida de los jóvenes. Gracias al valor de salir de lo convencional y la libertad de elegir temas y música, nos hemos convertido en un fenómeno único de la región de Bratislava.",
     "p2": "No transmitimos con fines de lucro ni bajo la batuta de grandes corporaciones: con nosotros, las ideas, el deseo de crear y la voz de los jóvenes deciden. Somos la única radio estudiantil en la región de Bratislava y, al mismo tiempo, la única en Eslovaquia que se dedica constantemente a los géneros alternativos.",

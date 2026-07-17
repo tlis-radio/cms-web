@@ -181,33 +181,41 @@ const Player: React.FC<{}> = () => {
    }, []);
 
    useEffect(() => {
-      let length = displayTitle.length;
-      let position = 0;
-      if (length < 24) {
+      const WINDOW = 24;
+      const PAUSE_MS = 3000;
+      const STEP_MS = 150;
+      const length = displayTitle.length;
+
+      if (length <= WINDOW) {
          setActiveDisplayTitle(displayTitle);
          return;
       }
-      let singleIteration: NodeJS.Timeout;
-      let waitTimeout: NodeJS.Timeout;
-      function startIteration() {
-         setActiveDisplayTitle(displayTitle);
-         waitTimeout = setTimeout(() => {
-            singleIteration = setInterval(() => {
-               setActiveDisplayTitle(displayTitle.substring(position, position + 24));
-               position += 3;
-               if (position > length - 24) {
-                  clearInterval(singleIteration);
-                  position = 0;
-                  startIteration();
-               }
-            }, 200);
-         }, 2000);
+
+      let position = 0;
+      let timeoutId: NodeJS.Timeout;
+
+      function showWindow() {
+         setActiveDisplayTitle(displayTitle.substring(position, position + WINDOW));
       }
-      startIteration();
-      return () => {
-         clearTimeout(waitTimeout);
-         clearInterval(singleIteration);
-      };
+
+      function pauseAtStart() {
+         position = 0;
+         showWindow();
+         timeoutId = setTimeout(scrollStep, PAUSE_MS);
+      }
+
+      function scrollStep() {
+         position += 1;
+         showWindow();
+         if (position >= length - WINDOW) {
+            timeoutId = setTimeout(pauseAtStart, PAUSE_MS);
+         } else {
+            timeoutId = setTimeout(scrollStep, STEP_MS);
+         }
+      }
+
+      pauseAtStart();
+      return () => clearTimeout(timeoutId);
    }, [displayTitle]);
 
    useEffect(() => {
@@ -255,6 +263,12 @@ const Player: React.FC<{}> = () => {
    const hasSeededHistoryRef = useRef(false);
 
    useEffect(() => {
+      if (mode === "archive") {
+         setIsQueueOpen(false);
+      }
+   }, [mode]);
+
+   useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
          if (playerWrapper.current && !playerWrapper.current.contains(event.target as Node)) {
             setIsQueueOpen(false);
@@ -267,10 +281,21 @@ const Player: React.FC<{}> = () => {
    }, [isQueueOpen]);
 
    useEffect(() => {
+      const node = playerWrapper.current;
       window.addEventListener("resize", shiftBody);
       shiftBody();
-      return () => window.removeEventListener("resize", shiftBody);
-   }, [isVisible]);
+
+      if (!node || typeof ResizeObserver === "undefined") {
+         return () => window.removeEventListener("resize", shiftBody);
+      }
+
+      const observer = new ResizeObserver(() => shiftBody());
+      observer.observe(node);
+      return () => {
+         window.removeEventListener("resize", shiftBody);
+         observer.disconnect();
+      };
+   }, [isVisible, isClient]);
 
    useEffect(() => {
       if (audioRef.current) {
@@ -285,7 +310,7 @@ const Player: React.FC<{}> = () => {
       const fetchTitle = async () => {
          if (mode === "archive") {
             if (archiveName) {
-               setDisplayTitle(`▶️ ${archiveName}`);
+               setDisplayTitle(archiveName);
             }
             return;
          }
@@ -418,8 +443,8 @@ const Player: React.FC<{}> = () => {
 
    const title = mode === "archive" ? archiveName : streamTitle;
    const subtitle = mode === "archive" 
-      ? archiveShowName || "Rádio TLIS"
-      : streamArtist || "Rádio TLIS";
+      ? archiveShowName || "Radio TLIS"
+      : streamArtist || "Radio TLIS";
 
    return (
       <>
@@ -430,7 +455,7 @@ const Player: React.FC<{}> = () => {
                animate={{ height: isQueueOpen ? "auto" : 0, opacity: isQueueOpen ? 1 : 0 }}
                transition={{ duration: 0.3, ease: "easeInOut" }}
                className={classNames(
-                  "absolute bottom-full inset-x-0 bg-[#2e2b2c] shadow-2xl rounded-t-2xl overflow-hidden",
+                  "absolute bottom-full inset-x-0 bg-[#2e2b2c] shadow-2xl rounded-t-md overflow-hidden",
                   { "border-t border-white/10": isQueueOpen }
                )}
                style={{ pointerEvents: isQueueOpen ? "auto" : "none" }}
@@ -516,7 +541,9 @@ const Player: React.FC<{}> = () => {
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} onToggleMute={toggleMute} />
                   </div>
-                  <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
+                  {mode === "stream" && (
+                     <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
+                  )}
                   { mode === "archive" &&
                   <button
                      aria-label="Back 15 seconds"
