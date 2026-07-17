@@ -47,10 +47,10 @@ export async function getNavbarLinks(): Promise<NavbarLinkType[]> {
          text: t('articles'),
          url: "/clanky",
       },
-      {
-         text: t('live'),
-         url: "/tlistv",
-      },
+      // {
+      //    text: t('live'),
+      //    url: "/tlistv",
+      // },
       {
          text: t('about_radio'),
          url: "/o-radiu",

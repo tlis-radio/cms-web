@@ -2,6 +2,7 @@ import Members from "@/components/MembersGrid";
 import { getTranslations } from 'next-intl/server';
 import { locales, toOgLocale } from "@/navigation";
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -33,9 +34,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function Clenovia({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations('MembersPage');
+    const b = await getTranslations({ locale, namespace: 'navbar' });
+
+    const breadcrumbs = [
+        { label: b('members'), href: `/o-radiu` }
+    ];
 
     return (
         <>
+            <div className="px-8 mb-4">
+                <Breadcrumbs items={breadcrumbs} />
+            </div>
             <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8">
                 <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> 
                 {t('title')}
