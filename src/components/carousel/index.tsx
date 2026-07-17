@@ -149,7 +149,7 @@ function ProgramCarousel({
   const visibleSlides = getVisibleSlides();
 
   return (
-    <div className="relative w-full py-2">
+    <div className="relative w-full py-2 overflow-hidden">
       <div className="relative flex items-center justify-center">
         <div className="relative w-full max-w-7xl mx-auto px-4">
           <motion.div
