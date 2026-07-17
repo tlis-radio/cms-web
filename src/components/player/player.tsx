@@ -181,33 +181,41 @@ const Player: React.FC<{}> = () => {
    }, []);
 
    useEffect(() => {
-      let length = displayTitle.length;
-      let position = 0;
-      if (length < 24) {
+      const WINDOW = 24;
+      const PAUSE_MS = 3000;
+      const STEP_MS = 150;
+      const length = displayTitle.length;
+
+      if (length <= WINDOW) {
          setActiveDisplayTitle(displayTitle);
          return;
       }
-      let singleIteration: NodeJS.Timeout;
-      let waitTimeout: NodeJS.Timeout;
-      function startIteration() {
-         setActiveDisplayTitle(displayTitle);
-         waitTimeout = setTimeout(() => {
-            singleIteration = setInterval(() => {
-               setActiveDisplayTitle(displayTitle.substring(position, position + 24));
-               position += 3;
-               if (position > length - 24) {
-                  clearInterval(singleIteration);
-                  position = 0;
-                  startIteration();
-               }
-            }, 200);
-         }, 2000);
+
+      let position = 0;
+      let timeoutId: NodeJS.Timeout;
+
+      function showWindow() {
+         setActiveDisplayTitle(displayTitle.substring(position, position + WINDOW));
       }
-      startIteration();
-      return () => {
-         clearTimeout(waitTimeout);
-         clearInterval(singleIteration);
-      };
+
+      function pauseAtStart() {
+         position = 0;
+         showWindow();
+         timeoutId = setTimeout(scrollStep, PAUSE_MS);
+      }
+
+      function scrollStep() {
+         position += 1;
+         showWindow();
+         if (position >= length - WINDOW) {
+            timeoutId = setTimeout(pauseAtStart, PAUSE_MS);
+         } else {
+            timeoutId = setTimeout(scrollStep, STEP_MS);
+         }
+      }
+
+      pauseAtStart();
+      return () => clearTimeout(timeoutId);
    }, [displayTitle]);
 
    useEffect(() => {
@@ -296,7 +304,7 @@ const Player: React.FC<{}> = () => {
       const fetchTitle = async () => {
          if (mode === "archive") {
             if (archiveName) {
-               setDisplayTitle(`▶️ ${archiveName}`);
+               setDisplayTitle(archiveName);
             }
             return;
          }
