@@ -263,6 +263,12 @@ const Player: React.FC<{}> = () => {
    const hasSeededHistoryRef = useRef(false);
 
    useEffect(() => {
+      if (mode === "archive") {
+         setIsQueueOpen(false);
+      }
+   }, [mode]);
+
+   useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
          if (playerWrapper.current && !playerWrapper.current.contains(event.target as Node)) {
             setIsQueueOpen(false);
@@ -535,7 +541,9 @@ const Player: React.FC<{}> = () => {
                   <div className='hidden lg:block'>
                      <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} onToggleMute={toggleMute} />
                   </div>
-                  <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
+                  {mode === "stream" && (
+                     <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
+                  )}
                   { mode === "archive" &&
                   <button
                      aria-label="Back 15 seconds"
