@@ -1,6 +1,5 @@
 'use client';
 
-import { AuthGuard } from '@/lib/dashboard/auth-guard';
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
 import { DashboardService } from '@/lib/dashboard/dashboard-service';
 import { useEffect, useState } from 'react';
@@ -9,14 +8,15 @@ import { Episode } from '@/models/episode';
 import { useParams, useRouter } from 'next/navigation';
 import { EpisodeAnalytics, ListenerSessionDisplay } from '@/types/statistics';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import StatCard from '@/components/dashboard/StatCard';
+import CoverThumb from '@/components/dashboard/CoverThumb';
 
 export default function EpisodeAnalyticsPage() {
    const params = useParams();
    const router = useRouter();
    const slug = params.slug as string;
    const episodeId = parseInt(params.episodeId as string);
-   
+
    const { directusClient } = useDashboardAuth();
    const [episode, setEpisode] = useState<Episode | null>(null);
    const [analytics, setAnalytics] = useState<EpisodeAnalytics | null>(null);
@@ -30,7 +30,7 @@ export default function EpisodeAnalyticsPage() {
       if (!directusClient || !episodeId) return;
 
       const service = new DashboardService(directusClient);
-      
+
       Promise.all([
          service.getEpisodeById(episodeId),
          service.getEpisodeAnalytics(episodeId),
@@ -58,13 +58,13 @@ export default function EpisodeAnalyticsPage() {
                ...archiveSessions,
                ...streamSessions,
             ];
-            
+
             const processedListeners = allSessions.map((session) => {
                const { duration, progress } = service.calculateListeningDuration(
                   session.segments || [],
                   trackDuration
                );
-               
+
                return {
                   id: session.id,
                   sessionId: session.session_id,
@@ -76,10 +76,10 @@ export default function EpisodeAnalyticsPage() {
             });
 
             // Sort by most recent first
-            processedListeners.sort((a, b) => 
+            processedListeners.sort((a, b) =>
                new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()
             );
-            
+
             setListeners(processedListeners);
 
             // Calculate retention data for graphs
@@ -87,7 +87,7 @@ export default function EpisodeAnalyticsPage() {
                analyticsData.listeningSessions,
                trackDuration
             );
-            
+
             // Format retention time to HH:MM:SS
             const formattedRetention = retention.map((item, index) => {
                const seconds = index * 15; // 15s segments
@@ -141,7 +141,7 @@ export default function EpisodeAnalyticsPage() {
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
       const secs = seconds % 60;
-      
+
       if (hours > 0) {
          return `${hours}h ${minutes}m ${secs}s`;
       } else if (minutes > 0) {
@@ -177,324 +177,255 @@ export default function EpisodeAnalyticsPage() {
          dataMap.set(key, entry);
       });
 
-      return Array.from(dataMap.values()).sort((a, b) => 
-         new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-      );
-   };
-
-   // Prepare data for second chart (listening sessions)
-   const getSessionsChartData = () => {
-      if (!analytics) return [];
-
-      const dataMap = new Map<string, { timestamp: string; sessions: number; streamSessions: number }>();
-
-      const aggregateByHour = (timestamp: string) => {
-         const date = new Date(timestamp);
-         date.setMinutes(0, 0, 0);
-         return date.toISOString();
-      };
-
-      analytics.listeningSessions.forEach((session) => {
-         const key = aggregateByHour(session.date_created);
-         const entry = dataMap.get(key) || { timestamp: key, sessions: 0, streamSessions: 0 };
-         entry.sessions++;
-         dataMap.set(key, entry);
-      });
-
-      analytics.listeningSessionsStream.forEach((session) => {
-         const key = aggregateByHour(session.date_created);
-         const entry = dataMap.get(key) || { timestamp: key, sessions: 0, streamSessions: 0 };
-         entry.streamSessions++;
-         dataMap.set(key, entry);
-      });
-
-      return Array.from(dataMap.values()).sort((a, b) => 
+      return Array.from(dataMap.values()).sort((a, b) =>
          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
       );
    };
 
    const engagementData = getEngagementChartData();
-   const sessionsData = getSessionsChartData();
 
    return (
-      <AuthGuard>
-         <div className="min-h-screen bg-gray-900 p-8">
-            <div className="max-w-7xl mx-auto">
-               <DashboardHeader>
-                  <Link
-                     href={`/dashboard/shows/${slug}`}
-                     className="text-red-400 hover:text-red-300 transition"
-                  >
-                     ← Back to Episodes
-                  </Link>
-               </DashboardHeader>
+      <div className="max-w-7xl mx-auto">
+         <Link
+            href={`/dashboard/shows/${slug}`}
+            className="text-red-400 hover:text-red-300 transition text-sm mb-4 inline-block"
+         >
+            ← Späť na epizódy
+         </Link>
 
-               {isLoading ? (
-                  <div className="text-white text-center">Loading analytics...</div>
-               ) : episode && analytics ? (
-                  <>
-                     <div className="bg-gray-800 rounded-lg p-6 mb-8">
-                        <div className="flex gap-4">
-                           {episode.Cover && (
-                              <div className="w-24 h-24 bg-gray-700 rounded overflow-hidden flex-shrink-0">
-                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Cover}`}
-                                    alt={episode.Title}
-                                    className="w-full h-full object-cover"
-                                 />
-                              </div>
-                           )}
-                           <div className="flex-1">
-                              <h1 className="text-3xl font-bold text-white mb-2">
-                                 {episode.Title}
-                              </h1>
-                              <div className="text-gray-400 mb-3">
-                                 {new Date(episode.Date).toLocaleDateString('sk-SK')}
-                              </div>
-                              {episode.Audio && (
-                                 <audio 
-                                    controls 
-                                    className="w-full"
-                                    preload="metadata"
-                                    onLoadedMetadata={(e) => {
-                                       const audio = e.target as HTMLAudioElement;
-                                       if (audio.duration && !isNaN(audio.duration)) {
-                                          setAudioDuration(Math.floor(audio.duration));
-                                       }
-                                    }}
-                                 >
-                                    <source 
-                                       src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio.id}`} 
-                                       type="audio/mpeg" 
-                                    />
-                                    Your browser does not support the audio element.
-                                 </audio>
-                              )}
-                           </div>
+         {isLoading ? (
+            <div className="text-white text-center text-sm">Načítavam analytiku...</div>
+         ) : episode && analytics ? (
+            <>
+               <div data-tour="episode-header" className="bg-gray-800 rounded-lg p-4 mb-4">
+                  <div className="flex gap-3">
+                     <CoverThumb assetId={episode.Cover} alt={episode.Title} size="lg" />
+                     <div className="flex-1">
+                        <h1 className="text-lg font-bold text-white mb-1">
+                           {episode.Title}
+                        </h1>
+                        <div className="text-gray-400 text-xs mb-2">
+                           {new Date(episode.Date).toLocaleDateString('sk-SK')}
                         </div>
-                     </div>
-
-                     {/* Summary Stats */}
-                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        <div className="bg-gray-800 rounded-lg p-4">
-                           <div className="text-gray-400 text-sm">Track Views</div>
-                           <div className="text-3xl font-bold text-blue-400">
-                              {analytics.trackViews.length}
-                           </div>
-                        </div>
-                        <div className="bg-gray-800 rounded-lg p-4">
-                           <div className="text-gray-400 text-sm">Shares</div>
-                           <div className="text-3xl font-bold text-purple-400">
-                              {analytics.trackShares.length}
-                           </div>
-                        </div>
-                        <div className="bg-gray-800 rounded-lg p-4">
-                           <div className="text-gray-400 text-sm">Sessions</div>
-                           <div className="text-3xl font-bold text-yellow-400">
-                              {analytics.listeningSessions.length}
-                           </div>
-                        </div>
-                        <div className="bg-gray-800 rounded-lg p-4">
-                           <div className="text-gray-400 text-sm">Stream Sessions</div>
-                           <div className="text-3xl font-bold text-orange-400">
-                              {analytics.listeningSessionsStream.length}
-                           </div>
-                        </div>
-                     </div>
-
-                     {/* First Chart: Views, Shares */}
-                     <div className="bg-gray-800 rounded-lg p-6 mb-8">
-                        <h2 className="text-2xl font-bold text-white mb-4">
-                           Engagement Over Time
-                        </h2>
-                        <ResponsiveContainer width="100%" height={300}>
-                           <LineChart data={engagementData}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                              <XAxis 
-                                 dataKey="timestamp" 
-                                 stroke="#9CA3AF"
-                                 tickFormatter={(value) => formatTimestamp(value)}
+                        {episode.Audio && (
+                           <audio
+                              controls
+                              className="w-full h-8"
+                              preload="metadata"
+                              onLoadedMetadata={(e) => {
+                                 const audio = e.target as HTMLAudioElement;
+                                 if (audio.duration && !isNaN(audio.duration)) {
+                                    setAudioDuration(Math.floor(audio.duration));
+                                 }
+                              }}
+                           >
+                              <source
+                                 src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio.id}`}
+                                 type="audio/mpeg"
                               />
-                              <YAxis stroke="#9CA3AF" />
-                              <Tooltip 
-                                 contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
-                                 labelStyle={{ color: '#fff' }}
-                                 labelFormatter={(value) => formatTimestamp(value)}
-                              />
-                              <Legend />
-                              {episode && (
-                                 <ReferenceLine
-                                    x={new Date(episode.Date).toISOString()}
-                                    stroke="#EF4444"
-                                    strokeWidth={2}
-                                    strokeDasharray="5 5"
-                                    label={{ value: 'Release', position: 'top', fill: '#EF4444' }}
-                                 />
-                              )}
-                              <Line 
-                                 type="monotone" 
-                                 dataKey="views" 
-                                 stroke="#3B82F6" 
-                                 name="Track Views"
-                                 strokeWidth={2}
-                              />
-                              <Line 
-                                 type="monotone" 
-                                 dataKey="shares" 
-                                 stroke="#A855F7" 
-                                 name="Shares"
-                                 strokeWidth={2}
-                              />
-                           </LineChart>
-                        </ResponsiveContainer>
-                     </div>
-
-                     {/* Second Chart: Retention Rate */}
-                     <div className="bg-gray-800 rounded-lg p-6 mb-8">
-                        <h2 className="text-2xl font-bold text-white mb-4">
-                           Listening Retention Rate
-                        </h2>
-                        <div className="text-gray-400 text-sm mb-4">
-                           Shows the percentage of listeners who reached each point in the audio
-                        </div>
-                        <ResponsiveContainer width="100%" height={300}>
-                           <LineChart data={retentionData}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                              <XAxis 
-                                 dataKey="time" 
-                                 stroke="#9CA3AF"
-                                 label={{ value: 'Time (HH:mm:ss)', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }}
-                              />
-                              <YAxis 
-                                 stroke="#9CA3AF"
-                                 label={{ value: 'Retention %', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }}
-                                 domain={[0, 100]}
-                              />
-                              <Tooltip 
-                                 contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
-                                 labelStyle={{ color: '#fff' }}
-                                 formatter={((value: any) => value !== undefined ? [`${value}%`, 'Retention'] : ['0%', 'Retention']) as any}
-                              />
-                              <Legend />
-                              <Line 
-                                 type="monotone" 
-                                 dataKey="retention" 
-                                 stroke="#F59E0B" 
-                                 name="Track Sessions Retention"
-                                 strokeWidth={2}
-                                 dot={false}
-                              />
-                           </LineChart>
-                        </ResponsiveContainer>
-                     </div>
-
-                     {/* Stream Retention Chart */}
-                     {streamRetentionData.length > 0 && (
-                        <div className="bg-gray-800 rounded-lg p-6 mb-8">
-                           <h2 className="text-2xl font-bold text-white mb-4">
-                              Stream Listening Retention Rate
-                           </h2>
-                           <div className="text-gray-400 text-sm mb-4">
-                              Shows the percentage of stream listeners who reached each point
-                           </div>
-                           <ResponsiveContainer width="100%" height={300}>
-                              <LineChart data={streamRetentionData}>
-                                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                                 <XAxis 
-                                    dataKey="time" 
-                                    stroke="#9CA3AF"
-                                    label={{ value: 'Time', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }}
-                                 />
-                                 <YAxis 
-                                    stroke="#9CA3AF"
-                                    label={{ value: 'Retention %', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }}
-                                    domain={[0, 100]}
-                                 />
-                                 <Tooltip 
-                                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
-                                    labelStyle={{ color: '#fff' }}
-                                    formatter={((value: any) => value !== undefined ? [`${value}%`, 'Retention'] : ['0%', 'Retention']) as any}
-                                 />
-                                 <Legend />
-                                 <Line 
-                                    type="monotone" 
-                                    dataKey="retention" 
-                                    stroke="#EF4444" 
-                                    name="Stream Sessions Retention"
-                                    strokeWidth={2}
-                                    dot={false}
-                                 />
-                              </LineChart>
-                           </ResponsiveContainer>
-                        </div>
-                     )}
-
-                     {/* Listeners List */}
-                     <div className="bg-gray-800 rounded-lg p-6">
-                        <h2 className="text-2xl font-bold text-white mb-4">
-                           Individual Listeners
-                        </h2>
-                        {listeners.length > 0 ? (
-                           <div className="space-y-2">
-                              {listeners.map((listener) => (
-                                 <Link
-                                    key={listener.id}
-                                    href={`/dashboard/users/${listener.sessionId}`}
-                                    className="block bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition"
-                                 >
-                                    <div className="flex flex-col gap-3">
-                                       <div className="flex justify-between items-center">
-                                          <div>
-                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className={`text-xs px-2 py-0.5 rounded border ${
-                                                   listener.type === 'Stream' 
-                                                      ? 'bg-red-900/30 text-red-200 border-red-800' 
-                                                      : 'bg-yellow-900/30 text-yellow-200 border-yellow-800'
-                                                }`}>
-                                                   {listener.type}
-                                                </span>
-                                                <span className="text-white font-medium font-mono">
-                                                   {listener.sessionId}
-                                                </span>
-                                             </div>
-                                             <div className="text-gray-400 text-sm">
-                                                Started: {formatTimestamp(listener.startedAt)}
-                                             </div>
-                                          </div>
-                                          <div className="text-right">
-                                             <div className="text-white font-semibold">
-                                                {formatDuration(listener.duration)}
-                                             </div>
-                                             <div className="text-gray-400 text-sm">
-                                                {listener.progress.toFixed(0)}% completed
-                                             </div>
-                                          </div>
-                                       </div>
-                                       
-                                       <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
-                                          <div 
-                                             className={`h-full ${listener.type === 'Stream' ? 'bg-red-500' : 'bg-yellow-500'}`}
-                                             style={{ width: `${listener.progress}%` }}
-                                          />
-                                       </div>
-                                    </div>
-                                 </Link>
-                              ))}
-                           </div>
-                        ) : (
-                           <div className="text-center text-gray-400 py-8">
-                              No listening sessions recorded yet.
-                           </div>
+                              Váš prehliadač nepodporuje prehrávanie zvuku.
+                           </audio>
                         )}
                      </div>
-                  </>
-               ) : (
-                  <div className="text-center text-gray-400 mt-12">
-                     Episode not found.
+                  </div>
+               </div>
+
+               {/* Summary Stats */}
+               <div data-tour="episode-stats" className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                  <StatCard label="Vypočutia" value={analytics.trackViews.length} accent="blue" />
+                  <StatCard label="Zdieľania" value={analytics.trackShares.length} accent="purple" />
+                  <StatCard label="Počet poslucháčov z archívu" value={analytics.listeningSessions.length} accent="yellow" />
+                  <StatCard label="Počet poslucháčov naživo" value={analytics.listeningSessionsStream.length} accent="orange" />
+               </div>
+
+               {/* First Chart: Views, Shares */}
+               <div data-tour="episode-engagement-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
+                  <h2 className="text-sm font-semibold text-white mb-3">
+                     Zapojenie v čase
+                  </h2>
+                  <ResponsiveContainer width="100%" height={260}>
+                     <LineChart data={engagementData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                        <XAxis
+                           dataKey="timestamp"
+                           stroke="#9CA3AF"
+                           tickFormatter={(value) => formatTimestamp(value)}
+                        />
+                        <YAxis stroke="#9CA3AF" />
+                        <Tooltip
+                           contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
+                           labelStyle={{ color: '#fff' }}
+                           labelFormatter={(value) => formatTimestamp(value)}
+                        />
+                        <Legend />
+                        {episode && (
+                           <ReferenceLine
+                              x={new Date(episode.Date).toISOString()}
+                              stroke="#EF4444"
+                              strokeWidth={2}
+                              strokeDasharray="5 5"
+                              label={{ value: 'Vydanie', position: 'top', fill: '#EF4444' }}
+                           />
+                        )}
+                        <Line
+                           type="monotone"
+                           dataKey="views"
+                           stroke="#3B82F6"
+                           name="Vypočutia"
+                           strokeWidth={2}
+                        />
+                        <Line
+                           type="monotone"
+                           dataKey="shares"
+                           stroke="#A855F7"
+                           name="Zdieľania"
+                           strokeWidth={2}
+                        />
+                     </LineChart>
+                  </ResponsiveContainer>
+               </div>
+
+               {/* Second Chart: Retention Rate */}
+               <div data-tour="episode-retention-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
+                  <h2 className="text-sm font-semibold text-white mb-1">
+                     Miera udržania poslucháčov
+                  </h2>
+                  <div className="text-gray-400 text-xs mb-3">
+                     Percento poslucháčov, ktorí sa dostali do daného bodu nahrávky
+                  </div>
+                  <ResponsiveContainer width="100%" height={260}>
+                     <LineChart data={retentionData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                        <XAxis
+                           dataKey="time"
+                           stroke="#9CA3AF"
+                           label={{ value: 'Čas (HH:mm:ss)', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }}
+                        />
+                        <YAxis
+                           stroke="#9CA3AF"
+                           label={{ value: 'Udržanie %', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }}
+                           domain={[0, 100]}
+                        />
+                        <Tooltip
+                           contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
+                           labelStyle={{ color: '#fff' }}
+                           formatter={((value: any) => value !== undefined ? [`${value}%`, 'Udržanie'] : ['0%', 'Udržanie']) as any}
+                        />
+                        <Legend />
+                        <Line
+                           type="monotone"
+                           dataKey="retention"
+                           stroke="#F59E0B"
+                           name="Udržanie (archív)"
+                           strokeWidth={2}
+                           dot={false}
+                        />
+                     </LineChart>
+                  </ResponsiveContainer>
+               </div>
+
+               {/* Stream Retention Chart */}
+               {streamRetentionData.length > 0 && (
+                  <div data-tour="episode-stream-retention-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
+                     <h2 className="text-sm font-semibold text-white mb-1">
+                        Miera udržania vysielania
+                     </h2>
+                     <div className="text-gray-400 text-xs mb-3">
+                        Percento poslucháčov vysielania, ktorí sa dostali do daného bodu
+                     </div>
+                     <ResponsiveContainer width="100%" height={260}>
+                        <LineChart data={streamRetentionData}>
+                           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                           <XAxis
+                              dataKey="time"
+                              stroke="#9CA3AF"
+                              label={{ value: 'Čas', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }}
+                           />
+                           <YAxis
+                              stroke="#9CA3AF"
+                              label={{ value: 'Udržanie %', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }}
+                              domain={[0, 100]}
+                           />
+                           <Tooltip
+                              contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
+                              labelStyle={{ color: '#fff' }}
+                              formatter={((value: any) => value !== undefined ? [`${value}%`, 'Udržanie'] : ['0%', 'Udržanie']) as any}
+                           />
+                           <Legend />
+                           <Line
+                              type="monotone"
+                              dataKey="retention"
+                              stroke="#EF4444"
+                              name="Udržanie (vysielanie)"
+                              strokeWidth={2}
+                              dot={false}
+                           />
+                        </LineChart>
+                     </ResponsiveContainer>
                   </div>
                )}
+
+               {/* Listeners List */}
+               <div data-tour="episode-listeners" className="bg-gray-800 rounded-lg p-4">
+                  <h2 className="text-sm font-semibold text-white mb-3">
+                     Jednotliví poslucháči
+                  </h2>
+                  {listeners.length > 0 ? (
+                     <div className="space-y-1.5">
+                        {listeners.map((listener) => (
+                           <Link
+                              key={listener.id}
+                              href={`/dashboard/users?session=${listener.sessionId}`}
+                              className="block bg-gray-700 rounded-lg p-2.5 hover:bg-gray-600 transition"
+                           >
+                              <div className="flex flex-col gap-2">
+                                 <div className="flex justify-between items-center">
+                                    <div>
+                                       <div className="flex items-center gap-2 mb-0.5">
+                                          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                                             listener.type === 'Stream'
+                                                ? 'bg-red-900/30 text-red-200 border-red-800'
+                                                : 'bg-yellow-900/30 text-yellow-200 border-yellow-800'
+                                          }`}>
+                                             {listener.type}
+                                          </span>
+                                          <span className="text-white text-xs font-medium">
+                                             Relácia z {formatTimestamp(listener.startedAt)}
+                                          </span>
+                                       </div>
+                                    </div>
+                                    <div className="text-right">
+                                       <div className="text-white text-xs font-semibold">
+                                          {formatDuration(listener.duration)}
+                                       </div>
+                                       <div className="text-gray-400 text-[10px]">
+                                          {listener.progress.toFixed(0)}% dopočuté
+                                       </div>
+                                    </div>
+                                 </div>
+
+                                 <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                                    <div
+                                       className={`h-full ${listener.type === 'Stream' ? 'bg-red-500' : 'bg-yellow-500'}`}
+                                       style={{ width: `${listener.progress}%` }}
+                                    />
+                                 </div>
+                              </div>
+                           </Link>
+                        ))}
+                     </div>
+                  ) : (
+                     <div className="text-center text-gray-400 py-6 text-xs">
+                        Zatiaľ neboli zaznamenané žiadne relácie počúvania.
+                     </div>
+                  )}
+               </div>
+            </>
+         ) : (
+            <div className="text-center text-gray-400 mt-12 text-sm">
+               Epizóda nebola nájdená.
             </div>
-         </div>
-      </AuthGuard>
+         )}
+      </div>
    );
 }

@@ -440,6 +440,11 @@ var articleEndpoints = {
             status: { _eq: 'published' },
             type: { _in: ['event', 'report'] }
          },
+         deep: {
+            gallery: {
+               _limit: -1,
+            },
+         },
          limit
       }));
       return events || [];

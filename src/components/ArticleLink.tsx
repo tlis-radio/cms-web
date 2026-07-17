@@ -47,12 +47,14 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
          minute: "2-digit"
       });
    };
-
+   
    const hasGallery = article.gallery && article.gallery.length > 0;
    const isEvent = article.type === "event" || article.type === "report";
 
    // Click handler for the whole card
-   const handleCardClick = () => {      UmamiTrack("article_click", { article_slug: article.slug, article_type: article.type });      router.push(`/clanky/${article.slug}`);
+   const handleCardClick = () => {
+      UmamiTrack("article_click", { article_slug: article.slug, article_type: article.type });      
+      router.push(`/clanky/${article.slug}`);
    };
 
    return (
@@ -100,7 +102,9 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
                )}
             </div>
 
-            <h2 className="font-argentumSansBold text-2xl font-bold">{article.title}</h2>
+            <a href={`/clanky/${article.slug}`} onClick={(e) => e.stopPropagation()}>
+               <h2 className="font-argentumSansBold text-2xl font-bold">{article.title}</h2>
+            </a>
 
             {isEvent && (
                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300">

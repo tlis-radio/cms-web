@@ -179,9 +179,9 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
                   {/* Author card */}
                   {article.author && (
                      <div className="bg-[#1c1c1c] rounded-lg p-4 mb-6">
-                        <h4 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">
+                        <h2 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">
                            Autor
-                        </h4>
+                        </h2>
                         <Link 
                            href={`/ucinkujuci/${article.author.Slug}`}
                            className="flex items-center gap-3 group"
@@ -200,12 +200,7 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
                      </div>
                   )}
 
-                  {/* Table of Contents */}
-                  {article.content && (
-                     <div className="bg-[#1c1c1c] rounded-lg p-4 lg:sticky lg:top-[8rem] lg:self-start">
-                        <TableOfContents content={article.content} />
-                     </div>
-                  )}
+                  <TableOfContents content={article.content} />
                </aside>
             </div>
          </div>

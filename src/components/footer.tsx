@@ -27,7 +27,7 @@ const Footer = () => {
                {/* Brand / About */}
                <div className="pr-0 md:pr-12 lg:pr-20">
                   <Link href={`/${locale}`} className="inline-block">
-                     <h3 className="text-2xl font-argentumSansBold tracking-tight">Radio TLIS</h3>
+                     <h2 className="text-2xl font-argentumSansBold tracking-tight">Radio TLIS</h2>
                   </Link>
                   <p className="font-argentumSansLight mt-3 text-sm text-gray-400 max-w-sm">
                      {t('description')}
@@ -36,7 +36,7 @@ const Footer = () => {
 
                {/* Column: Explore */}
                <div>
-                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('explore.title')}</h4>
+                  <h3 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('explore.title')}</h3>
                   <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400">
                      <li><Link href={`/${locale}`} className="hover:text-white">{t('explore.home')}</Link></li>
                      <li><Link href={`/${locale}/program`} className="hover:text-white">{t('explore.program')}</Link></li>
@@ -47,7 +47,7 @@ const Footer = () => {
 
                {/* Column: About Radio */}
                <div>
-                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('about.title')}</h4>
+                  <h3 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('about.title')}</h3>
                   <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400">
                      <li><Link href={`/${locale}/o-radiu`} className="hover:text-white">{t('about.whoWeAre')}</Link></li>
                      <li><Link href={`/${locale}/dve-percenta`} className="hover:text-white">{t('about.twoPercent')}</Link></li>
@@ -56,7 +56,7 @@ const Footer = () => {
 
                {/* Column: Legal */}
                <div className="flex flex-col md:items-start">
-                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('legal.title')}</h4>
+                  <h3 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('legal.title')}</h3>
                   <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400 mb-4">
                      <li><Link href={`/${locale}/gdpr`} className="hover:text-white">{t('legal.gdpr')}</Link></li>
                      <li><Link href={`/${locale}/tos`} className="hover:text-white">{t('legal.tos')}</Link></li>
@@ -65,7 +65,7 @@ const Footer = () => {
 
                {/* Column: Contact */}
                <div className="flex flex-col md:items-start">
-                  <h4 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('contact.title')}</h4>
+                  <h3 className="text-sm font-argentumSansBold mb-3 text-gray-200">{t('contact.title')}</h3>
                   <ul className="font-argentumSansLight space-y-2 text-sm text-gray-400 mb-4">
                      <li><Link href="mailto:radio@tlis.sk" className="hover:text-white">radio@tlis.sk</Link></li>
                      <li><Link href="mailto:media@tlis.sk" className="hover:text-white">media@tlis.sk</Link></li>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { trackSegment, trackStreamSegment } from "@/lib/statistics";
-import { getSessionId } from "@/lib/session";
+import { getSessionId, isAnonymousRequest } from "@/lib/session";
 import CmsApiService, { getDirectusInstance } from "@/services/cms-api-service";
 import { createItem, readItem, updateItem } from "@directus/sdk";
 
@@ -15,8 +15,10 @@ let lastCountedEpisodeId: string | null = null;
  * Heartbeat endpoint for segment tracking.
  *
  * POST /api/heartbeat/stream
+ * Body: { sessionId?: string }
  *
- * For native site: sessionId is retrieved from cookies
+ * For native site: sessionId is retrieved from cookies, or from the body
+ * for anonymous (rejected/no consent) listeners who never get a cookie.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -39,7 +41,15 @@ export async function POST(request: NextRequest) {
 
     if(!currentStream.current_episode || !started_at) return NextResponse.json({ok:true});
 
-    const sessionId = getSessionId(request);
+    let bodySessionId: string | undefined;
+    try {
+      const body = await request.json();
+      bodySessionId = body?.sessionId;
+    } catch {
+      bodySessionId = undefined;
+    }
+
+    const sessionId = bodySessionId || getSessionId(request);
     if (!sessionId) {
       return NextResponse.json({ error: "No session" }, { status: 400 });
     }
@@ -66,7 +76,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    await trackStreamSegment(sessionId, episodeId, segmentIndex);
+    await trackStreamSegment(sessionId, episodeId, segmentIndex, isAnonymousRequest(request));
 
     return NextResponse.json({ ok: true });
   } catch (error) {

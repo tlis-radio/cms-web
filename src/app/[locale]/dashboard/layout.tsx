@@ -1,5 +1,15 @@
 import { DashboardAuthProvider } from '@/context/DashboardAuthContext';
+import DashboardChrome from '@/components/dashboard/DashboardChrome';
 import type { Metadata } from 'next';
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter", 
+});
+
 
 export const metadata: Metadata = {
    robots: {
@@ -15,8 +25,8 @@ function DashboardLayoutClient({
 }) {
    return (
       <DashboardAuthProvider>
-         <div className="min-h-screen bg-gray-900">
-            {children}
+         <div className={`${inter.variable} font-sans antialiased min-h-screen bg-gray-900`}>
+            <DashboardChrome>{children}</DashboardChrome>
          </div>
       </DashboardAuthProvider>
    );

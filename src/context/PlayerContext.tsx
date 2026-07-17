@@ -1,7 +1,9 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { UmamiTrack } from "@/components/Analytics";
+import { isAnonymousConsent } from "@/lib/clientConsent";
 
 type PlayerMode = "stream" | "archive";
 
@@ -63,6 +65,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
   const [countedView, setCountedView] = useState<boolean>(false);
+
+  // In-memory session id for anonymous (rejected/no consent) listeners.
+  // Ties heartbeats for every episode/stream played in this tab together,
+  // without ever touching a cookie - a hard reload (F5) generates a new one.
+  const [anonymousSessionId] = useState<string>(() => uuidv4());
 
   useEffect(() => {
     let cancelled = false;
@@ -177,7 +184,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   function handleAudioTimeUpdate() {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
-      if (countedView === false && mode === "archive" && episodeId !== null && audioRef.current.duration > 0 && audioRef.current.currentTime >= 300) {
+      if (countedView === false && mode === "archive" && episodeId !== null && audioRef.current.duration > 0 && audioRef.current.currentTime >= Math.min(300, audioRef.current.duration * 0.33)) {
         setCountedView(true);
         fetch(`/api/view/${episodeId}`, {
           method: "POST",
@@ -270,10 +277,15 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       lastTrackedSegment.current = segmentIndex;
 
       try {
+        const anonymous = isAnonymousConsent();
         await fetch("/api/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ episodeId: episodeId, currentTime: audio.currentTime }),
+          body: JSON.stringify({
+            episodeId: episodeId,
+            currentTime: audio.currentTime,
+            sessionId: anonymous ? anonymousSessionId : undefined,
+          }),
           credentials: "include",
         });
       } catch (err) {
@@ -289,8 +301,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       lastTrackedSegment.current = segmentIndex;
 
       try {
+        const anonymous = isAnonymousConsent();
         await fetch("/api/heartbeat/stream", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId: anonymous ? anonymousSessionId : undefined,
+          }),
           credentials: "include",
         });
       } catch (err) {

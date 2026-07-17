@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
-
-const CONSENT_COOKIE_NAME = 'tlis_cookie_consent';
+import { isAnonymousConsent } from "@/lib/clientConsent";
 
 /**
  * Component that initializes session cookie on mount.
@@ -11,14 +10,8 @@ const CONSENT_COOKIE_NAME = 'tlis_cookie_consent';
 export default function SessionInit() {
   useEffect(() => {
     const initSession = () => {
-      // Check cookie consent status
-      const consent = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`${CONSENT_COOKIE_NAME}=`));
-      
-      const consentValue = consent?.split('=')[1];
-      const isAnonymous = consentValue === 'rejected' || !consentValue;
-      
+      const isAnonymous = isAnonymousConsent();
+
       // Initialize session with anonymous flag if needed
       const url = isAnonymous ? '/api/session?anonymous=true' : '/api/session';
       fetch(url, { credentials: "include" }).catch((err) => {
