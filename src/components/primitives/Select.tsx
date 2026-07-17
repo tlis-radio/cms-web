@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 type Option = {
 	label: string;
@@ -22,6 +23,7 @@ type PanelCoords = {
 	top?: number;
 	bottom?: number;
 	maxHeight: number;
+	fontFamily: string;
 };
 
 const PANEL_MARGIN = 8;
@@ -51,6 +53,7 @@ function computePanelCoords(trigger: HTMLElement): PanelCoords {
 		top: placeBelow ? rect.bottom + 4 : undefined,
 		bottom: placeBelow ? undefined : viewportHeight - rect.top + 4,
 		maxHeight,
+		fontFamily: window.getComputedStyle(trigger).fontFamily,
 	};
 }
 
@@ -69,6 +72,7 @@ const Select: React.FC<SelectProps> = ({
 	const [coords, setCoords] = useState<PanelCoords | null>(null);
 	const ref = useRef<HTMLDivElement>(null);
 	const triggerRef = useRef<HTMLDivElement>(null);
+	const panelRef = useRef<HTMLDivElement>(null);
 	const searchRef = useRef<HTMLInputElement>(null);
 
 	const toggleOpen = () => {
@@ -83,9 +87,10 @@ const Select: React.FC<SelectProps> = ({
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (ref.current && !ref.current.contains(event.target as Node)) {
-				setOpen(false);
-			}
+			const target = event.target as Node;
+			if (ref.current?.contains(target)) return;
+			if (panelRef.current?.contains(target)) return;
+			setOpen(false);
 		};
 		if (open) {
 			document.addEventListener("mousedown", handleClickOutside);
@@ -140,8 +145,9 @@ const Select: React.FC<SelectProps> = ({
 				   <span className={selected ? "text-white" : "text-gray-400"}>{selected ? selected.label : placeholder}</span>
                    <span className={`ml-2 text-white transition-transform duration-150 ${open ? "rotate-180" : ""}`}>▾</span>
 			   </div>
-			   {open && coords && (
+			   {open && coords && createPortal(
 				   <div
+					   ref={panelRef}
 					   style={{
 						   position: "fixed",
 						   left: coords.left,
@@ -149,6 +155,7 @@ const Select: React.FC<SelectProps> = ({
 						   top: coords.top,
 						   bottom: coords.bottom,
 						   maxHeight: coords.maxHeight,
+						   fontFamily: coords.fontFamily,
 					   }}
 					   className="bg-[#23232b] border border-white/20 rounded shadow-lg z-50 flex flex-col animate-fade-in"
 				   >
@@ -189,7 +196,8 @@ const Select: React.FC<SelectProps> = ({
 						   ))
 					   )}
 					   </div>
-				   </div>
+				   </div>,
+				   document.body
 			   )}
 		   </div>
 	);
