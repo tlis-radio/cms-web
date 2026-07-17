@@ -741,7 +741,7 @@ export class DashboardService {
    // distributions, computed entirely from the bulk-loaded session arrays
    // (getAllDashboardDataWithProgress) - no additional network calls.
    getUserOverviewStats(
-      data: { listeningSessions: ListeningSession[]; listeningSessionsStream: ListeningSessionStream[]; episodes: Episode[] },
+      data: { listeningSessions: ListeningSession[]; listeningSessionsStream: ListeningSessionStream[]; episodes: Episode[]; shows?: Show[] },
       filter?: { showId?: number; episodeId?: string }
    ): UserOverviewStats {
       let sessions: BaseListeningSession[] = [
@@ -752,14 +752,18 @@ export class DashboardService {
       if (filter?.episodeId) {
          sessions = sessions.filter((s) => String(s.episode_id) === String(filter.episodeId));
       } else if (filter?.showId) {
+         const show = (data.shows || []).find((sh) => String(sh.id) === String(filter.showId));
          const showEpisodeIds = new Set(
-            data.episodes
-               .filter((ep) => {
-                  const epShowId = (ep.Show_Id as any)?.id || ep.Show_Id;
-                  return epShowId && String(epShowId) === String(filter.showId);
-               })
-               .map((ep) => String(ep.id))
+            Array.isArray(show?.Episodes)
+               ? show!.Episodes.map((e) => String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id))
+               : []
          );
+         data.episodes.forEach((ep) => {
+            const epShowId = (ep.Show_Id as any)?.id || ep.Show_Id;
+            if (epShowId && String(epShowId) === String(filter.showId)) {
+               showEpisodeIds.add(String(ep.id));
+            }
+         });
          sessions = sessions.filter((s) => s.episode_id && showEpisodeIds.has(String(s.episode_id)));
       }
 

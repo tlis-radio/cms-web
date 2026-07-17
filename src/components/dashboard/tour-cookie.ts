@@ -1,12 +1,12 @@
 import { getCookie, setCookie } from './cookies';
 
-export const TOUR_SEEN_COOKIE = 'dashboard_tour_seen';
+const TOUR_COOKIE_PREFIX = 'dashboard_tour_seen_';
 const TOUR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365 * 5; // 5 years
 
-export function hasSeenTour(): boolean {
-   return getCookie(TOUR_SEEN_COOKIE) === '1';
+export function hasSeenTour(tourId: string): boolean {
+   return getCookie(`${TOUR_COOKIE_PREFIX}${tourId}`) === '1';
 }
 
-export function markTourSeen(): void {
-   setCookie(TOUR_SEEN_COOKIE, '1', TOUR_COOKIE_MAX_AGE);
+export function markTourSeen(tourId: string): void {
+   setCookie(`${TOUR_COOKIE_PREFIX}${tourId}`, '1', TOUR_COOKIE_MAX_AGE);
 }

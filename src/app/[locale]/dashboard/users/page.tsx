@@ -65,6 +65,7 @@ export default function DashboardUsersPage() {
             listeningSessions: dashboardData.listeningSessions,
             listeningSessionsStream: dashboardData.listeningSessionsStream,
             episodes: dashboardData.episodes,
+            shows: dashboardData.shows,
          },
          filter
       );
@@ -141,13 +142,15 @@ export default function DashboardUsersPage() {
 
    return (
       <div className="max-w-7xl mx-auto">
-         <FilterBar title="Poslucháči">
+         <FilterBar title="Poslucháči" data-tour="filter-bar">
             <Select
                compact
+               searchable
+               searchPlaceholder="Hľadať reláciu..."
                options={showOptions}
                value={showFilter}
                onChange={setShowFilter}
-               className="bg-gray-800 text-white min-w-[160px]"
+               className="bg-gray-800 text-white min-w-[280px]"
             />
             <button
                onClick={() => handleSort('lastSeen')}
@@ -181,7 +184,7 @@ export default function DashboardUsersPage() {
          ) : overview ? (
             <>
                {/* Headline: bounce vs returning */}
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="users-bounce" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <h2 className="text-sm font-semibold text-white mb-1">Jednorazoví vs. vracajúci sa poslucháči</h2>
                   <div className="text-gray-400 text-xs mb-3">
                      Jednorazový poslucháč (bounce) = presne jedna relácia s celkovým počúvaním pod 5 minút.
@@ -228,7 +231,7 @@ export default function DashboardUsersPage() {
                </div>
 
                {/* Secondary charts */}
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+               <div data-tour="users-charts" className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                   <div className="bg-gray-800 rounded-lg p-4">
                      <h2 className="text-sm font-semibold text-white mb-3">Počet epizód na poslucháča</h2>
                      <ResponsiveContainer width="100%" height={220}>
@@ -259,7 +262,7 @@ export default function DashboardUsersPage() {
                </div>
 
                {/* Table */}
-               <div className="bg-gray-800 rounded-lg p-4">
+               <div data-tour="users-table" className="bg-gray-800 rounded-lg p-4">
                   <h2 className="text-sm font-semibold text-white mb-3">Zoznam poslucháčov ({sortedUsers.length})</h2>
                   <div className="overflow-x-auto">
                      <table className="w-full text-sm">

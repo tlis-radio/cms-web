@@ -91,7 +91,7 @@ export default function DashboardShowDetailPage() {
             <div className="text-white text-center text-sm">Načítavam...</div>
          ) : show ? (
             <>
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="show-header" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <div className="flex gap-4">
                      <CoverThumb assetId={show.Cover} alt={show.Title} className="w-32 h-32 rounded-lg" />
                      <div className="flex-1">
@@ -114,7 +114,7 @@ export default function DashboardShowDetailPage() {
                   </div>
                </div>
 
-               <FilterBar title="Epizódy">
+               <FilterBar title="Epizódy" data-tour="episode-sort">
                   <button
                      onClick={() => toggleSort('date')}
                      className={`px-3 py-1.5 text-xs rounded transition ${
@@ -137,7 +137,7 @@ export default function DashboardShowDetailPage() {
                   </button>
                </FilterBar>
 
-               <div className="space-y-2">
+               <div data-tour="episode-list" className="space-y-2">
                   {getSortedEpisodes().map((episode) => (
                      <Link
                         key={episode.id}

@@ -171,7 +171,7 @@ export default function TrackSharesPage() {
             </div>
          ) : (
             <>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+               <div data-tour="shares-stats" className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                   <StatCard label="Celkovo zdieľaní" value={shares.length} accent="purple" />
                   <StatCard label="Unikátne epizódy" value={new Set(shares.map(s => s.episode.id)).size} accent="blue" />
                   <StatCard
@@ -189,7 +189,7 @@ export default function TrackSharesPage() {
                   />
                </div>
 
-               <FilterBar title="Zdieľania">
+               <FilterBar title="Zdieľania" data-tour="filter-bar">
                   {timeRangeOptions.map((option) => (
                      <button
                         key={option.value}
@@ -205,7 +205,7 @@ export default function TrackSharesPage() {
                   ))}
                </FilterBar>
 
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="shares-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <h2 className="text-sm font-semibold text-white mb-1">
                      Zdieľania v čase
                   </h2>
@@ -248,7 +248,7 @@ export default function TrackSharesPage() {
                </div>
 
                {/* Top Shared Episodes */}
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="shares-top" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <h2 className="text-sm font-semibold text-white mb-3">
                      Najzdieľanejšie epizódy
                   </h2>
@@ -294,7 +294,7 @@ export default function TrackSharesPage() {
                </div>
 
                {/* Recent Shares Table */}
-               <div className="bg-gray-800 rounded-lg p-4">
+               <div data-tour="shares-table" className="bg-gray-800 rounded-lg p-4">
                   <h2 className="text-sm font-semibold text-white mb-3">
                      Posledné zdieľania
                   </h2>

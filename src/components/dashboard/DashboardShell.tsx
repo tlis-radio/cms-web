@@ -1,32 +1,48 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import { AuthGuard } from '@/lib/dashboard/auth-guard';
 import Sidebar from './Sidebar';
 import ChangelogModal from './ChangelogModal';
 import OnboardingTour from './OnboardingTour';
 import { hasUnseenChangelog, markChangelogSeen } from './changelog-cookie';
 import { hasSeenTour, markTourSeen } from './tour-cookie';
-import { TOUR_STEPS } from './tour-steps';
+import { getTourForPath } from './tour-steps';
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
+   const pathname = usePathname() || '';
    const [drawerOpen, setDrawerOpen] = useState(false);
    const [changelogOpen, setChangelogOpen] = useState(false);
    const [tourOpen, setTourOpen] = useState(false);
+   const [changelogChecked, setChangelogChecked] = useState(false);
 
+   const tour = useMemo(() => getTourForPath(pathname), [pathname]);
+
+   // The changelog is a one-time, global prompt — checked once on mount, not per page.
    useEffect(() => {
       if (hasUnseenChangelog()) {
          setChangelogOpen(true);
-      } else if (!hasSeenTour()) {
-         setTourOpen(true);
       }
+      setChangelogChecked(true);
    }, []);
+
+   // Each dashboard page has its own tour, shown the first time that page is visited.
+   useEffect(() => {
+      if (!changelogChecked || changelogOpen) return;
+      setTourOpen(!hasSeenTour(tour.id));
+   }, [tour.id, changelogChecked, changelogOpen]);
 
    const closeChangelog = () => {
       setChangelogOpen(false);
-      if (!hasSeenTour()) {
+      if (!hasSeenTour(tour.id)) {
          setTourOpen(true);
       }
+   };
+
+   const closeTour = () => {
+      markTourSeen(tour.id);
+      setTourOpen(false);
    };
 
    return (
@@ -46,12 +62,11 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             onAcknowledge={markChangelogSeen}
          />
          <OnboardingTour
-            steps={TOUR_STEPS}
+            key={tour.id}
+            definition={tour}
+            pathname={pathname}
             open={tourOpen}
-            onClose={() => {
-               markTourSeen();
-               setTourOpen(false);
-            }}
+            onClose={closeTour}
          />
       </AuthGuard>
    );

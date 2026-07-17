@@ -35,23 +35,25 @@ export default function DashboardShowsPage() {
    return (
       <div className="max-w-7xl mx-auto">
          <FilterBar title="Relácie">
-            <Select
-               compact
-               options={[
-                  { value: 'active', label: 'Aktívne' },
-                  { value: 'archived', label: 'Archívne' },
-                  { value: 'digital', label: 'Starý archív' },
-               ]}
-               value={filter}
-               onChange={(val) => setFilter(val as FilterProps)}
-               className="bg-gray-800 text-white min-w-[140px]"
-            />
+            <div data-tour="shows-filter">
+               <Select
+                  compact
+                  options={[
+                     { value: 'active', label: 'Aktívne' },
+                     { value: 'archived', label: 'Archívne' },
+                     { value: 'digital', label: 'Starý archív' },
+                  ]}
+                  value={filter}
+                  onChange={(val) => setFilter(val as FilterProps)}
+                  className="bg-gray-800 text-white min-w-[140px]"
+               />
+            </div>
          </FilterBar>
 
          {isLoading ? (
             <div className="text-white text-center text-sm">Načítavam relácie...</div>
          ) : (
-            <div data-tour="list-density" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            <div data-tour="shows-grid" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                {filteredShows.map((show) => (
                   <Link
                      key={show.id}

@@ -12,11 +12,74 @@ type SelectProps = {
 	placeholder?: string;
 	className?: string;
 	compact?: boolean;
+	searchable?: boolean;
+	searchPlaceholder?: string;
 };
 
-const Select: React.FC<SelectProps> = ({ options, value, onChange, placeholder = "Select...", className, compact = false }) => {
+type PanelCoords = {
+	left: number;
+	width: number;
+	top?: number;
+	bottom?: number;
+	maxHeight: number;
+};
+
+const PANEL_MARGIN = 8;
+const MIN_PANEL_HEIGHT = 120;
+const MAX_PANEL_HEIGHT = 320;
+
+function computePanelCoords(trigger: HTMLElement): PanelCoords {
+	const rect = trigger.getBoundingClientRect();
+	const viewportHeight = window.innerHeight;
+	const viewportWidth = window.innerWidth;
+
+	const spaceBelow = viewportHeight - rect.bottom - PANEL_MARGIN;
+	const spaceAbove = rect.top - PANEL_MARGIN;
+	const placeBelow = spaceBelow >= MIN_PANEL_HEIGHT || spaceBelow >= spaceAbove;
+
+	const maxHeight = Math.min(MAX_PANEL_HEIGHT, Math.max(MIN_PANEL_HEIGHT, placeBelow ? spaceBelow : spaceAbove));
+
+	let left = rect.left;
+	if (left + rect.width > viewportWidth - PANEL_MARGIN) {
+		left = Math.max(PANEL_MARGIN, viewportWidth - rect.width - PANEL_MARGIN);
+	}
+	left = Math.max(PANEL_MARGIN, left);
+
+	return {
+		left,
+		width: rect.width,
+		top: placeBelow ? rect.bottom + 4 : undefined,
+		bottom: placeBelow ? undefined : viewportHeight - rect.top + 4,
+		maxHeight,
+	};
+}
+
+const Select: React.FC<SelectProps> = ({
+	options,
+	value,
+	onChange,
+	placeholder = "Select...",
+	className,
+	compact = false,
+	searchable = false,
+	searchPlaceholder = "Hľadať...",
+}) => {
 	const [open, setOpen] = useState(false);
+	const [query, setQuery] = useState("");
+	const [coords, setCoords] = useState<PanelCoords | null>(null);
 	const ref = useRef<HTMLDivElement>(null);
+	const triggerRef = useRef<HTMLDivElement>(null);
+	const searchRef = useRef<HTMLInputElement>(null);
+
+	const toggleOpen = () => {
+		setOpen((prev) => {
+			const next = !prev;
+			if (next && triggerRef.current) {
+				setCoords(computePanelCoords(triggerRef.current));
+			}
+			return next;
+		});
+	};
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -34,29 +97,80 @@ const Select: React.FC<SelectProps> = ({ options, value, onChange, placeholder =
 		};
 	}, [open]);
 
+	useEffect(() => {
+		if (open && searchable) {
+			searchRef.current?.focus();
+		} else {
+			setQuery("");
+		}
+	}, [open, searchable]);
+
+	useEffect(() => {
+		if (!open) return;
+		const reposition = () => {
+			if (triggerRef.current) setCoords(computePanelCoords(triggerRef.current));
+		};
+		window.addEventListener("resize", reposition);
+		window.addEventListener("scroll", reposition, true);
+		return () => {
+			window.removeEventListener("resize", reposition);
+			window.removeEventListener("scroll", reposition, true);
+		};
+	}, [open]);
+
 	const selected = options.find((opt) => opt.value === value);
+	const filteredOptions =
+		searchable && query.trim()
+			? options.filter((opt) => opt.label.toLowerCase().includes(query.trim().toLowerCase()))
+			: options;
 
 	return (
 		   <div ref={ref} className={`relative select-none ${className || ""}`.trim()}>
 			   <div
+				   ref={triggerRef}
 				   className={
 					   `cursor-pointer border border-white/30 rounded bg-[#18181b] flex items-center justify-between transition-colors duration-150 ` +
 					   (compact ? "px-2 py-1 text-sm " : "px-3 py-2 ") +
 					   (open ? "ring-2 ring-[#d43c4a]" : "hover:border-[#d43c4a]")
 				   }
-				   onClick={() => setOpen((o) => !o)}
+				   onClick={toggleOpen}
 				   tabIndex={0}
-				   onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setOpen(o => !o); }}
+				   onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOpen(); } }}
 			   >
 				   <span className={selected ? "text-white" : "text-gray-400"}>{selected ? selected.label : placeholder}</span>
                    <span className={`ml-2 text-white transition-transform duration-150 ${open ? "rotate-180" : ""}`}>▾</span>
 			   </div>
-			   {open && (
-				   <div className="absolute left-0 right-0 mt-1 bg-[#23232b] border border-white/20 rounded shadow-lg z-20 max-h-60 overflow-auto animate-fade-in">
-					   {options.length === 0 ? (
-						   <div className="px-3 py-2 text-gray-400">No options</div>
+			   {open && coords && (
+				   <div
+					   style={{
+						   position: "fixed",
+						   left: coords.left,
+						   width: coords.width,
+						   top: coords.top,
+						   bottom: coords.bottom,
+						   maxHeight: coords.maxHeight,
+					   }}
+					   className="bg-[#23232b] border border-white/20 rounded shadow-lg z-50 flex flex-col animate-fade-in"
+				   >
+					   {searchable && (
+						   <div className="p-1.5 border-b border-white/10 flex-shrink-0">
+							   <input
+								   ref={searchRef}
+								   type="text"
+								   value={query}
+								   onChange={(e) => setQuery(e.target.value)}
+								   onClick={(e) => e.stopPropagation()}
+								   onKeyDown={(e) => e.stopPropagation()}
+								   placeholder={searchPlaceholder}
+								   className="w-full px-2 py-1 text-sm bg-[#18181b] border border-white/20 rounded text-white placeholder-gray-500 outline-none focus:border-[#d43c4a]"
+							   />
+						   </div>
+					   )}
+					   <div className="overflow-auto min-h-0 flex-1">
+					   {filteredOptions.length === 0 ? (
+						   <div className="px-3 py-2 text-gray-400">Žiadne výsledky</div>
 					   ) : (
-						   options.map((opt) => (
+						   filteredOptions.map((opt) => (
 							   <div
 								   key={opt.value}
 								   className={
@@ -74,6 +188,7 @@ const Select: React.FC<SelectProps> = ({ options, value, onChange, placeholder =
 							   </div>
 						   ))
 					   )}
+					   </div>
 				   </div>
 			   )}
 		   </div>

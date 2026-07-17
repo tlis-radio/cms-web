@@ -182,7 +182,7 @@ export default function StreamListenersPage() {
             </div>
          ) : (
             <>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+               <div data-tour="stream-stats" className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                   <StatCard label="Súbežní poslucháči (zvolené obdobie)" value={max !== null ? max : 'Žiadne dáta'} accent="blue" />
                   <StatCard
                      label="Najvyššia návštevnosť naživo (historicky)"
@@ -203,7 +203,7 @@ export default function StreamListenersPage() {
                   />
                </div>
 
-               <FilterBar title="Poslucháči vysielania">
+               <FilterBar title="Poslucháči vysielania" data-tour="filter-bar">
                   {timeRangeOptions.map((option) => (
                      <button
                         key={option.value}
@@ -219,7 +219,7 @@ export default function StreamListenersPage() {
                   ))}
                </FilterBar>
 
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="stream-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <h2 className="text-sm font-semibold text-white mb-1">
                      Poslucháči v čase
                   </h2>
@@ -263,7 +263,7 @@ export default function StreamListenersPage() {
 
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {/* Last stream detail */}
-                  <div className="bg-gray-800 rounded-lg p-4">
+                  <div data-tour="stream-last" className="bg-gray-800 rounded-lg p-4">
                      <h2 className="text-sm font-semibold text-white mb-3">Posledné vysielanie</h2>
                      {lastStream ? (
                         <div>
@@ -309,7 +309,7 @@ export default function StreamListenersPage() {
                   </div>
 
                   {/* Top episodes by live listeners */}
-                  <div className="bg-gray-800 rounded-lg p-4">
+                  <div data-tour="stream-top" className="bg-gray-800 rounded-lg p-4">
                      <h2 className="text-sm font-semibold text-white mb-1">Najlepšie epizódy naživo</h2>
                      <div className="text-gray-400 text-xs mb-3">Podľa počtu unikátnych poslucháčov počas vysielania.</div>
                      {insights && insights.topEpisodes.length > 0 ? (

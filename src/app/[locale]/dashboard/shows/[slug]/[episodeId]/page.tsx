@@ -197,7 +197,7 @@ export default function EpisodeAnalyticsPage() {
             <div className="text-white text-center text-sm">Načítavam analytiku...</div>
          ) : episode && analytics ? (
             <>
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="episode-header" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <div className="flex gap-3">
                      <CoverThumb assetId={episode.Cover} alt={episode.Title} size="lg" />
                      <div className="flex-1">
@@ -231,7 +231,7 @@ export default function EpisodeAnalyticsPage() {
                </div>
 
                {/* Summary Stats */}
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+               <div data-tour="episode-stats" className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                   <StatCard label="Vypočutia" value={analytics.trackViews.length} accent="blue" />
                   <StatCard label="Zdieľania" value={analytics.trackShares.length} accent="purple" />
                   <StatCard label="Počet poslucháčov z archívu" value={analytics.listeningSessions.length} accent="yellow" />
@@ -239,7 +239,7 @@ export default function EpisodeAnalyticsPage() {
                </div>
 
                {/* First Chart: Views, Shares */}
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="episode-engagement-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <h2 className="text-sm font-semibold text-white mb-3">
                      Zapojenie v čase
                   </h2>
@@ -286,7 +286,7 @@ export default function EpisodeAnalyticsPage() {
                </div>
 
                {/* Second Chart: Retention Rate */}
-               <div className="bg-gray-800 rounded-lg p-4 mb-4">
+               <div data-tour="episode-retention-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
                   <h2 className="text-sm font-semibold text-white mb-1">
                      Miera udržania poslucháčov
                   </h2>
@@ -326,7 +326,7 @@ export default function EpisodeAnalyticsPage() {
 
                {/* Stream Retention Chart */}
                {streamRetentionData.length > 0 && (
-                  <div className="bg-gray-800 rounded-lg p-4 mb-4">
+                  <div data-tour="episode-stream-retention-chart" className="bg-gray-800 rounded-lg p-4 mb-4">
                      <h2 className="text-sm font-semibold text-white mb-1">
                         Miera udržania vysielania
                      </h2>
@@ -366,7 +366,7 @@ export default function EpisodeAnalyticsPage() {
                )}
 
                {/* Listeners List */}
-               <div className="bg-gray-800 rounded-lg p-4">
+               <div data-tour="episode-listeners" className="bg-gray-800 rounded-lg p-4">
                   <h2 className="text-sm font-semibold text-white mb-3">
                      Jednotliví poslucháči
                   </h2>
