@@ -963,6 +963,46 @@ export class DashboardService {
       });
    }
 
+   // Concurrent segment-tracking requests (e.g. two serverless invocations
+   // racing before either has written its row) can create more than one DB
+   // row for the same session_id+episode_id+type instead of updating one,
+   // each holding only part of the real listening progress. Merge those back
+   // into a single row per session/episode/type before computing progress so
+   // a listener's completion % is consistent everywhere it's displayed.
+   mergeDuplicateSessions<T extends { session_id: string; episode_id?: string; asset_id?: string; type?: string; date_created: string; segments: number[] }>(
+      sessions: T[]
+   ): T[] {
+      const groups = new Map<string, T[]>();
+      sessions.forEach((s) => {
+         const epKey = s.episode_id || s.asset_id || '';
+         const key = `${s.session_id}:${epKey}:${s.type || ''}`;
+         const arr = groups.get(key) || [];
+         arr.push(s);
+         groups.set(key, arr);
+      });
+
+      const merged: T[] = [];
+      groups.forEach((rows) => {
+         if (rows.length === 1) {
+            merged.push(rows[0]);
+            return;
+         }
+
+         rows.sort((a, b) => new Date(a.date_created).getTime() - new Date(b.date_created).getTime());
+         const maxLen = Math.max(...rows.map((r) => (r.segments || []).length));
+         const combinedSegments = new Array(maxLen).fill(0);
+         rows.forEach((r) => {
+            (r.segments || []).forEach((v, i) => {
+               if (v > combinedSegments[i]) combinedSegments[i] = v;
+            });
+         });
+
+         merged.push({ ...rows[0], segments: combinedSegments });
+      });
+
+      return merged;
+   }
+
    // Calculate listening duration from segments array
    calculateListeningDuration(segments: number[], trackDurationSeconds: number): { duration: number; progress: number } {
       try {

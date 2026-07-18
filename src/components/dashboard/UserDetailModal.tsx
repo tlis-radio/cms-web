@@ -43,7 +43,11 @@ export default function UserDetailModal({ sessionId, onClose }: UserDetailModalP
       const service = new DashboardService(directusClient);
       const { sessions: newSessions, hasMore: more } = await service.getUserHistory(sessionId, pageNum, 20);
 
-      const prepared: SessionWithEpisode[] = newSessions.map(s => ({
+      // Merge rows a tracking race split across duplicate DB entries so the
+      // completion % shown here matches what's shown on the episode page.
+      const mergedSessions = service.mergeDuplicateSessions(newSessions);
+
+      const prepared: SessionWithEpisode[] = mergedSessions.map(s => ({
           ...s,
           episode: null,
           duration: 0,
@@ -115,7 +119,7 @@ export default function UserDetailModal({ sessionId, onClose }: UserDetailModalP
          try {
              const session = sessions[index];
              const service = new DashboardService(directusClient);
-             const episodeIdStr = (session as any).asset_id || session.episode_id;
+             const episodeIdStr = session.episode_id || (session as any).asset_id;
              const episodeId = parseInt(episodeIdStr);
 
              let episodeData = cache.current.get(String(episodeId));
