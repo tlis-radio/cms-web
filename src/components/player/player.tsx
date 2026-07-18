@@ -1,22 +1,29 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { faChevronDown, faPause, faPlay, faSpinner, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
+import { faChevronDown, faClockRotateLeft, faPause, faPlay, faSpinner, faVolumeHigh, faVolumeLow, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import classNames from "classnames";
 import { usePlayer } from "@/context/PlayerContext";
 import Image from "next/image";
 import ProgressBar from "./progress-bar";
 import Marquee from "./marquee";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { UmamiTrack } from '../Analytics';
 
-const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void }> = ({ isVisible, onClick }) => {
+const SlideButton: React.FC<{ isVisible: boolean, onClick: () => void, extraOffset: number }> = ({ isVisible, onClick, extraOffset }) => {
    const buttonStyle = {
       transform: isVisible ? 'rotate(0deg)' : 'rotate(180deg)',
       transition: 'transform 0.3s ease-in-out',
    };
 
    return (
-      <div className={`fixed inset-x-0 ${isVisible ? 'bottom-[8rem]' : 'bottom-[3.5rem]'} z-20 transition-all duration-300 ease-in-out pointer-events-none`}>
+      <div
+         className="fixed inset-x-0 z-20 transition-[bottom] duration-300 ease-in-out pointer-events-none"
+         style={{ bottom: `calc(${isVisible ? '8rem' : '3.5rem'} + ${extraOffset}px)` }}
+      >
          <div className="max-w-7xl mx-auto relative px-4">
             <div className="absolute right-0 -translate-x-3 2xl:translate-x-12">
                <span
@@ -40,35 +47,97 @@ function getTimeFromMs(ms: number): string {
    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
-const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: React.ChangeEvent<HTMLInputElement>) => void }> = ({ volume, handleVolumeChange }) => {
+// FontAwesome's free set only ships speaker icons with one wave (faVolumeLow) or
+// three waves (faVolumeHigh) - no two-wave variant. Built from FontAwesome's own
+// speaker + inner-wave + middle-wave path segments so it matches their style exactly.
+const faVolumeMedium: IconDefinition = {
+   prefix: "fas",
+   iconName: "volume-medium" as IconDefinition["iconName"],
+   icon: [
+      544,
+      512,
+      [],
+      "",
+      "M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM412.6 181.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5z",
+   ],
+};
+
+// The slider position (0-1) is what the user drags and what drives the icon
+// tiers, but human hearing perceives loudness logarithmically, not linearly -
+// so a slider mapped straight to gain feels like it "does nothing" until near
+// the top. Mapping position to gain along a dB curve (like YouTube's player
+// does) makes equal slider movements feel like equal loudness steps.
+const VOLUME_DB_RANGE = 40;
+
+function sliderPositionToGain(position: number): number {
+   if (position <= 0) return 0;
+   if (position >= 1) return 1;
+   return Math.pow(10, (position - 1) * (VOLUME_DB_RANGE / 20));
+}
+
+function getVolumeIcon(volume: number) {
+   if (volume === 0) return faVolumeXmark;
+   if (volume <= 0.33) return faVolumeLow;
+   if (volume <= 0.66) return faVolumeMedium;
+   return faVolumeHigh;
+}
+
+const VolumeControl: React.FC<{ volume: number; handleVolumeChange: (event: React.ChangeEvent<HTMLInputElement>) => void; onToggleMute: () => void }> = ({ volume, handleVolumeChange, onToggleMute }) => {
+   const isMuted = volume === 0;
+
    return (
-      <div className="group relative inline-flex items-center">
+      <div className="group relative flex flex-row-reverse items-center h-10 w-10 hover:w-48 focus-within:w-48 rounded-full bg-[#d43c4a] text-white overflow-hidden transition-[width] duration-300 ease-in-out">
          <button
-            aria-label="Volume"
-            className="flex items-center justify-center w-10 h-10 cursor-pointer text-lg rounded-full bg-[#d43c4a] text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+            type="button"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            aria-pressed={isMuted}
+            onClick={onToggleMute}
+            className="flex items-center justify-center w-10 h-10 flex-shrink-0 text-lg cursor-pointer focus:outline-none"
          >
-            <FontAwesomeIcon icon={faVolumeHigh} />
+            <FontAwesomeIcon icon={getVolumeIcon(volume)} />
          </button>
-         <div className="absolute z-50 right-full pr-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-150">
-            <div className="px-3 py-2 rounded-full bg-[#d43c4a]">
-               <input
-                  aria-label="Volume slider"
-                  className="w-[150px] cursor-pointer"
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={handleVolumeChange}
-               />
-            </div>
-         </div>
+         <input
+            aria-label="Volume slider"
+            className="w-0 group-hover:w-[150px] group-focus-within:w-[150px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pl-2 cursor-pointer transition-all duration-300 ease-in-out"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+         />
       </div>
    );
 };
 
+interface RecentTrack {
+   artist?: string;
+   title: string;
+   cover: string | null;
+}
+
+const RECENT_TRACKS_LIMIT = 5;
+
+const QueueButton: React.FC<{ isOpen: boolean; onClick: () => void; label: string }> = ({ isOpen, onClick, label }) => {
+   return (
+      <button
+         aria-label={label}
+         aria-pressed={isOpen}
+         onClick={onClick}
+         className={classNames(
+            "flex items-center justify-center w-10 h-10 cursor-pointer text-lg rounded-full text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-colors",
+            { "bg-white/20": isOpen, "bg-[#d43c4a]": !isOpen }
+         )}
+      >
+         <FontAwesomeIcon icon={faClockRotateLeft} />
+      </button>
+   );
+};
+
 const Player: React.FC<{}> = () => {
-   const { 
+   const t = useTranslations("player");
+   const [isClient, setIsClient] = useState(false);
+   const {
       mode, 
       archiveName, 
       archiveShowSlug, 
@@ -85,53 +154,240 @@ const Player: React.FC<{}> = () => {
    
    const [isVisible, setIsVisible] = useState(true);
    const [volume, setVolume] = useState(1);
-   const [streamTitle, setStreamTitle] = useState("Rádio TLIS");
-   const [streamArtist, setStreamArtist] = useState<string | undefined>("Rádio TLIS");
+   const previousVolumeRef = useRef(1);
+   const [streamTitle, setStreamTitle] = useState("Radio TLIS");
+   const [streamArtist, setStreamArtist] = useState<string | undefined>("Radio TLIS");
+   const [albumCover, setAlbumCover] = useState<string | null>(null);
+   const [displayTitle, setDisplayTitle] = useState<string>("RADIO TLIS");
+   const [activeDisplayTitle, setActiveDisplayTitle] = useState<string>("RADIO TLIS");
+   const originalTitleRef = useRef<string>("");
+   const [recentTracks, setRecentTracks] = useState<RecentTrack[]>([]);
+   const [isQueueOpen, setIsQueueOpen] = useState(false);
+   const [queuePanelHeight, setQueuePanelHeight] = useState(0);
+   const queuePanelRef = useRef<HTMLDivElement>(null);
+
+   useEffect(() => {
+      const node = queuePanelRef.current;
+      if (!node || typeof ResizeObserver === "undefined") return;
+      const observer = new ResizeObserver((entries) => {
+         setQueuePanelHeight(entries[0]?.contentRect.height || 0);
+      });
+      observer.observe(node);
+      return () => observer.disconnect();
+   }, []);
+
+   useEffect(() => {
+      setIsClient(true);
+   }, []);
+
+   useEffect(() => {
+      const WINDOW = 24;
+      const PAUSE_MS = 3000;
+      const STEP_MS = 150;
+      const length = displayTitle.length;
+
+      if (length <= WINDOW) {
+         setActiveDisplayTitle(displayTitle);
+         return;
+      }
+
+      let position = 0;
+      let timeoutId: NodeJS.Timeout;
+
+      function showWindow() {
+         setActiveDisplayTitle(displayTitle.substring(position, position + WINDOW));
+      }
+
+      function pauseAtStart() {
+         position = 0;
+         showWindow();
+         timeoutId = setTimeout(scrollStep, PAUSE_MS);
+      }
+
+      function scrollStep() {
+         position += 1;
+         showWindow();
+         if (position >= length - WINDOW) {
+            timeoutId = setTimeout(pauseAtStart, PAUSE_MS);
+         } else {
+            timeoutId = setTimeout(scrollStep, STEP_MS);
+         }
+      }
+
+      pauseAtStart();
+      return () => clearTimeout(timeoutId);
+   }, [displayTitle]);
+
+   useEffect(() => {
+      const handleVisibilityChange = () => {
+         if (document.hidden) {
+            originalTitleRef.current = document.title;
+            document.title = activeDisplayTitle;
+         } else {
+            if (originalTitleRef.current) {
+               document.title = originalTitleRef.current;
+            }
+         }
+      };
+      if (document.hidden) {
+         document.title = activeDisplayTitle;
+      }
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+   }, [activeDisplayTitle]);
 
    const playerWrapper = useRef<HTMLDivElement | null>(null);
 
    const toggleVisibility = () => setIsVisible(!isVisible);
 
+   const resolveCover = async (artist: string, title: string): Promise<string | null> => {
+      try {
+         const params = new URLSearchParams({ artist, title });
+         const response = await fetch(`/api/album-art?${params.toString()}`);
+         const result = await response.json();
+         return result.artworkUrl || null;
+      } catch (err) {
+         return null;
+      }
+   };
+
+   const fetchAlbumArt = async (artist: string, title: string) => {
+      setAlbumCover(await resolveCover(artist, title));
+   };
+
+   const albumCoverRef = useRef<string | null>(null);
    useEffect(() => {
+      albumCoverRef.current = albumCover;
+   }, [albumCover]);
+
+   const hasSeededHistoryRef = useRef(false);
+
+   useEffect(() => {
+      if (mode === "archive") {
+         setIsQueueOpen(false);
+      }
+   }, [mode]);
+
+   useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+         if (playerWrapper.current && !playerWrapper.current.contains(event.target as Node)) {
+            setIsQueueOpen(false);
+         }
+      };
+      if (isQueueOpen) {
+         document.addEventListener("mousedown", handleClickOutside);
+      }
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+   }, [isQueueOpen]);
+
+   useEffect(() => {
+      const node = playerWrapper.current;
       window.addEventListener("resize", shiftBody);
       shiftBody();
-      return () => window.removeEventListener("resize", shiftBody);
-   }, [isVisible]);
+
+      if (!node || typeof ResizeObserver === "undefined") {
+         return () => window.removeEventListener("resize", shiftBody);
+      }
+
+      const observer = new ResizeObserver(() => shiftBody());
+      observer.observe(node);
+      return () => {
+         window.removeEventListener("resize", shiftBody);
+         observer.disconnect();
+      };
+   }, [isVisible, isClient]);
 
    useEffect(() => {
       if (audioRef.current) {
-         audioRef.current.volume = volume;
+         audioRef.current.volume = sliderPositionToGain(volume);
+      }
+      if (volume > 0) {
+         previousVolumeRef.current = volume;
       }
    }, [volume, audioRef]);
 
    useEffect(() => {
       const fetchTitle = async () => {
-         if (mode === "archive") return;
-
+         if (mode === "archive") {
+            if (archiveName) {
+               setDisplayTitle(archiveName);
+            }
+            return;
+         }
          try {
-            const currentStreamTitleResponse = await fetch('/api/stream');
-            const data = await currentStreamTitleResponse.json();
+            const response = await fetch('/api/stream');
+            if (!response.ok) return;
+            const text = await response.text();
+            if (!text) return;
+            const data = JSON.parse(text);
+
+            if (!hasSeededHistoryRef.current) {
+               hasSeededHistoryRef.current = true;
+               if (Array.isArray(data.history) && data.history.length > 0) {
+                  Promise.all(
+                     (data.history as Array<{ artist?: string; songTitle?: string }>).map(async (item) => ({
+                        artist: item.artist,
+                        title: item.songTitle || "",
+                        cover: await resolveCover(item.artist || "", item.songTitle || ""),
+                     }))
+                  ).then((seeded) => {
+                     setRecentTracks((prev) => (prev.length > 0 ? prev : seeded.filter((track) => track.title)));
+                  });
+               }
+            }
+
+            const idleTitle = t("now_playing");
+            const isPlaceholderTitle = (value?: string) => !value || value === "Radio TLIS" || value === idleTitle;
+
+            let tempDisplayTitle = "Radio TLIS";
             if (data.artist && data.songTitle) {
+               if (data.songTitle !== streamTitle || data.artist !== streamArtist) {
+                  if (!isPlaceholderTitle(streamTitle)) {
+                     setRecentTracks((prev) => [
+                        { artist: streamArtist, title: streamTitle, cover: albumCoverRef.current },
+                        ...prev,
+                     ].slice(0, RECENT_TRACKS_LIMIT));
+                  }
+                  fetchAlbumArt(data.artist, data.songTitle);
+               }
                setStreamTitle(data.songTitle);
                setStreamArtist(data.artist);
+               tempDisplayTitle = `${data.artist} - ${data.songTitle}`;
+            } else if (data.idle) {
+               if (idleTitle !== streamTitle) {
+                  if (!isPlaceholderTitle(streamTitle)) {
+                     setRecentTracks((prev) => [
+                        { artist: streamArtist, title: streamTitle, cover: albumCoverRef.current },
+                        ...prev,
+                     ].slice(0, RECENT_TRACKS_LIMIT));
+                  }
+                  setAlbumCover(null);
+               }
+               setStreamTitle(idleTitle);
+               setStreamArtist(undefined);
+               tempDisplayTitle = idleTitle;
             } else if (data.songTitle) {
+               if (data.songTitle !== streamTitle) {
+                  if (!isPlaceholderTitle(streamTitle)) {
+                     setRecentTracks((prev) => [
+                        { artist: streamArtist, title: streamTitle, cover: albumCoverRef.current },
+                        ...prev,
+                     ].slice(0, RECENT_TRACKS_LIMIT));
+                  }
+                  fetchAlbumArt("", data.songTitle);
+               }
                setStreamTitle(data.songTitle);
-               setStreamArtist(undefined);
-            } else {
-               setStreamTitle("Neznáma skladba");
-               setStreamArtist(undefined);
+               tempDisplayTitle = data.songTitle;
             }
+            setDisplayTitle(tempDisplayTitle);
          } catch (error) {
             console.error('Failed to fetch stream title:', error);
-            setStreamTitle("Neznáma skladba");
-            setStreamArtist(undefined);
          }
       };
-
       fetchTitle();
       const intervalId = setInterval(fetchTitle, 5000);
       return () => clearInterval(intervalId);
-   }, [mode]);
+   }, [mode, archiveName, streamTitle, streamArtist]);
 
    function shiftBody() {
       const padding = isVisible ? playerWrapper.current?.clientHeight + 'px' : '0';
@@ -142,7 +398,10 @@ const Player: React.FC<{}> = () => {
       setVolume(Number(event.target.value));
    };
 
-   // Seek by delta seconds (positive or negative). Uses updateCurrentTime from context
+   const toggleMute = () => {
+      setVolume((current) => (current > 0 ? 0 : previousVolumeRef.current || 1));
+   };
+
    const seekBy = (delta: number) => {
       const dur = duration || 0;
       const newTime = Math.max(0, Math.min((currentTime || 0) + delta, dur || Number.MAX_SAFE_INTEGER));
@@ -151,13 +410,11 @@ const Player: React.FC<{}> = () => {
 
    useEffect(() => {
       const onKey = (e: KeyboardEvent) => {
-         // Ignore when typing in inputs or editable elements
          const target = e.target as HTMLElement | null;
          if (target) {
             const tag = target.tagName?.toLowerCase();
             if (tag === 'input' || tag === 'textarea' || target.isContentEditable) return;
          }
-
          if (e.key === 'ArrowLeft') {
             e.preventDefault();
             seekBy(-15);
@@ -166,10 +423,11 @@ const Player: React.FC<{}> = () => {
             seekBy(15);
          }
       };
-
       window.addEventListener('keydown', onKey);
       return () => window.removeEventListener('keydown', onKey);
    }, [currentTime, duration]);
+
+   if (!isClient) return null;
 
    const playerClasses = classNames(
       'fixed bottom-0 inset-x-0 w-full z-10 bg-[#2e2b2c] transition-transform duration-300 ease-in-out',
@@ -179,21 +437,61 @@ const Player: React.FC<{}> = () => {
       }
    );
 
-   // Determine the cover image to display
    const coverImage = mode === "archive" && archiveEpisodeCover
       ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${archiveEpisodeCover}`
-      : "/images/03_TLIS_logo2020_white_no-bkg.svg";
+      : (albumCover || "/images/03_TLIS_logo2020_white_no-bkg.svg");
 
-   // Determine the title and subtitle
    const title = mode === "archive" ? archiveName : streamTitle;
    const subtitle = mode === "archive" 
-      ? archiveShowName || "Rádio TLIS"
-      : streamArtist || "Rádio TLIS";
+      ? archiveShowName || "Radio TLIS"
+      : streamArtist || "Radio TLIS";
 
    return (
       <>
          <div ref={playerWrapper} className={playerClasses}>
-            {/* Progress bar for archive mode */}
+            <motion.div
+               ref={queuePanelRef}
+               initial={false}
+               animate={{ height: isQueueOpen ? "auto" : 0, opacity: isQueueOpen ? 1 : 0 }}
+               transition={{ duration: 0.3, ease: "easeInOut" }}
+               className={classNames(
+                  "absolute bottom-full inset-x-0 bg-[#2e2b2c] shadow-2xl rounded-t-md overflow-hidden",
+                  { "border-t border-white/10": isQueueOpen }
+               )}
+               style={{ pointerEvents: isQueueOpen ? "auto" : "none" }}
+            >
+               <div className="max-w-7xl mx-auto px-4 py-3 max-h-[50vh] overflow-y-auto">
+                  <p className="text-xs font-bold uppercase tracking-wide text-gray-400 px-1 pb-2">
+                     {t("recently_played")}
+                  </p>
+                  {recentTracks.length === 0 ? (
+                     <p className="text-sm text-gray-400 px-1 pb-3">{t("recently_played_empty")}</p>
+                  ) : (
+                     <ul className="flex flex-col gap-1 pb-1">
+                        {recentTracks.map((track, index) => (
+                           <li
+                              key={`${track.title}-${track.artist}-${index}`}
+                              className="flex items-center gap-3 px-1 py-2 rounded-lg hover:bg-white/5"
+                           >
+                              <div className="w-10 h-10 flex-shrink-0 relative">
+                                 <Image
+                                    src={track.cover || "/images/03_TLIS_logo2020_white_no-bkg.svg"}
+                                    alt={track.title}
+                                    width={40}
+                                    height={40}
+                                    className="w-full h-full object-cover rounded shadow-sm"
+                                 />
+                              </div>
+                              <div className="min-w-0">
+                                 <p className="text-sm text-white truncate">{track.title}</p>
+                                 <p className="text-xs text-gray-400 truncate">{track.artist || t("radio_tlis")}</p>
+                              </div>
+                           </li>
+                        ))}
+                     </ul>
+                  )}
+               </div>
+            </motion.div>
             {mode === "archive" && (
                <ProgressBar
                   currentTime={currentTime}
@@ -202,25 +500,19 @@ const Player: React.FC<{}> = () => {
                   isVisible={isVisible}
                />
             )}
-            {/* If live, show a colored top border instead */}
             {mode === "stream" && (
                <div className="absolute top-0 left-0 w-full h-1 bg-[#d43c4a]" />
             )}
-
-            {/* Main player content */}
             <div className="max-w-7xl mx-auto flex items-center gap-3 p-3 pt-4">
-               {/* Cover Image */}
                <div className="w-14 h-14 flex-shrink-0 relative">
                   <Image
                      src={coverImage}
                      alt={title || "Radio TLIS"}
                      width={56}
                      height={56}
-                     className="w-full h-full object-cover rounded"
+                     className="w-full h-full object-cover rounded shadow-sm"
                   />
                </div>
-
-               {/* Title and Subtitle Container */}
                <div className="flex-1 min-w-0 flex flex-col justify-center">
                   {mode === "archive" && archiveShowSlug ? (
                      <Link href={`/relacie/${archiveShowSlug}`}>
@@ -236,24 +528,23 @@ const Player: React.FC<{}> = () => {
                      />
                   )}
                   <div className="flex items-center gap-2 text-xs text-gray-300 flex-wrap">
-                     <span>{subtitle}</span>
+                     <span suppressHydrationWarning>{subtitle}</span>
                      {mode === "archive" && duration > 0 && (
                         <>
                            <span>•</span>
-                           <span>{getTimeFromMs(currentTime)} / {getTimeFromMs(duration)}</span>
+                           <span suppressHydrationWarning>{getTimeFromMs(currentTime)} / {getTimeFromMs(duration)}</span>
                         </>
                      )}
                   </div>
                </div>
-
-               {/* Actions: Volume (desktop only) + Play Button */}
                <div className="flex items-center gap-2 flex-shrink-0">
                   <div className='hidden lg:block'>
-                     <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
+                     <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} onToggleMute={toggleMute} />
                   </div>
-
-                  {/* Back 15s */}
-                  { mode === "archive" && 
+                  {mode === "stream" && (
+                     <QueueButton isOpen={isQueueOpen} onClick={() => setIsQueueOpen((prev) => !prev)} label={t("recently_played")} />
+                  )}
+                  { mode === "archive" &&
                   <button
                      aria-label="Back 15 seconds"
                      onClick={() => seekBy(-15)}
@@ -266,11 +557,12 @@ const Player: React.FC<{}> = () => {
                         <path d="M14 4.5L12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C8.7288 22 5.82446 20.4293 4 18.001M8 2.83209C6.87754 3.32251 5.86251 4.01303 5 4.85857C3.14864 6.67349 2 9.20261 2 12C2 12.6849 2.06886 13.3538 2.20004 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                      </svg>
                   </button> }
-
-                  {/* Play / Pause */}
                   <button
                      className="flex items-center justify-center w-10 h-10 cursor-pointer text-xl rounded-full bg-[#d43c4a]/90 hover:bg-[#d43c4a] focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-                     onClick={() => setIsPlaying(!isPlaying)}
+                     onClick={() =>{
+                        UmamiTrack("Play/Pause", { isPlaying: !isPlaying, mode: mode, title: title, subtitle: subtitle });                        
+                        setIsPlaying(!isPlaying)
+                     }}
                      aria-label={isPlaying ? "Pause" : "Play"}
                      type="button"
                   >
@@ -278,8 +570,6 @@ const Player: React.FC<{}> = () => {
                      {!isPlaying && !isLoading && <FontAwesomeIcon icon={faPlay} />}
                      {!isLoading && isPlaying && <FontAwesomeIcon icon={faPause} />}
                   </button>
-
-                  {/* Forward 15s */}
                   { mode === "archive" &&
                   <button
                      aria-label="Forward 15 seconds"
@@ -296,7 +586,7 @@ const Player: React.FC<{}> = () => {
                </div>
             </div>
          </div>
-         <SlideButton isVisible={isVisible} onClick={toggleVisibility} />
+         <SlideButton isVisible={isVisible} onClick={toggleVisibility} extraOffset={queuePanelHeight} />
       </>
    );
 };

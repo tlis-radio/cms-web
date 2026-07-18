@@ -3,7 +3,7 @@ import Socials from "./socials";
 import logo from "@/../public/images/03_TLIS_logo2020_white_no-bkg.svg";
 import Navbar, { getMarqueeLinks, getNavbarLinks } from "./navbar";
 import Hamburger from "./navbar/hamburger";
-import Link from "next/link";
+import { Link } from '@/navigation';
 import Marquee from "./navbar/marquee";
 import Player from "./player/player";
 import LiveButton from "@/components/player/live-button";

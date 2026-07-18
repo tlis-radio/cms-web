@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link";
+import { Link } from '@/navigation';
 import { Member } from "./MembersGrid";
 import TlisImage from "./TlisImage";
 
@@ -41,8 +41,12 @@ export default function MemberGridItem({ member } :{ member: Member }) {
 
             )}
             <h3 className="text-white font-medium mt-5">{member.Name}</h3>
+            {member.RoleDescription && (
+                <p className="text-gray-300">{member.RoleDescription}</p>
+            )}
             {member.BestOfTheMonth && (
-                <span className="text-[#D43C4A] text-sm">Tlisák Mesiaca</span>)}
+                <span className="text-[#D43C4A] text-sm">Tlisák Mesiaca</span>
+            )}
         </div>
     </Link>
     );

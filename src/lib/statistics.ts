@@ -45,6 +45,7 @@ interface ListeningSession {
   session_id: string;
   asset_id: string;
   segments: number[];
+  is_anonymous?: boolean;
   updated_at?: string;
 }
 
@@ -57,7 +58,8 @@ interface ListeningSession {
 export async function trackSegment(
   sessionId: string,
   episodeId: number,
-  segmentIndex: number
+  segmentIndex: number,
+  isAnonymous: boolean
 ): Promise<number[]> {
   segmentIndex = Math.min(Math.max(segmentIndex, 0), MAX_SEGMENT_INDEX);
   const cacheKey = `${sessionId}:${episodeId}`;
@@ -104,7 +106,7 @@ export async function trackSegment(
   sweepStaleSessions();
 
   // Persist to Directus (fire and forget, don't block response)
-  persistToDirectus(sessionId, episodeId, segments, dbRecord?.id).catch((err) => {
+  persistToDirectus(sessionId, episodeId, segments, isAnonymous, dbRecord?.id).catch((err) => {
     console.error("Failed to persist to Directus:", err);
   });
 
@@ -114,7 +116,8 @@ export async function trackSegment(
 export async function trackStreamSegment(
   sessionId: string,
   episodeId: string,
-  segmentIndex: number
+  segmentIndex: number,
+  isAnonymous: boolean
 ): Promise<number[]> {
   segmentIndex = Math.min(Math.max(segmentIndex, 0), MAX_SEGMENT_INDEX);
   const cacheKey = `stream:${sessionId}:${episodeId}`;
@@ -159,7 +162,7 @@ export async function trackStreamSegment(
   sweepStaleSessions();
 
   // Persist to Directus (fire and forget)
-  persistToDirectusStream(sessionId, episodeId, segments, dbRecord?.id).catch((err) => {
+  persistToDirectusStream(sessionId, episodeId, segments, isAnonymous, dbRecord?.id).catch((err) => {
     console.error("Failed to persist stream segments to Directus:", err);
   });
 
@@ -170,6 +173,7 @@ async function persistToDirectusStream(
   sessionId: string,
   episodeId: string,
   segments: number[],
+  isAnonymous: boolean,
   existingId?: string
 ): Promise<void> {
   const directus = getDirectusInstance();
@@ -216,6 +220,7 @@ async function persistToDirectusStream(
             session_id: sessionId,
             episode_id: episodeId,
             segments,
+            is_anonymous: isAnonymous,
           })
         );
       }
@@ -235,6 +240,7 @@ async function persistToDirectus(
   sessionId: string,
   episodeId: number,
   segments: number[],
+  isAnonymous: boolean,
   existingId?: string
 ): Promise<void> {
   const directus = getDirectusInstance();
@@ -287,6 +293,7 @@ async function persistToDirectus(
             session_id: sessionId,
             episode_id: episodeId,
             segments,
+            is_anonymous: isAnonymous,
           })
         );
       }

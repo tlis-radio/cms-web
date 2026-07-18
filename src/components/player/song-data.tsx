@@ -57,7 +57,6 @@ function PlayerDisplay({ mode, archiveName, archiveShowSlug, currentTime, durati
             <div className="flex flex-col">
                <Marquee
                   text={titleParts.join(" ")}
-                  speed={15}
                   className="font-argentumSansLight text-sm sm:text-base truncate"
                   data-tip={titleParts.join(" ")}
                />

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { trackSegment } from "@/lib/statistics";
-import { getSessionId } from "@/lib/session";
+import { getSessionId, isAnonymousRequest } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Calculate segment from actual playback time
     const segmentIndex = Math.floor(currentTime / SEGMENT_DURATION);
-    await trackSegment(sessionId, episodeId, segmentIndex);
+    await trackSegment(sessionId, episodeId, segmentIndex, isAnonymousRequest(request));
 
     return NextResponse.json({ ok: true, segment: segmentIndex });
   } catch (error) {

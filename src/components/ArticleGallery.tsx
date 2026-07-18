@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useGallery } from "@/components/carousel/gallery/GalleryProvider";
+import { useTranslations } from "next-intl"; // Added import
 
 interface ArticleGalleryProps {
    images: string[];
@@ -10,6 +11,7 @@ interface ArticleGalleryProps {
 }
 
 export default function ArticleGallery({ images, initialVisibleCount = 4 }: ArticleGalleryProps) {
+   const t = useTranslations("ArticleGallery"); // Initialize translations
    const [isExpanded, setIsExpanded] = useState(false);
    const { showImages, setOpen } = useGallery();
 
@@ -29,8 +31,10 @@ export default function ArticleGallery({ images, initialVisibleCount = 4 }: Arti
    return (
       <div className="mb-8">
          <h3 className="text-white font-semibold mb-4 text-lg flex items-center gap-2">
-            Galéria 
-            <span className="text-gray-400 font-normal text-sm">({images.length} fotiek)</span>
+            {t('heading')} 
+            <span className="text-gray-400 font-normal text-sm">
+               ({images.length} {t('photos_count')})
+            </span>
          </h3>
          
          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
@@ -42,7 +46,7 @@ export default function ArticleGallery({ images, initialVisibleCount = 4 }: Arti
                >
                   <img
                      src={`${DIRECTUS_URL}/assets/${image}?width=200&height=200&fit=cover&quality=80`}
-                     alt={`Galéria obrázok ${index + 1}`}
+                     alt={`${t('image_alt')} ${index + 1}`}
                      className="w-full h-full object-cover"
                      loading="lazy"
                   />
@@ -56,7 +60,10 @@ export default function ArticleGallery({ images, initialVisibleCount = 4 }: Arti
                className="mt-4 flex items-center gap-2 text-[#d43c4a] hover:text-[#f05561] transition-colors mx-auto"
             >
                <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} className="w-4 h-4" />
-               {isExpanded ? "Zobraziť menej" : `Zobraziť všetky (${images.length})`}
+               {isExpanded 
+                  ? t('show_less') 
+                  : `${t('show_all')} (${images.length})`
+               }
             </button>
          )}
       </div>

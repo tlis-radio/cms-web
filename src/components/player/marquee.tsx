@@ -2,57 +2,70 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import classNames from "classnames";
 
-const Marquee = ({ text, speed = 15, className }: { text: string; speed?: number; className?: string }) => {
+const GAP_PX = 140;
+const PIXELS_PER_SECOND = 45;
+
+const Marquee = ({ text, className }: { text: string; className?: string }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollingTextRef = useRef<HTMLDivElement>(null);
-  const staticTextRef = useRef<HTMLSpanElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
 
   const [shouldScroll, setShouldScroll] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(0);
   const [textWidth, setTextWidth] = useState(0);
 
   useEffect(() => {
-    if (!containerRef.current || (!scrollingTextRef.current && !staticTextRef.current)) return;
+    if (!containerRef.current || !measureRef.current) return;
 
     const container = containerRef.current;
-    const textEl = shouldScroll ? scrollingTextRef.current : staticTextRef.current;
+    const measureEl = measureRef.current;
 
-    if (!textEl) return;
+    const measure = () => {
+      const tw = measureEl.scrollWidth;
+      setTextWidth(tw);
+      setShouldScroll(tw > container.offsetWidth);
+    };
 
-    const resizeObserver = new ResizeObserver(() => {
-      setContainerWidth(container.offsetWidth);
-      setTextWidth(textEl.scrollWidth);
-      setShouldScroll(textEl.scrollWidth > container.offsetWidth);
-    });
-
+    const resizeObserver = new ResizeObserver(measure);
     resizeObserver.observe(container);
-    resizeObserver.observe(textEl);
+    resizeObserver.observe(measureEl);
+    measure();
 
     return () => resizeObserver.disconnect();
-  }, [text, shouldScroll]);
+  }, [text]);
+
+  const duration = textWidth > 0 ? (textWidth + GAP_PX) / PIXELS_PER_SECOND : 0;
 
   return (
     <div
       ref={containerRef}
-      className={classNames("overflow-hidden whitespace-nowrap w-full", className)}
+      className={classNames("relative overflow-hidden whitespace-nowrap w-full", className)}
     >
+      <span
+        ref={measureRef}
+        aria-hidden="true"
+        className={classNames("absolute invisible pointer-events-none block", className)}
+      >
+        {text}
+      </span>
+
       {shouldScroll ? (
         <motion.div
-          ref={scrollingTextRef}
-          className="inline-block"
-          animate={{ x: ["100%", `-${textWidth}px`] }}
-          transition={{
-            repeat: Infinity,
-            ease: "linear",
-            duration: speed,
-          }}
+          className="inline-flex w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, ease: "linear", duration }}
         >
-          <span className={classNames("block", className)}>{text}</span>
+          <span className={classNames("block", className)} style={{ paddingRight: GAP_PX }}>
+            {text}
+          </span>
+          <span
+            className={classNames("block", className)}
+            style={{ paddingRight: GAP_PX }}
+            aria-hidden="true"
+          >
+            {text}
+          </span>
         </motion.div>
       ) : (
-        <span ref={staticTextRef} className={classNames("block", className)}>
-          {text}
-        </span>
+        <span className={classNames("block", className)}>{text}</span>
       )}
     </div>
   );
