@@ -48,8 +48,14 @@ export async function POST(request: NextRequest) {
     } catch {
       bodySessionId = undefined;
     }
-
-    const sessionId = bodySessionId || getSessionId(request);
+    
+    const cookieSessionId = getSessionId(request);
+    const sessionId =
+      cookieSessionId ??
+      (isAnonymousRequest(request) && typeof bodySessionId === "string" && bodySessionId.trim()
+        ? bodySessionId.trim()
+        : undefined);
+        
     if (!sessionId) {
       return NextResponse.json({ error: "No session" }, { status: 400 });
     }

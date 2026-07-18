@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { locales } from '@/navigation';
+import { AnalyticsClient } from "@/components/Analytics";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
@@ -43,15 +44,23 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>; 
 }) {
   const { locale } = await params;
+  if (!locales.includes(locale as (typeof locales)[number])) {
+    notFound();
+  }
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className="relative min-h-screen antialiased">
-        <div className="relative z-0">
-           {children}
-        </div>
-      </div>
-    </NextIntlClientProvider>
+    <html lang={locale}>
+      <body>
+        <AnalyticsClient />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <div className="relative min-h-screen antialiased">
+            <div className="relative z-0">
+               {children}
+            </div>
+          </div>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }

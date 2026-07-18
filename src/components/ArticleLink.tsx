@@ -102,9 +102,9 @@ const ArticleLink: FunctionComponent<ArticleLinkProps> = ({ article }) => {
                )}
             </div>
 
-            <a href={`/clanky/${article.slug}`} onClick={(e) => e.stopPropagation()}>
+            <Link href={`/clanky/${article.slug}`} onClick={(e) => e.stopPropagation()}>
                <h2 className="font-argentumSansBold text-2xl font-bold">{article.title}</h2>
-            </a>
+            </Link>
 
             {isEvent && (
                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300">

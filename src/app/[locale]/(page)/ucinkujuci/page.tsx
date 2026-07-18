@@ -45,8 +45,7 @@ const CastPage = async ({
 }) => {
    const { locale } = await params;
    const t = await getTranslations({ locale, namespace: 'CastPage' });
-   const n = await getTranslations({ locale, namespace: 'navbar' });
-
+   
    let loadingError = false;
    let cast: any[] = [];
 
