@@ -7,9 +7,9 @@ export type ChangelogEntry = {
 // Newest first.
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
    {
-      date: '2026-08-01',
+      date: '2026-07-17',
       title: 'Počítame aj anonymných poslucháčov',
-      body: 'Od 1. augusta 2026 do štatistík počúvanosti a udržania (retention) zarátavame aj poslucháčov, ktorí neprijali cookies alebo na cookie lištu nikdy neodpovedali. Tým, ktorí súhlas odmietli alebo ho ešte nedali, priraďujeme dočasné (in-memory) session ID namiesto trvalého cookie — vydrží len počas jednej návštevy/reloadu stránky. Očakávajte preto od tohto dátumu mierny nárast v počte jedinečných poslucháčov a session-based metrík, keďže predtým boli títo poslucháči úplne mimo štatistík.',
+      body: 'Od 17. 7. 2026 do štatistík počúvanosti a udržania (retention) zarátavame aj poslucháčov, ktorí neprijali cookies alebo na cookie lištu nikdy neodpovedali. Tým, ktorí súhlas odmietli alebo ho ešte nedali, priraďujeme dočasné (in-memory) session ID namiesto trvalého cookie — vydrží len počas jednej návštevy/reloadu stránky. Očakávajte preto od tohto dátumu mierny nárast v počte jedinečných poslucháčov a session-based metrík, keďže predtým boli títo poslucháči úplne mimo štatistík.',
    },
    {
       date: '2025-12-18',
