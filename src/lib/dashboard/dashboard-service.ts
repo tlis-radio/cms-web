@@ -812,7 +812,9 @@ export class DashboardService {
          const sessionCount = rows.length;
          const avgCompletionPct = sessionCount > 0 ? totalProgress / sessionCount : 0;
          const bounceClass: BounceClass =
-            sessionCount <= BOUNCE_MAX_SESSIONS && totalListenedSeconds < BOUNCE_MAX_SECONDS ? 'bounce' : 'returning';
+            (sessionCount <= BOUNCE_MAX_SESSIONS && totalListenedSeconds < BOUNCE_MAX_SECONDS)
+            || new Date(firstSeen).getDate() === new Date(lastSeen).getDate()
+            ? 'bounce' : 'returning';
 
          users.push({
             sessionId,
