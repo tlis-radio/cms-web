@@ -10,6 +10,7 @@ import { EpisodeAnalytics, ListenerSessionDisplay } from '@/types/statistics';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import StatCard from '@/components/dashboard/StatCard';
 import CoverThumb from '@/components/dashboard/CoverThumb';
+import UserDetailModal from '@/components/dashboard/UserDetailModal';
 
 export default function EpisodeAnalyticsPage() {
    const params = useParams();
@@ -25,6 +26,8 @@ export default function EpisodeAnalyticsPage() {
    const [streamRetentionData, setStreamRetentionData] = useState<Array<{ time: string; retention: number }>>([]);
    const [audioDuration, setAudioDuration] = useState<number>(3600); // Default 1 hour
    const [isLoading, setIsLoading] = useState(true);
+   const [openSessionId, setOpenSessionId] = useState<string | null>(null);
+   const [listenerStats, setListenerStats] = useState<Map<string, { otherEpisodes: number; meanProgress: number }>>(new Map());
 
    useEffect(() => {
       if (!directusClient || !episodeId) return;
@@ -54,10 +57,12 @@ export default function EpisodeAnalyticsPage() {
             const archiveSessions = analyticsData.listeningSessions.map(s => ({ ...s, type: 'Archive' as const }));
             const streamSessions = analyticsData.listeningSessionsStream.map(s => ({ ...s, type: 'Stream' as const }));
 
-            const allSessions = [
+            // Merge rows that a tracking race split across duplicate DB
+            // entries so each listener shows one, correct completion %.
+            const allSessions = service.mergeDuplicateSessions([
                ...archiveSessions,
                ...streamSessions,
-            ];
+            ]);
 
             const processedListeners = allSessions.map((session) => {
                const { duration, progress } = service.calculateListeningDuration(
@@ -127,6 +132,68 @@ export default function EpisodeAnalyticsPage() {
          setIsLoading(false);
       });
    }, [directusClient, episodeId]);
+
+   // For each listener shown below, look up how many other episodes they've
+   // listened to and their overall average completion. Uses each episode's
+   // real audio duration (cached per episode, and reusing the duration we
+   // already loaded for the current episode) rather than a fixed fallback -
+   // a fallback here would disagree with the listener's own row above, which
+   // is computed from the real duration, and produce contradictory numbers
+   // (e.g. mean 100% when their only listen shows 91%).
+   useEffect(() => {
+      if (!directusClient || listeners.length === 0) return;
+
+      const service = new DashboardService(directusClient);
+      const uniqueSessionIds = Array.from(new Set(listeners.map((l) => l.sessionId)));
+      const durationCache = new Map<string, number>([[String(episodeId), audioDuration]]);
+
+      let cancelled = false;
+
+      const getDuration = async (epIdStr: string): Promise<number> => {
+         const cached = durationCache.get(epIdStr);
+         if (cached !== undefined) return cached;
+
+         let duration = 3600;
+         try {
+            const ep = await service.getEpisodeById(parseInt(epIdStr));
+            if (ep?.Audio?.id) {
+               duration = await service.getAudioDuration(ep.Audio.id);
+            }
+         } catch (e) {
+            console.error('Error loading duration for episode', epIdStr, e);
+         }
+         durationCache.set(epIdStr, duration);
+         return duration;
+      };
+
+      Promise.all(
+         uniqueSessionIds.map(async (sid) => {
+            const sessions = await service.getUserListeningSessions(sid);
+            const merged = service.mergeDuplicateSessions(sessions);
+
+            const episodeIds = new Set<string>();
+            let totalProgress = 0;
+            for (const s of merged) {
+               const epId = s.episode_id || s.asset_id;
+               if (!epId) continue;
+               episodeIds.add(String(epId));
+               const duration = await getDuration(String(epId));
+               const { progress } = service.calculateListeningDuration(s.segments || [], duration);
+               totalProgress += progress;
+            }
+            episodeIds.delete(String(episodeId));
+
+            return [sid, {
+               otherEpisodes: episodeIds.size,
+               meanProgress: merged.length > 0 ? totalProgress / merged.length : 0,
+            }] as const;
+         })
+      ).then((results) => {
+         if (!cancelled) setListenerStats(new Map(results));
+      });
+
+      return () => { cancelled = true; };
+   }, [directusClient, listeners, episodeId, audioDuration]);
 
    const formatTimestamp = (timestamp: string) => {
       return new Date(timestamp).toLocaleString('sk-SK', {
@@ -371,14 +438,14 @@ export default function EpisodeAnalyticsPage() {
                      Jednotliví poslucháči
                   </h2>
                   {listeners.length > 0 ? (
-                     <div className="space-y-1.5">
+                     <div className="space-y-1">
                         {listeners.map((listener) => (
-                           <Link
+                           <button
                               key={listener.id}
-                              href={`/dashboard/users?session=${listener.sessionId}`}
-                              className="block bg-gray-700 rounded-lg p-2.5 hover:bg-gray-600 transition"
+                              onClick={() => setOpenSessionId(listener.sessionId)}
+                              className="w-full text-left rounded-md p-1.5 hover:bg-gray-700/40 transition"
                            >
-                              <div className="flex flex-col gap-2">
+                              <div className="flex flex-col gap-1">
                                  <div className="flex justify-between items-center">
                                     <div>
                                        <div className="flex items-center gap-2 mb-0.5">
@@ -390,7 +457,7 @@ export default function EpisodeAnalyticsPage() {
                                              {listener.type}
                                           </span>
                                           <span className="text-white text-xs font-medium">
-                                             Relácia z {formatTimestamp(listener.startedAt)}
+                                             Posluchač z {formatTimestamp(listener.startedAt)}
                                           </span>
                                        </div>
                                     </div>
@@ -404,14 +471,21 @@ export default function EpisodeAnalyticsPage() {
                                     </div>
                                  </div>
 
-                                 <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                                 <div className="w-full h-1 rounded-full border border-gray-600 overflow-hidden">
                                     <div
                                        className={`h-full ${listener.type === 'Stream' ? 'bg-red-500' : 'bg-yellow-500'}`}
                                        style={{ width: `${listener.progress}%` }}
                                     />
                                  </div>
+
+                                 {listenerStats.has(listener.sessionId) && (
+                                    <div className="text-gray-500 text-[10px]">
+                                       {listenerStats.get(listener.sessionId)!.otherEpisodes} ďalších epizód · priemerne{' '}
+                                       {listenerStats.get(listener.sessionId)!.meanProgress.toFixed(0)}% dopočuté
+                                    </div>
+                                 )}
                               </div>
-                           </Link>
+                           </button>
                         ))}
                      </div>
                   ) : (
@@ -426,6 +500,8 @@ export default function EpisodeAnalyticsPage() {
                Epizóda nebola nájdená.
             </div>
          )}
+
+         {openSessionId && <UserDetailModal sessionId={openSessionId} onClose={() => setOpenSessionId(null)} />}
       </div>
    );
 }
