@@ -2,7 +2,7 @@ export type TourStep = {
    targetSelector: string;
    title: string;
    body: string;
-   placement?: 'right' | 'bottom' | 'top';
+   placement?: 'right' | 'bottom' | 'top' | 'left';
 };
 
 export type TourRelatedLink = {
@@ -35,15 +35,53 @@ const HOME_TOUR: TourDefinition = {
          placement: 'right',
       },
       {
-         targetSelector: '[data-tour="filter-bar"]',
+         targetSelector: '[data-tour="time-filter"]',
          title: 'Časový rozsah',
-         body: 'Prepínač časového rozsahu je vždy hore vpravo a zostáva viditeľný pri scrollovaní. Ovplyvňuje rebríčky nižšie.',
+         body: 'Prepínač časového rozsahu ovplyvňuje načítané dáta v tomto stĺpci.',
          placement: 'bottom',
       },
       {
-         targetSelector: '[data-tour="list-density"]',
+         targetSelector: '[data-tour="home-widgets"]',
+         title: 'Rýchly prehľad',
+         body: 'Porovnanie za posledné obdobie nastavené v časovom rozsahu. Po kliknutí prejdeš na konkrétnu sekciu dashboardu s detailnejšími dátami.',
+         placement: 'bottom',
+      },
+      {
+         targetSelector: '[data-tour="home-profile"]',
+         title: 'Tvoj profil',
+         body: 'Tu máš rýchly prístup ku tvojim reláciám a dátum poslednej epizódy.',
+         placement: 'left',
+      },
+      {
+         targetSelector: '[data-tour="home-recent-episodes"]',
+         title: 'Posledné epizódy',
+         body: 'Zoznam posledných odvysielaných relácií. Kliknutím na epizódu sa dostaneš do jej detailnej analytiky.',
+      },
+      {
+         targetSelector: '[data-tour="home-listener-activity"]',
+         title: 'Aktivita poslucháčov',
+         body: 'Graf zobrazujúci aktivitu poslucháčov vo vybranom časovom rozsahu.',
+      },
+      {
+         targetSelector: '[data-tour="home-top-shows"]',
          title: 'Top relácie',
-         body: 'Tri rebríčky relácií — podľa udržateľnosti z archívu, udržateľnosti vysielania a počtu poslucháčov. Kliknutím na reláciu sa dostaneš na jej detail.',
+         body: 'Prehľad top relácií, ktoré udržali najvyššiu úroveň počúvania relácie. Klikni na epizódu pre detailný graf.',
+      },
+      {
+         targetSelector: '[data-tour="home-retention-graph"]',
+         title: 'Miera udržania',
+         body: 'Graf zobrazuje, koľko poslucháčov sa dopočulo do daného bodu nahrávky. Prudký pokles ukazuje, kde ľudia najčastejšie prestávajú počúvať.',
+      },
+      {
+         targetSelector: '[data-tour="home-trending"]',
+         title: 'Trendujúce relácie',
+         body: 'Zoznam relácií, ktoré zaznamenali najväčší počet poslucháčov vo vybranom časovom rozsahu. Kliknutím na epizódu sa dostaneš do jej detailnej analytiky.',
+         placement: 'top',
+      },
+      {
+         targetSelector: '[data-tour="home-top-creators"]',
+         title: 'Top tvorcovia',
+         body: 'Zoznam tvorcov, ktorých relácie zaznamenali najvyšší čas počúvania vo vybranom časovom rozsahu.',
          placement: 'top',
       },
       {

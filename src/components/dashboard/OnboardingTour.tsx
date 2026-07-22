@@ -137,6 +137,10 @@ export default function OnboardingTour({ definition, pathname, open, onClose }: 
             top = rect.top;
             left = rect.left + rect.width + gap;
             break;
+         case 'left':
+            top = rect.top;
+            left = rect.left - TOOLTIP_WIDTH - gap;
+            break;
          case 'top':
             top = rect.top - gap - tooltipHeight;
             left = rect.left;

@@ -346,16 +346,19 @@ export default function HomePage() {
       title: "Počet epizód",
       value: periodStats?.episodesCount ?? "...",
       diff: periodStats?.episodesDiff ?? null,
+      link: "/dashboard/shows",
     },
     {
       title: "Počet poslucháčov",
       value: periodStats?.listenersCount ?? "...",
       diff: periodStats?.listenersDiff ?? null,
+      link: "/dashboard/users",
     },
     {
       title: "Počet zdielaní",
       value: periodStats?.sharesCount ?? "...",
       diff: periodStats?.sharesDiff ?? null,
+      link: "/dashboard/track-shares",
     },
   ];
 
@@ -586,10 +589,10 @@ export default function HomePage() {
     <div className="max-w-7xl mx-auto">
       <div className="flex gap-4 xl:flex-row flex-col">
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex gap-4 flex-col md:flex-row">
+          <div className="flex gap-4 flex-col md:flex-row" data-tour="home-widgets">
             {topStatCards.map((show, index) => (
+              <Link key={index} href={show.link ?? "#"} className="flex flex-1">
               <div
-                key={index}
                 className="flex flex-1 flex-col bg-[#96120F] border-500 rounded-lg p-4 text-white gap-3"
               >
                 <div className="flex gap-1 mr-4 justify-between items-center w-full">
@@ -614,9 +617,10 @@ export default function HomePage() {
                   <span className="text-lg font-bold">{show.value}</span>
                 </span>
               </div>
+              </Link>
             ))}
           </div>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1" data-tour="time-filter">
             {timeFilterOptions.map((option) => (
               <button
                 key={option.value}
@@ -632,7 +636,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="flex flex-col gap-2 bg-black/20 p-4 rounded-md text-white">
+          <div className="flex flex-col gap-2 bg-black/20 p-4 rounded-md text-white" data-tour="home-listener-activity">
             <div className="flex items-center justify-between gap-2 w-full">
               <span className="text-md font-bold text-white">
                 Aktivita poslucháčov
@@ -673,7 +677,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex flex-col  gap-3 bg-black/20 p-4 rounded-md text-white">
+          <div className="flex flex-col  gap-3 bg-black/20 p-4 rounded-md text-white" data-tour="home-top-shows">
             <div className="flex items-center justify-between gap-2 w-full">
               <span className="text-md font-bold text-white">
                 Top relácie podľa priemernej udržateľnosti
@@ -726,7 +730,7 @@ export default function HomePage() {
                 )}
               </div>
 
-              <div className="flex flex-col gap-3 w-full">
+              <div className="flex flex-col gap-3 w-full" data-tour="home-retention-graph">
                 {selectedTopShowId != null ? (
                   <>
                     <ResponsiveContainer width="100%" height={240}>
@@ -770,7 +774,7 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-4 text-white">
-            <div className="flex w-full flex-col gap-2 bg-black/20 p-4 rounded-md">
+            <div className="flex w-full flex-col gap-2 bg-black/20 p-4 rounded-md" data-tour="home-trending">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-md font-bold text-white">
                   Trendy epizódy podľa vypočutí
@@ -809,7 +813,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex w-full flex-col gap-2 bg-black/20 p-4 rounded-md">
+            <div className="flex w-full flex-col gap-2 bg-black/20 p-4 rounded-md" data-tour="home-top-creators">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-md font-bold text-white">Tvorcovia podľa času počúvania</span>
               </div>
@@ -843,7 +847,7 @@ export default function HomePage() {
 
         <div className="flex xl:flex-col lg:flex-row flex-col gap-4 xl:w-[450px] w-full">
           <div className="bg-black/20 p-4 rounded-md flex flex-col gap-4 w-full">
-            <div>
+            <div data-tour="home-profile">
               <div className="flex gap-4 items-center">
                 {member?.Picture ? (
                   <img
@@ -903,7 +907,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="bg-black/20 p-4 rounded-md flex flex-col gap-4 w-full">
-            <div className="flex flex-col mt-2">
+            <div className="flex flex-col mt-2" data-tour="home-recent-episodes">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-md font-bold text-white">
                   Posledné epizódy
