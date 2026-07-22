@@ -423,6 +423,91 @@ export class DashboardService {
       }
    }
 
+   async getMemberForUser(userId: string): Promise<{
+      id: number;
+      Name: string;
+      Role: string;
+      Picture?: string;
+      Cast: { id: number; Name: string; Slug: string } | null;
+   } | null> {
+      try {
+         const members = await this.client.request<any[]>(
+            readItems('Members', {
+               filter: { DirectusUser: { _eq: userId } },
+               fields: ['id', 'Name', 'Role', 'Picture', 'Cast.id', 'Cast.Name', 'Cast.Slug'],
+               limit: 1,
+            })
+         );
+         return members && members.length > 0 ? members[0] : null;
+      } catch (error) {
+         console.error('Error fetching member for user:', error);
+         return null;
+      }
+   }
+
+   // Shows a given Cast member appears in (used for the "Moje relácie" widget).
+   async getShowsForCastId(castId: number): Promise<Show[]> {
+      try {
+         const shows = await this.client.request<Show[]>(
+            readItems('Shows', {
+               filter: { Cast: { Cast_id: { id: { _eq: castId } } } },
+               fields: ['id', 'Title', 'Slug', 'Cover'],
+               limit: -1,
+            })
+         );
+         return shows || [];
+      } catch (error) {
+         console.error('Error fetching shows for cast:', error);
+         return [];
+      }
+   }
+
+   // Members don't expose a reverse relation to Cast, so their profile picture
+   // has to be looked up separately and joined client-side by Cast id (same
+   // pattern castEndpoints.getCastBySlug already uses in cms-api-service.ts).
+   async getAllMembers(): Promise<Array<{ id: number; Cast: number | null; Picture: string | null }>> {
+      try {
+         const members = await this.client.request<Array<{ id: number; Cast: number | null; Picture: string | null }>>(
+            readItems('Members', {
+               fields: ['id', 'Cast', 'Picture'],
+               limit: -1,
+            })
+         );
+         return members || [];
+      } catch (error) {
+         console.error('Error fetching members:', error);
+         return [];
+      }
+   }
+
+   // Episodes have no real Show relation field of their own - the actual
+   // Show<->Episode link is the Shows.Episodes (Shows_Episodes) junction, the
+   // same one getTopShowsByRetention/etc. already key off of. Build both
+   // lookup directions from it once so pages don't have to guess.
+   buildShowEpisodeIndex(
+      shows: Show[],
+      episodes: Episode[]
+   ): { episodesByShowId: Map<number, Episode[]>; showByEpisodeId: Map<string, Show> } {
+      const episodesById = new Map(episodes.map((ep) => [String(ep.id), ep]));
+      const episodesByShowId = new Map<number, Episode[]>();
+      const showByEpisodeId = new Map<string, Show>();
+
+      shows.forEach((show) => {
+         const showEpisodes: Episode[] = [];
+         (show.Episodes || []).forEach((e) => {
+            const epId = String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id);
+            const episode = episodesById.get(epId);
+            if (episode) {
+               showEpisodes.push(episode);
+               showByEpisodeId.set(epId, show);
+            }
+         });
+         episodesByShowId.set(show.id, showEpisodes);
+      });
+
+      return { episodesByShowId, showByEpisodeId };
+   }
+
    // Fetch all dashboard data with progress support
    async getAllDashboardDataWithProgress(
       onProgress: (progress: number, message: string) => void
@@ -438,13 +523,13 @@ export class DashboardService {
          const [shows, episodes] = await Promise.all([
             this.client.request<Show[]>(
                readItems('Shows', {
-                  fields: ['id', 'Title', 'Slug', 'Episodes.Episodes_id'],
+                  fields: ['id', 'Title', 'Slug', 'Cover', 'Episodes.Episodes_id', 'Cast.Cast_id.id', 'Cast.Cast_id.Name'],
                   limit: -1,
                })
             ),
             this.client.request<Episode[]>(
                readItems('Episodes', {
-                  fields: ['id', 'Show_Id.id', 'Show_Id.Slug', 'Show_Id.Title', 'Audio.id', 'Date'],
+                  fields: ['id', 'Title', 'Cover', 'Views', 'Show_Id.id', 'Show_Id.Slug', 'Show_Id.Title', 'Audio.id', 'Date'],
                   filter: { status: { _eq: 'published' } },
                   limit: -1,
                })
@@ -881,7 +966,7 @@ export class DashboardService {
       };
    }
 
-   private getCutoffDate(timeFilter: string): Date | null {
+   getCutoffDate(timeFilter: string): Date | null {
       const now = new Date();
       switch (timeFilter) {
          case '7d':
@@ -895,6 +980,7 @@ export class DashboardService {
          case '12m':
             return new Date(now.getFullYear(), now.getMonth() - 12, now.getDate());
          case 'all':
+            return new Date("December 1, 2025")
          default:
             return null;
       }

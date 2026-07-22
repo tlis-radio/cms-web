@@ -1,0 +1,13 @@
+.dashboard-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.dashboard-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dashboard-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 9999px;
+}
+.dashboard-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}

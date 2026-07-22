@@ -54,7 +54,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             onStartTour={() => setTourOpen(true)}
             onOpenChangelog={() => setChangelogOpen(true)}
          />
-         <main className="md:pl-56 lg:pl-72 min-h-screen bg-gray-900 p-4 md:p-6">{children}</main>
+         <main className="md:pl-[250px] lg:pl-72 min-h-screen bg-gray-900 p-4 md:p-6">{children}</main>
 
          <ChangelogModal
             open={changelogOpen}
