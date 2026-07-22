@@ -41,7 +41,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex  bg-gray-900">
-      <div className="max-w-md min-w-[400px] w-full flex flex-col justify-center p-8 px-20 bg-[#0D1117] rounded-lg shadow-xl">
+      <div className="max-w-md md:min-w-[400px] w-full flex flex-col justify-center p-8 md:px-20 bg-[#0D1117] rounded-lg shadow-xl">
         <div className="flex gap-3 items-center mb-auto">
           <div className="bg-[#96120F] p-1 rounded-lg">
             <img
