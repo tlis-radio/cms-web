@@ -26,7 +26,13 @@
     "loading": "Cargando...",
     "archive_label": " programas",
     "recently_played": "Reproducido recientemente",
-    "recently_played_empty": "Aún no ha sonado nada"
+    "recently_played_empty": "Aún no ha sonado nada",
+    "password_prompt_title": "La transmisión está protegida con contraseña",
+    "password_prompt_description": "Introduce la contraseña para iniciar la transmisión.",
+    "password_placeholder": "Contraseña",
+    "password_submit": "Confirmar",
+    "password_cancel": "Cancelar",
+    "password_error": "Contraseña incorrecta, inténtalo de nuevo."
   },
   "breadcrumbs": {
     "home": "Inicio"

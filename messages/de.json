@@ -26,7 +26,13 @@
     "loading": "Wird geladen...",
     "archive_label": " Sendungen",
     "recently_played": "Zuletzt gespielt",
-    "recently_played_empty": "Bisher nichts gespielt"
+    "recently_played_empty": "Bisher nichts gespielt",
+    "password_prompt_title": "Stream ist passwortgeschützt",
+    "password_prompt_description": "Gib das Passwort ein, um den Stream zu starten.",
+    "password_placeholder": "Passwort",
+    "password_submit": "Bestätigen",
+    "password_cancel": "Abbrechen",
+    "password_error": "Falsches Passwort, versuch es erneut."
   },
   "breadcrumbs": {
     "home": "Startseite"

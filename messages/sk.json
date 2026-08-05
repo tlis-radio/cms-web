@@ -26,7 +26,13 @@
     "loading": "Načítavam...",
     "archive_label": " relácie",
     "recently_played": "Naposledy hrané",
-    "recently_played_empty": "Zatiaľ nič nehralo"
+    "recently_played_empty": "Zatiaľ nič nehralo",
+    "password_prompt_title": "Stream je chránený heslom",
+    "password_prompt_description": "Pre spustenie streamu zadaj heslo.",
+    "password_placeholder": "Heslo",
+    "password_submit": "Potvrdiť",
+    "password_cancel": "Zrušiť",
+    "password_error": "Nesprávne heslo, skús to znova."
   },
   "breadcrumbs": {
     "home": "Domov"

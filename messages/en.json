@@ -26,7 +26,13 @@
     "loading": "Loading...",
     "archive_label": " shows",
     "recently_played": "Recently played",
-    "recently_played_empty": "Nothing played yet"
+    "recently_played_empty": "Nothing played yet",
+    "password_prompt_title": "Stream is password protected",
+    "password_prompt_description": "Enter the password to start the stream.",
+    "password_placeholder": "Password",
+    "password_submit": "Submit",
+    "password_cancel": "Cancel",
+    "password_error": "Incorrect password, try again."
   },
   "breadcrumbs": {
     "home": "Home"

@@ -4,8 +4,15 @@ import { v4 as uuidv4 } from "uuid";
 
 import { UmamiTrack } from "@/components/Analytics";
 import { isAnonymousConsent } from "@/lib/clientConsent";
+import StreamPasswordPrompt from "@/components/player/StreamPasswordPrompt";
 
 type PlayerMode = "stream" | "archive";
+
+const STREAM_URL = "/api/stream-proxy";
+
+function buildAuthenticatedStreamUrl(password: string): string {
+  return `${STREAM_URL}?password=${encodeURIComponent(password)}`;
+}
 
 interface PlayerContextType {
   isPlaying: boolean;
@@ -57,11 +64,16 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     album: string;
     image: string;
   } | null>(null);
-  const [src, setSrc] = useState<string>("https://stream.tlis.sk/tlis.mp3");
+  const [src, setSrc] = useState<string>(STREAM_URL);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  // Only set after the stream has actually returned a 401 and the user supplied a working password.
+  const [streamPassword, setStreamPassword] = useState<string | null>(null);
+  const [isStreamPasswordPromptOpen, setIsStreamPasswordPromptOpen] = useState(false);
+  const [streamPasswordError, setStreamPasswordError] = useState<string | null>(null);
 
   const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
   const [countedView, setCountedView] = useState<boolean>(false);
@@ -109,7 +121,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
       setIsPlaying(true);
     } else {
-      setSrc("https://stream.tlis.sk/tlis.mp3");
+      setSrc(STREAM_URL);
     }
 
     if (audioRef.current) {
@@ -208,21 +220,58 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     let streamHandleCanPlay: (() => void) | null = null;
     let archiveHandleCanPlay: (() => void) | null = null;
+    let cancelled = false;
+
+    async function startStreamPlayback() {
+      const audio = audioRef.current;
+      if (!audio) return;
+      setIsLoading(true);
+
+      const urlToUse = streamPassword ? buildAuthenticatedStreamUrl(streamPassword) : STREAM_URL;
+
+      // Proxy forwards Icecast's status as-is, so one aborted GET tells us if this src works.
+      const probeController = new AbortController();
+      try {
+        const probe = await fetch(urlToUse, { method: "GET", signal: probeController.signal });
+        probeController.abort();
+        if (probe.status === 401) {
+          if (cancelled) return;
+          setIsLoading(false);
+          setIsPlaying(false);
+          if (streamPassword) {
+            setStreamPassword(null);
+            setStreamPasswordError("invalid");
+          } else {
+            setStreamPasswordError(null);
+          }
+          setIsStreamPasswordPromptOpen(true);
+          return;
+        }
+      } catch (err) {
+        if (!probeController.signal.aborted) {
+          console.warn("Stream auth probe failed, attempting playback anyway:", err);
+        }
+      }
+
+      if (cancelled || !audioRef.current) return;
+
+      audioRef.current.src = urlToUse;
+      audioRef.current.load();
+
+      streamHandleCanPlay = () => {
+        setIsLoading(false);
+        audioRef.current?.removeEventListener("canplay", streamHandleCanPlay!);
+      };
+      audioRef.current.addEventListener("canplay", streamHandleCanPlay);
+      audioRef.current.play().catch((err) => {
+        console.warn(err);
+      });
+    }
+
     if (audioRef.current && mode === "stream") {
       setArchiveMetadata(null);
       if (isPlaying) {
-        setIsLoading(true);
-        audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
-        audioRef.current.load();
-
-        streamHandleCanPlay = () => {
-          setIsLoading(false);
-          audioRef.current?.removeEventListener("canplay", streamHandleCanPlay!);
-        };
-        audioRef.current.addEventListener("canplay", streamHandleCanPlay);
-        audioRef.current.play().catch((err) => {
-          console.warn(err);
-        });
+        startStreamPlayback();
       } else {
         audioRef.current.pause();
         audioRef.current.src = "";
@@ -257,7 +306,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setIsLoading(false);
       }
     }
-  }, [isPlaying, mode]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isPlaying, mode, streamPassword]);
 
   // Segment tracking for archive and periodic heartbeat for stream
   const lastTrackedSegment = useRef<number>(-1);
@@ -367,6 +420,19 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
   }, [mode, episodeId]);
 
+  function submitStreamPassword(password: string) {
+    setStreamPassword(password);
+    setStreamPasswordError(null);
+    setIsStreamPasswordPromptOpen(false);
+    setIsPlaying(true);
+  }
+
+  function cancelStreamPassword() {
+    setIsStreamPasswordPromptOpen(false);
+    setStreamPasswordError(null);
+    setIsPlaying(false);
+  }
+
   return (
     <PlayerContext.Provider
       value={{
@@ -397,6 +463,12 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }}
     >
       {children}
+      <StreamPasswordPrompt
+        open={isStreamPasswordPromptOpen}
+        error={streamPasswordError}
+        onSubmit={submitStreamPassword}
+        onCancel={cancelStreamPassword}
+      />
     </PlayerContext.Provider>
   );
 };

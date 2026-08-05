@@ -26,7 +26,13 @@
     "loading": "Завантаження...",
     "archive_label": " передачі",
     "recently_played": "Нещодавно грало",
-    "recently_played_empty": "Поки що нічого не грало"
+    "recently_played_empty": "Поки що нічого не грало",
+    "password_prompt_title": "Потік захищений паролем",
+    "password_prompt_description": "Введіть пароль, щоб почати трансляцію.",
+    "password_placeholder": "Пароль",
+    "password_submit": "Підтвердити",
+    "password_cancel": "Скасувати",
+    "password_error": "Невірний пароль, спробуйте ще раз."
   },
   "breadcrumbs": {
     "home": "Головна"
