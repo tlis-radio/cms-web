@@ -5,7 +5,7 @@ import { DashboardService } from '@/lib/dashboard/dashboard-service';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import FilterBar from '@/components/dashboard/FilterBar';
-import Select from '@/components/primitives/Select';
+import ShowEpisodeFilter from '@/components/dashboard/ShowEpisodeFilter';
 import UserDetailModal from '@/components/dashboard/UserDetailModal';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
@@ -22,6 +22,7 @@ export default function DashboardUsersPage() {
    const [loadingMessage, setLoadingMessage] = useState('');
    const [dashboardData, setDashboardData] = useState<any>(null);
    const [showFilter, setShowFilter] = useState<string>('all');
+   const [episodeFilter, setEpisodeFilter] = useState<string>('all');
    const [sortBy, setSortBy] = useState<'lastSeen' | 'episodeCount'>('lastSeen');
    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -53,13 +54,19 @@ export default function DashboardUsersPage() {
 
    useEffect(() => {
       setVisibleCount(PAGE_SIZE);
-   }, [showFilter, sortBy, sortOrder]);
+   }, [showFilter, episodeFilter, sortBy, sortOrder]);
 
    const service = useMemo(() => (directusClient ? new DashboardService(directusClient) : null), [directusClient]);
 
    const overview = useMemo(() => {
       if (!service || !dashboardData) return null;
-      const filter = showFilter !== 'all' ? { showId: Number(showFilter) } : undefined;
+      const filter =
+         showFilter !== 'all'
+            ? {
+                 showId: Number(showFilter),
+                 ...(episodeFilter !== 'all' ? { episodeId: episodeFilter } : {}),
+              }
+            : undefined;
       return service.getUserOverviewStats(
          {
             listeningSessions: dashboardData.listeningSessions,
@@ -69,7 +76,7 @@ export default function DashboardUsersPage() {
          },
          filter
       );
-   }, [service, dashboardData, showFilter]);
+   }, [service, dashboardData, showFilter, episodeFilter]);
 
    const episodesById = useMemo(() => {
       const map = new Map<string, any>();
@@ -124,6 +131,34 @@ export default function DashboardUsersPage() {
       ...((dashboardData?.shows || []) as any[]).map((s) => ({ value: String(s.id), label: s.Title })),
    ];
 
+   const episodeOptions = useMemo(() => {
+      if (showFilter === 'all' || !dashboardData) return [{ value: 'all', label: 'Všetky epizódy' }];
+      // Same dual-source resolution as DashboardService.getUserOverviewStats:
+      // episodes link to a show via the Shows.Episodes junction and/or Show_Id.
+      const show = ((dashboardData.shows || []) as any[]).find((sh) => String(sh.id) === showFilter);
+      const showEpisodeIds = new Set(
+         Array.isArray(show?.Episodes)
+            ? show.Episodes.map((e: any) => String(typeof e.Episodes_id === 'object' ? e.Episodes_id?.id : e.Episodes_id))
+            : []
+      );
+      ((dashboardData.episodes || []) as any[]).forEach((ep) => {
+         const epShowId = ep.Show_Id?.id || ep.Show_Id;
+         if (epShowId && String(epShowId) === showFilter) showEpisodeIds.add(String(ep.id));
+      });
+      const episodes = ((dashboardData.episodes || []) as any[])
+         .filter((ep) => showEpisodeIds.has(String(ep.id)))
+         .sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime());
+      return [
+         { value: 'all', label: 'Všetky epizódy' },
+         ...episodes.map((ep) => ({ value: String(ep.id), label: ep.Title })),
+      ];
+   }, [dashboardData, showFilter]);
+
+   const handleShowFilterChange = (value: string) => {
+      setShowFilter(value);
+      setEpisodeFilter('all');
+   };
+
    const bounceTotal = overview ? overview.bounceVsReturning.bounce + overview.bounceVsReturning.returning : 0;
    const bouncePct = bounceTotal > 0 && overview ? Math.round((overview.bounceVsReturning.bounce / bounceTotal) * 100) : 0;
    const returningPct = bounceTotal > 0 ? 100 - bouncePct : 0;
@@ -143,14 +178,13 @@ export default function DashboardUsersPage() {
    return (
       <div className="max-w-7xl mx-auto">
          <FilterBar title="Poslucháči" data-tour="filter-bar">
-            <Select
-               compact
-               searchable
-               searchPlaceholder="Hľadať reláciu..."
-               options={showOptions}
-               value={showFilter}
-               onChange={setShowFilter}
-               className="bg-gray-800 text-white min-w-[280px]"
+            <ShowEpisodeFilter
+               showOptions={showOptions}
+               episodeOptions={episodeOptions}
+               showValue={showFilter}
+               episodeValue={episodeFilter}
+               onShowChange={handleShowFilterChange}
+               onEpisodeChange={setEpisodeFilter}
             />
             <button
                onClick={() => handleSort('lastSeen')}

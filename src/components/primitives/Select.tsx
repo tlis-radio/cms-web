@@ -15,6 +15,7 @@ type SelectProps = {
 	compact?: boolean;
 	searchable?: boolean;
 	searchPlaceholder?: string;
+	disabled?: boolean;
 };
 
 type PanelCoords = {
@@ -66,6 +67,7 @@ const Select: React.FC<SelectProps> = ({
 	compact = false,
 	searchable = false,
 	searchPlaceholder = "Hľadať...",
+	disabled = false,
 }) => {
 	const [open, setOpen] = useState(false);
 	const [query, setQuery] = useState("");
@@ -76,6 +78,7 @@ const Select: React.FC<SelectProps> = ({
 	const searchRef = useRef<HTMLInputElement>(null);
 
 	const toggleOpen = () => {
+		if (disabled) return;
 		setOpen((prev) => {
 			const next = !prev;
 			if (next && triggerRef.current) {
@@ -84,6 +87,10 @@ const Select: React.FC<SelectProps> = ({
 			return next;
 		});
 	};
+
+	useEffect(() => {
+		if (disabled && open) setOpen(false);
+	}, [disabled, open]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -134,15 +141,16 @@ const Select: React.FC<SelectProps> = ({
 			   <div
 				   ref={triggerRef}
 				   className={
-					   `cursor-pointer border border-white/30 rounded bg-[#18181b] flex items-center justify-between transition-colors duration-150 ` +
+					   `border border-white/30 rounded bg-[#18181b] flex items-center justify-between transition-colors duration-150 ` +
+					   (disabled ? "cursor-not-allowed opacity-50 " : "cursor-pointer ") +
 					   (compact ? "px-2 py-1 text-sm " : "px-3 py-2 ") +
-					   (open ? "ring-2 ring-[#d43c4a]" : "hover:border-[#d43c4a]")
+					   (open ? "ring-2 ring-[#d43c4a]" : disabled ? "" : "hover:border-[#d43c4a]")
 				   }
 				   onClick={toggleOpen}
-				   tabIndex={0}
+				   tabIndex={disabled ? -1 : 0}
 				   onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOpen(); } }}
 			   >
-				   <span className={selected ? "text-white" : "text-gray-400"}>{selected ? selected.label : placeholder}</span>
+				   <span className={`truncate min-w-0 ${selected ? "text-white" : "text-gray-400"}`}>{selected ? selected.label : placeholder}</span>
                    <span className={`ml-2 text-white transition-transform duration-150 ${open ? "rotate-180" : ""}`}>▾</span>
 			   </div>
 			   {open && coords && createPortal(

@@ -834,22 +834,30 @@ export class DashboardService {
          ...data.listeningSessionsStream.map((s) => ({ ...s, type: 'live' as const })),
       ];
 
-      if (filter?.episodeId) {
-         sessions = sessions.filter((s) => String(s.episode_id) === String(filter.episodeId));
-      } else if (filter?.showId) {
-         const show = (data.shows || []).find((sh) => String(sh.id) === String(filter.showId));
-         const showEpisodeIds = new Set(
-            Array.isArray(show?.Episodes)
-               ? show!.Episodes.map((e) => String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id))
-               : []
-         );
-         data.episodes.forEach((ep) => {
-            const epShowId = (ep.Show_Id as any)?.id || ep.Show_Id;
-            if (epShowId && String(epShowId) === String(filter.showId)) {
-               showEpisodeIds.add(String(ep.id));
-            }
-         });
-         sessions = sessions.filter((s) => s.episode_id && showEpisodeIds.has(String(s.episode_id)));
+      // The show/episode filter selects WHICH listeners appear (anyone with
+      // at least one matching session). Their stats below are still computed
+      // from ALL of their sessions, so the per-user overview stays global.
+      if (filter?.episodeId || filter?.showId) {
+         let matches: (s: BaseListeningSession) => boolean;
+         if (filter?.episodeId) {
+            matches = (s) => String(s.episode_id) === String(filter.episodeId);
+         } else {
+            const show = (data.shows || []).find((sh) => String(sh.id) === String(filter.showId));
+            const showEpisodeIds = new Set(
+               Array.isArray(show?.Episodes)
+                  ? show!.Episodes.map((e) => String(typeof e.Episodes_id === 'object' ? (e.Episodes_id as any).id : e.Episodes_id))
+                  : []
+            );
+            data.episodes.forEach((ep) => {
+               const epShowId = (ep.Show_Id as any)?.id || ep.Show_Id;
+               if (epShowId && String(epShowId) === String(filter.showId)) {
+                  showEpisodeIds.add(String(ep.id));
+               }
+            });
+            matches = (s) => !!s.episode_id && showEpisodeIds.has(String(s.episode_id));
+         }
+         const qualifyingUsers = new Set(sessions.filter(matches).map((s) => s.session_id));
+         sessions = sessions.filter((s) => qualifyingUsers.has(s.session_id));
       }
 
       const groups = new Map<string, BaseListeningSession[]>();
