@@ -1,6 +1,5 @@
 import "./embed.css";
 import { EmbedPlayerProvider } from "./context/EmbedPlayerContext";
-import EmbedSessionInit from "@/components/EmbedSessionInit";
 
 export const metadata = {
   title: 'Rádio TLIS - Embed Widget',
@@ -17,7 +16,6 @@ export default function EmbedLayout({
 }) {
   return (
     <>
-      <EmbedSessionInit />
       <EmbedPlayerProvider>
         {children}
       </EmbedPlayerProvider>

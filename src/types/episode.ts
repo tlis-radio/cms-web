@@ -18,9 +18,10 @@ export type EpisodeDto = {
    date_updated: string,
    Title: string,
    Cover: string,
-   Audio: { id: string; duration?: number },
+   Audio: { id: string; duration?: number; filesize?: number },
    Show_Id: string,
    Date: string,
+   /** Public decoration only, never a statistic - see models/episode.ts. */
    Views: number,
    Tags: Tags[]
 };

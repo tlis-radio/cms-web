@@ -9,6 +9,7 @@ import { Episode } from '@/models/episode';
 import { useParams, useRouter } from 'next/navigation';
 import FilterBar from '@/components/dashboard/FilterBar';
 import CoverThumb from '@/components/dashboard/CoverThumb';
+import { TIME_FILTER_OPTIONS, useDashboardPeriod } from '@/lib/dashboard/useDashboardPeriod';
 
 type EpisodeWithViews = Episode & { viewCount: number };
 type SortBy = 'date' | 'views';
@@ -24,6 +25,7 @@ export default function DashboardShowDetailPage() {
    const [isLoading, setIsLoading] = useState(true);
    const [sortBy, setSortBy] = useState<SortBy>('date');
    const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+   const [timeFilter, setTimeFilter] = useDashboardPeriod();
 
    useEffect(() => {
       if (!directusClient || !slug) return;
@@ -38,15 +40,22 @@ export default function DashboardShowDetailPage() {
          setShow(showData);
          const episodesData = await service.getShowEpisodes(showData.id);
 
+         // Same number as the home dashboard and episode page. Used to read
+         // Episodes.Views, which is decoration, not a statistic.
+         const listenCounts = await service.getQualifiedListenCountsForEpisodes(
+            episodesData,
+            timeFilter
+         );
+
          const episodesWithViews = episodesData.map((episode) => ({
             ...episode,
-            viewCount: episode.Views || 0,
+            viewCount: listenCounts.get(String(episode.id)) || 0,
          }));
 
          setEpisodes(episodesWithViews);
          setIsLoading(false);
       });
-   }, [directusClient, slug]);
+   }, [directusClient, slug, timeFilter]);
 
    const formatDate = (dateString: string) => {
       return new Date(dateString).toLocaleDateString('sk-SK', {
@@ -115,6 +124,19 @@ export default function DashboardShowDetailPage() {
                </div>
 
                <FilterBar title="Epizódy" data-tour="episode-sort">
+                  {TIME_FILTER_OPTIONS.map((option) => (
+                     <button
+                        key={option.value}
+                        onClick={() => setTimeFilter(option.value)}
+                        className={`px-2 py-1 text-xs rounded transition ${
+                           timeFilter === option.value
+                              ? 'bg-red-500 text-white'
+                              : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                        }`}
+                     >
+                        {option.label}
+                     </button>
+                  ))}
                   <button
                      onClick={() => toggleSort('date')}
                      className={`px-3 py-1.5 text-xs rounded transition ${

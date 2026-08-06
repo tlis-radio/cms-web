@@ -56,6 +56,22 @@ export default function DashboardUsersPage() {
       setVisibleCount(PAGE_SIZE);
    }, [showFilter, episodeFilter, sortBy, sortOrder]);
 
+   // Deep link from the episode page: ?show=<slug>&episode=<id>. Applied once
+   // the shows are loaded, then left alone so manual changes stick.
+   const [prefillApplied, setPrefillApplied] = useState(false);
+   useEffect(() => {
+      if (prefillApplied || !dashboardData) return;
+      const slug = searchParams.get('show');
+      if (!slug) return;
+      const show = (dashboardData.shows || []).find((s: any) => s.Slug === slug);
+      if (show) {
+         setShowFilter(String(show.id));
+         const episodeId = searchParams.get('episode');
+         if (episodeId) setEpisodeFilter(episodeId);
+      }
+      setPrefillApplied(true);
+   }, [dashboardData, searchParams, prefillApplied]);
+
    const service = useMemo(() => (directusClient ? new DashboardService(directusClient) : null), [directusClient]);
 
    const overview = useMemo(() => {
@@ -175,6 +191,17 @@ export default function DashboardUsersPage() {
         ]
       : [];
 
+   const listenTotal = overview ? overview.listenVsStart.listened + overview.listenVsStart.startedOnly : 0;
+   const listenedPct = listenTotal > 0 && overview ? Math.round((overview.listenVsStart.listened / listenTotal) * 100) : 0;
+   const startedOnlyPct = listenTotal > 0 ? 100 - listenedPct : 0;
+
+   const listenPieData = overview
+      ? [
+           { name: 'Iba spustili', value: overview.listenVsStart.startedOnly },
+           { name: 'Vypočuli', value: overview.listenVsStart.listened },
+        ]
+      : [];
+
    return (
       <div className="max-w-7xl mx-auto">
          <FilterBar title="Poslucháči" data-tour="filter-bar">
@@ -217,47 +244,82 @@ export default function DashboardUsersPage() {
             </div>
          ) : overview ? (
             <>
-               {/* Headline: bounce vs returning */}
-               <div data-tour="users-bounce" className="bg-gray-800 rounded-lg p-4 mb-4">
-                  <h2 className="text-sm font-semibold text-white mb-1">Jednorazoví vs. vracajúci sa poslucháči</h2>
-                  <div className="text-gray-400 text-xs mb-3">
-                     Jednorazový poslucháč (bounce) = presne jedna relácia s celkovým počúvaním pod 5 minút.
-                  </div>
-                  <div className="flex flex-col md:flex-row items-center gap-4">
-                     <div className="w-full max-w-xs flex-shrink-0">
-                        <ResponsiveContainer width="100%" height={200}>
-                           <PieChart>
-                              <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={80} paddingAngle={2}>
-                                 {pieData.map((entry, index) => (
-                                    <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                                 ))}
-                              </Pie>
-                              <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} labelStyle={{ color: '#fff' }} />
-                              <Legend />
-                           </PieChart>
-                        </ResponsiveContainer>
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                  <div data-tour="users-bounce" className="bg-gray-800 rounded-lg p-3">
+                     <h2 className="text-sm font-semibold text-white mb-0.5">Jednorazoví vs. vracajúci sa</h2>
+                     <div className="text-gray-400 text-[11px] mb-2">
+                        Vracajúci sa = počúval viac ako jednu epizódu. Nezávisí od dĺžky počúvania.
                      </div>
-                     <div className="flex-1 grid grid-cols-2 gap-3 w-full">
-                        <div className="bg-gray-700 rounded-lg p-3">
-                           <div className="text-xs text-gray-400 mb-1">Jednorazoví (bounce)</div>
-                           <div className="text-lg font-bold text-gray-300">
-                              {overview.bounceVsReturning.bounce} ({bouncePct}%)
-                           </div>
-                           {overview.bounceVsReturning.bounce > 0 && (
-                              <div className="mt-2 pt-2 border-t border-gray-600">
-                                 <div className="text-[11px] text-gray-400">
-                                    z toho <span className="text-gray-200 font-semibold">{overview.bounceAnonymity.anonymous}</span> ({bounceAnonPct}%) bez súhlasu s cookies
-                                 </div>
-                                 <div className="text-[10px] text-gray-500 mt-0.5 leading-snug">
-                                    Nemusí ísť o jednorazových poslucháčov — bez cookies dostanú nové ID pri každej návšteve, takže sa môžu vracať pravidelne a my to nevidíme.
-                                 </div>
-                              </div>
-                           )}
+                     <div className="flex items-center gap-3">
+                        <div className="w-32 flex-shrink-0">
+                           <ResponsiveContainer width="100%" height={130}>
+                              <PieChart>
+                                 <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={32} outerRadius={52} paddingAngle={2}>
+                                    {pieData.map((entry, index) => (
+                                       <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                    ))}
+                                 </Pie>
+                                 <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} labelStyle={{ color: '#fff' }} />
+                              </PieChart>
+                           </ResponsiveContainer>
                         </div>
-                        <div className="bg-gray-700 rounded-lg p-3">
-                           <div className="text-xs text-gray-400 mb-1">Vracajúci sa</div>
-                           <div className="text-lg font-bold text-[#d43c4a]">
-                              {overview.bounceVsReturning.returning} ({returningPct}%)
+                        <div className="flex-1 grid grid-cols-2 gap-2">
+                           <div className="bg-gray-700 rounded-lg p-2">
+                              <div className="text-[11px] text-gray-400 mb-0.5">Jednorazoví</div>
+                              <div className="text-base font-bold text-gray-300">
+                                 {overview.bounceVsReturning.bounce} ({bouncePct}%)
+                              </div>
+                              {overview.bounceVsReturning.bounce > 0 && (
+                                 <div className="mt-1.5 pt-1.5 border-t border-gray-600">
+                                    <div className="text-[10px] text-gray-400">
+                                       z toho <span className="text-gray-200 font-semibold">{overview.bounceAnonymity.anonymous}</span> ({bounceAnonPct}%) bez cookies
+                                    </div>
+                                    <div className="text-[10px] text-gray-500 mt-0.5 leading-snug">
+                                       Bez cookies dostanú nové ID pri každej návšteve — môžu sa vracať a nevidíme to.
+                                    </div>
+                                 </div>
+                              )}
+                           </div>
+                           <div className="bg-gray-700 rounded-lg p-2">
+                              <div className="text-[11px] text-gray-400 mb-0.5">Vracajúci sa</div>
+                              <div className="text-base font-bold text-[#d43c4a]">
+                                 {overview.bounceVsReturning.returning} ({returningPct}%)
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div data-tour="users-listens" className="bg-gray-800 rounded-lg p-3">
+                     <h2 className="text-sm font-semibold text-white mb-0.5">Vypočuli vs. iba spustili</h2>
+                     <div className="text-gray-400 text-[11px] mb-2">
+                        Vypočutie = aspoň 5 minút prehraných (alebo tretina kratšej epizódy).
+                     </div>
+                     <div className="flex items-center gap-3">
+                        <div className="w-32 flex-shrink-0">
+                           <ResponsiveContainer width="100%" height={130}>
+                              <PieChart>
+                                 <Pie data={listenPieData} dataKey="value" nameKey="name" innerRadius={32} outerRadius={52} paddingAngle={2}>
+                                    {listenPieData.map((entry, index) => (
+                                       <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                    ))}
+                                 </Pie>
+                                 <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }} labelStyle={{ color: '#fff' }} />
+                              </PieChart>
+                           </ResponsiveContainer>
+                        </div>
+                        <div className="flex-1 grid grid-cols-2 gap-2">
+                           <div className="bg-gray-700 rounded-lg p-2">
+                              <div className="text-[11px] text-gray-400 mb-0.5">Iba spustili</div>
+                              <div className="text-base font-bold text-gray-300">
+                                 {overview.listenVsStart.startedOnly} ({startedOnlyPct}%)
+                              </div>
+                           </div>
+                           <div className="bg-gray-700 rounded-lg p-2">
+                              <div className="text-[11px] text-gray-400 mb-0.5">Vypočuli</div>
+                              <div className="text-base font-bold text-blue-300">
+                                 {overview.listenVsStart.listened} ({listenedPct}%)
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -326,6 +388,14 @@ export default function DashboardUsersPage() {
                                        }`}
                                     >
                                        {u.bounceClass === 'bounce' ? 'Jednorazový' : 'Vracajúci sa'}
+                                    </span>
+                                    <span
+                                       className={`ml-1 px-1.5 py-0.5 rounded text-[10px] ${
+                                          u.hasQualifiedListen ? 'bg-blue-900/40 text-blue-200' : 'bg-gray-700 text-gray-400'
+                                       }`}
+                                       title="Vypočutie = aspoň 5 minút prehraných (alebo tretina kratšej epizódy)"
+                                    >
+                                       {u.hasQualifiedListen ? 'Vypočutie' : 'Spustenie'}
                                     </span>
                                     {u.isAnonymous && (
                                        <span

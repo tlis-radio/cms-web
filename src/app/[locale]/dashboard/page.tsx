@@ -26,8 +26,17 @@ import { DashboardService } from "@/lib/dashboard/dashboard-service";
 import { Show } from "@/models/show";
 import { Episode } from "@/models/episode";
 import { ListeningSession, ListeningSessionStream } from "@/types/statistics";
+import {
+  estimateEpisodeDurationSeconds,
+  lastActivityAt,
+} from "@/lib/dashboard/listen-metrics";
+import {
+  TimeFilter,
+  TIME_FILTER_OPTIONS,
+  timeFilterLabel,
+  useDashboardPeriod,
+} from "@/lib/dashboard/useDashboardPeriod";
 
-type TimeFilter = "all" | "12m" | "6m" | "3m" | "1m" | "7d";
 type RetentionFilter = "archive" | "live";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -136,7 +145,7 @@ function EpisodesList({ episodes }: { episodes: any[] }) {
 export default function HomePage() {
   const { directusClient, user } = useDashboardAuth();
 
-  const [timeFilter, setTimeFilter] = useState<TimeFilter>("7d");
+  const [timeFilter, setTimeFilter] = useDashboardPeriod();
   const [retentionFilter, setRetentionFilter] =
     useState<RetentionFilter>("archive");
 
@@ -271,14 +280,7 @@ export default function HomePage() {
     });
   }, [myShows, episodesByShowId, selectedMyShowIds]);
 
-  const timeFilterOptions: { value: TimeFilter; label: string }[] = [
-    { value: "all", label: "Celé obdobie" },
-    { value: "12m", label: "Posledných 12 mesiacov" },
-    { value: "6m", label: "Posledných 6 mesiacov" },
-    { value: "3m", label: "Posledné 3 mesiace" },
-    { value: "1m", label: "Posledný mesiac" },
-    { value: "7d", label: "Posledných 7 dní" },
-  ];
+  const timeFilterOptions = TIME_FILTER_OPTIONS;
 
   const periodStats = useMemo(() => {
     if (!dashboardData || !service) return null;
@@ -418,27 +420,23 @@ export default function HomePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topShowsList]);
 
-  // Trending episodes by listen count within the selected period (archive +
-  // live sessions), not the all-time Views counter.
-  const trendingEpisodes = useMemo(() => {
-    if (!dashboardData || !service) return [];
-    const start = service.getCutoffDate(timeFilter);
-    const now = Date.now();
+  // The one listen count for this page, honouring the selected period.
+  const listenCounts = useMemo(() => {
+    if (!dashboardData || !service) return new Map<string, number>();
+    return service.getQualifiedListenCounts(dashboardData, timeFilter);
+  }, [dashboardData, service, timeFilter]);
 
-    const listensByEpisodeId = new Map<string, number>();
-    [...dashboardData.listeningSessions, ...dashboardData.listeningSessionsStream].forEach((s) => {
-      if (start && new Date(s.date_created) < start) return;
-      const key = String(s.episode_id);
-      listensByEpisodeId.set(key, (listensByEpisodeId.get(key) || 0) + 1);
-    });
+  const trendingEpisodes = useMemo(() => {
+    if (!dashboardData) return [];
+    const now = Date.now();
 
     return dashboardData.episodes
       .filter((ep) => !ep.Date || new Date(ep.Date).getTime() <= now)
-      .map((ep) => ({ episode: ep, listens: listensByEpisodeId.get(String(ep.id)) || 0 }))
+      .map((ep) => ({ episode: ep, listens: listenCounts.get(String(ep.id)) || 0 }))
       .filter((e) => e.listens > 0)
       .sort((a, b) => b.listens - a.listens)
       .slice(0, 3);
-  }, [dashboardData, service, timeFilter]);
+  }, [dashboardData, listenCounts]);
 
   // Recently aired episodes, globally (not scoped to the logged-in user)
   const recentEpisodes = useMemo(() => {
@@ -457,7 +455,7 @@ export default function HomePage() {
 
     const stats = new Map<
       number,
-      { name: string; episodeIds: Set<string>; views: number }
+      { name: string; episodeIds: Set<string> }
     >();
     dashboardData.shows.forEach((show) => {
       const showEpisodes = episodesByShowId.get(show.id) || [];
@@ -468,17 +466,19 @@ export default function HomePage() {
         const entry = stats.get(castId) || {
           name: castName,
           episodeIds: new Set<string>(),
-          views: 0,
         };
-        showEpisodes.forEach((ep) => {
-          entry.episodeIds.add(String(ep.id));
-          entry.views += ep.Views || 0;
-        });
+        showEpisodes.forEach((ep) => entry.episodeIds.add(String(ep.id)));
         stats.set(castId, entry);
       });
     });
 
     const start = service.getCutoffDate(timeFilter);
+    const durationByEpisodeId = new Map(
+      dashboardData.episodes.map((ep) => [
+        String(ep.id),
+        estimateEpisodeDurationSeconds(ep),
+      ]),
+    );
 
     return Array.from(stats.entries())
       .map(([castId, e]) => {
@@ -489,21 +489,28 @@ export default function HomePage() {
           .filter(
             (s) =>
               e.episodeIds.has(String(s.episode_id)) &&
-              (!start || new Date(s.date_created) >= start),
+              (!start || lastActivityAt(s) >= start),
           )
           .reduce(
             (sum, s) =>
               sum +
               service.calculateListeningDuration(
                 s.segments || [],
-                RETENTION_FALLBACK_DURATION,
+                // Real length, not a flat hour - that truncated watch time on
+                // anything longer.
+                durationByEpisodeId.get(String(s.episode_id)) ||
+                  RETENTION_FALLBACK_DURATION,
               ).duration,
             0,
           );
+        const listens = Array.from(e.episodeIds).reduce(
+          (sum, epId) => sum + (listenCounts.get(epId) || 0),
+          0,
+        );
         return {
           name: e.name,
           episodes: e.episodeIds.size,
-          views: e.views,
+          views: listens,
           watchSeconds,
           Picture: pictureByCastId.get(castId),
         };
@@ -511,7 +518,7 @@ export default function HomePage() {
       .filter((c) => c.watchSeconds > 0)
       .sort((a, b) => b.watchSeconds - a.watchSeconds)
       .slice(0, 3);
-  }, [dashboardData, service, episodesByShowId, pictureByCastId, timeFilter]);
+  }, [dashboardData, service, episodesByShowId, pictureByCastId, timeFilter, listenCounts]);
 
   const handleGoToEpisode = (episode: Episode) => {
     const show = showByEpisodeId.get(String(episode.id));
@@ -779,6 +786,9 @@ export default function HomePage() {
                 <span className="text-md font-bold text-white">
                   Trendy epizódy podľa vypočutí
                 </span>
+                <span className="text-xs text-gray-400 whitespace-nowrap">
+                  {timeFilterOptions.find((o) => o.value === timeFilter)?.label}
+                </span>
               </div>
               <div className="flex flex-col gap-3">
                 {trendingEpisodes.map(({ episode, listens }) => (
@@ -911,6 +921,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between gap-2">
                 <span className="text-md font-bold text-white">
                   Posledné epizódy
+                  <span className="ml-2 text-xs font-normal text-gray-400">
+                    vypočutia: {timeFilterOptions.find((o) => o.value === timeFilter)?.label.toLowerCase()}
+                  </span>
                 </span>
                 <Link
                   href="/dashboard/shows"
@@ -948,7 +961,7 @@ export default function HomePage() {
                           className="text-gray-300"
                         />
                         <span className="text-xs text-gray-300">
-                          {episode.Views || 0}
+                          {listenCounts.get(String(episode.id)) || 0}
                         </span>
                       </div>
                     </div>

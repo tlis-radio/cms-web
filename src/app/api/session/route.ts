@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrCreateSessionId, setSessionCookie } from "@/lib/session";
+import { getOrCreateSessionId, setSessionCookie, clearSessionCookie } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +18,17 @@ export async function GET(request: NextRequest) {
 
   const { sessionId, isNew } = getOrCreateSessionId(request);
 
-  const response = NextResponse.json({ 
-    sessionId, 
+  const response = NextResponse.json({
+    sessionId,
     isNew,
-    anonymous: isAnonymous 
+    anonymous: isAnonymous
   });
 
-  // Only set cookie if user consented (not anonymous)
-  if (isNew && !isAnonymous) {
+  if (isAnonymous) {
+    // Rejecting consent must also drop an id set by an earlier acceptance.
+    // The cookie is httpOnly, so the banner can't clear it itself.
+    clearSessionCookie(response);
+  } else if (isNew) {
     setSessionCookie(response, sessionId);
   }
 

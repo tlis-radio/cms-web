@@ -1,9 +1,7 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import { UmamiTrack } from "@/components/Analytics";
-import { isAnonymousConsent } from "@/lib/clientConsent";
 
 type PlayerMode = "stream" | "archive";
 
@@ -65,11 +63,6 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
   const [countedView, setCountedView] = useState<boolean>(false);
-
-  // In-memory session id for anonymous (rejected/no consent) listeners.
-  // Ties heartbeats for every episode/stream played in this tab together,
-  // without ever touching a cookie - a hard reload (F5) generates a new one.
-  const [anonymousSessionId] = useState<string>(() => uuidv4());
 
   useEffect(() => {
     let cancelled = false;
@@ -277,14 +270,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       lastTrackedSegment.current = segmentIndex;
 
       try {
-        const anonymous = isAnonymousConsent();
+        // No session id sent - server derives it, see lib/session.ts.
         await fetch("/api/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             episodeId: episodeId,
             currentTime: audio.currentTime,
-            sessionId: anonymous ? anonymousSessionId : undefined,
           }),
           credentials: "include",
         });
@@ -301,13 +293,10 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       lastTrackedSegment.current = segmentIndex;
 
       try {
-        const anonymous = isAnonymousConsent();
         await fetch("/api/heartbeat/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sessionId: anonymous ? anonymousSessionId : undefined,
-          }),
+          body: JSON.stringify({}),
           credentials: "include",
         });
       } catch (err) {

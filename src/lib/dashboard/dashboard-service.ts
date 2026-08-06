@@ -17,14 +17,15 @@ import {
 } from '@/types/statistics';
 import { Show } from '@/models/show';
 import { Episode } from '@/models/episode';
+import {
+   countQualifiedListensByEpisode,
+   estimateEpisodeDurationSeconds,
+   isQualifiedListen,
+} from './listen-metrics';
 
-// A user counts as a "bounce" only if they were seen exactly once AND that
-// single session totalled under 5 minutes of actual listening.
-const BOUNCE_MAX_SESSIONS = 1;
-const BOUNCE_MAX_SECONDS = 300;
-// Fallback track duration (seconds) used when computing completion % in bulk
-// aggregates where per-episode audio duration isn't loaded - matches the same
-// approximation already used by getTopShowsByRetention/getTopShowsByStreamRetention.
+// Came back = listened to more than one episode.
+const RETURNING_MIN_EPISODES = 2;
+// Only used when an episode has no audio attached to estimate length from.
 const FALLBACK_TRACK_DURATION = 3600;
 
 export class DashboardService {
@@ -82,12 +83,13 @@ export class DashboardService {
 
          const episodes = await this.client.request<Episode[]>(
             readItems('Episodes', {
-               fields: ['*', 'Tags.Tags_id.*', 'Show_Id.Slug'],
-               filter: { 
+               fields: ['*', 'Tags.Tags_id.*', 'Show_Id.Slug', 'Audio.id', 'Audio.filesize'],
+               filter: {
                   id: { _in: episodeIds },
                   status: { _eq: 'published' }
                },
                sort: ['-Date'],
+               limit: -1,
             })
          );
          return episodes || [];
@@ -102,7 +104,7 @@ export class DashboardService {
          const episodes = await this.client.request<Episode[]>(
             readItems('Episodes', {
                filter: { id: { _eq: episodeId } },
-               fields: ['*', 'Tags.Tags_id.*', 'Show_Id.Slug', 'Show_Id.Cover', 'Audio.id'],
+               fields: ['*', 'Tags.Tags_id.*', 'Show_Id.Slug', 'Show_Id.Cover', 'Audio.id', 'Audio.filesize'],
             })
          );
          
@@ -176,8 +178,11 @@ export class DashboardService {
       try {
          const sessions = await this.client.request<ListeningSession[]>(
             readItems('ListeningSessions', {
-                filter: { episode_id: { _eq: String(episodeId) } },
-               sort: ['date_created'],               limit: -1,            })
+               filter: { episode_id: { _eq: String(episodeId) } },
+               fields: ['id', 'session_id', 'episode_id', 'segments', 'date_created', 'date_updated', 'is_anonymous'],
+               sort: ['date_created'],
+               limit: -1,
+            })
          );
          return sessions || [];
       } catch (error) {
@@ -191,6 +196,7 @@ export class DashboardService {
          const sessions = await this.client.request<ListeningSessionStream[]>(
             readItems('ListeningSessionsStream', {
                filter: { episode_id: { _eq: String(episodeId) } },
+               fields: ['id', 'session_id', 'episode_id', 'segments', 'date_created', 'date_updated', 'is_anonymous'],
                sort: ['date_created'],
                limit: -1,
             })
@@ -529,7 +535,8 @@ export class DashboardService {
             ),
             this.client.request<Episode[]>(
                readItems('Episodes', {
-                  fields: ['id', 'Title', 'Cover', 'Views', 'Show_Id.id', 'Show_Id.Slug', 'Show_Id.Title', 'Audio.id', 'Date'],
+                  // Audio.filesize drives the duration estimate in listen-metrics.
+                  fields: ['id', 'Title', 'Cover', 'Views', 'Show_Id.id', 'Show_Id.Slug', 'Show_Id.Title', 'Audio.id', 'Audio.filesize', 'Date'],
                   filter: { status: { _eq: 'published' } },
                   limit: -1,
                })
@@ -569,9 +576,10 @@ export class DashboardService {
             while(hasMore) {
                const chunk = await this.client.request<any[]>(
                    readItems(collection as any, {
-                       fields: collection === 'ListeningSessions'
-                           ? ['id', 'session_id', 'segments', 'date_created', 'episode_id', 'is_anonymous']
-                           : ['id', 'session_id', 'episode_id', 'segments', 'date_created', 'is_anonymous'],
+                       fields: ['id', 'session_id', 'episode_id', 'segments', 'date_created', 'date_updated', 'is_anonymous'],
+                       // Paging without a sort isn't stable - rows get dropped
+                       // and duplicated once the table exceeds one chunk.
+                       sort: ['id'],
                        limit: CHUNK_SIZE,
                        page: page
                    })
@@ -661,10 +669,9 @@ export class DashboardService {
             
             if (episodeSessions.length === 0) return;
 
-            // Calculate progress for each session individually
-            // We use default 1h duration for relative progress if unknown
-            const trackDuration = 3600; 
-            
+            const trackDuration =
+               estimateEpisodeDurationSeconds(episode) || FALLBACK_TRACK_DURATION;
+
             episodeSessions.forEach(session => {
                const { progress } = this.calculateListeningDuration(session.segments || [], trackDuration);
                totalProgress += progress;
@@ -733,9 +740,11 @@ export class DashboardService {
             
             if (episodeSessions.length === 0) return;
 
-            // For Live sets, we assume 1h or 2h duration if unknown
-            const trackDuration = (episode.Audio as any)?.duration || 3600;
-            
+            // Audio.duration is null on every file in Directus, so this always
+            // fell back to a flat hour.
+            const trackDuration =
+               estimateEpisodeDurationSeconds(episode) || FALLBACK_TRACK_DURATION;
+
             episodeSessions.forEach(session => {
                const { progress } = this.calculateListeningDuration(session.segments || [], trackDuration);
                totalProgress += progress;
@@ -834,9 +843,8 @@ export class DashboardService {
          ...data.listeningSessionsStream.map((s) => ({ ...s, type: 'live' as const })),
       ];
 
-      // The show/episode filter selects WHICH listeners appear (anyone with
-      // at least one matching session). Their stats below are still computed
-      // from ALL of their sessions, so the per-user overview stays global.
+      let inScope: (s: BaseListeningSession) => boolean = () => true;
+
       if (filter?.episodeId || filter?.showId) {
          let matches: (s: BaseListeningSession) => boolean;
          if (filter?.episodeId) {
@@ -856,6 +864,9 @@ export class DashboardService {
             });
             matches = (s) => !!s.episode_id && showEpisodeIds.has(String(s.episode_id));
          }
+         // Filter picks WHICH listeners show up; their stats stay global so
+         // "vracajúci sa" still means came back, not came back to this episode.
+         inScope = matches;
          const qualifyingUsers = new Set(sessions.filter(matches).map((s) => s.session_id));
          sessions = sessions.filter((s) => qualifyingUsers.has(s.session_id));
       }
@@ -867,6 +878,11 @@ export class DashboardService {
          groups.set(s.session_id, arr);
       });
 
+      const durationByEpisode = new Map<string, number | null>();
+      data.episodes.forEach((ep) =>
+         durationByEpisode.set(String(ep.id), estimateEpisodeDurationSeconds(ep))
+      );
+
       const users: UserAggregate[] = [];
       groups.forEach((rows, sessionId) => {
          let firstSeen = rows[0].date_created;
@@ -874,6 +890,7 @@ export class DashboardService {
          let totalListenedSeconds = 0;
          let totalProgress = 0;
          let isAnonymous = false;
+         let qualifiedListens = 0;
          const episodeIds = new Set<string>();
          const episodeCounts = new Map<string, number>();
 
@@ -882,9 +899,15 @@ export class DashboardService {
             if (new Date(row.date_created) > new Date(lastSeen)) lastSeen = row.date_created;
             if (row.is_anonymous) isAnonymous = true;
 
-            const { duration, progress } = this.calculateListeningDuration(row.segments || [], FALLBACK_TRACK_DURATION);
+            const epKey = String(row.episode_id || row.asset_id || '');
+            const epDuration = durationByEpisode.get(epKey) ?? null;
+            const { duration, progress } = this.calculateListeningDuration(
+               row.segments || [],
+               epDuration || FALLBACK_TRACK_DURATION
+            );
             totalListenedSeconds += duration;
             totalProgress += progress;
+            if (inScope(row) && isQualifiedListen(row as any, epDuration)) qualifiedListens++;
 
             const epId = row.episode_id || row.asset_id;
             if (epId) {
@@ -905,9 +928,7 @@ export class DashboardService {
          const sessionCount = rows.length;
          const avgCompletionPct = sessionCount > 0 ? totalProgress / sessionCount : 0;
          const bounceClass: BounceClass =
-            (sessionCount <= BOUNCE_MAX_SESSIONS && totalListenedSeconds < BOUNCE_MAX_SECONDS)
-            || new Date(firstSeen).getDate() === new Date(lastSeen).getDate()
-            ? 'bounce' : 'returning';
+            episodeIds.size >= RETURNING_MIN_EPISODES ? 'returning' : 'bounce';
 
          users.push({
             sessionId,
@@ -919,6 +940,7 @@ export class DashboardService {
             avgCompletionPct,
             favoriteEpisodeId,
             bounceClass,
+            hasQualifiedListen: qualifiedListens > 0,
             isAnonymous,
          });
       });
@@ -938,6 +960,14 @@ export class DashboardService {
             return acc;
          },
          { anonymous: 0, known: 0 }
+      );
+
+      const listenVsStart = users.reduce(
+         (acc, u) => {
+            acc[u.hasQualifiedListen ? 'listened' : 'startedOnly']++;
+            return acc;
+         },
+         { listened: 0, startedOnly: 0 }
       );
 
       const episodeBucketOrder: EpisodesPerUserBucket[] = ['1', '2-3', '4-10', '11-25', '25+'];
@@ -969,6 +999,7 @@ export class DashboardService {
          users,
          bounceVsReturning,
          bounceAnonymity,
+         listenVsStart,
          episodesPerUserHistogram: episodeBucketOrder.map((bucket) => ({ bucket, count: episodeBucketCounts.get(bucket) || 0 })),
          completionDistribution: completionBucketOrder.map((bucket) => ({ bucket, count: completionBucketCounts.get(bucket) || 0 })),
       };
@@ -988,9 +1019,69 @@ export class DashboardService {
          case '12m':
             return new Date(now.getFullYear(), now.getMonth() - 12, now.getDate());
          case 'all':
-            return new Date("December 1, 2025")
+            // Used to return a hardcoded 2025-12-01, truncating longer windows.
+            return null;
          default:
             return null;
+      }
+   }
+
+   /**
+    * Qualified listens per episode, honouring the time filter. Every tile
+    * showing a listen count reads this, so they can't drift apart.
+    * Returns episode id (string) -> count. See listen-metrics.ts.
+    */
+   getQualifiedListenCounts(
+      data: {
+         episodes: Episode[];
+         listeningSessions: ListeningSession[];
+         listeningSessionsStream: ListeningSessionStream[];
+      },
+      timeFilter: string = 'all'
+   ): Map<string, number> {
+      return countQualifiedListensByEpisode(
+         [...data.listeningSessions, ...data.listeningSessionsStream],
+         data.episodes,
+         this.getCutoffDate(timeFilter)
+      );
+   }
+
+   /** Same as above, for pages that load one show instead of everything. */
+   async getQualifiedListenCountsForEpisodes(
+      episodes: Episode[],
+      timeFilter: string = 'all'
+   ): Promise<Map<string, number>> {
+      if (episodes.length === 0) return new Map();
+
+      const episodeIds = episodes.map((e) => String(e.id));
+      const fields = ['id', 'session_id', 'episode_id', 'segments', 'date_created', 'date_updated', 'is_anonymous'];
+
+      try {
+         const [sessions, streamSessions] = await Promise.all([
+            this.client.request<ListeningSession[]>(
+               readItems('ListeningSessions', {
+                  filter: { episode_id: { _in: episodeIds } },
+                  fields,
+                  limit: -1,
+               })
+            ),
+            this.client.request<ListeningSessionStream[]>(
+               readItems('ListeningSessionsStream', {
+                  filter: { episode_id: { _in: episodeIds } },
+                  fields,
+                  limit: -1,
+               })
+            ),
+         ]);
+
+         return countQualifiedListensByEpisode(
+            [...(sessions || []), ...(streamSessions || [])],
+            episodes,
+            this.getCutoffDate(timeFilter)
+         );
+      } catch (error) {
+         console.error('Error fetching listen counts for episodes:', error);
+         return new Map();
       }
    }
 

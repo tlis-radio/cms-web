@@ -2,7 +2,10 @@
 
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
 import { DashboardService } from '@/lib/dashboard/dashboard-service';
-import { useEffect, useState } from 'react';
+import { countQualifiedListensForEpisode } from '@/lib/dashboard/listen-metrics';
+import { TIME_FILTER_OPTIONS, useDashboardPeriod } from '@/lib/dashboard/useDashboardPeriod';
+import FilterBar from '@/components/dashboard/FilterBar';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Episode } from '@/models/episode';
 import { useParams, useRouter } from 'next/navigation';
@@ -26,6 +29,7 @@ export default function EpisodeAnalyticsPage() {
    const [streamRetentionData, setStreamRetentionData] = useState<Array<{ time: string; retention: number }>>([]);
    const [audioDuration, setAudioDuration] = useState<number>(3600); // Default 1 hour
    const [isLoading, setIsLoading] = useState(true);
+   const [timeFilter, setTimeFilter] = useDashboardPeriod();
    const [openSessionId, setOpenSessionId] = useState<string | null>(null);
    const [listenerStats, setListenerStats] = useState<Map<string, { otherEpisodes: number; meanProgress: number }>>(new Map());
 
@@ -251,8 +255,35 @@ export default function EpisodeAnalyticsPage() {
 
    const engagementData = getEngagementChartData();
 
+   // Split by source so the three cards add up: total = archive + live.
+   // Uses the dashboard-wide period, so this page and the home page always
+   // report the same number for the same episode.
+   const listens = useMemo(() => {
+      if (!analytics) return { total: 0, archive: 0, live: 0 };
+      const since = new DashboardService(directusClient!).getCutoffDate(timeFilter);
+      const archive = countQualifiedListensForEpisode(analytics.listeningSessions, episode, since);
+      const live = countQualifiedListensForEpisode(analytics.listeningSessionsStream, episode, since);
+      return { total: archive + live, archive, live };
+   }, [analytics, episode, timeFilter, directusClient]);
+
    return (
       <div className="max-w-7xl mx-auto">
+         <FilterBar>
+            {TIME_FILTER_OPTIONS.map((option) => (
+               <button
+                  key={option.value}
+                  onClick={() => setTimeFilter(option.value)}
+                  className={`px-2 py-1 rounded text-xs transition ${
+                     timeFilter === option.value
+                        ? 'bg-red-500 text-white'
+                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+               >
+                  {option.label}
+               </button>
+            ))}
+         </FilterBar>
+
          <Link
             href={`/dashboard/shows/${slug}`}
             className="text-red-400 hover:text-red-300 transition text-sm mb-4 inline-block"
@@ -297,12 +328,23 @@ export default function EpisodeAnalyticsPage() {
                   </div>
                </div>
 
-               {/* Summary Stats */}
-               <div data-tour="episode-stats" className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                  <StatCard label="Vypočutia" value={analytics.trackViews.length} accent="blue" />
+               {/* Summary Stats. Vypočutia = z archívu + naživo, all on the
+                   same qualified-listen rule as the home dashboard. */}
+               <div data-tour="episode-stats" className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2">
+                  <StatCard
+                     label="Vypočutia"
+                     value={listens.total}
+                     accent="blue"
+                     href={`/dashboard/users?show=${slug}&episode=${episodeId}`}
+                  />
+                  <StatCard label="Z archívu" value={listens.archive} accent="yellow" />
+                  <StatCard label="Naživo" value={listens.live} accent="orange" />
                   <StatCard label="Zdieľania" value={analytics.trackShares.length} accent="purple" />
-                  <StatCard label="Počet poslucháčov z archívu" value={analytics.listeningSessions.length} accent="yellow" />
-                  <StatCard label="Počet poslucháčov naživo" value={analytics.listeningSessionsStream.length} accent="orange" />
+               </div>
+               <div className="text-gray-400 text-xs mb-4">
+                  Vypočutie = aspoň 5 minút prehraných (alebo tretina kratšej epizódy).
+                  Spustení celkovo: {analytics.listeningSessions.length + analytics.listeningSessionsStream.length}
+                  {' '}({analytics.listeningSessions.length} archív + {analytics.listeningSessionsStream.length} naživo).
                </div>
 
                {/* First Chart: Views, Shares */}

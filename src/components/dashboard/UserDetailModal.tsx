@@ -2,6 +2,7 @@
 
 import { useDashboardAuth } from '@/context/DashboardAuthContext';
 import { DashboardService } from '@/lib/dashboard/dashboard-service';
+import { estimateEpisodeDurationSeconds } from '@/lib/dashboard/listen-metrics';
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { BaseListeningSession } from '@/types/statistics';
 import { Episode } from '@/models/episode';
@@ -126,10 +127,8 @@ export default function UserDetailModal({ sessionId, onClose }: UserDetailModalP
 
              if (!episodeData) {
                  const episode = await service.getEpisodeById(episodeId);
-                 let trackDuration = 3600;
-                 if (episode?.Audio?.id) {
-                     trackDuration = await service.getAudioDuration(episode.Audio.id);
-                 }
+                 // Same estimate as the rest of the dashboard, so percentages match.
+                 const trackDuration = estimateEpisodeDurationSeconds(episode) || 3600;
                  episodeData = { episode, duration: trackDuration };
                  cache.current.set(String(episodeId), episodeData);
              }

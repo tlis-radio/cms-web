@@ -1,4 +1,11 @@
 // Statistics types for the dashboard
+
+/**
+ * Append-only tally row, one per counted view. An event log, not a per-listener
+ * record - no session id, so one person listening on three days makes three
+ * rows. Only for plotting views over time; listen counts come from
+ * lib/dashboard/listen-metrics.ts.
+ */
 export type TrackView = {
    id: number;
    episode: number; // Relation to Episodes
@@ -18,12 +25,18 @@ export type TrackShare = {
    date_created: string;
 };
 
+/**
+ * One row per (session_id, episode_id), created on first heartbeat and updated
+ * after - never appended. Filter time windows by `date_updated` (last
+ * activity); `date_created` is the first-ever listen and never moves. These
+ * types used to declare `updated_at`, which Directus doesn't have at all.
+ */
 export type ListeningSession = {
    id: string;
    session_id: string;
    asset_id: string;
    segments: number[];
-   updated_at?: string;
+   date_updated?: string | null;
    date_created: string;
    episode_id: string;
    is_anonymous?: boolean;
@@ -34,7 +47,7 @@ export type BaseListeningSession = {
    id: string;
    session_id: string;
    segments: number[];
-   updated_at?: string;
+   date_updated?: string | null;
    date_created: string;
    episode_id?: string;
    asset_id?: string;
@@ -47,7 +60,7 @@ export type ListeningSessionStream = {
    session_id: string;
    episode_id: string;
    segments: number[];
-   updated_at?: string;
+   date_updated?: string | null;
    date_created: string;
    is_anonymous?: boolean;
 };
@@ -87,7 +100,10 @@ export type UserAggregate = {
    episodeCount: number;
    avgCompletionPct: number;
    favoriteEpisodeId: string | null;
+   /** Came back or not. Independent of whether they actually listened. */
    bounceClass: BounceClass;
+   /** Reached the listen threshold on the filtered episode(s). */
+   hasQualifiedListen: boolean;
    // True if any session row for this listener came from a visitor who rejected
    // (or never answered) the cookie consent banner. Anonymous visitors get a
    // brand-new session_id on every page load, so a "bounce" here is not
@@ -106,6 +122,8 @@ export type UserOverviewStats = {
    // listeners are anonymous (untrackable, possibly repeat visitors) vs known
    // (consented to cookies and still only ever seen once).
    bounceAnonymity: { anonymous: number; known: number };
+   /** Reached the listen threshold vs only pressed play. */
+   listenVsStart: { listened: number; startedOnly: number };
    episodesPerUserHistogram: Array<{ bucket: EpisodesPerUserBucket; count: number }>;
    completionDistribution: Array<{ bucket: CompletionBucket; count: number }>;
 };

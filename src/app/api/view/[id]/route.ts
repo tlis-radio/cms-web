@@ -54,6 +54,7 @@ export async function POST(
 
         console.log(`Counting view for ID: ${id}, IP: ${ip}, Date: ${today}`);
         const episode = await getDirectusInstance().request(readItem("Episodes", id));
+        // Public decoration only, not a statistic - see models/episode.ts.
         await getDirectusInstance().request(updateItem("Episodes", id, {
             Views: (episode.Views || 0) + 1
         }));

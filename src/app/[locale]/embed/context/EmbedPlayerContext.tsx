@@ -1,6 +1,5 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
-import { getEmbedSessionId } from "@/components/EmbedSessionInit";
 
 interface EmbedPlayerContextType {
   isPlaying: boolean;
@@ -177,20 +176,16 @@ export const EmbedPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       if (segmentIndex === lastTrackedSegment.current) return;
       lastTrackedSegment.current = segmentIndex;
 
-      const sessionId = getEmbedSessionId();
-      if (!sessionId) {
-        console.warn("No session ID available for tracking");
-        return;
-      }
-
       try {
+        // Derived server-side. Used to be a uuid in localStorage, which is
+        // device storage under ePrivacy Art. 5(3) and needs consent - and these
+        // widgets run on third-party sites with no banner of ours.
         await fetch("/api/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            episodeId: episodeId, 
+          body: JSON.stringify({
+            episodeId: episodeId,
             currentTime: audio.currentTime,
-            sessionId: sessionId 
           }),
         });
       } catch (err) {

@@ -46,7 +46,9 @@ interface ListeningSession {
   asset_id: string;
   segments: number[];
   is_anonymous?: boolean;
-  updated_at?: string;
+  // Maintained by Directus on every write. There is no `updated_at` column on
+  // these collections - the API rejects it.
+  date_updated?: string;
 }
 
 /**
@@ -72,12 +74,14 @@ export async function trackSegment(
     // Try to load from Directus
     try {
       const directus = getDirectusInstance();
+      // No date window: persistToDirectus looks up without one, so a narrower
+      // filter here would start a fresh array and then overwrite the older row,
+      // wiping progress. Resuming weeks later must accumulate, not reset.
       const results = await directus.request<ListeningSession[]>(
         readItems("ListeningSessions", {
           filter: {
             session_id: { _eq: sessionId },
             episode_id: { _eq: episodeId },
-            date_created: { _gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() } // last 1 day
           },
           limit: 1,
         })
@@ -113,28 +117,35 @@ export async function trackSegment(
   return segments;
 }
 
+/**
+ * Records a stream segment, reporting whether this was the listener's first
+ * heartbeat for the episode. Derived from cache + DB, so it survives restarts
+ * and extra instances - unlike the in-memory Set the route used to dedupe with.
+ */
 export async function trackStreamSegment(
   sessionId: string,
   episodeId: string,
   segmentIndex: number,
   isAnonymous: boolean
-): Promise<number[]> {
+): Promise<{ segments: number[]; isFirstHeartbeat: boolean }> {
   segmentIndex = Math.min(Math.max(segmentIndex, 0), MAX_SEGMENT_INDEX);
   const cacheKey = `stream:${sessionId}:${episodeId}`;
 
   // Get current segments from cache or DB
   let segments = cache.get(cacheKey);
   let dbRecord: ListeningSession | null = null;
+  // A cache hit means we have already served this listener in this process.
+  let isFirstHeartbeat = !segments;
 
   if (!segments) {
     try {
       const directus = getDirectusInstance();
+      // Unfiltered by date, for the same reason as trackSegment above.
       const results = await directus.request<ListeningSession[]>(
         readItems("ListeningSessionsStream", {
           filter: {
             session_id: { _eq: sessionId },
             episode_id: { _eq: episodeId },
-            date_created: { _gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() } // last 1 day
           },
           limit: 1,
         })
@@ -142,12 +153,17 @@ export async function trackStreamSegment(
       if (results && results.length > 0) {
         dbRecord = results[0];
         segments = Array.isArray(dbRecord.segments) ? [...dbRecord.segments] : [];
+        // A row already exists, so another instance (or an earlier boot of this
+        // one) already saw this listener on this episode.
+        isFirstHeartbeat = false;
       } else {
         segments = [];
       }
     } catch (err) {
       console.warn("Could not load from Directus (stream), using fresh array:", err);
       segments = [];
+      // Can't prove it's new, so don't let a Directus blip inflate view counts.
+      isFirstHeartbeat = false;
     }
   }
 
@@ -166,7 +182,7 @@ export async function trackStreamSegment(
     console.error("Failed to persist stream segments to Directus:", err);
   });
 
-  return segments;
+  return { segments, isFirstHeartbeat };
 }
 
 async function persistToDirectusStream(
