@@ -186,9 +186,9 @@ export default function ArticleDetail({ article, episodes, episodeShows, gallery
                            href={`/ucinkujuci/${article.author.Slug}`}
                            className="flex items-center gap-3 group"
                         >
-                           <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold">
+                           <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold">
                               {article.author.Member?.Picture ? (
-                              <img className="rounded-full" src={`${DIRECTUS_URL}/assets/${article.author.Member?.Picture}`}></img>
+                              <img className="rounded-full aspect-square object-cover" src={`${DIRECTUS_URL}/assets/${article.author.Member?.Picture}`}></img>
                               ) : (article.author.Name.charAt(0))}
                            </div>
                            <div>

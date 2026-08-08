@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { parseCustomTags, CustomTag } from "@/lib/markdown-parser";
 import EpisodeEmbed from "@/components/EpisodeEmbed";
+import AudioEmbed from "@/components/AudioEmbed";
 import { Episode } from "@/models/episode";
 import { ShowDto } from "@/types/show";
 import { useGallery } from "@/components/carousel/gallery/GalleryProvider";
@@ -123,6 +124,10 @@ export default function ArticleContent({ content, episodes = new Map(), episodeS
                Epizóda nenájdená
             </div>
          );
+      }
+
+      if (part.type === "audio") {
+         return <AudioEmbed key={index} audioId={part.value.trim()} />;
       }
 
       if(part.type === "yt" ){
