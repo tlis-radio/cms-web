@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { useTranslations, useLocale } from "next-intl"; // Added imports
 import { UmamiTrack } from "@/components/Analytics";
 
