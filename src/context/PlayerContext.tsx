@@ -115,6 +115,15 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [mode, src]);
 
   useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play().catch((err) => {
         console.warn(err);
