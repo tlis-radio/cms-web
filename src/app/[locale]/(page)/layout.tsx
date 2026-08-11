@@ -5,7 +5,6 @@ import { Inter } from "next/font/google";
 // UI komponenty
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import { PlayerProvider } from "@/context/PlayerContext";
 import GalleryOverlay from "@/components/carousel/gallery/GalleryOverlay";
 import { GalleryProvider } from "@/components/carousel/gallery/GalleryProvider";
 import SessionInit from "@/components/SessionInit";
@@ -39,18 +38,16 @@ export default async function LocaleLayout({
       */}
       <div className={`${inter.variable} font-sans antialiased flex flex-col transition-[padding] duration-300 ease-in-out`}>
         <SessionInit />
-        <PlayerProvider>
-          <Header />
-          <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[105px] mb-16'>
-            <GalleryProvider>
-              <div className='pt-4 w-full text-center max-w-7xl'>
-                {children}
-              </div>
-              <GalleryOverlay />
-            </GalleryProvider>
-          </div>
-          <Footer />
-        </PlayerProvider>
+        <Header />
+        <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[105px] mb-16'>
+          <GalleryProvider>
+            <div className='pt-4 w-full text-center max-w-7xl'>
+              {children}
+            </div>
+            <GalleryOverlay />
+          </GalleryProvider>
+        </div>
+        <Footer />
         <CookieConsent />
       </div>
     </NextIntlClientProvider>
