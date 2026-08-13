@@ -29,7 +29,7 @@ jobs:
         
     - name: Deploy to development
       run: |
-        curl -X GET "${{ secrets.DEPLOY_URL }}?uuid=${{ secrets.DEV_DEPLOY_ID }}&force=false" \
+        curl -X POST "${{ secrets.DEPLOY_URL }}?uuid=${{ secrets.DEV_DEPLOY_ID }}&force=false" \
           -H "Authorization: Bearer ${{ secrets.DEPLOY_SECRET }}"
 
     - name: Get last successful commit SHA
