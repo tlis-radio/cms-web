@@ -3,39 +3,55 @@ import SwiperCarousel from "@/components/carousel";
 import { readItems } from '@directus/sdk';
 import CmsApiService, { getDirectusInstance } from "@/services/cms-api-service";
 
-export default async function Program() {
+async function attachShowData(episodes: any[]) {
+    await Promise.all(episodes.map(async (episode) => {
+        try {
+            const show = await CmsApiService.Show.getShowByEpisodeId(episode.id);
+            (episode as any).showData = show;
+        } catch (error) {
+            console.error("Error fetching show for episode:", error);
+        }
+    }));
+}
+
+export default async function Program({ compact = false }: { compact?: boolean }) {
     var loadingError = false;
 
     const today = new Date();
-    const threeDaysAgo = new Date(today);
-    threeDaysAgo.setDate(today.getDate() - 3);
-    const threeDaysAhead = new Date(today);
-    threeDaysAhead.setDate(today.getDate() + 3);
 
-    const carouselPosts = await getDirectusInstance().request(readItems('Episodes', {
+    const [upcomingEpisodes, recentEpisodes] = await Promise.all([
+        getDirectusInstance().request(readItems('Episodes', {
+            fields: ["*", "Audio.*"],
             filter: {
-                Date: {
-                    _between: [threeDaysAgo.toDateString(), threeDaysAhead.toDateString()],
-                },
+                Date: { _gte: today.toDateString() },
+                status: { _eq: 'published' },
             },
             sort: ['Date'],
-        }
-    )).catch((error) => {
-        console.error("Error fetching episodes:", error);
-        loadingError = true;
-        return [];
-    });
+        })).catch((error) => {
+            console.error("Error fetching upcoming episodes:", error);
+            loadingError = true;
+            return [];
+        }),
+        getDirectusInstance().request(readItems('Episodes', {
+            fields: ["*", "Audio.*"],
+            filter: {
+                Date: { _lt: today.toDateString() },
+                status: { _eq: 'published' },
+            },
+            sort: ['-Date'],
+            limit: 10,
+        })).catch((error) => {
+            console.error("Error fetching recent episodes:", error);
+            loadingError = true;
+            return [];
+        }),
+    ]);
 
-    if (Array.isArray(carouselPosts)) {
-        await Promise.all(carouselPosts.map(async (episode) => {
-            try {
-                const show = await CmsApiService.Show.getShowByEpisodeId(episode.id);
-                (episode as any).showData = show;
-            } catch (error) {
-                console.error("Error fetching show for episode:", error);
-            }
-        }));
+    const carouselPosts = [...(recentEpisodes || []).reverse(), ...(upcomingEpisodes || [])];
+
+    if (carouselPosts.length > 0) {
+        await attachShowData(carouselPosts);
     }
 
-    return (<SwiperCarousel carouselPosts={carouselPosts} loadingError={loadingError} />);
+    return (<SwiperCarousel carouselPosts={carouselPosts} loadingError={loadingError} compact={compact} />);
 }

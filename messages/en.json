@@ -69,7 +69,10 @@
     "metaTitle": "Home",
     "metaDescription": "Listen to Radio TLIS live. Alternative music, cultural shows, and fresh info directly from student life",
     "eventsTitle": "events",
-    "viewAll": "VIEW ALL"
+    "viewAll": "VIEW ALL",
+    "upNextTitle": "shows",
+    "fotoreportsTitle": "photo reports",
+    "articlesTitle": "articles"
   },
   "MembersPage": {
     "title": " members",
@@ -228,6 +231,7 @@
     "empty_title": "There is currently no program",
     "empty_subtitle": "Check out our archive of past shows",
     "open_archive": "Open Archive",
+    "open_show": "Open show",
     "missed_label": "You missed",
     "will_miss_label": "You will miss",
     "prev_aria": "Previous episode",

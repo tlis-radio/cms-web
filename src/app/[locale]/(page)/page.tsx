@@ -1,9 +1,9 @@
-import ArchiveGrid from "@/components/ArchiveGrid";
 import Program from "@/components/carousel/Program";
-import ArticleLink from "@/components/ArticleLink";
+import UpNextGrid from "@/components/UpNextGrid";
+import FotoreportsPanel from "@/components/FotoreportsPanel";
+import LatestArticles from "@/components/LatestArticles";
+import SyncedHeightRow from "@/components/SyncedHeightRow";
 import JsonLd from "@/components/JsonLd";
-import CmsApiService from "@/services/cms-api-service";
-import { Link } from "@/navigation";
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from "next";
 import { locales, toOgLocale } from "@/navigation";
@@ -41,9 +41,6 @@ export default async function Home({ params }: HomeProps) {
   // 2. Await the params
   const { locale } = await params;
 
-  // 3. Use getTranslations (not useTranslations) in async Server Components
-  const t = await getTranslations('HomePage');
-
   const broadcast = {
     "@context": "https://schema.org",
     "@type": "BroadcastService",
@@ -57,49 +54,40 @@ export default async function Home({ params }: HomeProps) {
     }
   };
   
-  const events = await CmsApiService.Article.getRecentEvents(5).catch(() => []);
-  
   return (
     <>
       <JsonLd data={broadcast} />
-      <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8">
-        <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> radio
-      </h1>
-      
-      <Program />
-      
-      {/* ... rest of your JSX remains the same ... */}
-      <div className="flex justify-center w-full pt-8">
-         <a href="https://www.websupport.sk/" target="_blank" rel="noopener noreferrer">
-           <img src="/images/websupport-banner-large.png" className="px-4 hidden md:block" alt="Sponsor" />
-         </a>
+      <div className="mx-[calc(50%-50vw)] overflow-x-hidden">
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 xl:px-24">
+          <SyncedHeightRow
+            className="grid grid-cols-1 lg:grid-cols-[2fr_1.5fr_1fr] gap-6 mb-12"
+            reference={
+              <div className="flex flex-col gap-6">
+                <div className="lg:aspect-square w-full min-w-0 lg:overflow-hidden rounded-lg">
+                  <FotoreportsPanel limit={4} />
+                </div>
+                <a
+                  href="https://www.websupport.sk/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden lg:flex items-center justify-center relative aspect-square w-full min-w-0 overflow-hidden rounded-lg shadow-lg bg-[#1c1c1c]"
+                >
+                  <img
+                    src="/images/freeweb-sk-4.png"
+                    alt="WebSupport"
+                    className="w-full h-full object-cover"
+                  />
+                </a>
+              </div>
+            }
+          >
+            <Program compact />
+            <UpNextGrid limit={9} />
+          </SyncedHeightRow>
+        </div>
       </div>
 
-      <ArchiveGrid />
-      
-      {events.length > 0 && (
-        <div className="mb-12 pb-16">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 px-4 md:px-8 pb-2">
-            <h2 className="text-4xl text-white font-semibold pb-0">
-              <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> {t('eventsTitle')}
-            </h2>
-            <Link
-              href="/clanky"
-              className="font-argentumSansBold bg-[#d43c4a] rounded-full px-4 py-2 text-white hover:underline mt-2 md:mt-0"
-            >
-              {t('viewAll')}
-            </Link>
-          </div>
-          <div className="px-4 md:px-8">
-            {events.map((event, index) => (
-              <ArticleLink 
-                key={event.id || event.slug || `event-${index}`} 
-                article={event} 
-              />
-            ))} 
-          </div>
-        </div>
-      )}
+      <LatestArticles limit={4} />
     </>
   );
 }

@@ -5,16 +5,32 @@ import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { Link } from "@/navigation";
 import { useTranslations, useLocale } from "next-intl"; // Added imports
 import { UmamiTrack } from "@/components/Analytics";
+import { usePlayer } from "@/context/PlayerContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 function ProgramCarousel({
   carouselPosts,
   loadingError,
+  compact = false,
+  isFallback = false,
 }: {
   carouselPosts: any;
   loadingError?: boolean;
+  compact?: boolean;
+  isFallback?: boolean;
 }) {
   const t = useTranslations("ProgramCarousel"); // Hook for text
   const locale = useLocale(); // Hook for date formatting
+  const {
+    setMode,
+    setArchiveName,
+    setArchiveShowName,
+    setArchiveEpisodeCover,
+    setArchiveMetadata,
+    setSrc,
+    setArchiveEpisodeId,
+  } = usePlayer();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -36,7 +52,9 @@ function ProgramCarousel({
       }
     }
 
-    return 0;
+    // No upcoming episode - default to the newest (last, since carouselPosts
+    // is sorted oldest-to-newest) rather than the oldest.
+    return carouselPosts.length - 1;
   };
 
   useEffect(() => {
@@ -99,6 +117,21 @@ function ProgramCarousel({
     UmamiTrack("Program Episode Click", { episodeId });
   };
 
+  const playEpisode = (episode: any) => {
+    UmamiTrack("Program Episode Play", { episodeId: episode.id });
+    setMode("archive");
+    setArchiveName(episode.Title);
+    setArchiveShowName(episode.showData?.Title || "");
+    setArchiveEpisodeCover(episode.Cover);
+    setArchiveMetadata({
+      author: episode.showData?.Title || "",
+      album: episode.showData?.Title || "",
+      image: episode.Cover,
+    });
+    setSrc(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${episode.Audio?.id || episode.Audio}`);
+    setArchiveEpisodeId(episode.id);
+  };
+
   const getVisibleSlides = () => {
     if (carouselPosts.length === 0) return [];
     if (carouselPosts.length === 1)
@@ -147,6 +180,74 @@ function ProgramCarousel({
   }
 
   const visibleSlides = getVisibleSlides();
+
+  if (compact) {
+    const activeEpisode = carouselPosts[currentIndex];
+    const hasAudio = activeEpisode?.Audio && (activeEpisode.Audio.id || activeEpisode.Audio);
+
+    return (
+      <div className="relative w-full aspect-[4/5] lg:aspect-auto lg:h-full min-w-0 rounded-lg overflow-hidden shadow-lg bg-[#1c1c1c]">
+        <Link
+          href={`/relacie/${activeEpisode.showData?.Slug}?programEpisode=${activeEpisode.id}`}
+          onClick={() => handleEpisodeClick(activeEpisode.id)}
+          className="absolute inset-0 block group"
+        >
+          <img
+            src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${activeEpisode.Cover}`}
+            alt={activeEpisode.Title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            draggable="false"
+          />
+          {isFallback && (
+            <span className="absolute top-0 left-0 bg-[#d43c4a] text-white text-xs uppercase font-bold px-3 py-1 rounded-br-lg shadow-md">
+              {t('missed_label')}
+            </span>
+          )}
+        </Link>
+        <div className="absolute bottom-0 left-0 right-0 p-4 pt-16 bg-gradient-to-t from-black/90 via-black/70 to-transparent flex flex-col text-left">
+          <h3 className="font-argentumSansBold text-white text-lg line-clamp-2 mb-1 drop-shadow">{activeEpisode.Title}</h3>
+          <p className="text-gray-200 text-sm mb-4 drop-shadow">[ {getDate(activeEpisode.Date)} ]</p>
+          <div className="flex items-center gap-3">
+            {hasAudio && (
+              <button
+                onClick={() => playEpisode(activeEpisode)}
+                aria-label="Play episode"
+                className="flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-full bg-[#d43c4a] hover:bg-[#b83744] text-white transition-colors"
+              >
+                <FontAwesomeIcon icon={faPlay} className="ml-0.5" />
+              </button>
+            )}
+            <Link
+              href={`/relacie/${activeEpisode.showData?.Slug}`}
+              className="flex-shrink-0 h-11 px-4 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-argentumSansBold transition-colors"
+            >
+              {t('open_show')}
+            </Link>
+            {carouselPosts.length > 1 && (
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  onClick={handlePrevious}
+                  disabled={currentIndex === 0}
+                  aria-label={t('prev_aria')}
+                  className={`w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors ${currentIndex > 0 ? "bg-white/10 hover:bg-white/20" : "bg-white/5 cursor-not-allowed opacity-40"}`}
+                >
+                  <FontAwesomeIcon icon={faChevronLeft} />
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={currentIndex === carouselPosts.length - 1}
+                  aria-label={t('next_aria')}
+                  className={`w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors ${currentIndex < carouselPosts.length - 1 ? "bg-white/10 hover:bg-white/20" : "bg-white/5 cursor-not-allowed opacity-40"}`}
+                >
+                  <FontAwesomeIcon icon={faChevronRight} />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full py-2 overflow-hidden">
