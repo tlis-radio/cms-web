@@ -21,7 +21,7 @@ const UpNextGrid: React.FC<UpNextGridProps> = async ({ limit = 6 }) => {
    if (limitedShows.length === 0) return null;
 
    return (
-      <div className="flex flex-col h-full min-w-0 bg-[#1c1c1c] rounded-lg p-4 shadow-lg">
+      <div className="flex flex-col h-full min-w-0 rounded-lg">
          <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl text-white font-semibold">
                <span className="text-[#d43c4a] italic text-[1.2em] mr-1">TLIS</span> {t('upNextTitle')}
@@ -29,7 +29,7 @@ const UpNextGrid: React.FC<UpNextGridProps> = async ({ limit = 6 }) => {
             <ViewAllButton href="/relacie" label={t('viewAll')} />
          </div>
 
-         <div className="grid grid-cols-3 gap-3 content-start flex-1 min-h-0">
+         <div className="grid grid-cols-3 gap-3 content-evenly flex-1 min-h-0">
             {limitedShows.map((show: any, index: number) => (
                <Link
                   key={index}
