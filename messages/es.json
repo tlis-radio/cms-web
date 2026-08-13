@@ -69,7 +69,10 @@
     "metaTitle": "Inicio",
     "metaDescription": "Escucha Radio TLIS en vivo. Música alternativa, programas culturales e información fresca directamente desde la vida estudiantil.",
     "eventsTitle": "eventos",
-    "viewAll": "VER TODO"
+    "viewAll": "VER TODO",
+    "upNextTitle": "programas",
+    "fotoreportsTitle": "reportajes fotográficos",
+    "articlesTitle": "artículos"
   },
   "MembersPage": {
     "title": " miembros",
@@ -228,6 +231,7 @@
     "empty_title": "Actualmente no hay programación",
     "empty_subtitle": "Consulte nuestro archivo de programas anteriores",
     "open_archive": "Abrir archivo",
+    "open_show": "Abrir programa",
     "missed_label": "Te perdiste",
     "will_miss_label": "Te perderás",
     "prev_aria": "Episodio anterior",

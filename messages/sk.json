@@ -69,7 +69,10 @@
     "metaTitle": "Domov",
     "metaDescription": "Počúvajte Radio TLIS naživo. Alternatívna hudba, relácie o kultúre a čerstvé info priamo zo študentského života",
     "eventsTitle": "udalosti",
-    "viewAll": "ZOBRAZIŤ VŠETKY"
+    "viewAll": "ZOBRAZIŤ VŠETKY",
+    "upNextTitle": "relácie",
+    "fotoreportsTitle": "fotoreporty",
+    "articlesTitle": "články"
   },
   "MembersPage": {
     "title": " členovia",
@@ -228,6 +231,7 @@
     "empty_title": "Momentálne nie je žiadny program",
     "empty_subtitle": "Pozrite si náš archív minulých relácií",
     "open_archive": "Otvoriť archív",
+    "open_show": "Otvoriť reláciu",
     "missed_label": "Zmeškal si",
     "will_miss_label": "Zmeškáš",
     "prev_aria": "Predošlá epizóda",

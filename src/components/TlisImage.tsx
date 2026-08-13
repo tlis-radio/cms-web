@@ -23,17 +23,28 @@ const TlisImage: React.FC<TlisImageProps> = ({ src, width = 500, height = 500, a
     const updateSize = useCallback(() => {
         if (imgRef.current) {
             const rect = imgRef.current.getBoundingClientRect();
-            setRenderSize({
-                width: Math.round(rect.width),
-                height: Math.round(rect.height),
-            });
+            // Skip zero-size measurements (e.g. before the grid/flex layout has
+            // resolved a track width) so we never bake a broken `?width=0` into
+            // the image URL - keep the last known-good size until a real one lands.
+            if (rect.width > 0 && rect.height > 0) {
+                setRenderSize({
+                    width: Math.round(rect.width),
+                    height: Math.round(rect.height),
+                });
+            }
         }
     }, []);
 
     useEffect(() => {
         updateSize();
-        const interval = setInterval(updateSize, 1000);
-        return () => clearInterval(interval);
+        const node = imgRef.current;
+        if (!node || typeof ResizeObserver === "undefined") {
+            const interval = setInterval(updateSize, 1000);
+            return () => clearInterval(interval);
+        }
+        const observer = new ResizeObserver(updateSize);
+        observer.observe(node);
+        return () => observer.disconnect();
     }, [updateSize]);
 
     const modifiedSrc = `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${src}?width=${Math.floor(renderSize.width * sizeMultiplier)}&quality=${100}`;
