@@ -29,7 +29,7 @@ const UpNextGrid: React.FC<UpNextGridProps> = async ({ limit = 6 }) => {
             <ViewAllButton href="/relacie" label={t('viewAll')} />
          </div>
 
-         <div className="grid grid-cols-3 gap-3 content-evenly flex-1 min-h-0">
+         <div className="grid grid-cols-3 gap-3 content-between flex-1 min-h-0">
             {limitedShows.map((show: any, index: number) => (
                <Link
                   key={index}
