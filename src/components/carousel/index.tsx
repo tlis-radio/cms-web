@@ -7,7 +7,7 @@ import { useTranslations, useLocale } from "next-intl"; // Added imports
 import { UmamiTrack } from "@/components/Analytics";
 import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faChevronLeft, faChevronRight, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 function ProgramCarousel({
   carouselPosts,
@@ -34,6 +34,7 @@ function ProgramCarousel({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isCoverLoading, setIsCoverLoading] = useState(true);
 
   useEffect(() => {
     const updateIsMobile = () => setIsMobile(window.innerWidth < 640);
@@ -41,6 +42,10 @@ function ProgramCarousel({
     window.addEventListener("resize", updateIsMobile);
     return () => window.removeEventListener("resize", updateIsMobile);
   }, []);
+
+  useEffect(() => {
+    setIsCoverLoading(true);
+  }, [carouselPosts[currentIndex]?.Cover]);
 
   const getNextEventIndex = () => {
     const now = new Date();
@@ -193,11 +198,19 @@ function ProgramCarousel({
           className="absolute inset-0 block group"
         >
           <img
+            key={activeEpisode.Cover}
             src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${activeEpisode.Cover}`}
             alt={activeEpisode.Title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             draggable="false"
+            onLoad={() => setIsCoverLoading(false)}
+            onError={() => setIsCoverLoading(false)}
           />
+          {isCoverLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#1c1c1c] z-10">
+              <FontAwesomeIcon icon={faSpinner} className="animate-spin text-white text-3xl" />
+            </div>
+          )}
           {isFallback && (
             <span className="absolute top-0 left-0 bg-[#d43c4a] text-white text-xs uppercase font-bold px-3 py-1 rounded-br-lg shadow-md">
               {t('missed_label')}
