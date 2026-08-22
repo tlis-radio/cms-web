@@ -41,7 +41,7 @@ const Footer = () => {
                      <li><Link href={`/${locale}`} className="hover:text-white">{t('explore.home')}</Link></li>
                      <li><Link href={`/${locale}/program`} className="hover:text-white">{t('explore.program')}</Link></li>
                      <li><Link href={`/${locale}/relacie`} className="hover:text-white">{t('explore.shows')}</Link></li>
-                     <li><Link href="https://www.radia.sk/radia/tlis/playlist" target="_blank" className="hover:text-white">{t('explore.playlist')}</Link></li>
+                     {/* <li><Link href="https://www.radia.sk/radia/tlis/playlist" target="_blank" className="hover:text-white">{t('explore.playlist')}</Link></li> */}
                   </ul>
                </div>
 
