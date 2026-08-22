@@ -33,10 +33,10 @@ export const CustomPlaylistIcon2: IconDefinition = {
 };
 
 export const socialLinks = [
-   { 
-      icon: CustomPlaylistIcon1, 
-      url: "https://radia.sk/radia/tlis/playlist"
-   },
+   // { 
+   //    icon: CustomPlaylistIcon1, 
+   //    url: "https://radia.sk/radia/tlis/playlist"
+   // },
    { 
       icon: faInstagram, 
       url: "https://www.instagram.com/radiotlis/"
