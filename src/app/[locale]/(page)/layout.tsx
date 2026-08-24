@@ -9,6 +9,7 @@ import GalleryOverlay from "@/components/carousel/gallery/GalleryOverlay";
 import { GalleryProvider } from "@/components/carousel/gallery/GalleryProvider";
 import SessionInit from "@/components/SessionInit";
 import CookieConsent from "@/components/CookieConsent";
+import TempStreamDisabled from '@/components/TempStreamDisabled';
 
 // Konfigurácia fontu Inter
 // Definujeme presné váhy, aby sme zabránili prehnanej tučnosti (boldness)
@@ -37,6 +38,7 @@ export default async function LocaleLayout({
           3. antialiased - dôležité pre Windows/Chrome, aby font nebol príliš hrubý
       */}
       <div className={`${inter.variable} font-sans antialiased flex flex-col transition-[padding] duration-300 ease-in-out`}>
+        <TempStreamDisabled/>
         <SessionInit />
         <Header />
         <div className='flex flex-row justify-center w-full pt-[100px] lg:pt-[105px] mb-16'>
