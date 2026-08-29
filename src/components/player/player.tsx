@@ -62,19 +62,6 @@ const faVolumeMedium: IconDefinition = {
    ],
 };
 
-// The slider position (0-1) is what the user drags and what drives the icon
-// tiers, but human hearing perceives loudness logarithmically, not linearly -
-// so a slider mapped straight to gain feels like it "does nothing" until near
-// the top. Mapping position to gain along a dB curve (like YouTube's player
-// does) makes equal slider movements feel like equal loudness steps.
-const VOLUME_DB_RANGE = 40;
-
-function sliderPositionToGain(position: number): number {
-   if (position <= 0) return 0;
-   if (position >= 1) return 1;
-   return Math.pow(10, (position - 1) * (VOLUME_DB_RANGE / 20));
-}
-
 function getVolumeIcon(volume: number) {
    if (volume === 0) return faVolumeXmark;
    if (volume <= 0.33) return faVolumeLow;
@@ -149,12 +136,13 @@ const Player: React.FC<{}> = () => {
       isPlaying,
       setIsPlaying,
       isLoading,
-      audioRef
+      audioRef,
+      volume,
+      setVolume
    } = usePlayer();
-   
+
    const [isVisible, setIsVisible] = useState(true);
-   const [volume, setVolume] = useState(1);
-   const previousVolumeRef = useRef(1);
+   const previousVolumeRef = useRef(volume);
    const [streamTitle, setStreamTitle] = useState("Radio TLIS");
    const [streamArtist, setStreamArtist] = useState<string | undefined>("Radio TLIS");
    const [albumCover, setAlbumCover] = useState<string | null>(null);
@@ -298,13 +286,10 @@ const Player: React.FC<{}> = () => {
    }, [isVisible, isClient]);
 
    useEffect(() => {
-      if (audioRef.current) {
-         audioRef.current.volume = sliderPositionToGain(volume);
-      }
       if (volume > 0) {
          previousVolumeRef.current = volume;
       }
-   }, [volume, audioRef]);
+   }, [volume]);
 
    useEffect(() => {
       const fetchTitle = async () => {

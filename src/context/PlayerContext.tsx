@@ -33,9 +33,24 @@ interface PlayerContextType {
   setDuration: (duration: number) => void;
 
   setArchiveEpisodeId: (id: number) => void;
+
+  volume: number;
+  setVolume: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const PlayerContext = createContext<PlayerContextType | null>(null);
+
+// The slider position (0-1) is what the user drags, but human hearing
+// perceives loudness logarithmically - mapping position to gain along a dB
+// curve (like YouTube's player does) makes equal slider movements feel like
+// equal loudness steps.
+const VOLUME_DB_RANGE = 40;
+
+function sliderPositionToGain(position: number): number {
+  if (position <= 0) return 0;
+  if (position >= 1) return 1;
+  return Math.pow(10, (position - 1) * (VOLUME_DB_RANGE / 20));
+}
 
 export const usePlayer = () => {
   const ctx = useContext(PlayerContext);
@@ -59,6 +74,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [volume, setVolume] = useState(0.5);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
@@ -122,6 +138,12 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = sliderPositionToGain(volume);
+    }
+  }, [volume, mode, src]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -392,6 +414,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setArchiveEpisodeId,
         archiveShowSlug,
         setArchiveShowSlug,
+        volume,
+        setVolume,
       }}
     >
       {children}
