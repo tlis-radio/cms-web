@@ -15,6 +15,7 @@ export class Show {
    public Filter: string;
    public ModeratorNames?: string[];
    public Views: number;
+   public noindex?: boolean | null;
 
    constructor(
       id: number,
@@ -30,7 +31,8 @@ export class Show {
       Cast: ShowCast[],
       Filter: string,
       Views: number,
-      ModeratorNames?: string[]
+      ModeratorNames?: string[],
+      noindex?: boolean | null
    ) {
       this.id = id;
       this.user_created = user_created;
@@ -46,6 +48,7 @@ export class Show {
       this.Filter = Filter;
       this.ModeratorNames = ModeratorNames;
       this.Views = Views;
+      this.noindex = noindex;
    }
 
    public static fromDto(dto: ShowDto): Show {
@@ -64,6 +67,7 @@ export class Show {
          dto.Filter,
          dto.Views,
          dto.ModeratorNames,
+         dto.noindex,
       );
    }
 }

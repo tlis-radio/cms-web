@@ -42,4 +42,5 @@ export type ShowDto = {
    Filter: string;
    ModeratorNames?: string[];
    Views: number;
+   noindex?: boolean | null;
 };

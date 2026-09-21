@@ -37,6 +37,8 @@ export async function generateMetadata({
          title,
          description,
          alternates,
+         // noindex z CMS platí pre celú reláciu — všetky ?page aj zdieľané epizódy
+         ...(show?.noindex ? { robots: { index: false, follow: true } } : {}),
          openGraph: {
             title,
             description,
