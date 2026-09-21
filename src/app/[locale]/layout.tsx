@@ -3,10 +3,6 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
 import "@/app/globals.css";
-import { locales } from '@/navigation';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
-
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -26,12 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: locale === 'sk' 
       ? 'Radio TLIS — alternatívna hudba, relácie a kultúra.' 
       : 'Radio TLIS — alternative music, shows, and culture.',
-    alternates: { 
-      canonical: `${SITE_URL}/${locale}`, // Opravené: kanonická URL by mala obsahovať locale
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `${SITE_URL}/${l}`])
-      ),
-    },
+    // canonical/hreflang si nastavuje každá stránka sama — v layoute by sa dedil
+    // na všetky podstránky a ukazoval by na /{locale}
   };
 }
 

@@ -74,7 +74,7 @@ export default function EpisodeWidget({ episode, show }: EpisodeWidgetProps) {
   }
 
   const showLink = show
-    ? `${SITE_URL}/relacie/${show.Slug}?sharedEpisode=${episode.id}`
+    ? `${SITE_URL}/sk/relacie/${show.Slug}?sharedEpisode=${episode.id}`
     : `${SITE_URL}`;
 
   return (

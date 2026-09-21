@@ -1,10 +1,10 @@
 import Members from "@/components/MembersGrid";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
+import { alternatesFor, pageUrl } from "@/lib/seo";
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 // 1. Dynamic Metadata (Handles both SK and EN automatically)
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -14,16 +14,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: `${t('metaTitle')}`,
         description: t('metaDescription'),
-        alternates: {
-            canonical: `${SITE_URL}/${locale}/o-radiu/clenovia`,
-            languages: Object.fromEntries(
-                locales.map((l) => [l, `${SITE_URL}/${l}/o-radiu/clenovia`])
-            ),
-        },
+        alternates: alternatesFor(`/o-radiu/clenovia`),
         openGraph: {
             title: `${t('metaTitle')}`,
             description: t('metaDescription'),
-            url: `${SITE_URL}/${locale}/o-radiu/clenovia`,
+            url: pageUrl(`/o-radiu/clenovia`),
             siteName: "Radio TLIS",
             locale: toOgLocale(locale),
         },

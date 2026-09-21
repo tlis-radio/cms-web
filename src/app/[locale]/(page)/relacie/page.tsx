@@ -5,9 +5,8 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, pageUrl, parsePage } from "@/lib/seo";
 
 export async function generateMetadata({ 
     params, 
@@ -20,33 +19,24 @@ export async function generateMetadata({
     const resolvedSearchParams = await searchParams;
     const t = await getTranslations({ locale, namespace: 'ShowsListPage' });
 
-    const pageParam = resolvedSearchParams?.page;
-    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+    const page = parsePage(resolvedSearchParams?.page);
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
     
-    const canonicalUrl = page === 1
-       ? `${SITE_URL}/${locale}/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
-       : `${SITE_URL}/${locale}/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
+    const alternates = alternatesFor("/relacie", {
+       filter: filter !== "active" ? filter : undefined,
+       page,
+    });
     
     return {
        // Vymazané "| Radio TLIS" (DRY princíp z layoutu)
        title: t('metaTitle'),
        description: t('metaDescription'),
-       alternates: { 
-          canonical: canonicalUrl,
-          // Preloopovanie cez jazyky pre SEO
-          languages: Object.fromEntries(
-            locales.map((l) => [
-                l, 
-                `${SITE_URL}/${l}/relacie${page > 1 ? `?page=${page}` : ""}${filter !== "active" ? `${page > 1 ? '&' : '?'}filter=${filter}` : ""}`
-            ])
-          ),
-       },
+       alternates,
        openGraph: {
           title: t('metaTitle'),
           description: t('metaDescription'),
-          url: `${SITE_URL}/${locale}/relacie`,
+          url: alternates.canonical,
           siteName: "Radio TLIS",
           locale: toOgLocale(locale),
        },
@@ -66,8 +56,7 @@ async function Shows({
 
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
-    const pageParam = resolvedSearchParams?.page;
-    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+    const page = parsePage(resolvedSearchParams?.page);
 
     let loadingError = false;
     const showsResult = await CmsApiService.Show.listShowsPaginated(page, filter).catch((error) => {
@@ -84,7 +73,7 @@ async function Shows({
        "@type": ["RadioSeries", "PodcastSeries"],
        "name": s.Title,
        "description": s.Description || undefined,
-       "url": `${SITE_URL}/${locale}/relacie/${s.Slug}`,
+       "url": pageUrl(`/relacie/${s.Slug}`),
        "image": s.Cover ? `${DIRECTUS}/assets/${s.Cover}` : undefined,
        "publisher": { "@type": "Organization", "name": "Radio TLIS", "url": SITE_URL }
     }));

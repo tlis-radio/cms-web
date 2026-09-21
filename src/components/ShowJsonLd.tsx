@@ -22,7 +22,7 @@ export default async function ShowJsonLd({ show, episodes }: { show: any; episod
     "@type": ["RadioSeries", "PodcastSeries"],
     "name": show.Title || t('fallback_show_title'),
     "description": show.Description || t('fallback_show_description', { title: show.Title }),
-    "url": `${SITE_URL}/relacie/${show.Slug}`,
+    "url": `${SITE_URL}/sk/relacie/${show.Slug}`,
     "image": imageUrl(show.Cover),
     "publisher": {
       "@type": "Organization",
@@ -32,7 +32,7 @@ export default async function ShowJsonLd({ show, episodes }: { show: any; episod
     "hasPart": (episodes || []).map((ep: any) => ({
       "@type": ["RadioEpisode", "PodcastEpisode"],
       "name": ep.Title,
-      "url": `${SITE_URL}/relacie/${show.Slug}#episode-${ep.id}`,
+      "url": `${SITE_URL}/sk/relacie/${show.Slug}#episode-${ep.id}`,
       "datePublished": ep.Date,
       "image": imageUrl(ep.Cover),
       "description": ep.Title || undefined,
@@ -47,13 +47,13 @@ export default async function ShowJsonLd({ show, episodes }: { show: any; episod
       "@type": ["RadioEpisode", "PodcastEpisode"],
       "name": ep.Title,
       "description": ep.Title || show.Description || undefined,
-      "url": `${SITE_URL}/relacie/${show.Slug}#episode-${ep.id}`,
+      "url": `${SITE_URL}/sk/relacie/${show.Slug}#episode-${ep.id}`,
       "datePublished": ep.Date,
       "image": imageUrl(ep.Cover),
       "partOfSeries": {
         "@type": ["RadioSeries", "PodcastSeries"],
         "name": show.Title,
-        "url": `${SITE_URL}/relacie/${show.Slug}`,
+        "url": `${SITE_URL}/sk/relacie/${show.Slug}`,
       },
       "associatedMedia": audioUrl ? { "@type": "AudioObject", "contentUrl": audioUrl } : undefined,
     };

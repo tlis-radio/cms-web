@@ -5,9 +5,8 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, pageUrl, parsePage } from "@/lib/seo";
 
 export async function generateMetadata({ 
    params, 
@@ -20,8 +19,7 @@ export async function generateMetadata({
    const queryParams = await searchParams;
    const t = await getTranslations({ locale, namespace: 'CastMemberPage' });
    
-   const pageParam = queryParams?.page;
-   const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+   const page = parsePage(queryParams?.page);
    
    let cast;
    let showsCount = 0;
@@ -41,9 +39,8 @@ export async function generateMetadata({
       };
    }
 
-   const canonicalUrl = page === 1 
-      ? `${SITE_URL}/${locale}/ucinkujuci/${slug}`
-      : `${SITE_URL}/${locale}/ucinkujuci/${slug}?page=${page}`;
+   const alternates = alternatesFor(`/ucinkujuci/${slug}`, { page });
+   const canonicalUrl = alternates.canonical;
    
    // Dynamický popis s lokalizovaným skloňovaním
    const description = t('metaDescription', { 
@@ -55,12 +52,7 @@ export async function generateMetadata({
    return {
       title: cast.Name,
       description,
-      alternates: {
-         canonical: canonicalUrl,
-         languages: Object.fromEntries(
-            locales.map((l) => [l, `${SITE_URL}/${l}/ucinkujuci/${slug}`])
-         ),
-      },
+      alternates,
       openGraph: {
          title: cast.Name,
          description,
@@ -112,7 +104,7 @@ const CastMemberPage = async ({
       "@context": "https://schema.org",
       "@type": "Person",
       "name": cast.Name,
-      "url": `${SITE_URL}/${locale}/ucinkujuci/${cast.Slug}`,
+      "url": pageUrl(`/ucinkujuci/${cast.Slug}`),
    } : null;
 
    const seriesJson = shows.map((s: any) => ({
@@ -120,7 +112,7 @@ const CastMemberPage = async ({
       "@type": ["RadioSeries", "PodcastSeries"],
       "name": s.Title,
       "description": s.Description || undefined,
-      "url": `${SITE_URL}/${locale}/relacie/${s.Slug}`,
+      "url": pageUrl(`/relacie/${s.Slug}`),
       "image": s.Cover ? `${DIRECTUS}/assets/${s.Cover}` : undefined,
       "publisher": { "@type": "Organization", "name": "Radio TLIS", "url": SITE_URL }
    }));

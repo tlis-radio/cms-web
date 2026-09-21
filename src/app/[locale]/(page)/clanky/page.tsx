@@ -5,9 +5,8 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, parsePage } from "@/lib/seo";
 
 export async function generateMetadata({ 
    params, 
@@ -18,28 +17,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
    const { locale } = await params;
    const requestedParams = await searchParams;
-   const pageParam = requestedParams?.page;
-   const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+   const page = parsePage(requestedParams?.page);
    
    const t = await getTranslations({ locale, namespace: 'ArticlesPage' });
    
-   const canonicalUrl = page === 1
-      ? `${SITE_URL}/${locale}/clanky`
-      : `${SITE_URL}/${locale}/clanky?page=${page}`;
+   const alternates = alternatesFor("/clanky", { page });
    
    return {
       title: t('metaTitle') || 'Články',
       description: t('metaDescription') || "Prehľad článkov, reportáží a udalostí Radia TLIS.",
-      alternates: { 
-         canonical: canonicalUrl,
-         languages: Object.fromEntries(
-            locales.map((l) => [l, `${SITE_URL}/${l}/clanky${page > 1 ? `?page=${page}` : ''}`])
-         ),
-      },
+      alternates,
       openGraph: {
          title: t('metaTitle') || 'Články',
          description: t('metaDescription') || "Prehľad článkov, reportáží a udalostí Radia TLIS.",
-         url: `${SITE_URL}/${locale}/clanky`,
+         url: alternates.canonical,
          siteName: "Radio TLIS",
          locale: toOgLocale(locale),
       },
@@ -75,7 +66,7 @@ const Articles = async ({
       "@type": "Article",
       "headline": a.title,
       "description": a.description || undefined,
-      "url": `${site}/${locale}/clanky/${a.slug}`,
+      "url": `${site}/sk/clanky/${a.slug}`,
       "image": a.thumbnail_image ? `${DIRECTUS}/assets/${a.thumbnail_image}` : undefined,
       "datePublished": a.published_at,
       "author": a.author ? {

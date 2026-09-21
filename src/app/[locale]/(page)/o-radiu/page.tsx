@@ -4,9 +4,9 @@ import GalleryThumbnail from '@/components/carousel/gallery/GalleryThumbnail';
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
+import { alternatesFor, pageUrl } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 // 1. Dynamické metadáta pre SEO (SK aj EN)
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -16,16 +16,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return {
         title: `${t('metaTitle')}`,
         description: t('metaDescription'),
-        alternates: {
-            canonical: `${SITE_URL}/${locale}/o-radiu`,
-            languages: Object.fromEntries(
-                locales.map((l) => [l, `${SITE_URL}/${l}/o-radiu`])
-            ),
-        },
+        alternates: alternatesFor(`/o-radiu`),
         openGraph: {
             title: `${t('metaTitle')}`,
             description: t('metaDescription'),
-            url: `${SITE_URL}/${locale}/o-radiu`,
+            url: pageUrl(`/o-radiu`),
             siteName: "Radio TLIS",
             locale: toOgLocale(locale),
         },
