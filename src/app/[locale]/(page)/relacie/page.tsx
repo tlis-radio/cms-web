@@ -5,9 +5,16 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, pageUrl, parsePage } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+type SearchParams = { [key: string]: string | string[] | undefined };
+
+// ?q= — vyhľadávací dopyt (aj z OpenSearch / SearchAction), orezaný na rozumnú dĺžku
+function parseQuery(param: SearchParams[string]): string {
+    const raw = Array.isArray(param) ? param[0] : param;
+    return (raw || "").trim().slice(0, 100);
+}
 
 export async function generateMetadata({ 
     params, 
@@ -20,33 +27,35 @@ export async function generateMetadata({
     const resolvedSearchParams = await searchParams;
     const t = await getTranslations({ locale, namespace: 'ShowsListPage' });
 
-    const pageParam = resolvedSearchParams?.page;
-    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+    const page = parsePage(resolvedSearchParams?.page);
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
+    const query = parseQuery(resolvedSearchParams?.q);
+
+    // Výsledky vyhľadávania neindexujeme — kanonicky ukazujú na zoznam relácií
+    if (query) {
+       return {
+          title: `${t('metaTitle')}: ${query}`,
+          description: t('metaDescription'),
+          alternates: alternatesFor("/relacie"),
+          robots: { index: false, follow: true },
+       };
+    }
     
-    const canonicalUrl = page === 1
-       ? `${SITE_URL}/${locale}/relacie${filter !== "active" ? `?filter=${filter}` : ""}`
-       : `${SITE_URL}/${locale}/relacie?${filter !== "active" ? `filter=${filter}&` : ""}page=${page}`;
+    const alternates = alternatesFor("/relacie", {
+       filter: filter !== "active" ? filter : undefined,
+       page,
+    });
     
     return {
        // Vymazané "| Radio TLIS" (DRY princíp z layoutu)
        title: t('metaTitle'),
        description: t('metaDescription'),
-       alternates: { 
-          canonical: canonicalUrl,
-          // Preloopovanie cez jazyky pre SEO
-          languages: Object.fromEntries(
-            locales.map((l) => [
-                l, 
-                `${SITE_URL}/${l}/relacie${page > 1 ? `?page=${page}` : ""}${filter !== "active" ? `${page > 1 ? '&' : '?'}filter=${filter}` : ""}`
-            ])
-          ),
-       },
+       alternates,
        openGraph: {
           title: t('metaTitle'),
           description: t('metaDescription'),
-          url: `${SITE_URL}/${locale}/relacie`,
+          url: alternates.canonical,
           siteName: "Radio TLIS",
           locale: toOgLocale(locale),
        },
@@ -66,11 +75,14 @@ async function Shows({
 
     const filterValue = resolvedSearchParams?.filter;
     const filter = Array.isArray(filterValue) ? filterValue[0] ?? "active" : filterValue ?? "active";
-    const pageParam = resolvedSearchParams?.page;
-    const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+    const page = parsePage(resolvedSearchParams?.page);
+    const query = parseQuery(resolvedSearchParams?.q);
 
     let loadingError = false;
-    const showsResult = await CmsApiService.Show.listShowsPaginated(page, filter).catch((error) => {
+    const showsRequest = query
+       ? CmsApiService.Show.searchShows(query, page)
+       : CmsApiService.Show.listShowsPaginated(page, filter);
+    const showsResult = await showsRequest.catch((error) => {
        console.error("Error fetching shows:", error);
        loadingError = true;
        return null;
@@ -79,12 +91,13 @@ async function Shows({
     const shows = showsResult?.shows || [];
     const DIRECTUS = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
     
-    const seriesJson = shows.map((s: any) => ({
+    // Pri vyhľadávaní JSON-LD relácií nevkladáme (stránka je noindex)
+    const seriesJson = query ? [] : shows.map((s: any) => ({
        "@context": "https://schema.org",
        "@type": ["RadioSeries", "PodcastSeries"],
        "name": s.Title,
        "description": s.Description || undefined,
-       "url": `${SITE_URL}/${locale}/relacie/${s.Slug}`,
+       "url": pageUrl(`/relacie/${s.Slug}`),
        "image": s.Cover ? `${DIRECTUS}/assets/${s.Cover}` : undefined,
        "publisher": { "@type": "Organization", "name": "Radio TLIS", "url": SITE_URL }
     }));
@@ -106,6 +119,7 @@ async function Shows({
                 loadingError={loadingError} 
                 currentPage={page} 
                 locale={locale} 
+                query={query}
             />
         </>
     );

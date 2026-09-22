@@ -5,14 +5,14 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import { extractEpisodeIds } from "@/lib/markdown-parser";
 import ArticleDetail from "./ArticleDetail";
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, pageUrl } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string, locale: string }> }): Promise<Metadata> {
    const { slug, locale } = await params;
-   const canonicalUrl = `${SITE_URL}/${locale}/clanky/${slug}`;
+   const canonicalUrl = pageUrl(`/clanky/${slug}`);
 
    try {
       const article = await CmsApiService.Article.getArticleBySlug(slug);
@@ -23,12 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       return {
          title,
          description,
-         alternates: {
-            canonical: canonicalUrl,
-            languages: Object.fromEntries(
-               locales.map((l) => [l, `${SITE_URL}/${l}/clanky/${slug}`])
-            ),
-         },
+         alternates: alternatesFor(`/clanky/${slug}`),
          openGraph: {
             title,
             description,
@@ -51,12 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       return {
          title: `Článok`,
          description: `Článok na Radiu TLIS.`,
-         alternates: {
-            canonical: canonicalUrl,
-            languages: Object.fromEntries(
-               locales.map((l) => [l, `${SITE_URL}/${l}/clanky/${slug}`])
-            ),
-         },
+         alternates: alternatesFor(`/clanky/${slug}`),
          openGraph: {
             title: `Článok`,
             description: `Článok na Radiu TLIS.`,
@@ -108,7 +98,7 @@ const ArticlePage = async ({ params }: { params: Promise<{ slug: string }> }) =>
          "@type": article.type === "event" || article.type === "report" ? "Event" : "Article",
          "headline": article.title,
          "description": article.description,
-         "url": `${SITE_URL}/clanky/${article.slug}`,
+         "url": `${SITE_URL}/sk/clanky/${article.slug}`,
          "image": article.cover_image ? `${DIRECTUS_URL}/assets/${article.cover_image}` : undefined,
          "datePublished": article.published_at,
          "author": article.author ? {

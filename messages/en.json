@@ -186,7 +186,14 @@
     "filter_digital": "OLD ARCHIVE",
     "fetch_error_title": "Error loading archive",
     "fetch_error_subtitle": "Please try again later.",
-    "load_error": "The show could not be loaded."
+    "load_error": "The show could not be loaded.",
+    "search_placeholder": "Search shows, hosts, episodes…",
+    "search_label": "Search shows",
+    "search_clear": "Clear search",
+    "search_results": "{count, plural, one {# result} other {# results}} for “{query}”",
+    "search_no_results": "Nothing found for “{query}”",
+    "search_no_results_hint": "Try another word — we search titles, descriptions, hosts and episodes.",
+    "filter_all": "ALL SHOWS"
   },
   "ShowPage": {
     "metaTitle_fallback": "Show",

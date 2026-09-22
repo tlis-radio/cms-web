@@ -5,9 +5,9 @@ import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CastGrid from "./CastGrid";
 import { getTranslations } from "next-intl/server";
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, pageUrl } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 // Dynamické metadáta s podporou prekladov
 export async function generateMetadata({ 
@@ -17,17 +17,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
    const { locale } = await params;
    const t = await getTranslations({ locale, namespace: 'CastPage' });
-   const canonicalUrl = `${SITE_URL}/${locale}/ucinkujuci`;
+   const canonicalUrl = pageUrl(`/ucinkujuci`);
 
    return {
       title: `${t('metaTitle')}`,
       description: t('metaDescription'),
-      alternates: {
-         canonical: canonicalUrl,
-         languages: Object.fromEntries(
-            locales.map((l) => [l, `${SITE_URL}/${l}/ucinkujuci`])
-         ),
-      },
+      alternates: alternatesFor(`/ucinkujuci`),
       openGraph: {
          title: `${t('metaTitle')}`,
          description: t('metaDescription'),
@@ -61,7 +56,7 @@ const CastPage = async ({
       "@type": "CollectionPage",
       "name": `${t('metaTitle')} - Radio TLIS`,
       "description": t('metaDescription'),
-      "url": `${SITE_URL}/${locale}/ucinkujuci`,
+      "url": pageUrl(`/ucinkujuci`),
       "publisher": {
          "@type": "Organization",
          "name": "Radio TLIS",

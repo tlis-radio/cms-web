@@ -7,9 +7,8 @@ import type { Metadata } from "next";
 import ShowJsonLd from "@/components/ShowJsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getTranslations } from 'next-intl/server';
-import { locales, toOgLocale } from "@/navigation";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, parsePage } from "@/lib/seo";
 
 // 1. Dynamické metadáta s podporou prekladov
 export async function generateMetadata({ 
@@ -23,12 +22,10 @@ export async function generateMetadata({
    const resolvedSearchParams = await searchParams;
    const t = await getTranslations({ locale, namespace: 'ShowPage' });
    
-   const pageParam = resolvedSearchParams?.page;
-   const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+   const page = parsePage(resolvedSearchParams?.page);
    
-   const canonicalUrl = page === 1 
-      ? `${SITE_URL}/${locale}/relacie/${slug}`
-      : `${SITE_URL}/${locale}/relacie/${slug}?page=${page}`;
+   const alternates = alternatesFor(`/relacie/${slug}`, { page });
+   const canonicalUrl = alternates.canonical;
    
    try {
       const show = await CmsApiService.Show.getShowBySlug(slug);
@@ -39,12 +36,9 @@ export async function generateMetadata({
       return {
          title,
          description,
-         alternates: {
-            canonical: canonicalUrl,
-            languages: Object.fromEntries(
-               locales.map((l) => [l, `${SITE_URL}/${l}/relacie/${slug}`])
-            ),
-         },
+         alternates,
+         // noindex z CMS platí pre celú reláciu — všetky ?page aj zdieľané epizódy
+         ...(show?.noindex ? { robots: { index: false, follow: true } } : {}),
          openGraph: {
             title,
             description,
@@ -58,12 +52,7 @@ export async function generateMetadata({
       return {
          title: t('metaTitle_fallback'),
          description: t('metaDescription_fallback'),
-         alternates: {
-            canonical: canonicalUrl,
-            languages: Object.fromEntries(
-               locales.map((l) => [l, `${SITE_URL}/${l}/relacie/${slug}`])
-            ),
-         },
+         alternates,
          openGraph: {
             title: t('metaTitle_fallback'),
             description: t('metaDescription_fallback'),

@@ -3,9 +3,9 @@ import StreamVideoHub from "@/components/stream/StreamVideoHub";
 import CmsApiService from "@/services/cms-api-service";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
+import { alternatesFor, pageUrl } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -14,16 +14,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/tlistv`,
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `${SITE_URL}/${l}/tlistv`])
-      ),
-    },
+    alternates: alternatesFor(`/tlistv`),
     openGraph: {
       title: t("metaTitle"),
       description: t("metaDescriptionOg"),
-      url: `${SITE_URL}/${locale}/tlistv`,
+      url: pageUrl(`/tlistv`),
       siteName: "Radio TLIS",
       locale: toOgLocale(locale),
     },

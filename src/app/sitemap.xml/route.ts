@@ -1,6 +1,6 @@
 import CmsApiService from '@/services/cms-api-service';
 
-import { locales } from '@/navigation';
+import { CANONICAL_LOCALE } from '@/lib/seo';
 
 const STATIC_ROUTES: string[] = [
   '/',
@@ -28,7 +28,7 @@ export async function GET() {
   try {
     const shows = await CmsApiService.Show.listShows();
     if (Array.isArray(shows)) {
-      showSlugs = shows.map((s: any) => s.Slug).filter(Boolean);
+      showSlugs = shows.filter((s: any) => !s.noindex).map((s: any) => s.Slug).filter(Boolean);
     }
   } catch (err) {
     showSlugs = [];
@@ -38,13 +38,10 @@ export async function GET() {
 
   const basePaths = Array.from(new Set([...STATIC_ROUTES, ...dynamicRelacie])).sort();
 
-  const localizedUrls: string[] = [];
-  basePaths.forEach(path => {
-    locales.forEach(locale => {
-      const fullPath = path === '/' ? `/${locale}` : `/${locale}${path}`;
-      localizedUrls.push(fullPath);
-    });
-  });
+  // Len kanonické /sk URL — ostatné jazykové prefixy majú rovnaký obsah
+  const localizedUrls = basePaths.map(path =>
+    path === '/' ? `/${CANONICAL_LOCALE}` : `/${CANONICAL_LOCALE}${path}`
+  );
 
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://tlis.sk').replace(/\/$/, '');
   const xml = buildSitemap(localizedUrls, baseUrl);

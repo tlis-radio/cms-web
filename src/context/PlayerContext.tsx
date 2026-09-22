@@ -33,6 +33,9 @@ interface PlayerContextType {
   setDuration: (duration: number) => void;
 
   setArchiveEpisodeId: (id: number) => void;
+  
+  showStreamDisabled: boolean;
+  setShowStreamDisabled: (show: boolean) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | null>(null);
@@ -63,6 +66,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [episodeId, setArchiveEpisodeId] = useState<number | null>(null);
   const [countedView, setCountedView] = useState<boolean>(false);
+
+  const [showStreamDisabled, setShowStreamDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -211,29 +216,33 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     let streamHandleCanPlay: (() => void) | null = null;
     let archiveHandleCanPlay: (() => void) | null = null;
     if (audioRef.current && mode === "stream") {
-      setArchiveMetadata(null);
-      if (isPlaying) {
-        setIsLoading(true);
-        audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
-        audioRef.current.load();
-
-        streamHandleCanPlay = () => {
-          setIsLoading(false);
-          audioRef.current?.removeEventListener("canplay", streamHandleCanPlay!);
-        };
-        audioRef.current.addEventListener("canplay", streamHandleCanPlay);
-        audioRef.current.play().catch((err) => {
-          console.warn(err);
-        });
-      } else {
-        audioRef.current.pause();
-        audioRef.current.src = "";
-        audioRef.current.load();
-        setIsLoading(false);
-        if (streamHandleCanPlay) {
-          audioRef.current.removeEventListener("canplay", streamHandleCanPlay);
-        }
+      UmamiTrack("Play Disabled");
+      if(isPlaying) {
+        setShowStreamDisabled(true);
       }
+      // setArchiveMetadata(null);
+      // if (isPlaying) {
+      //   setIsLoading(true);
+      //   audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
+      //   audioRef.current.load();
+
+      //   streamHandleCanPlay = () => {
+      //     setIsLoading(false);
+      //     audioRef.current?.removeEventListener("canplay", streamHandleCanPlay!);
+      //   };
+      //   audioRef.current.addEventListener("canplay", streamHandleCanPlay);
+      //   audioRef.current.play().catch((err) => {
+      //     console.warn(err);
+      //   });
+      // } else {
+      //   audioRef.current.pause();
+      //   audioRef.current.src = "";
+      //   audioRef.current.load();
+      //   setIsLoading(false);
+      //   if (streamHandleCanPlay) {
+      //     audioRef.current.removeEventListener("canplay", streamHandleCanPlay);
+      //   }
+      // }
     } else if (audioRef.current) {
       if (isPlaying) {
         setIsLoading(true);
@@ -392,6 +401,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setArchiveEpisodeId,
         archiveShowSlug,
         setArchiveShowSlug,
+        showStreamDisabled,
+        setShowStreamDisabled
       }}
     >
       {children}

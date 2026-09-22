@@ -4,11 +4,11 @@ import FotoreportsPanel from "@/components/FotoreportsPanel";
 import LatestArticles from "@/components/LatestArticles";
 import SyncedHeightRow from "@/components/SyncedHeightRow";
 import JsonLd from "@/components/JsonLd";
+import { SITE_URL, alternatesFor, pageUrl } from "@/lib/seo";
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from "next";
-import { locales, toOgLocale } from "@/navigation";
+import { toOgLocale } from "@/navigation";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
 
 interface HomeProps {
   params: Promise<{ locale: string }>;
@@ -21,16 +21,11 @@ export async function generateMetadata({ params }: HomeProps): Promise<Metadata>
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
-    alternates: {
-      canonical: `${SITE_URL}/${locale}`,
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `${SITE_URL}/${l}`])
-      ),
-    },
+    alternates: alternatesFor(``),
     openGraph: {
       title: t('metaTitle'),
       description: t('metaDescription'),
-      url: `${SITE_URL}/${locale}`,
+      url: pageUrl(``),
       siteName: "Radio TLIS",
       locale: toOgLocale(locale),
     },
@@ -54,9 +49,26 @@ export default async function Home({ params }: HomeProps) {
     }
   };
   
+  // WebSite + SearchAction — vyhľadávače vedia, že /relacie?q= je vyhľadávanie na webe
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Radio TLIS",
+    "url": SITE_URL,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${pageUrl("/relacie")}?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <>
       <JsonLd data={broadcast} />
+      <JsonLd data={website} />
       <div className="mx-[calc(50%-50vw)] overflow-x-hidden">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 xl:px-24">
           <SyncedHeightRow

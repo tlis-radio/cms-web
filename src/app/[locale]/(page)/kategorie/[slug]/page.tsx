@@ -5,19 +5,16 @@ import NotFound from "@/components/NotFound";
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { locales, toOgLocale } from "@/navigation";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tlis.sk";
+import { toOgLocale } from "@/navigation";
+import { SITE_URL, alternatesFor, parsePage } from "@/lib/seo";
 
 export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string, locale: string }>, searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
    const { slug, locale } = await params;
    const resolvedSearchParams = await searchParams;
-   const pageParam = resolvedSearchParams?.page;
-   const page = Array.isArray(pageParam) ? parseInt(pageParam[0] || "1") : parseInt(pageParam || "1");
+   const page = parsePage(resolvedSearchParams?.page);
    
-   const canonicalUrl = page === 1
-      ? `${SITE_URL}/${locale}/kategorie/${slug}`
-      : `${SITE_URL}/${locale}/kategorie/${slug}?page=${page}`;
+   const alternates = alternatesFor(`/kategorie/${slug}`, { page });
+   const canonicalUrl = alternates.canonical;
    
    try {
       const category = await CmsApiService.Article.getCategoryBySlug(slug);
@@ -27,12 +24,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
       return {
          title,
          description,
-         alternates: {
-            canonical: canonicalUrl,
-            languages: Object.fromEntries(
-               locales.map((l) => [l, `${SITE_URL}/${l}/kategorie/${slug}`])
-            ),
-         },
+         alternates,
          openGraph: {
             title,
             description,
@@ -45,12 +37,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
       return {
          title: `Kategória`,
          description: `Články v kategórii na Radiu TLIS.`,
-         alternates: {
-            canonical: canonicalUrl,
-            languages: Object.fromEntries(
-               locales.map((l) => [l, `${SITE_URL}/${l}/kategorie/${slug}`])
-            ),
-         },
+         alternates,
          openGraph: {
             title: `Kategória`,
             description: `Články v kategórii.`,
@@ -82,7 +69,7 @@ const CategoryPage = async ({ params, searchParams }: { params: Promise<{ slug: 
          "@type": "CollectionPage",
          "name": category.name,
          "description": category.description,
-         "url": `${SITE_URL}/kategorie/${slug}`,
+         "url": `${SITE_URL}/sk/kategorie/${slug}`,
          "publisher": {
             "@type": "Organization",
             "name": "Radio TLIS",

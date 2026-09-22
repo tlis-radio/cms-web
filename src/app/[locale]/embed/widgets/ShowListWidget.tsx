@@ -140,7 +140,7 @@ export default function ShowListWidget({ show, episodes, totalCount }: ShowListW
               {totalCount} {t('episodes_count')}
             </p>
             <a
-              href={`${SITE_URL}/${locale}/relacie/${show.Slug}`}
+              href={`${SITE_URL}/sk/relacie/${show.Slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[#d43c4a] text-xs mt-2 hover:underline"
@@ -166,7 +166,7 @@ export default function ShowListWidget({ show, episodes, totalCount }: ShowListW
         {totalCount > episodes.length && (
           <div className="p-4 text-center">
             <a
-              href={`${SITE_URL}/${locale}/relacie/${show.Slug}`}
+              href={`${SITE_URL}/sk/relacie/${show.Slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#d43c4a] text-sm hover:underline"
