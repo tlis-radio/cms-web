@@ -9,6 +9,26 @@ import { usePlayer } from "@/context/PlayerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faChevronLeft, faChevronRight, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
+// Directus hands back the original upload (covers get uploaded at 2000x2000, ~7MB)
+// unless a transform is requested. The carousel never renders a cover wider than
+// ~800px, and covers are square, so pin width AND height - width alone is ignored
+// for sources that do not match the expected ratio.
+const coverUrl = (assetId: string, size: number) =>
+  `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${assetId}?width=${size}&height=${size}&fit=cover&quality=75&format=webp`;
+
+const coverSrcSet = (assetId: string, widths: number[]) =>
+  widths.map((w) => `${coverUrl(assetId, w)} ${w}w`).join(", ");
+
+const COMPACT_COVER_WIDTHS = [400, 600, 800];
+const COMPACT_COVER_SIZES = "(min-width: 1536px) 700px, (min-width: 1024px) 45vw, 95vw";
+
+const SLIDE_COVER_WIDTHS = [250, 350, 700];
+const SLIDE_COVER_SIZES = "(min-width: 640px) 350px, 250px";
+
+// React 18 does not know the camelCase `fetchPriority` prop and warns while emitting
+// a mis-cased attribute, so spread the plain HTML attribute instead.
+const fetchPriority = (value: "high" | "low") => ({ fetchpriority: value }) as Record<string, string>;
+
 function ProgramCarousel({
   carouselPosts,
   loadingError,
@@ -46,6 +66,28 @@ function ProgramCarousel({
   useEffect(() => {
     setIsCoverLoading(true);
   }, [carouselPosts[currentIndex]?.Cover]);
+
+  // A cover served from cache can finish loading before React attaches onLoad,
+  // which would leave the spinner sitting on top of an image that is already there.
+  const coverRef = (node: HTMLImageElement | null) => {
+    if (node?.complete) setIsCoverLoading(false);
+  };
+
+  // Compact mode only mounts the active cover, so warm the neighbours to make
+  // prev/next feel instant instead of showing the spinner on every step.
+  useEffect(() => {
+    if (!compact || typeof window === "undefined") return;
+
+    [currentIndex - 1, currentIndex + 1]
+      .map((index) => carouselPosts[index]?.Cover)
+      .filter(Boolean)
+      .forEach((cover: string) => {
+        const img = new window.Image();
+        img.srcset = coverSrcSet(cover, COMPACT_COVER_WIDTHS);
+        img.sizes = COMPACT_COVER_SIZES;
+        img.src = coverUrl(cover, 600);
+      });
+  }, [compact, currentIndex, carouselPosts]);
 
   const getNextEventIndex = () => {
     const now = new Date();
@@ -199,10 +241,15 @@ function ProgramCarousel({
         >
           <img
             key={activeEpisode.Cover}
-            src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${activeEpisode.Cover}`}
+            ref={coverRef}
+            src={coverUrl(activeEpisode.Cover, 600)}
+            srcSet={coverSrcSet(activeEpisode.Cover, COMPACT_COVER_WIDTHS)}
+            sizes={COMPACT_COVER_SIZES}
             alt={activeEpisode.Title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             draggable="false"
+            decoding="async"
+            {...fetchPriority("high")}
             onLoad={() => setIsCoverLoading(false)}
             onError={() => setIsCoverLoading(false)}
           />
@@ -304,10 +351,14 @@ function ProgramCarousel({
                         className="relative w-[250px] sm:w-[350px] overflow-hidden rounded-lg shadow-2xl"
                       >
                         <img
-                          src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.Cover}`}
+                          src={coverUrl(slide.Cover, 350)}
+                          srcSet={coverSrcSet(slide.Cover, SLIDE_COVER_WIDTHS)}
+                          sizes={SLIDE_COVER_SIZES}
                           alt={slide.Title}
                           className="w-full h-auto object-cover select-none aspect-square"
                           draggable="false"
+                          decoding="async"
+                          {...fetchPriority(slide.position === 0 ? "high" : "low")}
                         />
                       </motion.div>
                       <motion.h2
