@@ -82,12 +82,17 @@ export default async function Home({ params }: HomeProps) {
                   href="https://www.websupport.sk/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hidden lg:flex items-center justify-center relative aspect-square w-full min-w-0 overflow-hidden rounded-lg shadow-lg bg-[#1c1c1c]"
+                  className="flex items-center justify-center relative md:aspect-square w-full min-w-0 overflow-hidden rounded-lg shadow-lg bg-[#1c1c1c]"
                 >
+                  <img
+                    src="/images/websupport-banner-small.png"
+                    alt="WebSupport"
+                    className="w-full h-auto object-contain md:hidden"
+                  />
                   <img
                     src="/images/freeweb-sk-4.png"
                     alt="WebSupport"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover hidden md:block"
                   />
                 </a>
               </div>
