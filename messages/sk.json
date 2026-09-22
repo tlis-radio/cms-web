@@ -183,7 +183,14 @@
     "filter_digital": "STARÝ ARCHÍV",
     "fetch_error_title": "Chyba pri načítaní archívu",
     "fetch_error_subtitle": "Skúste to prosím neskôr.",
-    "load_error": "Reláciu sa nepodarilo načítať."
+    "load_error": "Reláciu sa nepodarilo načítať.",
+    "search_placeholder": "Hľadať relácie, redaktorov, epizódy…",
+    "search_label": "Vyhľadávanie relácií",
+    "search_clear": "Vymazať vyhľadávanie",
+    "search_results": "{count, plural, one {# výsledok} few {# výsledky} other {# výsledkov}} pre „{query}“",
+    "search_no_results": "Pre „{query}“ sme nič nenašli",
+    "search_no_results_hint": "Skúste iné slovo — hľadáme v názvoch, popisoch, redaktoroch aj epizódach.",
+    "filter_all": "VŠETKY RELÁCIE"
   },
   "ShowPage": {
     "metaTitle_fallback": "Relácia",

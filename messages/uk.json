@@ -183,7 +183,14 @@
     "filter_digital": "СТАРИЙ АРХІВ",
     "fetch_error_title": "Помилка при завантаженні архіву",
     "fetch_error_subtitle": "Будь ласка, спробуйте пізніше.",
-    "load_error": "Не вдалося завантажити передачу."
+    "load_error": "Не вдалося завантажити передачу.",
+    "search_placeholder": "Шукати передачі, ведучих, епізоди…",
+    "search_label": "Пошук передач",
+    "search_clear": "Очистити пошук",
+    "search_results": "{count, plural, one {# результат} few {# результати} many {# результатів} other {# результату}} для «{query}»",
+    "search_no_results": "Нічого не знайдено для «{query}»",
+    "search_no_results_hint": "Спробуйте інше слово — ми шукаємо в назвах, описах, ведучих та епізодах.",
+    "filter_all": "УСІ ПЕРЕДАЧІ"
   },
   "ShowPage": {
     "metaTitle_fallback": "Передача",

@@ -38,6 +38,17 @@ export function getPublicDirectusInstance(): RestClient<any> {
    return publicDirectusInstance;
 }
 
+// Malé písmená, bez diakritiky a markdownu — na porovnávanie pri vyhľadávaní
+function normalizeSearch(text: string | null | undefined): string {
+   return (text || "")
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .replace(/[*_#>`~\[\]()]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+}
+
 const showEndpoints = {
    PAGE_SIZE: 10, // TODO: adjustable page size in future?
    listShows: async (): Promise<Array<Show>> => {
@@ -66,6 +77,69 @@ const showEndpoints = {
          page
       }));
       return { shows: shows || [], totalCount: total_count };
+   },
+
+   // Vyhľadávanie naprieč všetkými reláciami (ignoruje filter aktívne/archívne).
+   // Názov, popis a účinkujúci sa porovnávajú lokálne bez diakritiky ("relacie" nájde "relácie"),
+   // názvy epizód cez Directus (_icontains, s diakritikou).
+   searchShows: async (query: string, page: number): Promise<{ shows: Array<Show>, totalCount: number }> => {
+      const tokens = normalizeSearch(query).split(/\s+/).filter(Boolean);
+      if (tokens.length === 0) return { shows: [], totalCount: 0 };
+
+      const [shows, episodeMatches] = await Promise.all([
+         getDirectusInstance().request<Array<ShowDto>>(readItems("Shows", {
+            sort: ['-Episodes.Episodes_id.Date'],
+            fields: ['*', 'Cast.Cast_id.Name', 'Cast.Cast_id.Slug'],
+            limit: -1,
+         })),
+         getDirectusInstance().request<Array<{ id: number }>>(readItems("Shows", {
+            fields: ['id'],
+            filter: {
+               Episodes: {
+                  Episodes_id: {
+                     _and: [
+                        { Title: { _icontains: query.trim() } },
+                        { status: { _eq: 'published' } },
+                     ],
+                  },
+               },
+            },
+            limit: -1,
+         })).catch(() => [] as Array<{ id: number }>),
+      ]);
+
+      const episodeShowIds = new Set(episodeMatches.map(s => s.id));
+
+      const scored = (shows || []).map((show, order) => {
+         const title = normalizeSearch(show.Title);
+         const description = normalizeSearch(show.Description);
+         const cast = normalizeSearch((show.Cast || []).map(c => c.Cast_id?.Name).join(' '));
+         const inEpisodes = episodeShowIds.has(show.id);
+
+         let score = 0;
+         for (const token of tokens) {
+            const tokenScore =
+               (title.includes(token) ? 4 : 0) +
+               (cast.includes(token) ? 3 : 0) +
+               (description.includes(token) ? 1 : 0);
+            // Každé slovo musí niekde sedieť — inak relácia nevyhovuje (ak nesedí celá fráza v epizóde)
+            if (tokenScore === 0 && !inEpisodes) return null;
+            score += tokenScore;
+         }
+         if (title === tokens.join(' ')) score += 10;
+         else if (title.startsWith(tokens[0])) score += 2;
+         if (inEpisodes) score += 1;
+
+         return { show, score, order };
+      }).filter((x): x is { show: ShowDto, score: number, order: number } => x !== null);
+
+      scored.sort((a, b) => b.score - a.score || a.order - b.order);
+
+      const start = (page - 1) * showEndpoints.PAGE_SIZE;
+      return {
+         shows: scored.slice(start, start + showEndpoints.PAGE_SIZE).map(x => x.show),
+         totalCount: scored.length,
+      };
    },
 
    getShowDataById: async (id: number): Promise<Show> => {

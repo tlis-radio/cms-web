@@ -183,7 +183,14 @@
     "filter_digital": "ALTES ARCHIV",
     "fetch_error_title": "Fehler beim Laden des Archivs",
     "fetch_error_subtitle": "Bitte versuchen Sie es später noch einmal.",
-    "load_error": "Die Sendung konnte nicht geladen werden."
+    "load_error": "Die Sendung konnte nicht geladen werden.",
+    "search_placeholder": "Sendungen, Moderatoren, Episoden suchen…",
+    "search_label": "Sendungen durchsuchen",
+    "search_clear": "Suche löschen",
+    "search_results": "{count, plural, one {# Ergebnis} other {# Ergebnisse}} für „{query}“",
+    "search_no_results": "Nichts gefunden für „{query}“",
+    "search_no_results_hint": "Versuchen Sie ein anderes Wort — wir durchsuchen Titel, Beschreibungen, Moderatoren und Episoden.",
+    "filter_all": "ALLE SENDUNGEN"
   },
   "ShowPage": {
     "metaTitle_fallback": "Sendung",

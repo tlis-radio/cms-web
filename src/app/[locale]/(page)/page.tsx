@@ -52,11 +52,28 @@ export default async function Home({ params }: HomeProps) {
     }
   };
   
+  // WebSite + SearchAction — vyhľadávače vedia, že /relacie?q= je vyhľadávanie na webe
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Radio TLIS",
+    "url": SITE_URL,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${pageUrl("/relacie")}?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   const events = await CmsApiService.Article.getRecentEvents(5).catch(() => []);
   
   return (
     <>
       <JsonLd data={broadcast} />
+      <JsonLd data={website} />
       <h1 className="text-4xl text-white font-semibold mb-8 text-left ml-8">
         <span className="text-[#d43c4a] italic text-[1.4em] mr-2">TLIS</span> radio
       </h1>

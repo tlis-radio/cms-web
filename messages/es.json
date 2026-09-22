@@ -183,7 +183,14 @@
     "filter_digital": "ARCHIVO ANTIGUO",
     "fetch_error_title": "Error al cargar el archivo",
     "fetch_error_subtitle": "Por favor, inténtelo de nuevo más tarde.",
-    "load_error": "No se pudo cargar el programa."
+    "load_error": "No se pudo cargar el programa.",
+    "search_placeholder": "Buscar programas, presentadores, episodios…",
+    "search_label": "Buscar programas",
+    "search_clear": "Borrar búsqueda",
+    "search_results": "{count, plural, one {# resultado} other {# resultados}} para «{query}»",
+    "search_no_results": "No se encontró nada para «{query}»",
+    "search_no_results_hint": "Prueba otra palabra: buscamos en títulos, descripciones, presentadores y episodios.",
+    "filter_all": "TODOS LOS PROGRAMAS"
   },
   "ShowPage": {
     "metaTitle_fallback": "Programa",
