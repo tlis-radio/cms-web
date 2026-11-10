@@ -70,12 +70,6 @@ export default function TempStreamDisabled() {
             {randomJoke.button}
           </button>
         </div>
-
-        <a href="/konkurz">
-            <span className="text-xs text-neutral-500">
-                Konkurz už 21. septembra v Mlynskej Doline.
-            </span>
-        </a>
       </div>
     </div>
   );

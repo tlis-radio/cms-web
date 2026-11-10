@@ -214,35 +214,50 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     let streamHandleCanPlay: (() => void) | null = null;
+    let streamHandleError: (() => void) | null = null;
     let archiveHandleCanPlay: (() => void) | null = null;
     if (audioRef.current && mode === "stream") {
-      UmamiTrack("Play Disabled");
-      if(isPlaying) {
-        setShowStreamDisabled(true);
-      }
-      // setArchiveMetadata(null);
-      // if (isPlaying) {
-      //   setIsLoading(true);
-      //   audioRef.current.src = "https://stream.tlis.sk/tlis.mp3";
-      //   audioRef.current.load();
+      const audio = audioRef.current;
+      if (isPlaying) {
+        // Try to start the live stream; the "stream unavailable" popup only shows if it fails.
+        const handleStreamFailure = () => {
+          UmamiTrack("Play Disabled");
+          setIsLoading(false);
+          setIsPlaying(false);
+          setShowStreamDisabled(true);
+        };
 
-      //   streamHandleCanPlay = () => {
-      //     setIsLoading(false);
-      //     audioRef.current?.removeEventListener("canplay", streamHandleCanPlay!);
-      //   };
-      //   audioRef.current.addEventListener("canplay", streamHandleCanPlay);
-      //   audioRef.current.play().catch((err) => {
-      //     console.warn(err);
-      //   });
-      // } else {
-      //   audioRef.current.pause();
-      //   audioRef.current.src = "";
-      //   audioRef.current.load();
-      //   setIsLoading(false);
-      //   if (streamHandleCanPlay) {
-      //     audioRef.current.removeEventListener("canplay", streamHandleCanPlay);
-      //   }
-      // }
+        setIsLoading(true);
+        audio.src = "https://stream.tlis.sk/tlis.mp3";
+        audio.load();
+
+        streamHandleCanPlay = () => {
+          setIsLoading(false);
+        };
+        streamHandleError = () => {
+          handleStreamFailure();
+        };
+        audio.addEventListener("canplay", streamHandleCanPlay, { once: true });
+        audio.addEventListener("error", streamHandleError, { once: true });
+
+        audio.play().catch((err) => {
+          console.warn(err);
+          // AbortError = interrupted by pause/src change, not a stream failure.
+          if (err?.name === "AbortError") return;
+          // NotAllowedError = browser blocked autoplay, not a stream failure.
+          if (err?.name === "NotAllowedError") {
+            setIsLoading(false);
+            setIsPlaying(false);
+            return;
+          }
+          handleStreamFailure();
+        });
+      } else {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+        setIsLoading(false);
+      }
     } else if (audioRef.current) {
       if (isPlaying) {
         setIsLoading(true);
@@ -268,6 +283,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setIsLoading(false);
       }
     }
+
+    return () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (streamHandleCanPlay) audio.removeEventListener("canplay", streamHandleCanPlay);
+      if (streamHandleError) audio.removeEventListener("error", streamHandleError);
+    };
   }, [isPlaying, mode]);
 
   // Segment tracking for archive and periodic heartbeat for stream
